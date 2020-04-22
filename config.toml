@@ -17,7 +17,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     url = "https://github.com/fditraglia/econometrics.blog"
 [[menu.main]]
     name = "Twitter"
-    url = "https://twitter.com/econometrics.blog"
+    url = "https://twitter.com/economictricks"
 
 [params]
     description = "A blog about econometrics."
