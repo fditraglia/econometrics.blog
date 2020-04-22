@@ -6,6 +6,8 @@ slug: test-post
 categories: []
 tags: []
 ---
+## Something here
+$\mathbb{E}\hat{\beta}$
 
 Hi there!
 $\int_0^1\ f\left(x\right)\ dx$
