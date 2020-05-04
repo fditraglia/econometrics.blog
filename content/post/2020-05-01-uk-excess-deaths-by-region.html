@@ -1,0 +1,67 @@
+---
+title: Excess Deaths in England and Wales
+author: Frank DiTraglia
+date: '2020-05-04'
+slug: uk-excess-deaths-by-region
+categories:
+  - covid19
+tags:
+  - covid19
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+To get a better idea of the impact of Covid19 in the UK, Dan Mead and I have started working on an R package called <a href="https://github.com/fditraglia/rcovidUK">rcovidUK</a> that will (eventually) combine publicly available data from a variety of sources.
+This is very much a work in progress, but we just finished adding weekly deaths in England and Wales from the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales">Office for National Statistics</a> (ONS), allowing us to produce a plot of total deaths by region in 2020:
+<div class="figure"><span id="fig:plot"></span>
+<img src="/post/2020-05-01-uk-excess-deaths-by-region_files/figure-html/plot-1.png" alt="Total Weekly Deaths in England &amp; Wales." width="672" />
+<p class="caption">
+Figure 1: Total Weekly Deaths in England &amp; Wales.
+</p>
+</div>
+<p>The red curve is an equally-weighted average of weekly deaths in a given region for the past five years, up to and including 2019.
+Weeks are defined by the ONS to end on Fridays. This means that a given week does not necessarily correspond to the same days of the year across years, but always exactly one of each day of the week: Monday, Tuesday, etc. This eliminates seasonality from day-of-the-week effects, but creates the possibility of neglected seasonality from holidays that move across weeks during different years, e.g. Easter.
+For each point on the red curve, we have added simple error bars: <span class="math inline">\(\pm 2 \times \text{SE}\)</span> where SE is the usual standard error for a mean, ignoring any possible dependence between deaths in the same week across different years.
+The blue curve depicts weekly deaths in 2020.
+From week 12 or 13, depending on region, we see a dramatic uptick in deaths across England and Wales, well outside the two standard error bars. R source code for this plot follows below.</p>
+<pre class="r"><code>library(tidyverse)
+library(rcovidUK)
+
+#Set the most recent week of data for 2020
+week_2020 &lt;- ONSweekly %&gt;%
+  filter(year == 2020, !is.na(deaths)) %&gt;%
+  pull(week) %&gt;%
+  max
+
+df_2020 &lt;- ONSweekly %&gt;%
+  filter(year == 2020)
+
+df_prev5 &lt;- ONSweekly %&gt;%
+  filter(year &lt; 2020 &amp; year &gt;= 2015) 
+
+df_prev5 %&gt;%
+  group_by(reg_nm, week) %&gt;%
+  summarise(deaths_mean = mean(deaths),
+            deaths_sd = sd(deaths),
+            n = n(),
+            se = deaths_sd/sqrt(n)) %&gt;%
+  mutate(year = &quot;2015-2019&quot;) %&gt;%
+  rename(deaths = deaths_mean) %&gt;%
+  bind_rows(df_2020) %&gt;%
+  filter(week&lt;week_2020) %&gt;%
+  ggplot(aes(x=week, y = deaths, col = year, 
+             group = reg_id)) +
+  geom_errorbar(aes(ymin=deaths - 2 * se, 
+                    ymax = deaths + 2 * se),
+                width=.2, colour=&quot;black&quot;) + 
+  geom_line(size = 1) + 
+  facet_wrap(~reg_nm, ncol = 2) +
+  scale_color_brewer(palette = &quot;Set1&quot;,
+                     labels = c(&quot;Avg Past 5 Yrs&quot;, &quot;2020&quot;)) +
+  labs(x= &quot;Week from Start of Year&quot;,
+       y = &quot;Deaths per Week&quot;) +
+  theme_bw()+
+  theme(legend.position = &#39;top&#39;,
+        legend.title = element_blank(),
+        legend.key.size = unit(1, &quot;cm&quot;))</code></pre>
