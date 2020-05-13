@@ -10,7 +10,7 @@ slug: uk-excess-deaths-are-concentrated-among-older-men
 ---
 
 <!--One of the most striking facts about covid has been its disproportionate impact on men and older people.--> 
-My [previous post](https://www.econometrics.blog/2020/05/13/past-the-peak-excess-deaths-in-england-and-wales/) looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Here's the same analysis carried out by age group and sex rather than region:
+My [previous post](https://www.econometrics.blog/2020/05/13/past-the-peak-excess-deaths-in-england-and-wales/) looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Thanks to my RA Dan Mead, here's the same analysis carried out by age group and sex rather than region:
 
 ```{r plot,message=FALSE,fig.height=8,echo=FALSE,fig.cap="Total Weekly Deaths in England & Wales by Sex and Age Group."}
 library(tidyverse)
@@ -93,4 +93,8 @@ In the 15-44 age group, male deaths during weeks 11 through `r week_2020` of 202
 | Over 85       | +`r get_excess_prop('Men', '85<')`% | +`r get_excess_prop('Women', '85<')`% |
 
 In each age group, relative excess deaths are substantially higher for men than women. 
-For example, male deaths in the 45-64 age group were `r get_excess_prop('Men', '45-64')`% higher than usual in weeks 11 through `r week_2020` of 2020 compared to `r get_excess_prop('Women', '45-64')`% higher for women. Although relative excess deaths increase markedly with age for both sexes, even the rates in the 45-64 group are alarming, particularly for men. 
+For example, male deaths in the 45-64 age group were `r get_excess_prop('Men', '45-64')`% higher than usual in weeks 11 through `r week_2020` of 2020 compared to `r get_excess_prop('Women', '45-64')`% higher for women. Although relative excess deaths increase markedly with age for both sexes, even the rates in the 45-64 group are alarming, particularly for men.
+
+You can replicate the plot from above by running this R code: 
+```{r plot,eval=FALSE,message=FALSE}
+```
