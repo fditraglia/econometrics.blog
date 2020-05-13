@@ -1,0 +1,64 @@
+---
+title: UK Excess Deaths by Age Group and Sex
+author: Francis DiTraglia
+date: '2020-05-13'
+categories:
+  - covid19
+tags:
+  - covid19
+slug: uk-excess-deaths-are-concentrated-among-older-men
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<!--One of the most striking facts about covid has been its disproportionate impact on men and older people.-->
+<p>My <a href="https://www.econometrics.blog/2020/05/13/past-the-peak-excess-deaths-in-england-and-wales/">previous post</a> looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Here’s the same analysis carried out by age group and sex rather than region:</p>
+<div class="figure"><span id="fig:plot"></span>
+<img src="/post/2020-05-13-uk-excess-deaths-are-concentrated-among-older-men_files/figure-html/plot-1.png" alt="Total Weekly Deaths in England &amp; Wales by Sex and Age Group." width="672" />
+<p class="caption">
+Figure 1: Total Weekly Deaths in England &amp; Wales by Sex and Age Group.
+</p>
+</div>
+<p>The red curve is an equally-weighted average of reported weekly deaths for the past five years up to and including 2019, while the blue curve depicts weekly deaths in 2020. All calculations are based on data from the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales">ONS</a>.
+Each point on the red curve is accompanied by error bars indicating plus/minus two standard errors of the mean. Roughly speaking these bounds are equivalent to the margin of error from a typical opinion poll. (For the precise calculations, see the R code below.)</p>
+<p>Deaths below age 1 show no clear pattern in 2020 relative to the average of past years.
+There’s a hint of slightly <em>lower</em> deaths among males aged 1-14 since the lockdown began, although the data are quite noisy given the extremely small number of deaths in this age group.
+For the remaining age groups, we start to see a clear effect around the time of the covid outbreak, approximately weeks 11 through 18 of 2020.
+Because death rates vary with age and sex in both ordinary years and 2020, the cleanest way to compare across groups is by computing <em>relative</em> excess deaths.
+To do this, we add up the differences between the red curve and the blue curve between weeks 11 and 18 and divide the result by sum of the red curve during the same period of time.
+The result give us the percentage by which total deaths in a given age/sex group in weeks 11 through 18 of 2020 exceed the “usual” number of deaths for this age/sex group during the same weeks based on past data.</p>
+<p>In the 15-44 age group, male deaths during weeks 11 through 18 of 2020 were 9.6% higher than usual. In contrast, female deaths were 17.1% higher than usual. Deaths in this age group, however, are relatively rare. Accordingly, the blue curves lie comfortably within the error bars for all but a small number of weeks. For the remaining age groups, the picture becomes much starker and the relative excess deaths much larger:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Age Group</th>
+<th>Men</th>
+<th>Women</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45-64</td>
+<td>+50.3%</td>
+<td>+39.5%</td>
+</tr>
+<tr class="even">
+<td>65-74</td>
+<td>+55.1%</td>
+<td>+38.2%</td>
+</tr>
+<tr class="odd">
+<td>75-84</td>
+<td>+69.6%</td>
+<td>+52.9%</td>
+</tr>
+<tr class="even">
+<td>Over 85</td>
+<td>+76.1%</td>
+<td>+51.8%</td>
+</tr>
+</tbody>
+</table>
+<p>In each age group, relative excess deaths are substantially higher for men than women.
+For example, male deaths in the 45-64 age group were 50.3% higher than usual in weeks 11 through 18 of 2020 compared to 39.5% higher for women. Although relative excess deaths increase markedly with age for both sexes, even the rates in the 45-64 group are alarming, particularly for men.</p>
