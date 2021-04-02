@@ -7,7 +7,7 @@ categories: []
 tags: [April Fools]
 ---
 
-*Some years back, I wrote a monologue for the Economics Department Skit Night at UPenn. It was a niche venue, granted, but the crowd seemed to enjoy it. In honor of April Fool's day I've posted a lightly-edited version below. On the off chance that anyone else finds this amusing, I grant unlimited rights for this to material to be borrowed, adapted, remixed, stolen, execrated, or burned in effigy as you see fit. It's funnier when you use the names of your own colleagues so I encourage you to fill in the blanks below!*
+*Some years back, I wrote a monologue for the Economics Department Skit Night at UPenn. It was a niche venue, granted, but the crowd seemed to enjoy my contribution. In honor of April Fool's day I've posted a lightly-edited version below. On the off chance that anyone else finds this amusing, I grant unlimited rights for this material to be borrowed, adapted, remixed, stolen, execrated, or burned in effigy as you see fit. It's funnier when you use the names of your own colleagues so I encourage you to fill in the blanks below!*
 
 ---
 
