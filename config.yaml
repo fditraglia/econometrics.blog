@@ -47,6 +47,7 @@ disableAliases: true
 outputs:
   home: [HTML, RSS, JSON, WebAppManifest, headers, redirects]
   section: [HTML, RSS]
+math: true
 markup:
   defaultMarkdownHandler: goldmark
   goldmark:
