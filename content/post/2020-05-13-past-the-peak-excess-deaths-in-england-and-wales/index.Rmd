@@ -8,7 +8,7 @@ tags: [covid]
 subtitle: ''
 summary: ''
 authors: []
-lastmod: '2021-05-08T17:21:31+01:00'
+#lastmod: '2021-05-08T17:21:31+01:00'
 featured: no
 image:
   caption: ''
@@ -17,9 +17,7 @@ image:
 projects: []
 ---
 
-Since my [previous post](https://www.econometrics.blog/2020/05/04/uk-excess-deaths-by-region/), the 
-[Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) has posted updated data on weekly deaths, and we've updated [rcovidUK](https://github.com/fditraglia/rcovidUK) accordingly.
-Here's where things stand as of week 18 of 2020:
+Since my previous post, the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) has posted updated data on weekly deaths, and we've updated [rcovidUK](https://github.com/fditraglia/rcovidUK) accordingly. Here's where things stand: 
 ```{r plot,message=FALSE,fig.height=8,echo=FALSE,fig.cap="Total Weekly Deaths in England & Wales."}
 library(tidyverse)
 library(rcovidUK)

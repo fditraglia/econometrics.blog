@@ -3,7 +3,7 @@ title: Econometricians Anonymous
 author: Francis J. DiTraglia
 date: '2021-04-01'
 slug: econometricians-anonymous
-categories: []
+categories: [fun]
 tags: [April Fools]
 ---
 

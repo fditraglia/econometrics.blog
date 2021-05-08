@@ -8,7 +8,7 @@ tags: [covid]
 subtitle: ''
 summary: ''
 authors: []
-lastmod: '2021-05-08T17:21:31+01:00'
+#lastmod: '2021-05-08T17:21:31+01:00'
 featured: no
 image:
   caption: ''
@@ -17,17 +17,17 @@ image:
 projects: []
 ---
 
-To get a better idea of the impact of Covid19 in the UK, Dan Mead and I have started working on an R package called [rcovidUK](https://github.com/fditraglia/rcovidUK) that will (eventually) combine publicly available data from a variety of sources. 
-This is very much a work in progress, but we just finished adding weekly deaths in England and Wales from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) (ONS), allowing us to produce a plot of total deaths by region in 2020:
+To get a better idea of the impact of Covid19 in the UK, Dan Mead and put together an R package [rcovidUK](https://github.com/fditraglia/rcovidUK) with weekly deaths in England and Wales, taken from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) (ONS), allowing us to produce a plot of total deaths by region in 2020:
 ```{r plot,message=FALSE,fig.height=8,echo=FALSE,fig.cap="Total Weekly Deaths in England & Wales."}
 library(tidyverse)
 library(rcovidUK)
 
 #Set the most recent week of data for 2020
-week_2020 <- ONSweekly %>%
-  filter(year == 2020, !is.na(deaths)) %>%
-  pull(week) %>%
-  max
+week_2020 <- 16 # original version of this post only had data up to week 16
+#week_2020 <- ONSweekly %>%
+#  filter(year == 2020, !is.na(deaths)) %>%
+#  pull(week) %>%
+#  max
 
 df_2020 <- ONSweekly %>%
   filter(year == 2020)

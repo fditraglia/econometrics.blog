@@ -8,7 +8,7 @@ tags: [covid]
 subtitle: ''
 summary: ''
 authors: []
-lastmod: '2021-05-08T17:21:31+01:00'
+#lastmod: '2021-05-08T17:21:31+01:00'
 featured: no
 image:
   caption: ''
@@ -18,7 +18,7 @@ projects: []
 ---
 
 <!--One of the most striking facts about covid has been its disproportionate impact on men and older people.--> 
-My [previous post](https://www.econometrics.blog/2020/05/13/past-the-peak-excess-deaths-in-england-and-wales/) looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Thanks to my RA Dan Mead, here's the same analysis carried out by age group and sex rather than region:
+In an earlier post I looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Thanks to my RA Dan Mead, here's the same analysis carried out by age group and sex rather than region:
 
 ```{r plot,message=FALSE,fig.height=8,echo=FALSE,fig.cap="Total Weekly Deaths in England & Wales by Sex and Age Group."}
 library(tidyverse)
@@ -73,7 +73,7 @@ get_excess_prop <- function(gender_group, age_group) {
     group_by(age, week, gender) %>%
     summarise(deaths_mean = mean(deaths)) %>%
     ungroup() %>%
-    bind_cols(df_2020) %>%
+    left_join(df_2020) %>%
     filter(week >= 11 & week <= week_2020, gender == gender_group, age == age_group) %>%
     select(deaths_mean, deaths_2020 = deaths) %>%
     mutate(excess = deaths_2020 - deaths_mean) %>%
