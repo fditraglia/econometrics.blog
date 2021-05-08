@@ -1,6 +1,6 @@
 ---
 title: UK Excess Deaths by Age Group and Sex
-author: Francis DiTraglia
+author: Francis J. DiTraglia
 date: '2020-05-13'
 slug: uk-excess-deaths-are-concentrated-among-older-men
 categories: [covid,R]

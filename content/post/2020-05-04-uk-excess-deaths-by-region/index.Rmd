@@ -1,12 +1,20 @@
 ---
 title: Excess Deaths in England and Wales
-author: Frank DiTraglia
+author: Francis J. DiTraglia 
 date: '2020-05-04'
 slug: uk-excess-deaths-by-region
-categories:
-  - covid19
-tags:
-  - covid19
+categories: [covid,R]
+tags: [covid]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-05-08T17:21:31+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
 ---
 
 To get a better idea of the impact of Covid19 in the UK, Dan Mead and I have started working on an R package called [rcovidUK](https://github.com/fditraglia/rcovidUK) that will (eventually) combine publicly available data from a variety of sources. 

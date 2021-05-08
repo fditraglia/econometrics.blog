@@ -1,12 +1,20 @@
 ---
 title: Past the Peak? Excess Deaths in England and Wales
-author: Francis DiTraglia
+author: Francis J. DiTraglia
 date: '2020-05-13'
 slug: past-the-peak-excess-deaths-in-england-and-wales
-categories:
-  - covid19
-tags:
-  - covid19
+categories: [covid,R]
+tags: [covid]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-05-08T17:21:31+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
 ---
 
 Since my [previous post](https://www.econometrics.blog/2020/05/04/uk-excess-deaths-by-region/), the 
