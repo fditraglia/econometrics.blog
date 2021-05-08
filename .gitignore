@@ -1,4 +1,8 @@
-blogdown
-public
+/blogdown
+/public
+/public/
+/resources/
 .Rproj.user
 .Rhistory
+.DS_Store
+Thumbs.db
