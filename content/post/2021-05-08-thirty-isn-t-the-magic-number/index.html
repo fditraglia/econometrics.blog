@@ -51,7 +51,7 @@ xbar_sims &lt;- replicate(nreps, get_unif_sim(10))
 hist(xbar_sims, xlab = &#39;&#39;, freq = FALSE, 
      main = &#39;Sampling Dist. of Sample Mean of 10 Uniform(0,1) Draws&#39;)</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>A beautiful bell curve! This certainly looks normal, but histograms can tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we’ll instead comparison <em>distribution functions</em> and <em>quantiles</em>.</p>
+<p>A beautiful bell curve! This certainly looks normal, but histograms can be tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we’ll instead compare <em>distribution functions</em> and <em>quantiles</em>.</p>
 <div id="the-empirical-cdf" class="section level3">
 <h3>The Empirical CDF</h3>
 <!--To find out what the CLT implies in this example, we first need to know the mean and variance of $X_i$. If $X \sim U(0,1)$, then
@@ -74,21 +74,21 @@ so if the CLT provides a good approximation in this example, we should find that
 <span class="math display">\[
 \frac{\bar{X}_n - 1/2}{1/\sqrt{120}} = \sqrt{120} (\bar{X}_n - 1/2) \approx N(0,1)
 \]</span>
-in the sense that that <em>Cumulative Distribution Function</em> of <span class="math inline">\(\sqrt{120} (\bar{X}_n - 1/2)\)</span>, call it <span class="math inline">\(F\)</span>, is approximately equal to the standard normal CDF <code>pnorm()</code>. An obvious way to see if this holds is to plot <span class="math inline">\(F\)</span> against <code>pnorm</code> and see how they compare. From now on, we’ll be working with the z-scores of <code>xbar_sims</code> rather than the raw simulation values themselves, so we’ll start by constructing them, subtracting the population mean and dividing by the population standard deviation:</p>
+in the sense that that the <em>cumulative distribution function</em> (CDF) of <span class="math inline">\(\sqrt{120} (\bar{X}_n - 1/2)\)</span>, call it <span class="math inline">\(F\)</span>, is approximately equal to the standard normal CDF <code>pnorm()</code>. An obvious way to see if this holds is to plot <span class="math inline">\(F\)</span> against <code>pnorm()</code> and see how they compare. From now on, we’ll be working with the z-scores of <code>xbar_sims</code> rather than the raw simulation values themselves, so we’ll start by constructing them, subtracting the population mean and dividing by the population standard deviation:</p>
 <pre class="r"><code>z &lt;- (xbar_sims - 1/2) / (1 / sqrt(120))</code></pre>
 <p>We haven’t worked out an expression for the function <span class="math inline">\(F\)</span>, but we can approximate it using our simulation draws <code>xbar_sims</code>. We do this by calculating the <em>empirical CDF</em> of our centered and standardized simulation draws <code>z</code>. Recall that if <span class="math inline">\(Z\)</span> is a random variable, its CDF <span class="math inline">\(F\)</span> is defined as <span class="math inline">\(F(t) = \mathbb{P}(Z \leq t)\)</span>. Given a large number of observed random draws <span class="math inline">\(z_1, \dots, z_J\)</span> from the distribution of <span class="math inline">\(Z\)</span>, we can approximate <span class="math inline">\(\mathbb{P}(Z \leq t)\)</span> by calculating the fraction of observed draws less than or equal to <span class="math inline">\(t\)</span>. In other words
 <span class="math display">\[
 \mathbb{P}(Z \leq t) \approx \frac{1}{J}\sum_{j=1}^J \mathbf{1}\{z_j \leq t\}
 \]</span>
-where <span class="math inline">\(1\{z_j \leq t \}\)</span> the <em>indicator function</em>: it equals one if <span class="math inline">\(z_j\)</span> is less than or equal to the threshold <span class="math inline">\(t\)</span> and zero otherwise. The sample average on the right-hand side of the preceding expression is called the <em>empirical CDF</em>. It uses empirical data–in this case our simulation draws <span class="math inline">\(z_j\)</span>–to approximate the unknown CDF. By increasing the number of random draws <span class="math inline">\(J\)</span> that we use, we can make this approximately as good as we like.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For example, we don’t know the exact value of <span class="math inline">\(F(0)\)</span>, the probability that <span class="math inline">\(Z \leq 0\)</span>. But using our simulated values <code>z</code> from above, we can approximate it as</p>
+where <span class="math inline">\(\mathbf{1}\{z_j \leq t \}\)</span> is the <em>indicator function</em>: it equals one if <span class="math inline">\(z_j\)</span> is less than or equal to the threshold <span class="math inline">\(t\)</span> and zero otherwise. The sample average on the right-hand side of the preceding expression is called the <em>empirical CDF</em>. It uses empirical data–in this case our simulation draws <span class="math inline">\(z_j\)</span>–to approximate the unknown CDF. By increasing the number of random draws <span class="math inline">\(J\)</span> that we use, we can make this approximation as accurate as we like.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For example, we don’t know the exact value of <span class="math inline">\(F(0)\)</span>, the probability that <span class="math inline">\(Z \leq 0\)</span>. But using our simulated values <code>z</code> from above, we can approximate it as</p>
 <pre class="r"><code>mean(z &lt;= 0)</code></pre>
 <pre><code>## [1] 0.49993</code></pre>
 <p>and if we wanted to the probability that <span class="math inline">\(Z \leq 2\)</span>, we could approximate this as</p>
 <pre class="r"><code>mean(z &lt;= 2)</code></pre>
 <pre><code>## [1] 0.97797</code></pre>
-<p>So far, so good: since we know that <code>pnorm(0)</code> equals 0.5 while <code>pnorm(2)</code> is approximately 0.9772.
+<p>So far so good: these values agree with <code>pnorm(0)</code>, which equals 0.5, and <code>pnorm(2)</code>, which is approximately 0.9772.
 But we’ve only looked at two values of <span class="math inline">\(t\)</span>.
-While we could continue trying additional values “by hand,” it’s much faster to use R’s built-in function for computing an empirical cdf, <code>ecdf()</code>, instead. First we pass our simulated z-scores <code>z</code> into <code>ecdf()</code> function to calculate the <em>empirical CDF</em> and plot the result. Next, we overlay Finally, we overlay some points from the standard normal CDF, <code>pnorm</code> in blue for comparison:</p>
+While we could continue trying additional values one at a time, it’s much faster to use R’s built-in function for computing an empirical cdf, <code>ecdf()</code>. First we pass our simulated z-scores <code>z</code> into <code>ecdf()</code> function to calculate the empirical CDF and plot the result. Next we overlay some points from the standard normal CDF, <code>pnorm</code> in blue for comparison:</p>
 <pre class="r"><code>z &lt;- sqrt(120) * (xbar_sims - 1/2)
 plot(ecdf(z), xlab = &#39;t&#39;, ylab = &#39;F(t)&#39;, main = &#39;F(t) versus pnorm(t)&#39;)
 tseq &lt;- seq(-4, 4, by = 0.2)
@@ -124,8 +124,7 @@ rbind(normal = qnorm(p), simulation =  quantile(z, probs = p))</code></pre>
 ## normal     -0.6744898 0.0000000000 0.6744898
 ## simulation -0.6779843 0.0001169817 0.6791994</code></pre>
 <p>This looks good as well.
-If we want to compare quantiles over a finer grid of values for <code>p</code>, it’s more convenient to make a plot rather than a table.
-Suppose that we treat the values <code>qnorm</code> as an <span class="math inline">\(x\)</span>-coordinate and the quantiles of <code>z</code> as a <span class="math inline">\(y\)</span>-coordinate. If the CLT is giving us a good approximation, then we should have <span class="math inline">\(x \approx y\)</span> and all of the points will fall near the 45-degree line. This is indeed what we observe:</p>
+If we want to compare quantiles over a finer grid of values for <code>p</code>, it’s more convenient to make a plot rather than a table. Suppose that we treat the values <code>qnorm</code> as an <span class="math inline">\(x\)</span>-coordinate and the quantiles of <code>z</code> as a <span class="math inline">\(y\)</span>-coordinate. If the CLT is giving us a good approximation, then we should have <span class="math inline">\(x \approx y\)</span> and all of the points should fall near the 45-degree line. This is indeed what we observe:</p>
 <pre class="r"><code>p &lt;- seq(from = 0.05, to = 0.95, by = 0.05)
 x &lt;- qnorm(p)
 y &lt;- quantile(z, probs = p)
@@ -139,7 +138,7 @@ abline(0, 1) # plot the 45-degree line</code></pre>
 <li>Calculate the corresponding quantiles of your data, <code>quantile(your_data_here, probs = p)</code>. Call them <span class="math inline">\(y\)</span>.</li>
 <li>Plot <span class="math inline">\(y\)</span> against <span class="math inline">\(x\)</span>.</li>
 </ol>
-<p>If the points all fall on a line, then the quantiles of the observed data agree with those of a normal distribution. If we standardize the data before making such a plot, as we did to construct <code>z</code> above, the relevant line with be the 45-degree line. If not, it will be a different line but the interpretation remains the same The easiest way to make a normal quantile-quantile plot in R is by using the function <code>qqnorm</code> followed by <code>qqline</code>. We could do this either using the centered and standardized simulation draws <code>z</code> or the original draws <code>xbar_sims</code></p>
+<p>If the points all fall on a line, then the quantiles of the observed data agree with those of <em>some</em> normal distribution, although perhaps not a standard normal. If we standardize the data before making such a plot, as we did to construct <code>z</code> above, the relevant line with be the 45-degree line. If not, it will be a different line but the interpretation remains the same The easiest way to make a normal quantile-quantile plot in R is by using the function <code>qqnorm</code> followed by <code>qqline</code>. We could do this either using the centered and standardized simulation draws <code>z</code> or the original draws <code>xbar_sims</code></p>
 <pre class="r"><code>par(mfrow = c(1, 2))
 qqnorm(z, ylab = &#39;Quantiles of z&#39;)
 qqline(z)
@@ -151,7 +150,7 @@ qqline(xbar_sims)</code></pre>
 <pre class="r"><code>cbind(simulation = quantile(z, 0.0001), normal = qnorm(0.0001))</code></pre>
 <pre><code>##       simulation    normal
 ## 0.01%  -3.563576 -3.719016</code></pre>
-<p>So if you want to carry out a <span class="math inline">\(0.01\%\)</span> test (<span class="math inline">\(\alpha = 0.0001\)</span>), the approximation provided by the CLT won’t quite cut it with <span class="math inline">\(n = 10\)</span> in this example. But for any conventional significance level, it’s nearly perfect:</p>
+<p>This makes perfect sense. A standard normal can take on arbitrarily large values, while the sample mean of ten uniforms is necessarily bounded above by <span class="math inline">\(1\)</span>. So if you want to carry out a <span class="math inline">\(0.01\%\)</span> test (<span class="math inline">\(\alpha = 0.0001\)</span>), the approximation provided by the CLT won’t quite cut it with <span class="math inline">\(n = 10\)</span> in this example. But for any conventional significance level, it’s nearly perfect:</p>
 <pre class="r"><code>p &lt;- c(0.01, 0.025, 0.05, 0.1)
 rbind(normal = qnorm(p), simulation = quantile(z, prob = p))</code></pre>
 <pre><code>##                   1%      2.5%        5%       10%
@@ -173,7 +172,7 @@ P_x_bar &lt;- dbinom(n * x, size = n, prob = p)
 plot(x, P_x_bar, type = &#39;h&#39;, xlim = c(0, 0.1), ylab = &#39;pmf of Xbar&#39;, 
      lwd = 2, col = &#39;blue&#39;)</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>The result is <em>far</em> from a normal distribution. Not only is it noticeably discrete, it is also seriously asymmetric. Another way to see this is by examining the CDF. If the central limit theorem is working well in this example, we should have <span class="math inline">\(\bar{X}_n \approx N\big(p, p(1 - p)/n\big)\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> Extending the idea from above, we can plot the exact CDF of <span class="math inline">\(\bar{X}_n\)</span> using the binomial CDF <code>pbinom()</code> and compare it to the approximation suggested by the CLT:</p>
+<p>The result is <em>far</em> from a normal distribution. Not only is it noticeably discrete, it is also seriously asymmetric. Another way to see this is by examining the CDF. If the central limit theorem is working well in this example, we should have <span class="math inline">\(\bar{X}_n \approx N\big(p, p(1 - p)/n\big)\)</span>. Extending the idea from above, we can plot the exact CDF of <span class="math inline">\(\bar{X}_n\)</span> using the binomial CDF <code>pbinom()</code> and compare it to the approximation suggested by the CLT:</p>
 <pre class="r"><code>x &lt;- seq(-0.02, 0.08, by = 0.001)
 F_x_bar &lt;- pbinom(n * x, size = n, prob = p)
 F_clt &lt;- pnorm(x, p, sqrt(p * (1 - p) / n))
@@ -184,7 +183,7 @@ legend(&#39;topleft&#39;, legend = c(&#39;Exact&#39;, &#39;CLT&#39;), col = c(&#
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>The approximation is noticeably poor, but is the problem serious enough to affect any inferences we might hope to draw? Suppose we wanted to construct a 95% confidence interval for <span class="math inline">\(p\)</span>. The textbook approach, based on the CLT, would have us report <span class="math inline">\(\widehat{p} \pm 1.96 \times \sqrt{\widehat{p}(1 - \widehat{p})/n}\)</span> where <span class="math inline">\(\widehat{p}\)</span> is the sample proportion, i.e. <span class="math inline">\(\bar{X}_n\)</span>. Let’s set up a little simulation experiment to see how well this interval performs when <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 1/60\)</span>.</p>
 <pre class="r"><code># Simulate 5000 draws for phat
-# wach with p = 1/60, n = 100
+# with p = 1/60, n = 100
 set.seed(54321)
 draw_sim_phat &lt;- function(p, n) {
   x &lt;- rbinom(n, size = 1, prob = p)
@@ -206,7 +205,7 @@ coverage_prob</code></pre>
 </div>
 <div id="epilogue" class="section level2">
 <h2>Epilogue</h2>
-<p>I hope these examples have convinced you that, in spite of what you may have heard elsewhere, <span class="math inline">\(n\geq 30\)</span> is neither necessary nor sufficient for the CLT to provide an adequate approximation. But some important questions remain. First, what can we do in situations like the second example, where we want to carry out inference for a small proportion? The problem is hardly academic: at the time of this writing, the most recent estimate of coronavirus prevalence in the UK was approximately 0.2%, i.e. nearly ten times <em>smaller</em> than the value I used for <span class="math inline">\(p\)</span> in my second example.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> Second, how did the <span class="math inline">\(n\geq 30\)</span> folk wisdom arise? Is there anything that we can say about <span class="math inline">\(n\geq 30\)</span>? Finally, are there any theoretical results that can provide guidance about the quality of the approximation provided by the CLT? These questions will have to wait for a future post!</p>
+<p>I hope these examples have convinced you that, in spite of what you may have heard elsewhere, <span class="math inline">\(n\geq 30\)</span> is neither necessary nor sufficient for the CLT to provide an adequate approximation. But some important questions remain. First, what can we do in situations like the second example, where we want to carry out inference for a small proportion? The problem is hardly academic: at the time of this writing, the most recent estimate of coronavirus prevalence in the UK was approximately 0.2%, i.e. nearly ten times <em>smaller</em> than the value I used for <span class="math inline">\(p\)</span> in my second example.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> Second, how did the <span class="math inline">\(n\geq 30\)</span> folk wisdom arise? Is there anything that we can say about <span class="math inline">\(n\geq 30\)</span>? Finally, are there any theoretical results that can provide guidance about the quality of the approximation provided by the CLT? These questions will have to wait for a future post!</p>
 </div>
 <div class="footnotes">
 <hr />
@@ -216,7 +215,6 @@ coverage_prob</code></pre>
 <li id="fn3"><p>Here we take <span class="math inline">\(J = 100,000\)</span> which is more than enough for the purposes of this exercise.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 <li id="fn4"><p>Recall that we subtracted <span class="math inline">\(1/2\)</span> and multipled by <span class="math inline">\(\sqrt{120}\approx 11\)</span> to construct <code>z</code> from <code>xbar_sims</code>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 <li id="fn5"><p>Notice that I “zoomed in” on the most interesting part of the plot by setting <code>xlim = c(0, 0.1)</code>.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>This is another good homework problem for introductory probability and statistics students!<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>Source: <a href="https://www.gov.uk/government/publications/react-1-study-of-coronavirus-transmission-march-2021-final-results/react-1-study-of-coronavirus-transmission-march-2021-final-results">REACT-1 study of coronavirus tranmission: March 2021 final results</a><a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Source: <a href="https://www.gov.uk/government/publications/react-1-study-of-coronavirus-transmission-march-2021-final-results/react-1-study-of-coronavirus-transmission-march-2021-final-results">REACT-1 study of coronavirus tranmission: March 2021 final results</a><a href="#fnref6" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>

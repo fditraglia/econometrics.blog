@@ -59,7 +59,7 @@ hist(xbar_sims, xlab = '', freq = FALSE,
      main = 'Sampling Dist. of Sample Mean of 10 Uniform(0,1) Draws')
 ```
 
-A beautiful bell curve! This certainly looks normal, but histograms can tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we'll instead comparison *distribution functions* and *quantiles*.
+A beautiful bell curve! This certainly looks normal, but histograms can be tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we'll instead compare *distribution functions* and *quantiles*.
 
 ### The Empirical CDF
 
@@ -83,7 +83,7 @@ so if the CLT provides a good approximation in this example, we should find that
 $$
 \frac{\bar{X}_n - 1/2}{1/\sqrt{120}} = \sqrt{120} (\bar{X}_n - 1/2) \approx N(0,1)
 $$
-in the sense that that *Cumulative Distribution Function* of $\sqrt{120} (\bar{X}_n - 1/2)$, call it $F$, is approximately equal to the standard normal CDF `pnorm()`. An obvious way to see if this holds is to plot $F$ against `pnorm` and see how they compare. From now on, we'll be working with the z-scores of `xbar_sims` rather than the raw simulation values themselves, so we'll start by constructing them, subtracting the population mean and dividing by the population standard deviation:
+in the sense that that the *cumulative distribution function* (CDF) of $\sqrt{120} (\bar{X}_n - 1/2)$, call it $F$, is approximately equal to the standard normal CDF `pnorm()`. An obvious way to see if this holds is to plot $F$ against `pnorm()` and see how they compare. From now on, we'll be working with the z-scores of `xbar_sims` rather than the raw simulation values themselves, so we'll start by constructing them, subtracting the population mean and dividing by the population standard deviation:
 ```{r}
 z <- (xbar_sims - 1/2) / (1 / sqrt(120))
 ```
@@ -92,7 +92,7 @@ We haven't worked out an expression for the function $F$, but we can approximate
 $$
 \mathbb{P}(Z \leq t) \approx \frac{1}{J}\sum_{j=1}^J \mathbf{1}\{z_j \leq t\}
 $$
-where $1\{z_j \leq t \}$ the *indicator function*: it equals one if $z_j$ is less than or equal to the threshold $t$ and zero otherwise. The sample average on the right-hand side of the preceding expression is called the *empirical CDF*. It uses empirical data--in this case our simulation draws $z_j$--to approximate the unknown CDF. By increasing the number of random draws $J$ that we use, we can make this approximately as good as we like.^[Here we take $J = 100,000$ which is more than enough for the purposes of this exercise.] For example, we don't know the exact value of $F(0)$, the probability that $Z \leq 0$. But using our simulated values `z` from above, we can approximate it as
+where $\mathbf{1}\{z_j \leq t \}$ is the *indicator function*: it equals one if $z_j$ is less than or equal to the threshold $t$ and zero otherwise. The sample average on the right-hand side of the preceding expression is called the *empirical CDF*. It uses empirical data--in this case our simulation draws $z_j$--to approximate the unknown CDF. By increasing the number of random draws $J$ that we use, we can make this approximation as accurate as we like.^[Here we take $J = 100,000$ which is more than enough for the purposes of this exercise.] For example, we don't know the exact value of $F(0)$, the probability that $Z \leq 0$. But using our simulated values `z` from above, we can approximate it as
 ```{r}
 mean(z <= 0)
 ```
@@ -100,9 +100,9 @@ and if we wanted to the probability that $Z \leq 2$, we could approximate this a
 ```{r}
 mean(z <= 2)
 ```
-So far, so good: since we know that `pnorm(0)` equals 0.5 while `pnorm(2)` is approximately `r round(pnorm(2),4)`. 
+So far so good: these values agree with `pnorm(0)`, which equals 0.5, and `pnorm(2)`, which is approximately `r round(pnorm(2),4)`. 
 But we've only looked at two values of $t$. 
-While we could continue trying additional values "by hand," it's much faster to use R's built-in function for computing an empirical cdf, `ecdf()`, instead. First we pass our simulated z-scores `z` into `ecdf()` function to calculate the *empirical CDF* and plot the result. Next, we overlay Finally, we overlay some points from the standard normal CDF, `pnorm` in blue for comparison:
+While we could continue trying additional values one at a time, it's much faster to use R's built-in function for computing an empirical cdf, `ecdf()`. First we pass our simulated z-scores `z` into `ecdf()` function to calculate the empirical CDF and plot the result. Next we overlay some points from the standard normal CDF, `pnorm` in blue for comparison:
 ```{r}
 z <- sqrt(120) * (xbar_sims - 1/2)
 plot(ecdf(z), xlab = 't', ylab = 'F(t)', main = 'F(t) versus pnorm(t)')
@@ -135,8 +135,7 @@ p <- c(0.25, 0.5, 0.75)
 rbind(normal = qnorm(p), simulation =  quantile(z, probs = p))
 ```
 This looks good as well.
-If we want to compare quantiles over a finer grid of values for `p`, it's more convenient to make a plot rather than a table. 
-Suppose that we treat the values `qnorm` as an $x$-coordinate and the quantiles of `z` as a $y$-coordinate. If the CLT is giving us a good approximation, then we should have $x \approx y$ and all of the points will fall near the 45-degree line. This is indeed what we observe: 
+If we want to compare quantiles over a finer grid of values for `p`, it's more convenient to make a plot rather than a table. Suppose that we treat the values `qnorm` as an $x$-coordinate and the quantiles of `z` as a $y$-coordinate. If the CLT is giving us a good approximation, then we should have $x \approx y$ and all of the points should fall near the 45-degree line. This is indeed what we observe: 
 ```{r}
 p <- seq(from = 0.05, to = 0.95, by = 0.05)
 x <- qnorm(p)
@@ -152,7 +151,7 @@ The plot that we have just made is called a *normal quantile-quantile plot*. It 
 1. Calculate the corresponding quantiles of your data, `quantile(your_data_here, probs = p)`. Call them $y$.
 1. Plot $y$ against $x$.
 
-If the points all fall on a line, then the quantiles of the observed data agree with those of a normal distribution. If we standardize the data before making such a plot, as we did to construct `z` above, the relevant line with be the 45-degree line. If not, it will be a different line but the interpretation remains the same The easiest way to make a normal quantile-quantile plot in R is by using the function `qqnorm` followed by `qqline`. We could do this either using the centered and standardized simulation draws `z` or the original draws `xbar_sims` 
+If the points all fall on a line, then the quantiles of the observed data agree with those of *some* normal distribution, although perhaps not a standard normal. If we standardize the data before making such a plot, as we did to construct `z` above, the relevant line with be the 45-degree line. If not, it will be a different line but the interpretation remains the same The easiest way to make a normal quantile-quantile plot in R is by using the function `qqnorm` followed by `qqline`. We could do this either using the centered and standardized simulation draws `z` or the original draws `xbar_sims` 
 ```{r}
 par(mfrow = c(1, 2))
 qqnorm(z, ylab = 'Quantiles of z')
@@ -165,8 +164,7 @@ The only difference between these two plots is the scale of the $y$-axis. The pl
 ```{r}
 cbind(simulation = quantile(z, 0.0001), normal = qnorm(0.0001))
 ```
-
-So if you want to carry out a $0.01\%$ test ($\alpha = 0.0001$), the approximation provided by the CLT won't quite cut it with $n = 10$ in this example. But for any conventional significance level, it's nearly perfect:
+This makes perfect sense. A standard normal can take on arbitrarily large values, while the sample mean of ten uniforms is necessarily bounded above by $1$. So if you want to carry out a $0.01\%$ test ($\alpha = 0.0001$), the approximation provided by the CLT won't quite cut it with $n = 10$ in this example. But for any conventional significance level, it's nearly perfect:
 ```{r}
 p <- c(0.01, 0.025, 0.05, 0.1)
 rbind(normal = qnorm(p), simulation = quantile(z, prob = p))
@@ -189,7 +187,7 @@ plot(x, P_x_bar, type = 'h', xlim = c(0, 0.1), ylab = 'pmf of Xbar',
      lwd = 2, col = 'blue')
 ```
 
-The result is *far* from a normal distribution. Not only is it noticeably discrete, it is also seriously asymmetric. Another way to see this is by examining the CDF. If the central limit theorem is working well in this example, we should have $\bar{X}_n \approx N\big(p, p(1 - p)/n\big)$.^[This is another good homework problem for introductory probability and statistics students!] Extending the idea from above, we can plot the exact CDF of $\bar{X}_n$ using the binomial CDF `pbinom()` and compare it to the approximation suggested by the CLT:
+The result is *far* from a normal distribution. Not only is it noticeably discrete, it is also seriously asymmetric. Another way to see this is by examining the CDF. If the central limit theorem is working well in this example, we should have $\bar{X}_n \approx N\big(p, p(1 - p)/n\big)$. Extending the idea from above, we can plot the exact CDF of $\bar{X}_n$ using the binomial CDF `pbinom()` and compare it to the approximation suggested by the CLT:
 ```{r}
 x <- seq(-0.02, 0.08, by = 0.001)
 F_x_bar <- pbinom(n * x, size = n, prob = p)
@@ -203,7 +201,7 @@ legend('topleft', legend = c('Exact', 'CLT'), col = c('blue', 'red'),
 The approximation is noticeably poor, but is the problem serious enough to affect any inferences we might hope to draw? Suppose we wanted to construct a 95\% confidence interval for $p$. The textbook approach, based on the CLT, would have us report $\widehat{p} \pm 1.96 \times \sqrt{\widehat{p}(1 - \widehat{p})/n}$ where $\widehat{p}$ is the sample proportion, i.e.\ $\bar{X}_n$. Let's set up a little simulation experiment to see how well this interval performs when $n = 100$ and $p = 1/60$.
 ```{r}
 # Simulate 5000 draws for phat
-# wach with p = 1/60, n = 100
+# with p = 1/60, n = 100
 set.seed(54321)
 draw_sim_phat <- function(p, n) {
   x <- rbinom(n, size = 1, prob = p)
