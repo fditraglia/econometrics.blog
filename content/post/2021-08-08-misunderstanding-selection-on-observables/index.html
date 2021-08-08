@@ -20,12 +20,12 @@ projects: []
 <script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
 
 
-<p>On a recent exam I asked students to extend the logic of <a href="https://expl.ai/BASRRGX">propensity score weighting</a> to handle a treatment that takes on <em>three</em> rather than two values.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important <em>selection-on-observables</em> assumption:
+<p>On a recent exam I asked students to extend the logic of <a href="https://expl.ai/BASRRGX">propensity score weighting</a> to handle a treatment that takes on <em>three</em> rather than two values. (My problem was basically a stripped-down version of <a href="https://academic.oup.com/biomet/article-abstract/87/3/706/293734">Imbens (2000)</a>.) Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important <em>selection-on-observables</em> assumption:
 <span class="math display">\[
     \mathbb{E}[Y_0|D,X] = \mathbb{E}[Y_0|X] \quad \text{and} \quad 
     \mathbb{E}[Y_1|D,X] = \mathbb{E}[Y_1|X]
 \]</span>
-where <span class="math inline">\((Y_0, Y_1)\)</span> are the <a href="https://expl.ai/QHUAVRV">potential outcomes</a> corresponding to a binary treatment <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> is a vector of observed covariates.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.</p>
+where <span class="math inline">\((Y_0, Y_1)\)</span> are the <a href="https://expl.ai/QHUAVRV">potential outcomes</a> corresponding to a binary treatment <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> is a vector of observed covariates.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.</p>
 <div id="two-misconceptions" class="section level1">
 <h1>Two Misconceptions</h1>
 <p>The following two statements about selection on observables are <em>false</em>:</p>
@@ -84,8 +84,9 @@ so the average treatment effect would also be zero. Again, this is not a contrad
 <p>Under selection on observables, if I know the value of someone’s covariate vector <span class="math inline">\(X\)</span>, then learning her treatment status <span class="math inline">\(D\)</span> provides no additional information about the average values of her <em>potential outcomes</em> <span class="math inline">\((Y_0, Y_1)\)</span>.</p>
 </blockquote>
 <p>This is a correct verbal statement of the mean exclusion restriction <span class="math inline">\(\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)\)</span> and <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)\)</span>.</p>
-<div id="the-second-misconception" class="section level2">
-<h2>The Second Misconception</h2>
+</div>
+<div id="the-second-misconception" class="section level1">
+<h1>The Second Misconception</h1>
 <p>And this leads nicely to the second misconception:</p>
 <blockquote>
 <p>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally independent given covariates <span class="math inline">\(X\)</span>.</p>
@@ -127,12 +128,11 @@ In spite of this, the selection on observables assumption still holds:
 \mathbb{E}(Y_0|X) &amp;= \alpha_0 + X&#39;\beta_0 + \mathbb{E}(U_0|X) = \alpha_0 + X&#39;\beta_0\\
 \end{aligned}
 \]</span>
-and similarly <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X&#39;\beta_0\)</span>. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an <em>expectation</em>, identifying it only requires assumptions about <em>conditional means</em>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The second statement is even easier to correct than the first: we need only add a single word:</p>
+and similarly <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X&#39;\beta_0\)</span>. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an <em>expectation</em>, identifying it only requires assumptions about <em>conditional means</em>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The second statement is even easier to correct than the first: we need only add a single word:</p>
 <blockquote>
 <p>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally <em>mean</em> independent given covariates <span class="math inline">\(X\)</span>.</p>
 </blockquote>
 <p>Conditional independence implies conditional mean independence, but the converse is false.</p>
-</div>
 </div>
 <div id="epilogue" class="section level1">
 <h1>Epilogue</h1>
@@ -141,8 +141,7 @@ and similarly <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>My problem was basically a stripped-down version of <a href="https://academic.oup.com/biomet/article-abstract/87/3/706/293734">Imbens (2000)</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>For more details see my <a href="https://www.treatment-effects.com/">lecture notes on treatment effects</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it’s important to be clear about which assumptions are actually <em>used</em> in a given derivation, and here we only rely on conditional mean independence.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>For more details see my <a href="https://www.treatment-effects.com/">lecture notes on treatment effects</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it’s important to be clear about which assumptions are actually <em>used</em> in a given derivation, and here we only rely on conditional mean independence.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>

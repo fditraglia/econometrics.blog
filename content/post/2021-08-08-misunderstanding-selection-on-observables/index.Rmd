@@ -18,7 +18,7 @@ projects: []
 ---
 
 
-On a recent exam I asked students to extend the logic of [propensity score weighting](https://expl.ai/BASRRGX) to handle a treatment that takes on *three* rather than two values.^[My problem was basically a stripped-down version of [Imbens (2000)](https://academic.oup.com/biomet/article-abstract/87/3/706/293734).] Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important *selection-on-observables* assumption:
+On a recent exam I asked students to extend the logic of [propensity score weighting](https://expl.ai/BASRRGX) to handle a treatment that takes on *three* rather than two values. (My problem was basically a stripped-down version of [Imbens (2000)](https://academic.oup.com/biomet/article-abstract/87/3/706/293734).) Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important *selection-on-observables* assumption:
 $$
 	\mathbb{E}[Y_0|D,X] = \mathbb{E}[Y_0|X] \quad \text{and} \quad 
 	\mathbb{E}[Y_1|D,X] = \mathbb{E}[Y_1|X]
@@ -84,7 +84,7 @@ To summarize: the first statement above cannot be an implication of selection on
 
 This is a correct verbal statement of the mean exclusion restriction $\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)$ and $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)$.
 
-## The Second Misconception
+# The Second Misconception
 
 And this leads nicely to the second misconception:
 
