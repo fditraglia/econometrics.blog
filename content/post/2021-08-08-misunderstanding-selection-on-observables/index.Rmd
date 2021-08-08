@@ -1,0 +1,139 @@
+---
+title: (Mis)understanding Selection on Observables
+author: Francis J. DiTraglia
+date: '2021-08-08'
+slug: misunderstanding-selection-on-observables
+categories: [treatment effects]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-08T23:01:47+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+On a recent exam I asked students to extend the logic of [propensity score weighting](https://expl.ai/BASRRGX) to handle a treatment that takes on *three* rather than two values.^[My problem was basically a stripped-down version of [Imbens (2000)](https://academic.oup.com/biomet/article-abstract/87/3/706/293734).] Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important *selection-on-observables* assumption:
+$$
+	\mathbb{E}[Y_0|D,X] = \mathbb{E}[Y_0|X] \quad \text{and} \quad 
+	\mathbb{E}[Y_1|D,X] = \mathbb{E}[Y_1|X]
+$$
+where $(Y_0, Y_1)$ are the [potential outcomes](https://expl.ai/QHUAVRV) corresponding to a binary treatment $D$ and $X$ is a vector of observed covariates.^[For more details see my [lecture notes on treatment effects](https://www.treatment-effects.com/)] Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.
+
+# Two Misconceptions
+The following two statements about selection on observables are *false*:
+
+> 1. Under selection on observables, if I know the value of someone's covariate vector $X$, then learning her treatment status $D$ provides no additional information about the average value of her observed outcome $Y$.
+> 2. Selection on observables requires the treatment $D$ and potential outcomes $(Y_0,Y_1)$ to be conditionally independent given covariates $X$.
+
+If you've studied treatment effects, pause for a moment and see if you can figure out what's wrong with each of them before reading further.
+
+# The First Misconception
+
+The first statement:
+
+> Under selection on observables, if I know the value of someone's covariate vector $X$, then learning her treatment status $D$ provides no additional information about the average value of her observed outcome $Y$.
+ 
+is  a verbal description of the following conditional mean independence condition:
+$$
+\mathbb{E}[Y|X,D] = \mathbb{E}[Y|X].
+$$
+So what's wrong with this equality? The potential outcomes $(Y_0, Y_1)$ and the observed outcome $Y$ are related according to
+$$
+Y = Y_0 + D (Y_1 - Y_0).
+$$
+Taking conditional expectations of both sides and using the selection on observables assumption 
+$$
+\begin{aligned}
+\mathbb{E}[Y|X,D] &= \mathbb{E}[Y_0|X,D] + D \mathbb{E}[Y_1 - Y_0|D,X]\\
+&= \mathbb{E}[Y_0|X] + D \mathbb{E}[Y_1 - Y_0|X].
+\end{aligned}
+$$
+In contrast, conditioning on $X$ alone gives
+$$
+\begin{aligned}
+\mathbb{E}[Y|X] &= \mathbb{E}[Y_0|X] + \mathbb{E}[D(Y_1 - Y_0)|X]\\
+&= \mathbb{E}[Y_0|X] + \mathbb{E}_{D|X}[D\mathbb{E}(Y_1 - Y_0|D,X)]\\
+&= \mathbb{E}[Y_0|X] + \mathbb{E}_{D|X}[D\mathbb{E}(Y_1 - Y_0|X)]\\
+&= \mathbb{E}[Y_0|X] + \mathbb{E}(D|X) \cdot \mathbb{E}(Y_1 - Y_0|X)
+\end{aligned}
+$$
+by iterated expectations and the selection on observables assumption, since $\mathbb{E}(Y_1 - Y_0|X)$ is a measurable function of $X$. Subtracting these expressions, we find that
+$$
+\mathbb{E}(Y|X,D) - \mathbb{E}(Y|X) = \left[ D - \mathbb{E}(D|X) \right] \cdot \mathbb{E}(Y_1 - Y_0|X)
+$$
+so that $\mathbb{E}(Y|X,D) = \mathbb{E}(Y|X)$ if and only if the RHS equals zero.
+
+So how could the RHS equal zero? One way is if $D = \mathbb{E}(D|X)$. Since $D$ is a binary random variable, this would require $\mathbb{E}(D|X)$ to be a binary random variable as well. But notice that $\mathbb{E}(D|X) = \mathbb{P}(D=1|X)$ is simply the propensity score $p(X)$. Because $X$ is a random variable, so is $p(X)$. But $p(X)$ *cannot* take on the values zero or one. If it did, this would violate the *overlap assumption*: $0 < p(X) < 1$.
+
+So we can't have $D = \mathbb{E}(D|X)$, but what about $\mathbb{E}(Y_1 - Y_0|X)=0$? Since $(Y_1 - Y_0)$ is the treatment effect of $D$, it follows that $\mathbb{E}(Y_1 - Y_0|X)$ is the conditional average treatment effect $\text{ATE}(X)$ given $X$. It's not a contradiction for $\text{ATE}(X)$ to equal zero, but think about what it would mean: it would require that the average treatment effect for a person with covariates $(X = x)$ is exactly zero *regardless* of $x$. Moreover, by iterated expectations it would imply that
+$$
+\text{ATE} = \mathbb{E}(Y_1 - Y_0) = \mathbb{E}_X[\mathbb{E}(Y_1 - Y_0|
+X)] = \mathbb{E}[\text{ATE}(X)] = 0
+$$
+so the average treatment effect would also be zero. Again, this is not a contradiction but it would definitely be odd to assume that the treatment effect is zero before you even try to estimate it!
+
+To summarize: the first statement above cannot be an implication of selection on observables because it would either require a violation of the overlap assumption, or imply that there is no treatment effect whatsoever. To correct the statement, we simply need to change the last three words: 
+
+> Under selection on observables, if I know the value of someone's covariate vector $X$, then learning her treatment status $D$ provides no additional information about the average values of her *potential outcomes* $(Y_0, Y_1)$.
+
+This is a correct verbal statement of the mean exclusion restriction $\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)$ and $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)$.
+
+## The Second Misconception
+
+And this leads nicely to the second misconception:
+
+> Selection on observables requires the treatment $D$ and potential outcomes $(Y_0,Y_1)$ to be conditionally independent given covariates $X$.
+
+To see why this is false, consider an example in which 
+$$
+\begin{aligned}
+Y &= (1 - D) \cdot (\alpha_0 + X'\beta_0 + U_0) + D \cdot (\alpha_1 + X' \beta_1 + U_1)\\
+U_0|(D,X) &\sim \text{Normal}(0,1 - D/2)\\
+U_1|(D,X) &\sim \text{Normal}(0,1 + D).
+\end{aligned}
+$$
+Notice that the distributions of $U_0$ and $U_1$ given $(D,X)$ *depend on* $D$. Now, by iterated expectations,
+$$
+\begin{aligned}
+\mathbb{E}(U_0|X) &= \mathbb{E}_{(D|X)}[\mathbb{E}(U_0|D,X)] = 0\\
+\mathbb{E}(U_0) &= \mathbb{E}_{X}[\mathbb{E}(U_0|X)] =  0
+\end{aligned}
+$$
+and similarly $\mathbb{E}(U_1|X) = \mathbb{E}(U_1)=0$. Substituting $D=0$ and $D=1$, we can calculate the potential outcomes and average treatment effect as follows
+$$
+\begin{aligned}
+Y_0 &= \alpha_0 + X'\beta_0 + U_0 \\
+Y_1 &= \alpha_1 + X'\beta_1 + U_1 \\
+\text{ATE} &= \mathbb{E}(Y_1 - Y_0) = (\alpha_1 - \alpha_0) + \mathbb{E}[X'](\beta_1 - \beta_0).
+\end{aligned}
+$$
+It follows that $D$ is *not* conditionally independent of $(Y_0, Y_1)$ given $X$. In particular, the *variance* of the potential outcomes depends on $D$ even after conditioning on $X$:
+$$
+\begin{aligned}
+\text{Var}(Y_0|X,D) &= \text{Var}(U_0|X,D) = 1 - D/2\\
+\text{Var}(Y_1|X,D) &= \text{Var}(U_1|X,D) = 1 + D.
+\end{aligned}
+$$
+In spite of this, the selection on observables assumption still holds: 
+$$
+\begin{aligned}
+\mathbb{E}(Y_0|D,X) &= \alpha_0 + X'\beta_0 + \mathbb{E}(U_0|D,X) = \alpha_0 + X'\beta_0\\
+\mathbb{E}(Y_0|X) &= \alpha_0 + X'\beta_0 + \mathbb{E}(U_0|X) = \alpha_0 + X'\beta_0\\
+\end{aligned}
+$$
+and similarly $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X'\beta_0$. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an *expectation*, identifying it only requires assumptions about *conditional means*.^[You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it's important to be clear about which assumptions are actually *used* in a given derivation, and here we only rely on conditional mean independence.] The second statement is even easier to correct than the first: we need only add a single word:
+
+> Selection on observables requires the treatment $D$ and potential outcomes $(Y_0,Y_1)$ to be conditionally *mean* independent given covariates $X$.
+
+Conditional independence implies conditional mean independence, but the converse is false.
+
+# Epilogue
+So what's the moral here? First, it's crucial to distinguish between the *observed* outcome $Y$ and the *potential outcomes* $(Y_0, Y_1)$. Second, the various notions of "unrelatedness" between random variables—independence, conditional mean independence, and uncorrelatedness—can be confusing. Be sure to pay attention to exactly which condition is used and why. In a future post, I'll have more to say about the relationships between these notions.
+
+

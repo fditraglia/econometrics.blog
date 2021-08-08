@@ -1,0 +1,148 @@
+---
+title: (Mis)understanding Selection on Observables
+author: Francis J. DiTraglia
+date: '2021-08-08'
+slug: misunderstanding-selection-on-observables
+categories: [treatment effects]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-08T23:01:47+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>On a recent exam I asked students to extend the logic of <a href="https://expl.ai/BASRRGX">propensity score weighting</a> to handle a treatment that takes on <em>three</em> rather than two values.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Nearly everyone figured this out without much trouble, which is good news! At the same time, I noticed some common misconceptions about the all-important <em>selection-on-observables</em> assumption:
+<span class="math display">\[
+    \mathbb{E}[Y_0|D,X] = \mathbb{E}[Y_0|X] \quad \text{and} \quad 
+    \mathbb{E}[Y_1|D,X] = \mathbb{E}[Y_1|X]
+\]</span>
+where <span class="math inline">\((Y_0, Y_1)\)</span> are the <a href="https://expl.ai/QHUAVRV">potential outcomes</a> corresponding to a binary treatment <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> is a vector of observed covariates.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.</p>
+<div id="two-misconceptions" class="section level1">
+<h1>Two Misconceptions</h1>
+<p>The following two statements about selection on observables are <em>false</em>:</p>
+<blockquote>
+<ol style="list-style-type: decimal">
+<li>Under selection on observables, if I know the value of someone’s covariate vector <span class="math inline">\(X\)</span>, then learning her treatment status <span class="math inline">\(D\)</span> provides no additional information about the average value of her observed outcome <span class="math inline">\(Y\)</span>.</li>
+<li>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally independent given covariates <span class="math inline">\(X\)</span>.</li>
+</ol>
+</blockquote>
+<p>If you’ve studied treatment effects, pause for a moment and see if you can figure out what’s wrong with each of them before reading further.</p>
+</div>
+<div id="the-first-misconception" class="section level1">
+<h1>The First Misconception</h1>
+<p>The first statement:</p>
+<blockquote>
+<p>Under selection on observables, if I know the value of someone’s covariate vector <span class="math inline">\(X\)</span>, then learning her treatment status <span class="math inline">\(D\)</span> provides no additional information about the average value of her observed outcome <span class="math inline">\(Y\)</span>.</p>
+</blockquote>
+<p>is a verbal description of the following conditional mean independence condition:
+<span class="math display">\[
+\mathbb{E}[Y|X,D] = \mathbb{E}[Y|X].
+\]</span>
+So what’s wrong with this equality? The potential outcomes <span class="math inline">\((Y_0, Y_1)\)</span> and the observed outcome <span class="math inline">\(Y\)</span> are related according to
+<span class="math display">\[
+Y = Y_0 + D (Y_1 - Y_0).
+\]</span>
+Taking conditional expectations of both sides and using the selection on observables assumption
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}[Y|X,D] &amp;= \mathbb{E}[Y_0|X,D] + D \mathbb{E}[Y_1 - Y_0|D,X]\\
+&amp;= \mathbb{E}[Y_0|X] + D \mathbb{E}[Y_1 - Y_0|X].
+\end{aligned}
+\]</span>
+In contrast, conditioning on <span class="math inline">\(X\)</span> alone gives
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}[Y|X] &amp;= \mathbb{E}[Y_0|X] + \mathbb{E}[D(Y_1 - Y_0)|X]\\
+&amp;= \mathbb{E}[Y_0|X] + \mathbb{E}_{D|X}[D\mathbb{E}(Y_1 - Y_0|D,X)]\\
+&amp;= \mathbb{E}[Y_0|X] + \mathbb{E}_{D|X}[D\mathbb{E}(Y_1 - Y_0|X)]\\
+&amp;= \mathbb{E}[Y_0|X] + \mathbb{E}(D|X) \cdot \mathbb{E}(Y_1 - Y_0|X)
+\end{aligned}
+\]</span>
+by iterated expectations and the selection on observables assumption, since <span class="math inline">\(\mathbb{E}(Y_1 - Y_0|X)\)</span> is a measurable function of <span class="math inline">\(X\)</span>. Subtracting these expressions, we find that
+<span class="math display">\[
+\mathbb{E}(Y|X,D) - \mathbb{E}(Y|X) = \left[ D - \mathbb{E}(D|X) \right] \cdot \mathbb{E}(Y_1 - Y_0|X)
+\]</span>
+so that <span class="math inline">\(\mathbb{E}(Y|X,D) = \mathbb{E}(Y|X)\)</span> if and only if the RHS equals zero.</p>
+<p>So how could the RHS equal zero? One way is if <span class="math inline">\(D = \mathbb{E}(D|X)\)</span>. Since <span class="math inline">\(D\)</span> is a binary random variable, this would require <span class="math inline">\(\mathbb{E}(D|X)\)</span> to be a binary random variable as well. But notice that <span class="math inline">\(\mathbb{E}(D|X) = \mathbb{P}(D=1|X)\)</span> is simply the propensity score <span class="math inline">\(p(X)\)</span>. Because <span class="math inline">\(X\)</span> is a random variable, so is <span class="math inline">\(p(X)\)</span>. But <span class="math inline">\(p(X)\)</span> <em>cannot</em> take on the values zero or one. If it did, this would violate the <em>overlap assumption</em>: <span class="math inline">\(0 &lt; p(X) &lt; 1\)</span>.</p>
+<p>So we can’t have <span class="math inline">\(D = \mathbb{E}(D|X)\)</span>, but what about <span class="math inline">\(\mathbb{E}(Y_1 - Y_0|X)=0\)</span>? Since <span class="math inline">\((Y_1 - Y_0)\)</span> is the treatment effect of <span class="math inline">\(D\)</span>, it follows that <span class="math inline">\(\mathbb{E}(Y_1 - Y_0|X)\)</span> is the conditional average treatment effect <span class="math inline">\(\text{ATE}(X)\)</span> given <span class="math inline">\(X\)</span>. It’s not a contradiction for <span class="math inline">\(\text{ATE}(X)\)</span> to equal zero, but think about what it would mean: it would require that the average treatment effect for a person with covariates <span class="math inline">\((X = x)\)</span> is exactly zero <em>regardless</em> of <span class="math inline">\(x\)</span>. Moreover, by iterated expectations it would imply that
+<span class="math display">\[
+\text{ATE} = \mathbb{E}(Y_1 - Y_0) = \mathbb{E}_X[\mathbb{E}(Y_1 - Y_0|
+X)] = \mathbb{E}[\text{ATE}(X)] = 0
+\]</span>
+so the average treatment effect would also be zero. Again, this is not a contradiction but it would definitely be odd to assume that the treatment effect is zero before you even try to estimate it!</p>
+<p>To summarize: the first statement above cannot be an implication of selection on observables because it would either require a violation of the overlap assumption, or imply that there is no treatment effect whatsoever. To correct the statement, we simply need to change the last three words:</p>
+<blockquote>
+<p>Under selection on observables, if I know the value of someone’s covariate vector <span class="math inline">\(X\)</span>, then learning her treatment status <span class="math inline">\(D\)</span> provides no additional information about the average values of her <em>potential outcomes</em> <span class="math inline">\((Y_0, Y_1)\)</span>.</p>
+</blockquote>
+<p>This is a correct verbal statement of the mean exclusion restriction <span class="math inline">\(\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)\)</span> and <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)\)</span>.</p>
+<div id="the-second-misconception" class="section level2">
+<h2>The Second Misconception</h2>
+<p>And this leads nicely to the second misconception:</p>
+<blockquote>
+<p>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally independent given covariates <span class="math inline">\(X\)</span>.</p>
+</blockquote>
+<p>To see why this is false, consider an example in which
+<span class="math display">\[
+\begin{aligned}
+Y &amp;= (1 - D) \cdot (\alpha_0 + X&#39;\beta_0 + U_0) + D \cdot (\alpha_1 + X&#39; \beta_1 + U_1)\\
+U_0|(D,X) &amp;\sim \text{Normal}(0,1 - D/2)\\
+U_1|(D,X) &amp;\sim \text{Normal}(0,1 + D).
+\end{aligned}
+\]</span>
+Notice that the distributions of <span class="math inline">\(U_0\)</span> and <span class="math inline">\(U_1\)</span> given <span class="math inline">\((D,X)\)</span> <em>depend on</em> <span class="math inline">\(D\)</span>. Now, by iterated expectations,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(U_0|X) &amp;= \mathbb{E}_{(D|X)}[\mathbb{E}(U_0|D,X)] = 0\\
+\mathbb{E}(U_0) &amp;= \mathbb{E}_{X}[\mathbb{E}(U_0|X)] =  0
+\end{aligned}
+\]</span>
+and similarly <span class="math inline">\(\mathbb{E}(U_1|X) = \mathbb{E}(U_1)=0\)</span>. Substituting <span class="math inline">\(D=0\)</span> and <span class="math inline">\(D=1\)</span>, we can calculate the potential outcomes and average treatment effect as follows
+<span class="math display">\[
+\begin{aligned}
+Y_0 &amp;= \alpha_0 + X&#39;\beta_0 + U_0 \\
+Y_1 &amp;= \alpha_1 + X&#39;\beta_1 + U_1 \\
+\text{ATE} &amp;= \mathbb{E}(Y_1 - Y_0) = (\alpha_1 - \alpha_0) + \mathbb{E}[X&#39;](\beta_1 - \beta_0).
+\end{aligned}
+\]</span>
+It follows that <span class="math inline">\(D\)</span> is <em>not</em> conditionally independent of <span class="math inline">\((Y_0, Y_1)\)</span> given <span class="math inline">\(X\)</span>. In particular, the <em>variance</em> of the potential outcomes depends on <span class="math inline">\(D\)</span> even after conditioning on <span class="math inline">\(X\)</span>:
+<span class="math display">\[
+\begin{aligned}
+\text{Var}(Y_0|X,D) &amp;= \text{Var}(U_0|X,D) = 1 - D/2\\
+\text{Var}(Y_1|X,D) &amp;= \text{Var}(U_1|X,D) = 1 + D.
+\end{aligned}
+\]</span>
+In spite of this, the selection on observables assumption still holds:
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(Y_0|D,X) &amp;= \alpha_0 + X&#39;\beta_0 + \mathbb{E}(U_0|D,X) = \alpha_0 + X&#39;\beta_0\\
+\mathbb{E}(Y_0|X) &amp;= \alpha_0 + X&#39;\beta_0 + \mathbb{E}(U_0|X) = \alpha_0 + X&#39;\beta_0\\
+\end{aligned}
+\]</span>
+and similarly <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X&#39;\beta_0\)</span>. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an <em>expectation</em>, identifying it only requires assumptions about <em>conditional means</em>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The second statement is even easier to correct than the first: we need only add a single word:</p>
+<blockquote>
+<p>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally <em>mean</em> independent given covariates <span class="math inline">\(X\)</span>.</p>
+</blockquote>
+<p>Conditional independence implies conditional mean independence, but the converse is false.</p>
+</div>
+</div>
+<div id="epilogue" class="section level1">
+<h1>Epilogue</h1>
+<p>So what’s the moral here? First, it’s crucial to distinguish between the <em>observed</em> outcome <span class="math inline">\(Y\)</span> and the <em>potential outcomes</em> <span class="math inline">\((Y_0, Y_1)\)</span>. Second, the various notions of “unrelatedness” between random variables—independence, conditional mean independence, and uncorrelatedness—can be confusing. Be sure to pay attention to exactly which condition is used and why. In a future post, I’ll have more to say about the relationships between these notions.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>My problem was basically a stripped-down version of <a href="https://academic.oup.com/biomet/article-abstract/87/3/706/293734">Imbens (2000)</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>For more details see my <a href="https://www.treatment-effects.com/">lecture notes on treatment effects</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it’s important to be clear about which assumptions are actually <em>used</em> in a given derivation, and here we only rely on conditional mean independence.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
