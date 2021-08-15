@@ -1,0 +1,327 @@
+---
+title: Understanding the F Statistic
+author: Francis J. DiTraglia
+date: '2021-08-15'
+slug: understanding-the-f-statistic
+categories: [introductory econometrics]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-15T22:21:49+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses.
+In the simplest case, it can be written as
+<span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)}\]</span>
+where <span class="math inline">\(SSR_r\)</span> is the <em>restricted</em> sum of squared residuals, <span class="math inline">\(SSR_{u}\)</span> is the <em>unrestricted</em> sum of squared residuals, <span class="math inline">\(q\)</span> is the number of restrictions, and <span class="math inline">\((n - k - 1)\)</span> is the degrees of freedom of the unrestricted model.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add the a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the <span class="math inline">\(F\)</span> statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even <em>obvious</em>.</p>
+<p>This is not a post about asymptotic theory, and it is not a post about heteroskedasticity. I will not prove that <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span>-distribution, and I will blithely assume that we inhabit the idealized textbook realm in which all errors are homoskedastic. I will also dodge the question of whether you should even be carrying out an F-test in the first place.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> This is a post about understanding what the <span class="math inline">\(F\)</span>-statistic measures and why it takes the form that it does.</p>
+<div id="the-simplest-possible-example" class="section level2">
+<h2>The Simplest Possible Example</h2>
+<p>The best way to understand the <span class="math inline">\(F\)</span>-statistic is by looking at an example that’s so simple that there’s no reason to use an <span class="math inline">\(F\)</span>-test in the first place. Here’s a dataset of students’ scores on two introductory statistics midterms that I gave many years ago:</p>
+<pre class="r"><code>midterms &lt;- read.csv(&#39;https://ditraglia.com/econ103/midterms.csv&#39;)
+head(midterms)</code></pre>
+<pre><code>##   Midterm1 Midterm2
+## 1    57.14    60.71
+## 2    77.14    77.86
+## 3    83.57    93.57
+## 4    88.00       NA
+## 5    69.29    72.14
+## 6    80.71    89.29</code></pre>
+<p>As you can see, there is at least one missing observation: student #4 scored 88% on the first midterm, but missed the second. In fact, nine students missed the second midterm:</p>
+<pre class="r"><code>summary(midterms)</code></pre>
+<pre><code>##     Midterm1        Midterm2    
+##  Min.   :56.43   Min.   :47.86  
+##  1st Qu.:70.53   1st Qu.:74.64  
+##  Median :80.36   Median :84.29  
+##  Mean   :79.74   Mean   :81.39  
+##  3rd Qu.:87.86   3rd Qu.:90.71  
+##  Max.   :97.86   Max.   :99.29  
+##                  NA&#39;s   :9</code></pre>
+<p>To keep this example as simple as possible, I’ll drop the missing observations.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>midterms &lt;- na.omit(midterms)</code></pre>
+<p>Let’s call student #4 Natalie: she scored 88% on the first midterm but missed the second. Suppose we wanted to predict how well Natalie <em>would have done</em> on the second midterm had she taken it. There are many ways that we could try to make this prediction. One possibility would be to ignore Natalie’s score on the first midterm, and predict that she would have scored 81.4 on the second: the average score among all students who took this exam. Another possibility would be to fit a linear regression to the scores of all students who took <em>both</em> exams and use this to project Natalie’s score on midterm two based on her score on midterm one. If scores on the two exams are correlated, option two seems like a better idea: Natalie outperformed the class average on midterm one by 8.4 or roughly 0.77 standard deviations. It seems reasonable to account for this when predicting her second on the second exam.</p>
+<p>In fact both of these these prediction rules can be viewed as special cases of linear regression. Let <span class="math inline">\(x_i\)</span> denote student <span class="math inline">\(i\)</span>’s score on midterm one and <span class="math inline">\(y_i\)</span> denote her score on midterm two. The sample mean <span class="math inline">\(\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i\)</span> solves the optimization problem
+<span class="math display">\[
+\min_a \sum_{i=1}^n (y_i - a)^2
+\]</span>
+which is simply least squares without a predictor variable.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> In contrast, the usual least-squares regression problem is
+<span class="math display">\[
+\min_{a,b} \sum_{i=1}^n (y_i - a - b x_i)^2
+\]</span>
+with solutions <span class="math inline">\(\hat{a} = \bar{y} - \hat{b} \bar{x}\)</span> and <span class="math inline">\(\hat{b} = s_{xy} / s_x^2\)</span>, where <span class="math inline">\(s_{xy}\)</span> is the sample covariance of scores on the two midterms and <span class="math inline">\(s_x^2\)</span> is the sample variance of scores on the first midterm. Notice how these two optimization problems are related: the first is a <em>restricted</em> (aka <em>constrained</em>) version of the second with the constraint <span class="math inline">\(b = 0\)</span>. In the discussion below, I will call the first of these the <em>restricted regression</em> and the second the <em>unrestricted regression</em>.</p>
+<p>It’s easy to fit these regressions in R.
+We’ll start with the restricted:</p>
+<pre class="r"><code>restricted &lt;- lm(Midterm2 ~ 1, data = midterms)
+summary(restricted)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Midterm2 ~ 1, data = midterms)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -33.531  -6.746   2.899   9.319  17.899 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.391      1.457   55.86   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.28 on 70 degrees of freedom</code></pre>
+<p>The syntax <code>Midterm2 ~ 1</code> specifies a regression formula containing <em>no predictor variables</em>, only an intercept.
+Notice that our estimate for the intercept agrees with the sample mean score on the second midterm from above, as it should!</p>
+<p>Turning our attention to the unrestricted regression, we see that scores on the first midterm are strongly predictive of scores on the second:</p>
+<pre class="r"><code>unrestricted &lt;- lm(Midterm2 ~ Midterm1, data = midterms)
+summary(unrestricted)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Midterm2 ~ Midterm1, data = midterms)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -22.809  -7.127   2.047   8.125  18.549 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   32.575      9.243   3.524 0.000759 ***
+## Midterm1       0.613      0.115   5.329 1.17e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.41 on 69 degrees of freedom
+## Multiple R-squared:  0.2916, Adjusted R-squared:  0.2813 
+## F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
+<p>For a pair of students who differed by one point in their scores on the first midterm, we would predict a difference of 0.61 points on the second.</p>
+<p>The restricted regression <em>ignores</em> a student’s score on the first midterm when predicting her score on the second.
+But we’ve seen from the unrestricted regression that scores on midterm #1 are strongly correlated with scores on midterm #2.
+As such, our best bet is to predict Natalie’s second midterm score using the unrestricted regression model:</p>
+<pre class="r"><code>predict(unrestricted, newdata = data.frame(Midterm1 = 88))</code></pre>
+<pre><code>##        1 
+## 86.52169</code></pre>
+<p>Because Natalie scored above the mean on the first exam, we predict that she will score above the mean on the second exam.</p>
+</div>
+<div id="how-much-better-is-the-fit-of-the-unrestricted-regression" class="section level2">
+<h2>How much better is the fit of the unrestricted regression?</h2>
+<p>While I didn’t present it in this way, the choice between restricted and unrestricted regressions above could be formulated as a hypothesis test. The restricted regression imposes a zero regression slope, but the unrestricted regression doesn’t. In this case, we can test the restriction that the slope is in fact zero using simple t-test.
+Based on the t-statistic of 5.33 from above we would easily <em>reject</em> the restriction at any conventional significance level.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<p>But there’s another way to carry out the same test.
+Although it would be overkill in this example, the principles that underlie it can be used to carry out tests in more complicated situations where a simple t-test wouldn’t suffice.
+Rather than examining the slope estimate from the unrestricted regression, this alternative approach compares the <em>sum of squared residuals</em> (SSR) of the two regressions to see which does a better job of fitting the observed data.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>
+It’s easy to compute the SSR of the two regressions from above using the <code>residuals()</code> function:</p>
+<pre class="r"><code>SSR_u &lt;- sum(residuals(unrestricted)^2)
+SSR_r &lt;- sum(residuals(restricted)^2)
+c(Unrestricted = SSR_u, Restricted = SSR_r)</code></pre>
+<pre><code>## Unrestricted   Restricted 
+##     7475.741    10552.883</code></pre>
+<p>The SSR of the restricted regression is <em>higher</em> than that of the unrestricted regression.
+But what exactly should we make of this?
+A picture can help to make things clearer.
+This one has two panels: one for the restricted regression and another for the unrestricted regression.
+Each panel plots the observations from the <code>midterms</code> dataset along with the fitted regression line, using dashed vertical lines to indicate the residuals: the distance from a given observation to the regression line.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/SSRplot-1.png" width="960" /></p>
+<p>Notice that the restricted regression line is flat because it does not use scores on the first midterm to predict those on the second.
+The lower SSR of the unrestricted model reflects the fact that the observations in the <code>midterms</code> dataset are on average <em>closer</em> to a line with slope 0.6 and intercept 32.6 than they are to a line with slope zero and intercept 81.4.</p>
+<p>To understand this picture, it helps to think about the following question: is it possible for the unrestricted regression to have a <em>higher</em> SSR than the restricted one?
+Recall from above that each of these regressions is the solution to an optimization problem.
+The difference between them is that the restricted regression imposes a <em>constraint</em> while the unrestricted regression doesn’t.
+If the best slope for predicting second midterm scores using first midterm scores is zero, the unrestricted regression is free to set <span class="math inline">\(b = 0\)</span>.
+In this case its estimates would coincide with those of the restricted regression.
+On the other hand, if the best slope <em>isn’t</em> zero that means some other choice of <span class="math inline">\(b\)</span> by definition results in a lower SSR: linear regression chooses the line whose slope and intercept minimize the squared vertical deviations between the data and the line.
+The restricted regression is <em>forced</em> to have <span class="math inline">\(b = 0\)</span>, so in this case it must do a worse job fitting the data.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>
+This reasoning shows that we will <em>always</em> find that the SSR of the restricted model is at least as large as that of the unrestricted model.</p>
+<p>We shouldn’t be surprised to see that the unrestricted regression “fits the data” better than the restricted one: it can’t do otherwise unless the sample correlation between midterm scores is exactly zero.
+But there is still the question of <em>how much better</em> it fits.
+Taking differences tells us how much larger the SSR of the restricted model is compared to that of the unrestricted model:</p>
+<pre class="r"><code>SSR_r - SSR_u</code></pre>
+<pre><code>## [1] 3077.142</code></pre>
+<p>So is this a big difference or a small difference?
+The answer depends on the <em>units</em> in which <span class="math inline">\(y\)</span> is measured.
+A residual is a vertical deviation, i.e. a distance along the <span class="math inline">\(y\)</span>-axis.
+This means that it has the same units as the <span class="math inline">\(y\)</span>-variable.
+If <span class="math inline">\(y\)</span> is measured in inches, so are the residuals; if <span class="math inline">\(y\)</span> is measured in kilometers, so are the residuals.
+Because the SSR is a sum of squared residuals, it has the same units as <span class="math inline">\(y^2\)</span>.
+If <span class="math inline">\(y\)</span> is measured in inches, the SSR is measured in square inches; if <span class="math inline">\(y^2\)</span> is measured in kilometers, the SSR is measured in square kilometers.
+Changing the units of <span class="math inline">\(y\)</span> changes the units of the SSR.
+For example, an SSR of one becomes an SSR of <em>one million</em> if we change the units of <span class="math inline">\(y\)</span> from kilometers to meters.
+Accordingly, a comparison of <code>SSR_r</code> to <code>SSR_u</code> is meaningless unless we account for the units of <span class="math inline">\(y\)</span>.</p>
+<p>The simplest way account for units is by <em>eliminating them</em> from the problem.
+This is precisely what we do when we carry out a t-test: <span class="math inline">\(\bar{x}/\text{SE}(\bar{x})\)</span> is unitless because the standard error of <span class="math inline">\(\bar{x}\)</span> has the same units as <span class="math inline">\(\bar{x}\)</span> itself. Any change of units in the numerator would be cancelled out in the denominator.
+This is a crucial point: test statistics are <em>unitless</em>.
+We do not compare <span class="math inline">\(\bar{x}\)</span> to a table of normal critical values measured in inches for a distribution with standard deviation <span class="math inline">\(2.4\)</span>; we compare <span class="math inline">\(\bar{x}/2.4\)</span> to a unitless <em>standard normal</em> distribution.</p>
+<p>The t-statistic eliminates units by taking a ratio, so let’s try the same idea in our comparison of <code>SSR_r</code> to <code>SSR_u</code>.
+There are various possibilities, and any of them would work just as well from the perspective of eliminating units.
+The F-test statistic is based on a ratio that asks how much <em>worse</em> the restricted model fits <em>relative</em> to the unrestricted regression.
+In other words, we ask: how much <em>larger</em> is <code>SSR_r</code> compared to <code>SSR_u</code> as a percentage expressed in decimal terms?</p>
+<pre class="r"><code>(SSR_r - SSR_u) / SSR_u</code></pre>
+<pre><code>## [1] 0.4116171</code></pre>
+<p>There is nothing subtle going on here.
+If we wanted to know how much larger US GDP is in 2021 compared to 1921, we would simply calculate
+<span class="math display">\[
+\frac{\text{GDP}_{2021} - \text{GDP}_{1921}}{\text{GDP}_{1921}}
+\]</span>
+assuming, of course, that both of these figures are corrected for inflation!
+This is precisely the same reasoning that we used above: the SSR “grows” when we impose a restriction.
+We want to know how much it grows as a percentage.
+The answer is 0.41 or equivalently 41%.</p>
+</div>
+<div id="sampling-uncertainty" class="section level2">
+<h2>Sampling Uncertainty</h2>
+<p>We’ve <em>nearly</em> arrived at the F-statistic.
+To see what’s missing, we’ll use a bit of algebra to re-write it as
+<span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)} = \left(\frac{SSR_r - SSR_u}{SSR_u}\right) \left(\frac{n - k - 1}{q}\right).\]</span>
+We obtained the first factor on the RHS, <span class="math inline">\((SSR_r - SSR_u) / SSR_u\)</span>, simply by reasoning about units and the nature of constrained versus unconstrained optimization problems.
+Stop for a minute and appreciate how impressive this is: simple intuition has taken us halfway to this rather formidable-looking expression.
+To understand the second factor, we need to think about sampling uncertainty.</p>
+<p>In the midterms example we found that the restricted regression SSR was 41% larger than the unrestricted one.
+Is this a big difference or a small one?
+Units don’t enter into it, because we have already eliminated them.
+But the <code>midterms</code> dataset only contains information on 71 students.
+If we merely want to summarize the relationship between test scores for these students, there is no role for statistical inference: summary statistics suffice.
+Tests and confidence intervals enter the picture when we hope to <em>generalize</em> from an observed sample to the population from which it was drawn.
+Imagine a large population of introductory statistics students who took my two midterms.
+Now suppose that we observe a random sample of 71 students from this population.
+How much information do the observed exam scores for <em>these students</em> provide about the relationship between midterm scores that we <em>in the population</em>?<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<p>The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population.
+We can see this in the expression for the standard error of the sample mean: <span class="math inline">\(\text{SE}(\bar{X}) = \sigma_x^2/\sqrt{n}\)</span>.
+The larger the sample size, the smaller the standard error, all else equal.
+Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic.
+The same reasoning applies to the F-statistic above.
+The numerator <span class="math inline">\((n - k - 1)\)</span> in the second factor increases with the sample size <span class="math inline">\(n\)</span>.
+This <em>magnifies</em> the effect of the first factor.
+An <span class="math inline">\(SSR_r\)</span> that is 41% higher than the <span class="math inline">\(SSR_u\)</span> is “more impressive” evidence when the sample size is <span class="math inline">\(1000\)</span> than when it is <span class="math inline">\(10\)</span>.
+Small samples are intrinsically more variable than large ones, so we should expect them to turn up anomalous results more frequently.
+The F-statistic takes this into account.</p>
+<p>So why <span class="math inline">\((n - k - 1)\)</span> rather than <span class="math inline">\(n\)</span>?
+This is a so-called “degrees of freedom correction.”
+By estimating <span class="math inline">\(k\)</span> regression slope parameters and <span class="math inline">\(1\)</span> intercept parameter, we “use up” <span class="math inline">\((k + 1)\)</span> of the observations, leaving only <span class="math inline">\((n - k - 1)\)</span> pieces of truly independent information.
+This is not particularly intuitive.
+In a stunning departure from my usual advice to introductory statistics and econometrics students, I suggest that you simply memorize this part of the F-statistic.
+It may help to notice that the same degrees of freedom correction appears in the expression for the standard error of the regression, <span class="math inline">\(SER \equiv \sqrt{SSR/(n - k - 1)}\)</span>,
+a measure of the average distance that the observed data fall from the regression line.</p>
+<p>The only as-yet-unexplained quantity in the F-test statistic is <span class="math inline">\(q\)</span>.
+This denotes the <em>number of restrictions</em> imposed by the restricted model.
+Counting restrictions is the same thing as counting equals signs.
+In a regression of the form <span class="math inline">\(Y = \beta_0 + \beta_1 X + U\)</span> a restriction of the form <span class="math inline">\(\beta_1 = 1\)</span> gives <span class="math inline">\(q = 1\)</span> because there it takes a single equals sign to assert that <span class="math inline">\(\beta_1\)</span> equals one.
+More complicated regressions allow more complicated kinds of restrictions.
+For example, in the regression
+<span class="math display">\[
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
+\]</span>
+we could consider the restriction <span class="math inline">\(\beta_1 = \beta_2 = \beta_3 = 0\)</span> yielding <span class="math inline">\(q =3\)</span>.
+Alternatively we could consider <span class="math inline">\(\beta_0 = \beta_2 = 7\)</span> yielding <span class="math inline">\(q = 2\)</span>.
+We could even consider <span class="math inline">\(\beta_1 + \beta_2 = 1\)</span> yielding <span class="math inline">\(q = 1\)</span>.
+Again: to count the number of restrictions, count the number of equals signs that it requires to express these restrictions.</p>
+<p>Now we know how to determine <span class="math inline">\(q\)</span>, but the question remains: why does it enter the F-test statistic?
+Above we discussed why <span class="math inline">\(SSR_u\)</span> cannot exceed <span class="math inline">\(SSR_r\)</span> in a particular dataset.
+Now we have to think about what happens when sampling uncertainty enters the picture.
+The sum of squared residuals measures how well a linear regression model fits the <em>observed dataset</em>.
+Crucially, this is the very same dataset that was used to calculate the regression slope and intercept.
+In effect, we have used the data twice: first to determine the parameter values that minimize the sum of squared vertical deviations and then to assess how well our regression fits the data, measured by the <em>same</em> vertical deviations.
+The danger lurking here is a phenomenon called <em>overfitting</em>.
+We’re not really interested in how well the regression fits <em>this dataset</em>; what we want to know is how well it would help us to predict <em>future observations</em>.
+In-sample fit, as measured by SSR or related quantities, can be shown to be an <em>over-optimistic</em> measure of out-of-sample fit.
+This is well-known to machine learning practitioners, who generally use one dataset to fit their models, the training data, and a <em>separate</em> dataset, the test data, to evaluate their predictive performance.
+In general, the more “flexible” the model, the worse the overfitting problem becomes.
+Because adding restrictions <em>reduces</em> a model’s flexibility, this creates a challenge for any procedure that compares the in-sample fit of two regressions.
+Because it is less flexible, we should expect the restricted regression to fit the sample data less well than the unrestricted regression <em>even if the restrictions are true in the population</em>.</p>
+<p>To drive this point home, I generated a dataset called <code>sim_data</code> in which <span class="math inline">\(Y_i = \alpha + \epsilon_i\)</span> where <span class="math inline">\(\epsilon_i \sim \text{Normal}(0, 1)\)</span>.
+I then simulated a large number of regressors <span class="math inline">\((X_{i1}, X_{i2}, \dots, X_{iq})\)</span> <em>completely independently</em> of <span class="math inline">\(Y_i\)</span>.
+(For the simulation code, see the appendix below.)
+In the population from which I simulated my data, none of these regressors contains any information to predict <span class="math inline">\(Y\)</span>.
+Nevertheless, if <span class="math inline">\(q\)</span> is relatively large compared to the sample size <span class="math inline">\(n\)</span>, some of these regressors will <em>appear</em> to be correlated with <span class="math inline">\(Y\)</span> based on the observed data, purely because of sampling variability.
+In this example I set <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(q = 50\)</span>.
+Fitting a restricted regression with only an intercept, and an unrestricted regression that includes all 50 regressors from <code>sim_dat</code> we obtain</p>
+<pre class="r"><code>reg_sim_unrestricted &lt;- lm(y ~ ., sim_dat)
+reg_sim_restricted &lt;- lm(y ~ 1, sim_dat)
+SSR_sim_r &lt;- sum(residuals(reg_sim_restricted)^2)
+SSR_sim_u &lt;- sum(residuals(reg_sim_unrestricted)^2)
+(SSR_sim_r - SSR_sim_u) / SSR_sim_u</code></pre>
+<pre><code>## [1] 0.9144509</code></pre>
+<p>Even though the restrictions are <em>true</em> in this simulation study, the restricted SSR is 91% larger than the unrestricted SSR purely due to sampling variability.
+The F-statistic explicitly takes this phenomenon into account via the scaling factor <span class="math inline">\((n - k - 1) / q\)</span>.
+What matters is not the sample size <em>per se</em>, but the sample size <em>relative</em> to the number of restrictions imposed by the restricted regression.</p>
+</div>
+<div id="while-were-here-we-might-as-well-carry-out-the-test" class="section level2">
+<h2>While we’re here we might as well carry out the test!</h2>
+<p>Now that we understand why the F-test statistic takes the form that it does, let’s carry out the F-test in each of the two examples from above: <code>midterms</code> and <code>sim_dat</code>.
+Under the null hypothesis that the constraints imposed by the restricted regression are <em>correct</em>, the F-test statistic follows an <span class="math inline">\(F(q, n-k-1)\)</span> distribution.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>
+For the <code>midterms</code> dataset our test statistic is</p>
+<pre class="r"><code>F_midterms &lt;- ((SSR_r - SSR_u) / SSR_u) * (71 - 1 - 1) / 1
+F_midterms</code></pre>
+<pre><code>## [1] 28.40158</code></pre>
+<p>while the 10%, 5% and 1% critical values for an <span class="math inline">\(F(1, 69)\)</span> distribution are</p>
+<pre class="r"><code>alpha &lt;- c(0.1, 0.05, 0.01)
+qf(1 - alpha, df1 = 1, df2 = 69)</code></pre>
+<pre><code>## [1] 2.779684 3.979807 7.017078</code></pre>
+<p>The associated p-value is</p>
+<pre class="r"><code>1 - pf(F_midterms, df1 = 1, df2 = 69)</code></pre>
+<pre><code>## [1] 1.173624e-06</code></pre>
+<p>so we resoundingly reject the restriction: first midterm scores <em>clearly do</em> help to predict second midterm scores.
+The <code>sim_data</code> example gives a very different result.
+The test statistic in this example is well below any standard critical value, and the p-value is very large:</p>
+<pre class="r"><code>F_sim &lt;- ((SSR_sim_r - SSR_sim_u) / SSR_sim_u) * (100 - 50 - 1) / 50
+F_sim</code></pre>
+<pre><code>## [1] 0.8961619</code></pre>
+<pre class="r"><code>qf(1 - alpha, df1 = 50, df2 = 49)</code></pre>
+<pre><code>## [1] 1.444392 1.604442 1.957803</code></pre>
+<pre class="r"><code>1 - pf(F_sim, df1 = 50, df2 = 49)</code></pre>
+<pre><code>## [1] 0.6497498</code></pre>
+<p>In this case we would <em>fail to reject</em> the restrictions.
+Indeed, the restrictions are <em>true</em>: my simulation generated regressors that are completely independent of <span class="math inline">\(Y\)</span>!</p>
+</div>
+<div id="the-bottom-line" class="section level2">
+<h2>The Bottom Line</h2>
+<p>The F-statistic is a product of two factors.
+The first factor measures how much larger the sum of squared residuals becomes in percentage terms when we impose the restriction. We use a relative comparison to eliminate units from the problem. The second factor accounts for sampling variability. The larger the sample size <span class="math inline">\(n\)</span> relative to the number of restrictions <span class="math inline">\(q\)</span>, the more we “inflate” the value of the first factor. The only thing you need to memorize is the degrees of freedom correction: <span class="math inline">\((n - k - 1)\)</span>.</p>
+</div>
+<div id="appendix-code" class="section level2">
+<h2>Appendix: Code</h2>
+<p>I used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:</p>
+<pre class="r"><code>par(mfrow = c(1, 2))
+plot(Midterm2 ~ Midterm1, data = midterms, main = &#39;Unrestricted&#39;, pch = 20)
+abline(coef(unrestricted), lwd = 2, col = &#39;blue&#39;)
+with(midterms, segments(x0 = Midterm1, y0 = Midterm2, 
+                        x1 = Midterm1, y1 = fitted(unrestricted),
+                        col = &#39;blue&#39;, lty = 2, lwd = 1))
+text(90, 50, bquote(SSR == .(round(SSR_u))))
+plot(Midterm2 ~ Midterm1, data = midterms, main = &#39;Restricted&#39;, pch = 20)
+with(midterms, segments(x0 = Midterm1, y0 = Midterm2, 
+                        x1 = Midterm1, y1 = fitted(restricted),
+                        col = &#39;red&#39;, lty = 2, lwd = 1))
+abline(h = coef(restricted), lwd = 2, col = &#39;red&#39;)
+text(90, 50, bquote(SSR == .(round(SSR_r))))
+par(mfrow = c(1,1))</code></pre>
+<p>and the following code to generate the data contained in <code>sim_data</code></p>
+<pre class="r"><code>set.seed(3817)
+n &lt;- 100
+q &lt;- 50
+y &lt;- 0.5 + rnorm(n)
+x &lt;- matrix(rnorm(n * q), n, q)
+colnames(x) &lt;- paste0(&#39;x&#39;, 1:q)
+sim_dat &lt;- data.frame(x, y)</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Specifically, the “simplest case” refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>See <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R-squared, and Other Distractions</a> for an insightful critique.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Health warning: it <em>dangerous</em> to glibly drop missing observations in applied work! The key question is why those nine students missed the second exam. If their reasons for doing so are “as good as randomly assigned,” e.g. a death in the family or an unexpected illness or injury, these observations as <em>missing at random</em> (MAR). In this case, dropping them is statistically innocuous. If instead these students’ reasons for missing the exam are related to their course performance, then dropping their observations could yield a misleading picture of the underlying relationship between midterm scores.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>If you’re taking introductory statistics or econometrics it’s a good idea to try to prove this for yourself!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>If you’re familiar with the “trinity” of classical tests (Score/LM, Likelihood Ratio, and Wald), this reasoning amounts to a Wald test: fit the unrestricted model and use the distance between the parameter estimates and their values under the restriction to form a test statistic. If the unrestricted estimates are close enough to the restriction, don’t reject it.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Again, if you’re familiar with the aforementioned “trinity” of tests, the procedure I’m about to describe amounts to a Likelihood Ratio Test: fit both the restricted and unrestricted models, and compare their maximized sample likelihoods. If the likelihoods are similar, don’t reject the restriction.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>More generally, imposing a constraint can never result in a <em>better</em> solution to an optimization problem: at best it can leave the optimum unchanged.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>Strictly speaking this requires the regression errors to be normally distributed and homoskedastic. If the errors are non-normal but homoskedastic, then the F-statistic is approximately distributed as an <span class="math inline">\(F(q, \infty)\)</span> random variable for large <span class="math inline">\(n\)</span>. Life is much more complicated under heteroskedasticity, but this is a topic for a future post!<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
