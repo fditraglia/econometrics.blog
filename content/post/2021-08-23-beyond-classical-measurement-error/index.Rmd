@@ -1,0 +1,120 @@
+---
+title: Beyond Classical Measurement Error
+author: Francis J. DiTraglia
+date: '2021-08-23'
+slug: beyond-classical-measurement-error
+categories: [measurement error]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-23T13:01:22+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Pop Quiz: If $D^*$ and $D$ are binary random variables and $D$ is a noisy measure of $D^*$, is it possible for the measurement error $W \equiv D - D^*$ to be *classical*? Explain why or why not. (Answer below)
+
+# Classical Measurement Error
+Classical measurement error is a problem that is easy to understand and relatively easy to address. 
+Roughly speaking, classical measurement error refers to a situation in which the variable we observe equals the truth plus noise
+$$
+\text{Observed} = \text{Truth} + \text{Noise}
+$$
+where the noise is unrelated to the truth and "everything else." 
+(I'll be precise about the meaning of "unrelated" and "everything else" in a moment.)
+Mis-measuring a regressor $X$ in this way biases the OLS slope estimator towards zero (*attenuation bias*) but we can correct for this with a valid instrument. Mis-measuring the outcome $Y$ increases standard errors but doesn't bias the OLS estimator. You can find all the details in your favorite introductory econometrics textbook, but in the interest of making this post self-contained, here's a quick review.
+
+## Least Squares Attenuation Bias 
+Suppose that we want to learn the slope coefficient from a population linear regression of $Y$ on $X^*$:
+$$
+\beta \equiv \frac{\text{Cov}(Y,X^*)}{\text{Var}(X^*)}. 
+$$
+Unfortunately we observe not $X^*$ but a noisy measure $X = X^* + W_X$ where $W_X$ is uncorrelated with both $X^*$ and $Y$.
+Then
+$$
+\begin{aligned}
+\text{Cov}(Y, X) &= \text{Cov}(Y, X^* + W_X) = \text{Cov}(Y, X^*)\\
+\text{Var}(X) &= \text{Var}(X^* + W_X) = \text{Var}(X^*) + \text{Var}(W_X).
+\end{aligned}
+$$
+Now, define the *reliability ratio* $\lambda$ as follows:
+$$
+\lambda \equiv \frac{\text{Var}(X^*)}{\text{Var}(X^*) + \text{Var}(W_X)}.
+$$
+Measurement error means that $\text{Var}(W_X)$ is positive.
+Since variances can't be negative, this implies $0 < \lambda < 1$.
+Combining our definition of $\lambda$ with the expressions for $\text{Cov}(Y,X)$ and $\text{Var}(X)$ from above, 
+$$
+\begin{aligned}
+\frac{\text{Cov}(Y,X)}{\text{Var}(X)} &= \frac{\text{Cov}(Y, X^*)}{\text{Var}(X^*) + \text{Var}(W_X)} \\
+&=\frac{\text{Var}(X^*)}{\text{Var}(X^*) + \text{Var}(W_X)}\cdot \frac{\text{Cov}(Y, X^*)}{\text{Var}(X^*)}\\
+&= \lambda \beta
+\end{aligned}
+$$
+so we see that regressing $Y$ on $X$ gives $\lambda \beta$ rather than $\beta$.
+Since $0 < \lambda < 1$, this phenomenon is called *least squares attenuation bias*: $\lambda \beta$ has the same sign as $\beta$ but is smaller in magnitude.
+The greater the extent of measurement error, the larger the variance of $W_X$ and the smaller that $|\lambda \beta|$ becomes.
+
+## Instrumental variables to the rescue
+Suppose that $Y = \alpha + \beta X^* + U$ where $X = X^* + W_X$ as above.
+Now suppose that we can find a variable $Z$ that is correlated with $X^*$ but uncorrelated with $U$ and $W_X$.
+Then 
+$$
+\begin{aligned}
+\text{Cov}(Y,Z) &= \text{Cov}(\alpha + \beta X^* + U, Z) = \beta\text{Cov}(X^*,Z)\\
+\text{Cov}(X,Z) &= \text{Cov}(X^* + W_X, Z) = \text{Cov}(X^*,Z)
+\end{aligned}
+$$
+so that $\beta = \text{Cov}(Y, Z) / \text{Cov}(X,Z)$.
+If $X^*$ is measured with classical measurement error, a simple instrumental variables regression solves the problem of attenuation bias.^[Strictly speaking I haven't used the assumption that $W_X$ is uncorrelated with $X^*$ in this derivation, but it's implicit in the assumption that $Z$ is correlated with $X^*$ but not with $W_X$.]
+Notice that we haven't said anything about $U$ in relation to $X^*$. 
+If $\beta$ is the population linear regression slope, then $U$ is uncorrelated with $X^*$ by definition.
+But this derivation still goes through if $Y = \alpha + \beta X^* + U$ is a *causal model* in which $X^*$ is correlated with $U$, e.g. if $Y$ is wage and $X^*$ is years of schooling, in which case $U$ might be "unobserved ability."
+In this way, a *single* valid instrument can serve "double-duty," eliminating both attenuation bias and selection bias.
+
+## Measurement error in the outcome 
+Now suppose that $X^*$ is observed but the true *outcome* $Y^*$ is not: we only observe a noisy measure $Y = Y^* + W_Y$.
+If $W_Y$ is uncorrelated with $X^*$, 
+$$
+\frac{\text{Cov}(Y,X^*)}{\text{Var}(X^*)} = \frac{\text{Cov}(Y^* + W_Y, X^*)}{\text{Var}(X^*)} = \frac{\text{Cov}(Y^*,X^*)}{\text{Var}(X^*)} 
+$$
+
+so we'll obtain the same slope from a regression of $Y$ on $X^*$ as we would from a regression of $Y^*$ on $X^*$.
+Classical measurement error in the outcome variable doesn't introduce a bias.
+
+# Solution to the Pop Quiz
+
+Now that we've refreshed our memories about classical measurement error, let's a take a look at my pop quiz question from above:
+
+> If $D^*$ and $D$ are binary random variables and $D$ is a noisy measure of $D^*$, is it possible for the measurement error $W \equiv D - D^*$ to be *classical*? Explain why or why not. 
+
+If $W$ is a classical measurement error then, among other things, it must be uncorrelated with $D^*$.
+But this is *impossible* if both $D^*$ and $D$ are binary.
+By the definition of $W$, $D = D^* + W$.
+If $D^* = 1$ then $D = 1 + W$. 
+To ensure that $D$ takes on a value in $\{0, 1\}$, this means that $W$ must be either $0$ or $-1$.
+If instead $D^* = 0$, then $D = W$, so $W$ must be either $0$ or $1$.
+Hence, unless $W$ always equals zero, in which case there's no measurement error, $W$ must always be *negatively correlated* with $D^*$.
+In other words, measurement error in a a binary variable can never be classical.
+The same basic logic applies whenever $X$ and $X^*$ are bounded: to ensure that $X$ stays within its bounds, any measurement error must be correlated with $X^*$. 
+
+# Non-Differential Measurement Error
+
+Classical measurement error, as we've seen, is a very special case. 
+Or to put it another way, non-classical measurement error isn't as exotic as it sounds.
+Because discrete random variables cannot be subject to classical measurement error, non-classical measurement error should be on any applied economist's radar.
+My next few posts will provide an overview of the simplest case: *non-differential* measurement error in a binary variable.
+This assumption allows $D^*$ to be correlated with $W$, but assumes that conditioning on $D^*$ is sufficient to *break* the dependence between $W$ and everything else.
+Even in this relatively simple case, everything we've learned about classical measurement error goes out the window:
+
+1. Non-differential measurement error does *not* necessarily cause attenuation. 
+2. The IV estimator doesn't correct for non-differential measurement error, and a single instrument cannot serve "double-duty."
+3. Non-classical measurement error in the outcome variable generally *does* introduce bias.
+
+The good news is that there are methods to address non-differential measurement error.
+In my next post, I'll start by considering the case of a mis-measured binary outcome.
