@@ -1,0 +1,286 @@
+---
+title: Regressions with a Mis-measured, Binary Outcome
+author: Francis J. DiTraglia
+date: '2021-08-30'
+slug: regressions-with-a-mis-measured-binary-outcome
+categories: [measurement error]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-30T23:04:48+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Many outcomes of interest in economics are binary.
+For example, we may want to learn how employment status $Y^*$ varies with demographics $X$, where $Y^*=1$ means "employed" and $Y^*=0$ means unemployed or not in the labor force. 
+But how do we know if someone is employed? 
+Typically we ask them, perhaps as part of a large, nationally representative survey such as the [CPS](https://www.census.gov/programs-surveys/cps.html).
+Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate [(Poterba & Summers, 1986)](https://www.jstor.org/stable/1914301).
+Administrative errors creep into even the most carefully-administered surveys.
+But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199) Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
+
+In my [previous post](https://www.econometrics.blog/post/beyond-classical-measurement-error/) I showed that classical measurement error an outcome variable is basically innocuous.
+But I also showed that measurement error in a binary random variable *cannot* be classical.
+In this post, I'll explore the consequences of this fact when we want to learn $\mathbb{P}(Y^*=1|X)$ but only observe $Y$ and $X$, not the true outcome variable $Y^*$.
+To keep things concrete, I will assume throughout that $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ where $F$ is a strictly increasing, differentiable function. This covers all the usual suspects: [logit, probit](https://expl.ai/ZULFNLF), and the [linear probability model](https://expl.ai/XSLDYZE).^[For more details of these models, see my [lecture notes](https://www.economictricks.com/limdep-notes.pdf).] 
+The parameter $\beta$ may have a causal interpretation or may simply have a predictive one.
+Either way, the question I'll focus on here is whether, and if so how, $\beta$ can be identified in the presence of measurement error.
+For simplicity I will assume throughout that that the covariates $X$ are measured without error. 
+
+# What's the problem?
+
+Why does observing $Y$ rather than $Y^*$ present a problem?
+To answer this question, we need to derive the relationship between
+$\mathbb{P}(Y=1|X)$ and $\mathbb{P}(Y^*=1|X)$.
+Since $Y$ and $Y^*$ are both binary, $\mathbb{E}(Y|X) = \mathbb{P}(Y=1|X)$ and similarly 
+$$
+\mathbb{E}(Y^*|X) = \mathbb{P}(Y^*=1|X) = F(X'\beta).
+$$
+Now define the measurement error $W$ as $W = Y - Y^*$ so we can write $Y = Y^* + W$.
+By the linearity of expectation,
+$$
+\begin{aligned}
+\mathbb{P}(Y=1|X) &= \mathbb{E}(Y|X)\\
+&= \mathbb{E}(Y^* + W|X) = \mathbb{E}(Y^*|X) + \mathbb{E}(W|X)\\
+&= \mathbb{P}(Y^*=1|X) + \mathbb{E}(W|X)
+\end{aligned}
+$$
+so we see that if $\mathbb{E}(W|X)=0$ then $\mathbb{P}(Y=1|X)$ and $\mathbb{P}(Y^*=1|X)$ will coincide.
+Unfortunately $\mathbb{E}(W|X)$ in general *cannot* be zero. 
+This means that learning $\mathbb{P}(Y=1|X)$ will not tell us what we want to know: $\mathbb{P}(Y^*=1|X)$.
+
+To see why $\mathbb{E}(W|X) \neq 0$, first define the *mis-classification probabilities* $\alpha_0(\cdot)$ and $\alpha_1(\cdot)$
+$$
+\begin{aligned}
+\alpha_0(X) &\equiv P(Y=1|Y^*=0,X)\\
+\alpha_1(X) &\equiv P(Y=0|Y^*=1,X).
+\end{aligned}
+$$
+The subscripts on $\alpha$ refer to the value of $Y^*$ on which we condition: $\alpha_0(\cdot)$ conditions on $Y^*=0$ while $\alpha_1(\cdot)$ conditions on $Y^*=1$. 
+You can interpret the mis-classification probabilities by analogy to null hypothesis testing: $\alpha_0(X)$ is effectively the type I error rate as a function of $X$ and $\alpha_1(X)$ is the type II error rate as a function of $X$. 
+
+To keep things fully general for the moment, we allow the mis-classification probabilities to depend on $X$. Perhaps a young male worker with five years of experience is more likely to make an erroneous self-report in the CPS than and older female worker with more experience, for example.^[Below we'll examine a simpler special case in which $\alpha_0$ and $\alpha_1$ are *fixed* probabilities that do not depend on $X$.] Since $Y$ and $Y^*$ are both binary, $W \in \{-1, 0, 1\}$ and we calculate $\mathbb{E}(W|X)$ as follows:
+$$
+\begin{aligned}
+\mathbb{E}(W|X) &= -1 \times \mathbb{P}(W=-1|X) + 0 \times \mathbb{P}(W=0|X) + 1 \times \mathbb{P}(W=1|X) \\
+&= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X).
+\end{aligned}
+$$
+Now consider the event $\{W = -1\}$. 
+The only way that this could occur is if $Y = 0$ and $Y^* = 1$.
+Accordingly,
+$$
+\begin{aligned}
+\mathbb{P}(W = -1|X) &= \mathbb{P}(Y = 0, Y^* = 1|X)\\
+&= \mathbb{P}(Y=0|Y^*=1,X)\mathbb{P}(Y^*=1|X) \\
+&= \alpha_1(X) F(X'\beta).
+\end{aligned}
+$$
+Similarly, the only way that $\{W=1\}$ can occur is if $Y=1$ and $Y^*=0$ so that
+$$
+\begin{aligned}
+\mathbb{P}(W = 1|X) &= \mathbb{P}(Y = 1, Y^* = 0|X)\\
+&= \mathbb{P}(Y=1|Y^*=0,X) \mathbb{P}(Y^*=0|X)\\
+&= \alpha_0(X) \left[1 - F(X'\beta)\right].
+\end{aligned}
+$$
+<!--The event $\{W =0\}$ can occur in two mutually exclusive ways: $\{Y=0,Y^*=0\}$ and $\{Y=1,Y^*=1\}$.
+Thus
+$$
+\begin{aligned}
+\mathbb{P}(W = 0|X) &= \mathbb{P}(Y = 0, Y^* = 0|X) + \mathbb{P}(Y=1, Y^*=1|X)\\
+&= \mathbb{P}(Y=0|Y^*=0,X)\mathbb{P}(Y^*=0|X) + \mathbb{P}(Y=1|Y^*=1,X)\mathbb{P}(Y^*=1|X)\\
+&=\left[ 1 - \alpha_0(X)\right] \left[1 - F(X'\beta) \right] + [1 - \alpha_1(X)] F(X'\beta)
+\end{aligned}
+$$-->
+Therefore,
+$$
+\begin{aligned}
+\mathbb{E}(W|X) &= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X) \\
+&=  \alpha_0(X)\left[1 - F(X'\beta) \right] -\alpha_1(X) F(X'\beta).
+\end{aligned}
+$$
+So how could $\mathbb{E}(W|X) = 0$? 
+Re-arranging the preceding to solve for $F(X'\beta)$,
+$$
+\mathbb{E}(W|X) = 0 \iff F(X'\beta) = \frac{\alpha_0(X)}{\alpha_0(X) + \alpha_1(X)}.
+$$
+This shows that that $\mathbb{E}(W|X)$ can only be zero in an *extremely peculiar* case where $\alpha_0(\cdot)$ and $\alpha_1(\cdot)$ depend on $X$ in just the right way.
+If the mis-classification probabilities are constants that do not depend on $X$, we would require $F(X'\beta) = \alpha_0/(\alpha_0 + \alpha_1)$. 
+This is only possible if all the elements of $\beta$ besides the intercept are zero.
+Since $\mathbb{E}(W|X)$ will not in general equal zero, $\mathbb{P}(Y=1|X)$ will not in general equal $\mathbb{P}(Y^*=1|X)$.
+
+# What happens if we ignore the problem?
+
+Substituting our expression for $\mathbb{E}(W|X)$ and factoring the result, 
+$$
+\begin{aligned}
+\mathbb{P}(Y=1|X) &=  \mathbb{P}(Y^*=1|X) + E(W|X) \\
+&=  F(X'\beta) + \alpha_0(X)\left[1 - F(X'\beta) \right] -\alpha_1(X) F(X'\beta)\\
+&= \alpha_0(X) + F(X'\beta) [1 - \alpha_0(X) - \alpha_1(X)].
+\end{aligned}
+$$
+
+Because we observe $(Y, X)$, $\mathbb{P}(Y=1|X)$ is *identified*. 
+With enough data, we can learn this conditional probability as a function of $X$ as accurately as we wish. 
+The problem is that $\alpha_0(X)$ and $\alpha_1(X)$ drive a wedge between what we can observe, $\mathbb{P}(Y=1|X)$, and what we're trying to learn $\mathbb{P}(Y^*=1|X) = F(X'\beta)$. Without knowing more about the functions $\alpha_0(\cdot)$ and $\alpha_1(\cdot)$ we can't say much about how $\mathbb{P}(Y=1|X)$ and $\mathbb{P}(Y^*=1|X)$ will differ. 
+Because they are *probabilities*, 
+$$
+0\leq \alpha_0(X) \leq 1, \quad 0\leq \alpha_1(X) \leq 1.
+$$
+But because they are conditional probabilities that condition on *different events*, $\{Y^*=0, X=x\}$ versus $\{Y^*=1, X=x\}$, the sum $\alpha_0(x) + \alpha_1(x)$ could be greater than one.
+This means that $1 - \alpha_0(X) - \alpha_1(X)$ could be *negative*, at least for certain values of $X$.
+It's common in practice, however, to assume that $\alpha_0(X) + \alpha_1(X) < 1$ for all possible values that the covariates $X$ could take on.
+To understand this assumption, and the problem more generally, it's helpful to consider a simple special case in which the mis-classification probabilities do not depend on $X$.
+In this case we can say precisely how measurement error in the outcome affects what we can learn about the relationship between $X$ and $Y^*$ and make clear why $\alpha_0(X) + \alpha_1(X) < 1$ is usually a reasonable assumption.
+
+## A Special Case: Fixed Mis-classification
+Suppose that the mis-classification probabilities are *fixed*, i.e. that
+$$
+\begin{aligned}
+\alpha_0(X) &\equiv \mathbb{P}(Y=1|Y^*=0|X) = \mathbb{P}(Y=1|Y^*=0)\equiv \alpha_0 \\
+\alpha_1(X) &\equiv \mathbb{P}(Y=0|Y^*=1|X) = \mathbb{P}(Y=0|Y^*=1)\equiv \alpha_1.
+\end{aligned}
+$$
+This is a fairly strong assumption. 
+It says that both self-reporting and administrative errors occur at the same rate for *everyone*, regardless of their observed characteristics.
+In this case, our expression for $\mathbb{P}(Y=1|X)$ from above becomes
+$$
+\begin{aligned}
+\mathbb{P}(Y=1|X) &= \alpha_0 + F(X'\beta) (1 - \alpha_0 - \alpha_1).
+\end{aligned}
+$$
+Defining $f$ as the derivative of $F$, this means that the *observed* partial effect of a continuous covariate $X_j$ with respect to $Y$ is
+$$
+\begin{align*}
+\frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) &= \frac{\partial}{\partial X_j} \left[ \alpha_0 + F(X'\beta)(1 - \alpha_0 - \alpha_1)\right]\\
+&= f(X'\beta)\beta_j (1 - \alpha_0 - \alpha_1)
+\end{align*}
+$$
+whereas the *true* partial effect, with respect to $Y^*$, is
+$$
+\frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X) = \frac{\partial}{\partial X_j} F(X'\beta) = f(X'\beta) \beta_j.
+$$
+If $(\alpha_0 + \alpha_1) > 1$ then $(1 - \alpha_0 - \alpha_1)$ will be *negative*. 
+This means that the measurement error problem is so severe that all of the observed partial effects have the wrong sign.
+A bit of tedious algebra shows that $Y$ and $Y^*$ must be negatively correlated in this case: $Y$ is such a noisy measure of $Y^*$ that when $Y=1$ we're better off predicting that $Y^*=0$.
+For this reason, it's traditional to assume that $\alpha_0 + \alpha_1 < 1$. In this case $0 < (1 - \alpha_0 - \alpha_1) \leq 1$ so the observed partial effects are *attenuated* versions of the true partial effects, in that
+$$
+0 < \frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) \leq \frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X).
+$$
+So in this special case, *non-classical* measurement error in a binary outcome variable has the same effect as *classical* measurement in a continuous *regressor*: attenuation bias.
+
+## Observational Equivalence and $(\alpha_0 + \alpha_1)$
+
+You may be wondering: do we really *need* the assumption $\alpha_0 + \alpha_1<1$ or is it merely convenient? Couldn't the observed *data* tell us whether $\alpha_0 + \alpha_1$ is less than one or greater than one? The answer turns out to be no, and it's easy to show why if $F(t) = 1 - F(-t)$ as in the probit, logit, and the linear probability models. Suppose that this condition on $F$ holds. Then we can write
+$$
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta)\\
+  &= \alpha_0 + (1 - \alpha_0 - \alpha_1) \left[ 1 - F\big(X'(-\beta)\big)\right]\\
+  &= \left(\alpha_0 + 1 - \alpha_0 - \alpha_1\right) - (1 - \alpha_0 - \alpha_1) F\big(X'(-\beta)\big)\\
+  &= (1 - \alpha_1) + \left[ \alpha_0 - (1 - \alpha_1) \right] F\big(X' (-\beta)\big)\\
+  &= (1 - \alpha_1) + \left[1 - (1 - \alpha_1) - (1 - \alpha_0) \right] F\big(X' (-\beta)\big).
+\end{aligned}
+$$
+Defining $\widetilde{\alpha}_0 \equiv (1 - \alpha_1)$, $\widetilde{\alpha}_1 \equiv (1 - \alpha_0)$, and $\widetilde{\beta} \equiv -\beta$, we have established that
+$$
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta)\\
+  &= \widetilde{\alpha}_0 + \left( 1 - \widetilde{\alpha}_0 - \widetilde{\alpha}_1 \right) F\big(X'\widetilde{\beta}\big).
+\end{aligned}
+$$
+Since $Y$ is binary, $\mathbb{P}(Y=1|X)$ tells us everything that there is to know about the distribution of $Y$ given $X$.
+The preceding pair of equalities shows that the observed conditional distribution $\mathbb{P}(Y=1|X)$ could just as well have arisen from $\mathbb{P}(Y^*=1|X) = F(X'\widetilde{\beta})$ with mis-classification probabilities $(\widetilde{\alpha}_0, \widetilde{\alpha}_1)$ as it could from $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ with mis-classification probabilities $(\alpha_0, \alpha_1)$. From observations of $(Y, X)$ alone there is no way to tell these possibilities apart: we say that they are *observationally equivalent*. Notice that if $\alpha_0 + \alpha_1 < 1$ then $\widetilde{\alpha}_0 + \widetilde{\alpha}_1 > 1$ and vice-versa. This shows that the only way to point identify $\beta$ is to assume either that $\alpha_0 + \alpha_1 < 1$ or the reverse inequality.^[Alternatively, you could say that the only way to identify $(\alpha_0, \alpha_1)$ is by making an assumption about the sign of one component of $\beta$.] For the reasons discussed above, it usually makes sense to choose $\alpha_0 + \alpha_1 < 1$.
+
+
+# Some Solutions
+
+So what is an applied researcher to do?  If we could somehow learn the mis-classification probabilities, we could use them to "adjust" $\mathbb{P}(Y=1|X)$ and identify $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ as follows: 
+$$
+F(X'\beta) = \frac{\mathbb{P}(Y=1|X) - \alpha_0(X)}{1 - \alpha_0(X) - \alpha_1(X)}. 
+$$
+Broadly speaking there are two ways learn the mis-classification probabilities.
+The first approach estimates $\alpha_0(X)$ and $\alpha_1(X)$ using a *second* dataset.
+The second approach uses a single dataset and exploits non-linearity in the function $F$ instead.
+For the remainder of this discussion I will assume that $\alpha_0(X) + \alpha_1(X) < 1$ or $\alpha_0 + \alpha_1 < 1$ if the mis-classification probabilities are fixed.
+
+## Method 1: Auxiliary Data
+
+Let's start by making life simple: assume *fixed* mis-classification. Now suppose that we observe two random samples from the *same* population. In the first, we observe pairs $(Y_i,X_i)$ for $i = 1, ..., n$ and in the second we observe pairs $(Y_j, Y^*_j)$ for $j = 1, ..., m$. Notice that neither dataset contains observations of $X$ and $Y^*$ for the same individual. Using the $(Y_i,X_i)$ observations we can estimate $\mathbb{P}(Y=1|X)$, and using the $(Y_j, Y^*_j)$ observations we can estimate
+$$
+\alpha_0 = \mathbb{P}(Y=1|Y^*=0), \quad \alpha_1 = \mathbb{P}(Y=0|Y^*=1).
+$$
+This gives us everything we need to determine $F(X'\beta)$ as a function of $X$ and hence $\beta$. The observations of $(Y_i, Y^*_i)$ are called an *auxiliary dataset*. In theory, auxiliary data provide a simple and general solution to measurement error problems of all stripes. Suppose, for example, that we were uncomfortable with the assumption of fixed mis-classification. If we observed an auxiliary dataset of *triples* $(Y_j, Y_j^*, X_j)$ then we could directly estimate $\alpha_0(X)$ and $\alpha_1(X)$. Of course, we if we observed $(Y_j, Y_j^*, X_j)$ for a random sample drawn from the population of interest we could estimate $\mathbb{P}(Y^*=1|X)$ *directly* without the need to account for measurement error! And here lies the fundamental tension of the auxiliary data approach: if we had sufficiently rich auxiliary data we wouldn't really have a measurement error problem in the first place. More typically, we either observe $(Y_j, Y_j^*, X_j)$ for a *different* population, or only observe a subset of these variables for our population of interest. Either way we need to rely on modeling assumptions to bridge the gap. For example, fixed mis-classification and an auxiliary dataset of $(Y^*_j, Y_j)$ suffice to solve the measurement error problem but only if $\alpha_0(X)$ and $\alpha_1(X)$ do not in fact depend on $X$. 
+
+## Method 2: Nonlinearity of $F$
+
+The auxiliary data approach is very general in principle but relies on information that we simply may not have in practice: a second dataset from the same population. An alternative approach uses only one dataset, $(Y_i, X_i)$ for $i = 1, ..., n$, and instead exploits the *shape* of the function $F$. This second approach is a bit less general but doesn't require any outside sources of information.
+
+To begin, suppose that the mis-classification probabilities are *fixed* and that $F$ is a *known function*, e.g. the standard logistic CDF. Suppose further that $F$ is strictly increasing and hence invertible. Then, applying $F^{-1}$ to both sides of our expression for $F(X'\beta)$ from above,
+$$
+X'\beta = F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]
+$$
+and thus, pre-multiplying both sides by $X$ and taking expectations,
+$$
+\mathbb{E}[XX']\beta = \mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+$$
+Therefore, if $\mathbb{E}[XX']$ is invertible,
+$$
+\beta = \mathbb{E}[XX']^{-1}\mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+$$
+Since $\mathbb{P}(Y=1|X)$ depends only on the observed data $(Y,X)$, this function is point identified. Since $F$ is assumed to be a known function, it follows that $\beta$ is point identified whenever $\mathbb{E}[XX']$ is invertible and $(\alpha_0, \alpha_1)$ are known.^[We also need $\alpha_0 + \alpha_1$ to avoid division by zero!] So if we can find a way to point identify $\alpha_0$ and $\alpha_1$, we will immediately identify $\beta$.
+
+Easier said than done! How can we possibly learn $\alpha_0$ and $\alpha_1$ without auxiliary data? Nonlinearity is the key. If $F$ is a cumulative distribution function, then $\lim_{t\rightarrow \infty} F(t) = 1$ and $\lim_{t\rightarrow -\infty} F(t) = 0$. Now suppose that $X$ contains at least one covariate, call it $V$, that is continuous and has "large support," i.e. takes on values in a very wide range. Without loss of generality, suppose that the coefficient $\beta_v$ on $V$ is positive. (If it's negative, then apply the following argument to $-V$ instead.) For $V$ large and *positive* $X'\beta$ is large and positive so that $F(X'\beta)$ is close to one.
+In this case 
+$$
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta) &\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 1 \\
+&= (1 - \alpha_1).
+\end{aligned}
+$$
+For $V$ large and *negative*, on the other hand, $X'\beta$ is large and negative, $F(X'\beta)$ is close to zero, and
+$$
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta) &\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 0\\
+&= \alpha_0.
+\end{aligned}
+$$
+Intuitively, by examining values of $X_i$ for which $F(X_i'\beta)$ is close to one we can learn $(1 - \alpha_1)$ and by examining values for which $F(X_i'\beta)$ is close to zero we can identify $\alpha_0$. 
+
+You may object that the preceding identification argument sounds suspiciously circular:  doesn't this idea at least implicitly require us to know $\beta$? Fortunately the answer is no. We only need to know the *signs* of $\beta$. Under the assumption that $\alpha_0 + \alpha_1 < 1$ these are the same as the signs of the observed partial effects $\partial \mathbb{P}(Y=1|X) /\partial \beta_j$. An example may help. Suppose $Y=1$ means "graduated from college." Under fixed misclassification, we would learn $\alpha_0$ from the observations of $(Y_i, X_i)$ for people who almost certainly *didn't* graduate from college, based on their covariates, and $(1 - \alpha_1)$ from observations of $(Y_i, X_i)$ for people who almost certainly *did*. By first estimating $\mathbb{P}(Y=1|X)$ we learn *attenuated* versions of the true partial effects $F(X'\beta) \beta_j$. In other words, we learn how *reported* education varies with $X$. But this information suffices to show us how to make $F(X'\beta)$ close to zero or one. 
+
+The preceding argument *crucially relies* on the assumption that $F$ is nonlinear. To see why, consider the linear probability model $F(X'\beta) = X'\beta$ and let $X' = (1, X_1')$ and $\beta' = (\beta_0, \beta_1')$.
+Then,
+$$
+\begin{aligned}
+  \mathbb{P}(Y=1|X) 
+  &= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right) F(X'\beta)\\
+  &= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(X'\beta) \\
+  &= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(\beta_0 + X_1' \beta_1) \\
+  &= \alpha_0 + (1 - \alpha_0 - \alpha_1) \beta_0 + X_1' (1 - \alpha_0 - \alpha_1) \beta_1.
+\end{aligned}
+$$
+Now, defining $\widetilde{\beta}_0 \equiv \alpha_0 + (1 - \alpha_0 - \alpha_1)\beta_0$, $\widetilde{\beta}_1 = (1 - \alpha_0 - \alpha_1) \beta_1$, and $\widetilde{\beta}' = (\widetilde{\beta}_0, \widetilde{\beta}_1')$ we have
+$$
+\mathbb{P}(Y=1|X) = \alpha_0 + (1 - \alpha_0 - \alpha_1) X'\beta  = X'\widetilde{\beta}.
+$$
+This shows that a linear probability model with coefficient vector $\beta$ and mis-classification probabilities $(\alpha_0, \alpha_1)$ is *observationally equivalent* to a linear probability model with *no mis-classification* and coefficient $\widetilde{\beta}$. To put it another way: there is no way to tell whether mis-classification is present or absent in a linear model. Doing so requires *non-linearity*.
+
+So how can we use these results in practice? If $(\alpha_0, \alpha_1, \beta)$ are identified and $F$ is assumed known, we can proceed via garden-variety maximum likelihood estimation. The log-likelihood function is only slightly more complicated than in the standard binary outcome setting, in particular:
+$$
+\begin{aligned}
+  \ell_n(\alpha_0, \alpha_1, \beta) &= \frac{1}{n} \sum_{i=1}^n \log\left\{ \mathbb{P}(Y_i=1|X)^{\mathbb{1}(Y_i=1)}\mathbb{P}(Y_i=0|X_i)^{\mathbb{1}(Y_i=0)} \right\} \\
+  &= \frac{1}{n} \sum_{i=1}^n Y_i \log\left\{  \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\} + (1 - Y_i) \log\left\{ 1 - \alpha_0 - (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\}.
+\end{aligned}
+$$
+If $F$ is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor $V$ with "large support" allows us to identify the mis-classification probabilities, and hence $F$. Indeed, we can even allow $\alpha_0$ and $\alpha_1$ to depend covariates, as long as they don't depend on $V$ itself. For more details on the "identification by nonlinearity" approach, see [Hausman et al. (1998)](https://www.sciencedirect.com/science/article/pii/S0304407698000153) and [Lewbel (2000)](https://www.cambridge.org/core/journals/econometric-theory/article/identification-of-the-binary-choice-model-with-misclassification/8FD094D628B0053032FF25DAAD2E1621).
+
+# Coming Attractions
+That's more than enough about measurement error for now! When I return to this topic in a few weeks time, I'll consider the problem of a mis-measured binary *regressor*. In my next installment, however, I'll put measurement error to one side and revisit a classic problem from introductory statistics: constructing a confidence interval for a population proportion. Sometimes the easiest things turn out to be much harder than they first appear. 
+

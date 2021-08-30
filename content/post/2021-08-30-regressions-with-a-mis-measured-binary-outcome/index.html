@@ -1,0 +1,289 @@
+---
+title: Regressions with a Mis-measured, Binary Outcome
+author: Francis J. DiTraglia
+date: '2021-08-30'
+slug: regressions-with-a-mis-measured-binary-outcome
+categories: [measurement error]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-08-30T23:04:48+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Many outcomes of interest in economics are binary.
+For example, we may want to learn how employment status <span class="math inline">\(Y^*\)</span> varies with demographics <span class="math inline">\(X\)</span>, where <span class="math inline">\(Y^*=1\)</span> means “employed” and <span class="math inline">\(Y^*=0\)</span> means unemployed or not in the labor force.
+But how do we know if someone is employed?
+Typically we ask them, perhaps as part of a large, nationally representative survey such as the <a href="https://www.census.gov/programs-surveys/cps.html">CPS</a>.
+Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate <a href="https://www.jstor.org/stable/1914301">(Poterba &amp; Summers, 1986)</a>.
+Administrative errors creep into even the most carefully-administered surveys.
+But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years <a href="https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199">(Meyer et al. 2015)</a> Instead of true employment status <span class="math inline">\(Y^*\)</span> researchers only observe a noisy measure <span class="math inline">\(Y\in \{0, 1\}\)</span>.</p>
+<p>In my <a href="https://www.econometrics.blog/post/beyond-classical-measurement-error/">previous post</a> I showed that classical measurement error an outcome variable is basically innocuous.
+But I also showed that measurement error in a binary random variable <em>cannot</em> be classical.
+In this post, I’ll explore the consequences of this fact when we want to learn <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> but only observe <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>, not the true outcome variable <span class="math inline">\(Y^*\)</span>.
+To keep things concrete, I will assume throughout that <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X&#39;\beta)\)</span> where <span class="math inline">\(F\)</span> is a strictly increasing, differentiable function. This covers all the usual suspects: <a href="https://expl.ai/ZULFNLF">logit, probit</a>, and the <a href="https://expl.ai/XSLDYZE">linear probability model</a>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+The parameter <span class="math inline">\(\beta\)</span> may have a causal interpretation or may simply have a predictive one.
+Either way, the question I’ll focus on here is whether, and if so how, <span class="math inline">\(\beta\)</span> can be identified in the presence of measurement error.
+For simplicity I will assume throughout that that the covariates <span class="math inline">\(X\)</span> are measured without error.</p>
+<div id="whats-the-problem" class="section level1">
+<h1>What’s the problem?</h1>
+<p>Why does observing <span class="math inline">\(Y\)</span> rather than <span class="math inline">\(Y^*\)</span> present a problem?
+To answer this question, we need to derive the relationship between
+<span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>.
+Since <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> are both binary, <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{P}(Y=1|X)\)</span> and similarly
+<span class="math display">\[
+\mathbb{E}(Y^*|X) = \mathbb{P}(Y^*=1|X) = F(X&#39;\beta).
+\]</span>
+Now define the measurement error <span class="math inline">\(W\)</span> as <span class="math inline">\(W = Y - Y^*\)</span> so we can write <span class="math inline">\(Y = Y^* + W\)</span>.
+By the linearity of expectation,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;= \mathbb{E}(Y|X)\\
+&amp;= \mathbb{E}(Y^* + W|X) = \mathbb{E}(Y^*|X) + \mathbb{E}(W|X)\\
+&amp;= \mathbb{P}(Y^*=1|X) + \mathbb{E}(W|X)
+\end{aligned}
+\]</span>
+so we see that if <span class="math inline">\(\mathbb{E}(W|X)=0\)</span> then <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> will coincide.
+Unfortunately <span class="math inline">\(\mathbb{E}(W|X)\)</span> in general <em>cannot</em> be zero.
+This means that learning <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> will not tell us what we want to know: <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>.</p>
+<p>To see why <span class="math inline">\(\mathbb{E}(W|X) \neq 0\)</span>, first define the <em>mis-classification probabilities</em> <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span>
+<span class="math display">\[
+\begin{aligned}
+\alpha_0(X) &amp;\equiv P(Y=1|Y^*=0,X)\\
+\alpha_1(X) &amp;\equiv P(Y=0|Y^*=1,X).
+\end{aligned}
+\]</span>
+The subscripts on <span class="math inline">\(\alpha\)</span> refer to the value of <span class="math inline">\(Y^*\)</span> on which we condition: <span class="math inline">\(\alpha_0(\cdot)\)</span> conditions on <span class="math inline">\(Y^*=0\)</span> while <span class="math inline">\(\alpha_1(\cdot)\)</span> conditions on <span class="math inline">\(Y^*=1\)</span>.
+You can interpret the mis-classification probabilities by analogy to null hypothesis testing: <span class="math inline">\(\alpha_0(X)\)</span> is effectively the type I error rate as a function of <span class="math inline">\(X\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> is the type II error rate as a function of <span class="math inline">\(X\)</span>.</p>
+<p>To keep things fully general for the moment, we allow the mis-classification probabilities to depend on <span class="math inline">\(X\)</span>. Perhaps a young male worker with five years of experience is more likely to make an erroneous self-report in the CPS than and older female worker with more experience, for example.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Since <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> are both binary, <span class="math inline">\(W \in \{-1, 0, 1\}\)</span> and we calculate <span class="math inline">\(\mathbb{E}(W|X)\)</span> as follows:
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(W|X) &amp;= -1 \times \mathbb{P}(W=-1|X) + 0 \times \mathbb{P}(W=0|X) + 1 \times \mathbb{P}(W=1|X) \\
+&amp;= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X).
+\end{aligned}
+\]</span>
+Now consider the event <span class="math inline">\(\{W = -1\}\)</span>.
+The only way that this could occur is if <span class="math inline">\(Y = 0\)</span> and <span class="math inline">\(Y^* = 1\)</span>.
+Accordingly,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{P}(W = -1|X) &amp;= \mathbb{P}(Y = 0, Y^* = 1|X)\\
+&amp;= \mathbb{P}(Y=0|Y^*=1,X)\mathbb{P}(Y^*=1|X) \\
+&amp;= \alpha_1(X) F(X&#39;\beta).
+\end{aligned}
+\]</span>
+Similarly, the only way that <span class="math inline">\(\{W=1\}\)</span> can occur is if <span class="math inline">\(Y=1\)</span> and <span class="math inline">\(Y^*=0\)</span> so that
+<span class="math display">\[
+\begin{aligned}
+\mathbb{P}(W = 1|X) &amp;= \mathbb{P}(Y = 1, Y^* = 0|X)\\
+&amp;= \mathbb{P}(Y=1|Y^*=0,X) \mathbb{P}(Y^*=0|X)\\
+&amp;= \alpha_0(X) \left[1 - F(X&#39;\beta)\right].
+\end{aligned}
+\]</span>
+<!--The event $\{W =0\}$ can occur in two mutually exclusive ways: $\{Y=0,Y^*=0\}$ and $\{Y=1,Y^*=1\}$.
+Thus
+$$
+\begin{aligned}
+\mathbb{P}(W = 0|X) &= \mathbb{P}(Y = 0, Y^* = 0|X) + \mathbb{P}(Y=1, Y^*=1|X)\\
+&= \mathbb{P}(Y=0|Y^*=0,X)\mathbb{P}(Y^*=0|X) + \mathbb{P}(Y=1|Y^*=1,X)\mathbb{P}(Y^*=1|X)\\
+&=\left[ 1 - \alpha_0(X)\right] \left[1 - F(X'\beta) \right] + [1 - \alpha_1(X)] F(X'\beta)
+\end{aligned}
+$$-->
+Therefore,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(W|X) &amp;= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X) \\
+&amp;=  \alpha_0(X)\left[1 - F(X&#39;\beta) \right] -\alpha_1(X) F(X&#39;\beta).
+\end{aligned}
+\]</span>
+So how could <span class="math inline">\(\mathbb{E}(W|X) = 0\)</span>?
+Re-arranging the preceding to solve for <span class="math inline">\(F(X&#39;\beta)\)</span>,
+<span class="math display">\[
+\mathbb{E}(W|X) = 0 \iff F(X&#39;\beta) = \frac{\alpha_0(X)}{\alpha_0(X) + \alpha_1(X)}.
+\]</span>
+This shows that that <span class="math inline">\(\mathbb{E}(W|X)\)</span> can only be zero in an <em>extremely peculiar</em> case where <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span> depend on <span class="math inline">\(X\)</span> in just the right way.
+If the mis-classification probabilities are constants that do not depend on <span class="math inline">\(X\)</span>, we would require <span class="math inline">\(F(X&#39;\beta) = \alpha_0/(\alpha_0 + \alpha_1)\)</span>.
+This is only possible if all the elements of <span class="math inline">\(\beta\)</span> besides the intercept are zero.
+Since <span class="math inline">\(\mathbb{E}(W|X)\)</span> will not in general equal zero, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> will not in general equal <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>.</p>
+</div>
+<div id="what-happens-if-we-ignore-the-problem" class="section level1">
+<h1>What happens if we ignore the problem?</h1>
+<p>Substituting our expression for <span class="math inline">\(\mathbb{E}(W|X)\)</span> and factoring the result,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;=  \mathbb{P}(Y^*=1|X) + E(W|X) \\
+&amp;=  F(X&#39;\beta) + \alpha_0(X)\left[1 - F(X&#39;\beta) \right] -\alpha_1(X) F(X&#39;\beta)\\
+&amp;= \alpha_0(X) + F(X&#39;\beta) [1 - \alpha_0(X) - \alpha_1(X)].
+\end{aligned}
+\]</span></p>
+<p>Because we observe <span class="math inline">\((Y, X)\)</span>, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> is <em>identified</em>.
+With enough data, we can learn this conditional probability as a function of <span class="math inline">\(X\)</span> as accurately as we wish.
+The problem is that <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> drive a wedge between what we can observe, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span>, and what we’re trying to learn <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X&#39;\beta)\)</span>. Without knowing more about the functions <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span> we can’t say much about how <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> will differ.
+Because they are <em>probabilities</em>,
+<span class="math display">\[
+0\leq \alpha_0(X) \leq 1, \quad 0\leq \alpha_1(X) \leq 1.
+\]</span>
+But because they are conditional probabilities that condition on <em>different events</em>, <span class="math inline">\(\{Y^*=0, X=x\}\)</span> versus <span class="math inline">\(\{Y^*=1, X=x\}\)</span>, the sum <span class="math inline">\(\alpha_0(x) + \alpha_1(x)\)</span> could be greater than one.
+This means that <span class="math inline">\(1 - \alpha_0(X) - \alpha_1(X)\)</span> could be <em>negative</em>, at least for certain values of <span class="math inline">\(X\)</span>.
+It’s common in practice, however, to assume that <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> for all possible values that the covariates <span class="math inline">\(X\)</span> could take on.
+To understand this assumption, and the problem more generally, it’s helpful to consider a simple special case in which the mis-classification probabilities do not depend on <span class="math inline">\(X\)</span>.
+In this case we can say precisely how measurement error in the outcome affects what we can learn about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y^*\)</span> and make clear why <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> is usually a reasonable assumption.</p>
+<div id="a-special-case-fixed-mis-classification" class="section level2">
+<h2>A Special Case: Fixed Mis-classification</h2>
+<p>Suppose that the mis-classification probabilities are <em>fixed</em>, i.e. that
+<span class="math display">\[
+\begin{aligned}
+\alpha_0(X) &amp;\equiv \mathbb{P}(Y=1|Y^*=0|X) = \mathbb{P}(Y=1|Y^*=0)\equiv \alpha_0 \\
+\alpha_1(X) &amp;\equiv \mathbb{P}(Y=0|Y^*=1|X) = \mathbb{P}(Y=0|Y^*=1)\equiv \alpha_1.
+\end{aligned}
+\]</span>
+This is a fairly strong assumption.
+It says that both self-reporting and administrative errors occur at the same rate for <em>everyone</em>, regardless of their observed characteristics.
+In this case, our expression for <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> from above becomes
+<span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;= \alpha_0 + F(X&#39;\beta) (1 - \alpha_0 - \alpha_1).
+\end{aligned}
+\]</span>
+Defining <span class="math inline">\(f\)</span> as the derivative of <span class="math inline">\(F\)</span>, this means that the <em>observed</em> partial effect of a continuous covariate <span class="math inline">\(X_j\)</span> with respect to <span class="math inline">\(Y\)</span> is
+<span class="math display">\[
+\begin{align*}
+\frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) &amp;= \frac{\partial}{\partial X_j} \left[ \alpha_0 + F(X&#39;\beta)(1 - \alpha_0 - \alpha_1)\right]\\
+&amp;= f(X&#39;\beta)\beta_j (1 - \alpha_0 - \alpha_1)
+\end{align*}
+\]</span>
+whereas the <em>true</em> partial effect, with respect to <span class="math inline">\(Y^*\)</span>, is
+<span class="math display">\[
+\frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X) = \frac{\partial}{\partial X_j} F(X&#39;\beta) = f(X&#39;\beta) \beta_j.
+\]</span>
+If <span class="math inline">\((\alpha_0 + \alpha_1) &gt; 1\)</span> then <span class="math inline">\((1 - \alpha_0 - \alpha_1)\)</span> will be <em>negative</em>.
+This means that the measurement error problem is so severe that all of the observed partial effects have the wrong sign.
+A bit of tedious algebra shows that <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> must be negatively correlated in this case: <span class="math inline">\(Y\)</span> is such a noisy measure of <span class="math inline">\(Y^*\)</span> that when <span class="math inline">\(Y=1\)</span> we’re better off predicting that <span class="math inline">\(Y^*=0\)</span>.
+For this reason, it’s traditional to assume that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span>. In this case <span class="math inline">\(0 &lt; (1 - \alpha_0 - \alpha_1) \leq 1\)</span> so the observed partial effects are <em>attenuated</em> versions of the true partial effects, in that
+<span class="math display">\[
+0 &lt; \frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) \leq \frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X).
+\]</span>
+So in this special case, <em>non-classical</em> measurement error in a binary outcome variable has the same effect as <em>classical</em> measurement in a continuous <em>regressor</em>: attenuation bias.</p>
+</div>
+<div id="observational-equivalence-and-alpha_0-alpha_1" class="section level2">
+<h2>Observational Equivalence and <span class="math inline">\((\alpha_0 + \alpha_1)\)</span></h2>
+<p>You may be wondering: do we really <em>need</em> the assumption <span class="math inline">\(\alpha_0 + \alpha_1&lt;1\)</span> or is it merely convenient? Couldn’t the observed <em>data</em> tell us whether <span class="math inline">\(\alpha_0 + \alpha_1\)</span> is less than one or greater than one? The answer turns out to be no, and it’s easy to show why if <span class="math inline">\(F(t) = 1 - F(-t)\)</span> as in the probit, logit, and the linear probability models. Suppose that this condition on <span class="math inline">\(F\)</span> holds. Then we can write
+<span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X&#39;\beta)\\
+  &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) \left[ 1 - F\big(X&#39;(-\beta)\big)\right]\\
+  &amp;= \left(\alpha_0 + 1 - \alpha_0 - \alpha_1\right) - (1 - \alpha_0 - \alpha_1) F\big(X&#39;(-\beta)\big)\\
+  &amp;= (1 - \alpha_1) + \left[ \alpha_0 - (1 - \alpha_1) \right] F\big(X&#39; (-\beta)\big)\\
+  &amp;= (1 - \alpha_1) + \left[1 - (1 - \alpha_1) - (1 - \alpha_0) \right] F\big(X&#39; (-\beta)\big).
+\end{aligned}
+\]</span>
+Defining <span class="math inline">\(\widetilde{\alpha}_0 \equiv (1 - \alpha_1)\)</span>, <span class="math inline">\(\widetilde{\alpha}_1 \equiv (1 - \alpha_0)\)</span>, and <span class="math inline">\(\widetilde{\beta} \equiv -\beta\)</span>, we have established that
+<span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X&#39;\beta)\\
+  &amp;= \widetilde{\alpha}_0 + \left( 1 - \widetilde{\alpha}_0 - \widetilde{\alpha}_1 \right) F\big(X&#39;\widetilde{\beta}\big).
+\end{aligned}
+\]</span>
+Since <span class="math inline">\(Y\)</span> is binary, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> tells us everything that there is to know about the distribution of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>.
+The preceding pair of equalities shows that the observed conditional distribution <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> could just as well have arisen from <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X&#39;\widetilde{\beta})\)</span> with mis-classification probabilities <span class="math inline">\((\widetilde{\alpha}_0, \widetilde{\alpha}_1)\)</span> as it could from <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X&#39;\beta)\)</span> with mis-classification probabilities <span class="math inline">\((\alpha_0, \alpha_1)\)</span>. From observations of <span class="math inline">\((Y, X)\)</span> alone there is no way to tell these possibilities apart: we say that they are <em>observationally equivalent</em>. Notice that if <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> then <span class="math inline">\(\widetilde{\alpha}_0 + \widetilde{\alpha}_1 &gt; 1\)</span> and vice-versa. This shows that the only way to point identify <span class="math inline">\(\beta\)</span> is to assume either that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> or the reverse inequality.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> For the reasons discussed above, it usually makes sense to choose <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span>.</p>
+</div>
+</div>
+<div id="some-solutions" class="section level1">
+<h1>Some Solutions</h1>
+<p>So what is an applied researcher to do? If we could somehow learn the mis-classification probabilities, we could use them to “adjust” <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and identify <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X&#39;\beta)\)</span> as follows:
+<span class="math display">\[
+F(X&#39;\beta) = \frac{\mathbb{P}(Y=1|X) - \alpha_0(X)}{1 - \alpha_0(X) - \alpha_1(X)}. 
+\]</span>
+Broadly speaking there are two ways learn the mis-classification probabilities.
+The first approach estimates <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> using a <em>second</em> dataset.
+The second approach uses a single dataset and exploits non-linearity in the function <span class="math inline">\(F\)</span> instead.
+For the remainder of this discussion I will assume that <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> or <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> if the mis-classification probabilities are fixed.</p>
+<div id="method-1-auxiliary-data" class="section level2">
+<h2>Method 1: Auxiliary Data</h2>
+<p>Let’s start by making life simple: assume <em>fixed</em> mis-classification. Now suppose that we observe two random samples from the <em>same</em> population. In the first, we observe pairs <span class="math inline">\((Y_i,X_i)\)</span> for <span class="math inline">\(i = 1, ..., n\)</span> and in the second we observe pairs <span class="math inline">\((Y_j, Y^*_j)\)</span> for <span class="math inline">\(j = 1, ..., m\)</span>. Notice that neither dataset contains observations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y^*\)</span> for the same individual. Using the <span class="math inline">\((Y_i,X_i)\)</span> observations we can estimate <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span>, and using the <span class="math inline">\((Y_j, Y^*_j)\)</span> observations we can estimate
+<span class="math display">\[
+\alpha_0 = \mathbb{P}(Y=1|Y^*=0), \quad \alpha_1 = \mathbb{P}(Y=0|Y^*=1).
+\]</span>
+This gives us everything we need to determine <span class="math inline">\(F(X&#39;\beta)\)</span> as a function of <span class="math inline">\(X\)</span> and hence <span class="math inline">\(\beta\)</span>. The observations of <span class="math inline">\((Y_i, Y^*_i)\)</span> are called an <em>auxiliary dataset</em>. In theory, auxiliary data provide a simple and general solution to measurement error problems of all stripes. Suppose, for example, that we were uncomfortable with the assumption of fixed mis-classification. If we observed an auxiliary dataset of <em>triples</em> <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> then we could directly estimate <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span>. Of course, we if we observed <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> for a random sample drawn from the population of interest we could estimate <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> <em>directly</em> without the need to account for measurement error! And here lies the fundamental tension of the auxiliary data approach: if we had sufficiently rich auxiliary data we wouldn’t really have a measurement error problem in the first place. More typically, we either observe <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> for a <em>different</em> population, or only observe a subset of these variables for our population of interest. Either way we need to rely on modeling assumptions to bridge the gap. For example, fixed mis-classification and an auxiliary dataset of <span class="math inline">\((Y^*_j, Y_j)\)</span> suffice to solve the measurement error problem but only if <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> do not in fact depend on <span class="math inline">\(X\)</span>.</p>
+</div>
+<div id="method-2-nonlinearity-of-f" class="section level2">
+<h2>Method 2: Nonlinearity of <span class="math inline">\(F\)</span></h2>
+<p>The auxiliary data approach is very general in principle but relies on information that we simply may not have in practice: a second dataset from the same population. An alternative approach uses only one dataset, <span class="math inline">\((Y_i, X_i)\)</span> for <span class="math inline">\(i = 1, ..., n\)</span>, and instead exploits the <em>shape</em> of the function <span class="math inline">\(F\)</span>. This second approach is a bit less general but doesn’t require any outside sources of information.</p>
+<p>To begin, suppose that the mis-classification probabilities are <em>fixed</em> and that <span class="math inline">\(F\)</span> is a <em>known function</em>, e.g. the standard logistic CDF. Suppose further that <span class="math inline">\(F\)</span> is strictly increasing and hence invertible. Then, applying <span class="math inline">\(F^{-1}\)</span> to both sides of our expression for <span class="math inline">\(F(X&#39;\beta)\)</span> from above,
+<span class="math display">\[
+X&#39;\beta = F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]
+\]</span>
+and thus, pre-multiplying both sides by <span class="math inline">\(X\)</span> and taking expectations,
+<span class="math display">\[
+\mathbb{E}[XX&#39;]\beta = \mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+\]</span>
+Therefore, if <span class="math inline">\(\mathbb{E}[XX&#39;]\)</span> is invertible,
+<span class="math display">\[
+\beta = \mathbb{E}[XX&#39;]^{-1}\mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+\]</span>
+Since <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> depends only on the observed data <span class="math inline">\((Y,X)\)</span>, this function is point identified. Since <span class="math inline">\(F\)</span> is assumed to be a known function, it follows that <span class="math inline">\(\beta\)</span> is point identified whenever <span class="math inline">\(\mathbb{E}[XX&#39;]\)</span> is invertible and <span class="math inline">\((\alpha_0, \alpha_1)\)</span> are known.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> So if we can find a way to point identify <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span>, we will immediately identify <span class="math inline">\(\beta\)</span>.</p>
+<p>Easier said than done! How can we possibly learn <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> without auxiliary data? Nonlinearity is the key. If <span class="math inline">\(F\)</span> is a cumulative distribution function, then <span class="math inline">\(\lim_{t\rightarrow \infty} F(t) = 1\)</span> and <span class="math inline">\(\lim_{t\rightarrow -\infty} F(t) = 0\)</span>. Now suppose that <span class="math inline">\(X\)</span> contains at least one covariate, call it <span class="math inline">\(V\)</span>, that is continuous and has “large support,” i.e. takes on values in a very wide range. Without loss of generality, suppose that the coefficient <span class="math inline">\(\beta_v\)</span> on <span class="math inline">\(V\)</span> is positive. (If it’s negative, then apply the following argument to <span class="math inline">\(-V\)</span> instead.) For <span class="math inline">\(V\)</span> large and <em>positive</em> <span class="math inline">\(X&#39;\beta\)</span> is large and positive so that <span class="math inline">\(F(X&#39;\beta)\)</span> is close to one.
+In this case
+<span class="math display">\[
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X&#39;\beta) &amp;\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 1 \\
+&amp;= (1 - \alpha_1).
+\end{aligned}
+\]</span>
+For <span class="math inline">\(V\)</span> large and <em>negative</em>, on the other hand, <span class="math inline">\(X&#39;\beta\)</span> is large and negative, <span class="math inline">\(F(X&#39;\beta)\)</span> is close to zero, and
+<span class="math display">\[
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X&#39;\beta) &amp;\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 0\\
+&amp;= \alpha_0.
+\end{aligned}
+\]</span>
+Intuitively, by examining values of <span class="math inline">\(X_i\)</span> for which <span class="math inline">\(F(X_i&#39;\beta)\)</span> is close to one we can learn <span class="math inline">\((1 - \alpha_1)\)</span> and by examining values for which <span class="math inline">\(F(X_i&#39;\beta)\)</span> is close to zero we can identify <span class="math inline">\(\alpha_0\)</span>.</p>
+<p>You may object that the preceding identification argument sounds suspiciously circular: doesn’t this idea at least implicitly require us to know <span class="math inline">\(\beta\)</span>? Fortunately the answer is no. We only need to know the <em>signs</em> of <span class="math inline">\(\beta\)</span>. Under the assumption that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> these are the same as the signs of the observed partial effects <span class="math inline">\(\partial \mathbb{P}(Y=1|X) /\partial \beta_j\)</span>. An example may help. Suppose <span class="math inline">\(Y=1\)</span> means “graduated from college.” Under fixed misclassification, we would learn <span class="math inline">\(\alpha_0\)</span> from the observations of <span class="math inline">\((Y_i, X_i)\)</span> for people who almost certainly <em>didn’t</em> graduate from college, based on their covariates, and <span class="math inline">\((1 - \alpha_1)\)</span> from observations of <span class="math inline">\((Y_i, X_i)\)</span> for people who almost certainly <em>did</em>. By first estimating <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> we learn <em>attenuated</em> versions of the true partial effects <span class="math inline">\(F(X&#39;\beta) \beta_j\)</span>. In other words, we learn how <em>reported</em> education varies with <span class="math inline">\(X\)</span>. But this information suffices to show us how to make <span class="math inline">\(F(X&#39;\beta)\)</span> close to zero or one.</p>
+<p>The preceding argument <em>crucially relies</em> on the assumption that <span class="math inline">\(F\)</span> is nonlinear. To see why, consider the linear probability model <span class="math inline">\(F(X&#39;\beta) = X&#39;\beta\)</span> and let <span class="math inline">\(X&#39; = (1, X_1&#39;)\)</span> and <span class="math inline">\(\beta&#39; = (\beta_0, \beta_1&#39;)\)</span>.
+Then,
+<span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X) 
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right) F(X&#39;\beta)\\
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(X&#39;\beta) \\
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(\beta_0 + X_1&#39; \beta_1) \\
+  &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) \beta_0 + X_1&#39; (1 - \alpha_0 - \alpha_1) \beta_1.
+\end{aligned}
+\]</span>
+Now, defining <span class="math inline">\(\widetilde{\beta}_0 \equiv \alpha_0 + (1 - \alpha_0 - \alpha_1)\beta_0\)</span>, <span class="math inline">\(\widetilde{\beta}_1 = (1 - \alpha_0 - \alpha_1) \beta_1\)</span>, and <span class="math inline">\(\widetilde{\beta}&#39; = (\widetilde{\beta}_0, \widetilde{\beta}_1&#39;)\)</span> we have
+<span class="math display">\[
+\mathbb{P}(Y=1|X) = \alpha_0 + (1 - \alpha_0 - \alpha_1) X&#39;\beta  = X&#39;\widetilde{\beta}.
+\]</span>
+This shows that a linear probability model with coefficient vector <span class="math inline">\(\beta\)</span> and mis-classification probabilities <span class="math inline">\((\alpha_0, \alpha_1)\)</span> is <em>observationally equivalent</em> to a linear probability model with <em>no mis-classification</em> and coefficient <span class="math inline">\(\widetilde{\beta}\)</span>. To put it another way: there is no way to tell whether mis-classification is present or absent in a linear model. Doing so requires <em>non-linearity</em>.</p>
+<p>So how can we use these results in practice? If <span class="math inline">\((\alpha_0, \alpha_1, \beta)\)</span> are identified and <span class="math inline">\(F\)</span> is assumed known, we can proceed via garden-variety maximum likelihood estimation. The log-likelihood function is only slightly more complicated than in the standard binary outcome setting, in particular:
+<span class="math display">\[
+\begin{aligned}
+  \ell_n(\alpha_0, \alpha_1, \beta) &amp;= \frac{1}{n} \sum_{i=1}^n \log\left\{ \mathbb{P}(Y_i=1|X)^{\mathbb{1}(Y_i=1)}\mathbb{P}(Y_i=0|X_i)^{\mathbb{1}(Y_i=0)} \right\} \\
+  &amp;= \frac{1}{n} \sum_{i=1}^n Y_i \log\left\{  \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X_i&#39;\beta) \right\} + (1 - Y_i) \log\left\{ 1 - \alpha_0 - (1 - \alpha_0 - \alpha_1) F(X_i&#39;\beta) \right\}.
+\end{aligned}
+\]</span>
+If <span class="math inline">\(F\)</span> is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor <span class="math inline">\(V\)</span> with “large support” allows us to identify the mis-classification probabilities, and hence <span class="math inline">\(F\)</span>. Indeed, we can even allow <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> to depend covariates, as long as they don’t depend on <span class="math inline">\(V\)</span> itself. For more details on the “identification by nonlinearity” approach, see <a href="https://www.sciencedirect.com/science/article/pii/S0304407698000153">Hausman et al. (1998)</a> and <a href="https://www.cambridge.org/core/journals/econometric-theory/article/identification-of-the-binary-choice-model-with-misclassification/8FD094D628B0053032FF25DAAD2E1621">Lewbel (2000)</a>.</p>
+</div>
+</div>
+<div id="coming-attractions" class="section level1">
+<h1>Coming Attractions</h1>
+<p>That’s more than enough about measurement error for now! When I return to this topic in a few weeks time, I’ll consider the problem of a mis-measured binary <em>regressor</em>. In my next installment, however, I’ll put measurement error to one side and revisit a classic problem from introductory statistics: constructing a confidence interval for a population proportion. Sometimes the easiest things turn out to be much harder than they first appear.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>For more details of these models, see my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Below we’ll examine a simpler special case in which <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> are <em>fixed</em> probabilities that do not depend on <span class="math inline">\(X\)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Alternatively, you could say that the only way to identify <span class="math inline">\((\alpha_0, \alpha_1)\)</span> is by making an assumption about the sign of one component of <span class="math inline">\(\beta\)</span>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>We also need <span class="math inline">\(\alpha_0 + \alpha_1\)</span> to avoid division by zero!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
