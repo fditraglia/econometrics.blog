@@ -1,0 +1,182 @@
+---
+title: Don't Use the Textbook CI for a Proportion
+author: Francis J. DiTraglia
+date: '2021-10-04'
+slug: don-t-use-the-textbook-ci-for-a-proportion
+categories: [Statistics]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-04T16:37:50+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>In a <a href="https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/">previous post</a> I showed an example in which the “textbook” confidence interval for a proportion performs poorly despite a fairly large sample size. My aim in that post was to convince you that the oft-repeated advice concerning <span class="math inline">\(n &gt; 30\)</span> and the central limit theorem is worthless. Today I’d like to convince you of something even more subversive: the textbook confidence interval for a proportion is absolutely terrible and you should never use it or teach it under any circumstances. Fortunately there’s a simple fix. For a 95% interval, simply add four “fake” observations to your dataset, two successes and two failures, and then follow the textbook recipe for this “artificially augmented” dataset.</p>
+<p>This post draws on two very approachable papers from around the turn of the millennium: <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550">Agresti &amp; Coull (1998)</a> and <a href="https://projecteuclid.org/journals/statistical-science/volume-16/issue-2/Interval-Estimation-for-a-Binomial-Proportion/10.1214/ss/1009213286.full">Brown, Cai, &amp; DasGupta (2001)</a>. More theoretically-inclined readers may also enjoy a companion paper to the latter reference: <a href="https://projecteuclid.org/journals/annals-of-statistics/volume-30/issue-1/Confidence-Intervals-for-a-binomial-proportion-and-asymptotic-expansions/10.1214/aos/1015362189.full">Brown, Cai, &amp; DasGupta (2002)</a>.</p>
+<div id="the-wald-confidence-interval" class="section level1">
+<h1>The Wald Confidence Interval</h1>
+<p>This is what you learned in your introductory statistics course: it’s the textbook interval I alluded to above. Let <span class="math inline">\(X_1, ..., X_n \sim \text{iid Bernoulli}(p)\)</span> and define <span class="math inline">\(\widehat{p} = \sum_{i=1}^n X_i/n\)</span>. By the central limit theorem
+<span class="math display">\[
+\frac{\widehat{p} - p}{\sqrt{\widehat{p}(1 - \widehat{p})/n}} \rightarrow_d N(0,1)
+\]</span>
+leading to the so-called “Wald” 95% confidence interval for a population proportion:
+<span class="math display">\[
+\widehat{p} \pm 1.96 \times \sqrt{\frac{\widehat{p}(1- \widehat{p})}{n}}.
+\]</span></p>
+</div>
+<div id="an-obvious-objection-to-the-wald-interval" class="section level1">
+<h1>An Obvious Objection to the Wald Interval</h1>
+<p>Suppose we want to estimate the proportion of Trump voters in Berkeley California. We decide carry out a poll of 25 randomly-sampled Berkeley residents and find that none of them voted for Trump. Then <span class="math inline">\(\widehat{p} = 0\)</span> and the Wald confidence interval is
+<span class="math display">\[
+0 \pm 1.96 \times \sqrt{0 \times (1 - 0) / 25}
+\]</span>
+in other words <span class="math inline">\([0, 0]\)</span>. Clearly this is absurd: unless there are literally <em>zero</em> Trump voters in Berkeley, we can be <em>certain</em> that this interval does not contain the true population parameter. A similar problem would emerge if we instead tried to estimate the proportion of Biden voters in the Berkeley: if <span class="math inline">\(\widehat{p} = 1\)</span> then our confidence interval would be <span class="math inline">\([1,1]\)</span>. This too is absurd. More broadly, the Wald confidence interval is extremely poorly behaved in situations where <span class="math inline">\(p\)</span> is close to zero or one. You may have encountered a suggestion that <span class="math inline">\(np(1-p)\)</span> should be at least 5 for the Wald interval to perform well. There’s something to this advice, as we’ll see below, but it’s not sufficient. More to the point: we don’t <em>know</em> <span class="math inline">\(p\)</span> in practice so there is no way to apply this rule!</p>
+</div>
+<div id="the-agresti-coull-interval" class="section level1">
+<h1>The Agresti-Coull Interval</h1>
+<p>Here’s a quick and dirty fix that is suprisingly effective. Simply add four “fake” observations to the dataset: two zeros (failures) and two ones (successes). The 95% Agresti-Coull confidence interval is constructed in exactly the same way as 95% Wald interval only using this “artificially augmented” dataset rather than the original one. In other words, if the sample size is <span class="math inline">\(n\)</span> and the sample proportion is <span class="math inline">\(\widehat{p}\)</span>, then Agresti-Coull interval is constructed from <span class="math inline">\(\widetilde{n} = n + 4\)</span> and
+<span class="math display">\[
+\widetilde{p} \equiv \frac{n \widehat{p} + 2}{n + 4} = \frac{\left(\sum_{i=1}^n X_i\right) + 0 + 0 + 1 + 1}{n + 4}
+\]</span>
+yielding
+<span class="math display">\[
+\widetilde{p} \pm 1.96 \times \sqrt{\frac{\widetilde{p}(1 - \widetilde{p})}{\widetilde{n}}}, \quad \widetilde{n} \equiv n + 4, \quad \widetilde{p} \equiv \frac{n\widehat{p}+ 2}{n + 4}.
+\]</span>
+Note that this “add four fake observations” adjustment is specific to the case of a 95% confidence interval. In a future post, I’ll explain where the rule comes from and how to generalize it to other confidence levels. For now, let’s ask ourselves a more fundamental question: does this adjustment make sense? “Wait!” I can hear you object: “adding fake observations introduces a <em>bias</em>!” Indeed it does. Since <span class="math inline">\(\widehat{p}\)</span> is an unbiased estimator of <span class="math inline">\(p\)</span>,
+<span class="math display">\[
+\begin{aligned}
+\text{Bias}(\widetilde{p}) &amp;\equiv \mathbb{E}[\widetilde{p} - p] = \mathbb{E}\left[ \frac{n \widehat{p} + 2}{n + 4}\right] - p\\
+&amp;= \frac{np + 2}{n+4} - p  =  (1 - 2p) \left(\frac{2}{n + 4}\right).
+\end{aligned}
+\]</span>
+If <span class="math inline">\(p = 1/2\)</span> this estimator is unbiased. Otherwise, the addition of four fake observations pulls <span class="math inline">\(\widetilde{p}\)</span> <em>away</em> from <span class="math inline">\(\widehat{p}\)</span> and <em>towards</em> <span class="math inline">\(1/2\)</span>: when <span class="math inline">\(p&gt;1/2\)</span> the estimator is downward-biased, and when <span class="math inline">\(p &lt; 1/2\)</span> it is upward-biased. The smaller the sample size, the larger the bias.</p>
+<p>Let’s try this out on our Trump/Berkeley example. Adding four fake observations gives a sample proportion of
+<span class="math display">\[
+\widetilde{p} = \frac{n \widehat{p} + 2}{n + 4} = \frac{25 \times 0 + 2}{25 + 4} = \frac{2}{29} \approx 0.07
+\]</span>
+in the augmented dataset and hence a 95% confidence interval of approximately
+<span class="math display">\[
+0.07 \pm 1.96 \times \sqrt{\frac{0.07 \times (1 - 0.07)}{29}} = [-0.02, 0.16].
+\]</span>
+Of course a proportion can’t be negative, so we would report <span class="math inline">\([0, 0.16]\)</span>. This seems like a much more reasonable summary of our uncertainty than reporting an interval of <span class="math inline">\([0,0]\)</span>, but does it really work? Does adding fake data really improve things?</p>
+</div>
+<div id="comparing-the-wald-and-agresti-coull-intervals" class="section level1">
+<h1>Comparing the Wald and Agresti-Coull Intervals</h1>
+<p>To answer the question raised at the end of the last paragraph, let’s use R to calculate the <em>coverage probability</em> of the Wald and Agresti-Coull intervals for a range of values of the sample size <span class="math inline">\(n\)</span> and true population proportion <span class="math inline">\(p\)</span>. In other words, let’s see how often these intervals <em>actually</em> contain the true population parameter <span class="math inline">\(p\)</span>. If they are bona fide 95% confidence intervals, this should occur with probability close to 0.95. One way to carry out this exercise is via Monte Carlo simulation: repeatedly drawing randomly generated datasets and counting the proportion of our resulting confidence intervals that contain the true value of <span class="math inline">\(p\)</span>. In this example, however, it turns out that there’s a quick and easy way to calculate <em>exact</em> coverage probabilities using the R function <code>dbinom</code>. For full details, see the R code appendix at the end of the post.</p>
+<p>To begin, let’s compare the two confidence intervals over a grid of values for the true population proportion <span class="math inline">\(p\)</span> while holding the sample size <span class="math inline">\(n\)</span> fixed. When <span class="math inline">\(n = 25\)</span> we obtain the following:
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="960" />
+In each of these plots, along with those that follow, the solid black curve gives the coverage probability while the dashed red line passes through <span class="math inline">\(0.95\)</span> on the vertical axis. A well-behaved confidence interval should produce a black curve that is close to the dashed red line. To make a long story short: the Agresti-Coull interval is quite well-behaved while the Wald interval is a disaster. For values of <span class="math inline">\(p\)</span> close to zero or one, the Wald interval is extremely erratic: its coverage probability can be exactly 95% or far below depending on the precise value of <span class="math inline">\(p\)</span>. Moreover, the Wald interval systematically <em>undercovers</em>. There are very few values of <span class="math inline">\(p\)</span> for which its coverage probability is 0.95 or higher and very many for which it is below this level. In stark contrast, the Agresti-Coull interval at worst undercovers by around 0.01 or 0.02. In general its actual coverage probability is very close to 95%, although it does have a tendency to <em>overcover</em> for values of <span class="math inline">\(p\)</span> that are close to zero or one. It turns out that there is nothing special about <span class="math inline">\(n = 25\)</span>. The same basic story holds for larger sample sizes, for example <span class="math inline">\(n=50\)</span> and <span class="math inline">\(n = 100\)</span>.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="960" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-2.png" width="960" /></p>
+<p>So what do we make of the rule of thumb that the Wald interval will perform well if <span class="math inline">\(np(1-p)&gt;5\)</span>? Indeed, values of <span class="math inline">\(p\)</span> that are close to zero or one present the biggest problems for this confidence interval. But like many traditional statistical rules of thumb, this one leaves much to be desired. Suppose that <span class="math inline">\(n = 1270\)</span> and <span class="math inline">\(p = 0.005\)</span>. In this case <span class="math inline">\(np(1-p)\)</span> equals 6.3 but the coverage probability of the Wald interval is an unsatisfying 0.875 compared to 0.958 for the Agresti-Coull interval.</p>
+<p>Because the central limit theorem is an asymptotic result, one that holds as <span class="math inline">\(n\)</span> approaches infinity, we might hope that at least the performance of the Wald interval improves as the sample size grows. Alas, this is not always the case. The following plot compares the coverage of Wald and Agresti-Coull confidence intervals for <span class="math inline">\(p = 0.005\)</span> as <span class="math inline">\(n\)</span> increases from 200 to 2000. Note the pronounced “sawtooth” pattern in the Wald confidence interval. It improves steadily as the sample size grows only to jump precipitously downward, before beginning a steady upward climb followed by another jump. In contrast, the performance of the Agresti-Coull interval is fairly steady. While a bit less dramatic, a similar qualitative pattern holds for <span class="math inline">\(p=0.2\)</span> as <span class="math inline">\(n\)</span> increases from 25 to 100.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="960" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-2.png" width="960" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Friends don’t let friends use the Wald interval for a proportion. Fortunately there’s a simple alternative when you’re after a 95% confidence interval: add two successes and two failures to your dataset, then proceed as normal. I encourage you to use my R code to test out different values of <span class="math inline">\(p\)</span> and <span class="math inline">\(n\)</span>, making your own comparisons of the Wald and Agresti-Coull intervals. In a future post, I’ll show you where the Agresti-Coull interval comes from, why it works so well, and how to generalize it to construct 90%, 99% and indeed arbitrary <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence intervals.</p>
+</div>
+<div id="r-code-appendix" class="section level1">
+<h1>R Code Appendix</h1>
+<p>I wrote four R functions to generate the plots shown above: <code>get_Wald_coverage()</code> and <code>get_AC_coverage()</code> calculate the coverage probabilities of the Wald and Agresti-Coull confidence intervals, while <code>plot_n_comparison()</code> and <code>plot_p_comparison()</code> construct the plots comparing coverage probabilities across different values of the sample size <span class="math inline">\(n\)</span> and true population proportion <span class="math inline">\(p\)</span>.</p>
+<pre class="r"><code>get_Wald_coverage &lt;- function(p, n) {
+#-----------------------------------------------------------------------------
+# Calculates the exact coverage probability of a nominal 95% Wald confidence 
+# interval for a population proportion.
+#-----------------------------------------------------------------------------
+# p   true population proportion
+# n   sample size
+#-----------------------------------------------------------------------------
+  x &lt;- 0:n
+  p_hat &lt;- x / n
+  z &lt;- qnorm(1 - 0.05 / 2)
+  SE &lt;- sqrt(p_hat * (1 - p_hat) / n)
+  cover &lt;- (p &gt;= p_hat - z * SE) &amp; (p &lt;= p_hat + z * SE)
+  prob_cover &lt;- dbinom(x, n, p)
+  sum(cover * prob_cover)
+}
+
+get_AC_coverage &lt;- function(p, n) {
+#-----------------------------------------------------------------------------
+# Calculates the exact coverage probability of a nominal 95% Agresti-Coull
+# confidence interval for a population proportion.
+#-----------------------------------------------------------------------------
+# p   true population proportion
+# n   sample size
+#-----------------------------------------------------------------------------
+  x &lt;- 0:n
+  p_tilde &lt;- (x + 2) / (n + 4)
+  n_tilde &lt;- n + 4            
+  z &lt;- qnorm(1 - 0.05 / 2)
+  SE &lt;- sqrt(p_tilde * (1 - p_tilde) / n_tilde)
+  cover &lt;- (p &gt;= p_tilde - z * SE) &amp; (p &lt;= p_tilde + z * SE)
+  prob_cover &lt;- dbinom(x, n, p)
+  sum(cover * prob_cover)
+}
+
+plot_n_comparison &lt;- function(n_seq, p) {
+#-----------------------------------------------------------------------------
+# Plots a comparison of coverage probabilities for Wald and Agresti-Coull 
+# nominal 95% confidence intervals for a population proportion over a grid of
+# values for the sample size, holding the population proportion fixed.
+#-----------------------------------------------------------------------------
+# n_seq   vector of values for the sample size
+# p       true population proportion
+#-----------------------------------------------------------------------------
+# Example:
+#   my_p_seq &lt;- seq(0.02, 0.98, 0.0001)
+#   plot_p_comparison(my_p_seq, n = 25)
+#-----------------------------------------------------------------------------
+  wald &lt;- sapply(n_seq, function(n) get_Wald_coverage(p, n))
+  AC &lt;- sapply(n_seq, function(n) get_AC_coverage(p, n))
+  cover_min &lt;- min(min(wald), min(AC))
+  cover_max &lt;- max(max(wald), max(AC))
+  limits &lt;- c(cover_min, 1)
+  par(mfrow = c(1, 2))
+  plot(n_seq, wald, type = &#39;l&#39;, xlab = &#39;n&#39;, ylim = limits, main = &#39;Wald&#39;, 
+       ylab = &#39;Coverage Prob.&#39;)
+  text(mean(n_seq), 1, labels = bquote(p == .(p)))
+  abline(h = 0.95, lty = 2, col = &#39;red&#39;)
+  plot(n_seq, AC, type = &#39;l&#39;, xlab = &#39;n&#39;, ylim = limits,
+       main = &#39;Agresti-Coull&#39;, ylab = &#39;&#39;)
+  text(mean(n_seq), 1, labels = bquote(p == .(p)))
+  abline(h = 0.95, lty = 2, col = &#39;red&#39;)
+  par(mfrow = c(1, 1))
+}
+
+plot_p_comparison &lt;- function(p_seq, n) {
+#-----------------------------------------------------------------------------
+# Plots a comparison of coverage probabilities for Wald and Agresti-Coull 
+# nominal 95% confidence intervals for a population proportion over a grid of
+# values for the population proportion, holding sample size fixed.
+#-----------------------------------------------------------------------------
+# p_seq   vector of values for the true population proportion
+# n       sample size
+#-----------------------------------------------------------------------------
+# Example:
+#   plot_n_comparison(n_seq = 25:100, p = 0.2)
+#-----------------------------------------------------------------------------
+  wald &lt;- sapply(p_seq, function(p) get_Wald_coverage(p, n))
+  AC &lt;- sapply(p_seq, function(p) get_AC_coverage(p, n))
+  cover_min &lt;- min(min(wald), min(AC))
+  limits &lt;- c(cover_min, 1)
+  par(mfrow = c(1, 2))
+  plot(p_seq, wald, type = &#39;l&#39;, xlab = &#39;p&#39;, ylim = limits, main = &#39;Wald&#39;, 
+       ylab = &#39;Coverage Prob.&#39;)
+  text(0.5, 1, labels = bquote(n == .(n)))
+  abline(h = 0.95, lty = 2, col = &#39;red&#39;)
+  plot(p_seq, AC, type = &#39;l&#39;, xlab = &#39;p&#39;, ylim = limits,
+       main = &#39;Agresti-Coull&#39;, ylab = &#39;&#39;)
+  text(0.5, 1, labels = bquote(n == .(n)))
+  abline(h = 0.95, lty = 2, col = &#39;red&#39;)
+  par(mfrow = c(1, 1))
+}</code></pre>
+</div>
