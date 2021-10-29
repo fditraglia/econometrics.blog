@@ -1,0 +1,161 @@
+---
+title: Street Fighting Numerical Analysis - Part 1
+author: Francis J. DiTraglia
+date: '2021-10-29'
+slug: street-fighting-numerical-analysis-part-1
+categories: [computing, R]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-10-29T11:47:06+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training numerical analysis and computer science.
+This means that we often learn things <em>the hard way</em>: by making boneheaded mistakes and spending hours browsing <a href="https://stackoverflow.com/">stackoverflow</a> to try to figure out what went wrong.
+In preparation for my upcoming course on <a href="https://empirical-methods.com">Empirical Research Methods</a><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> I’ve started trying to collect and organize the various nuggets of computational wisdom that I’ve picked up over the years. This post is the first of several that I plan to write on that theme.
+Its origin is an enigmatic bug that I detected in a seemingly trivial line of my R code involving <code>rep()</code>.</p>
+<div id="is-r-broken" class="section level1">
+<h1>Is R broken?</h1>
+<p>For no particular reason, let’s use the R function <code>rep()</code> to print out the string <code>"econometrics.blog"</code> four times:</p>
+<pre class="r"><code>rep(&quot;econometrics.blog&quot;, times = 4)</code></pre>
+<pre><code>## [1] &quot;econometrics.blog&quot; &quot;econometrics.blog&quot; &quot;econometrics.blog&quot;
+## [4] &quot;econometrics.blog&quot;</code></pre>
+<p>Since 0.2 multiplied by 20 equals 4, it comes no surprise that replacing <code>times = 4</code> with <code>times = 0.2 * 20</code> gives the same result:</p>
+<pre class="r"><code>rep(&quot;econometrics.blog&quot;, times = 0.2 * 20)</code></pre>
+<pre><code>## [1] &quot;econometrics.blog&quot; &quot;econometrics.blog&quot; &quot;econometrics.blog&quot;
+## [4] &quot;econometrics.blog&quot;</code></pre>
+<p>Now let’s try <code>times = (1 - 0.8) * 20</code> instead. Since 0.2 equals (1 - 0.8) this couldn’t possibly make a difference, could it? Distressingly, it does: we obtain only <em>three</em> copies of <code>"econometrics.blog"</code></p>
+<pre class="r"><code>rep(&quot;econometrics.blog&quot;, times = (1 - 0.8) * 20)</code></pre>
+<pre><code>## [1] &quot;econometrics.blog&quot; &quot;econometrics.blog&quot; &quot;econometrics.blog&quot;</code></pre>
+<p>What on earth is going on here? Has R made some kind of mistake? Let’s try a sanity check. First we’ll calculate <code>(1 - 0.8) * 20</code> and call it <code>x</code>. Then we’ll check that <code>x</code> really does equal four:</p>
+<pre class="r"><code>x &lt;- (1 - 0.8) * 20
+x</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>What a relief: surely setting <code>times = x</code> should give us four copies of <code>"econometrics.blog"</code>. Alas, it does not:</p>
+<pre class="r"><code>rep(&#39;econometrics.blog&#39;, times = x) </code></pre>
+<pre><code>## [1] &quot;econometrics.blog&quot; &quot;econometrics.blog&quot; &quot;econometrics.blog&quot;</code></pre>
+<p>Clearly using open-source software like R is a bad idea and I should switch to STATA.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+</div>
+<div id="numeric-types-in-r" class="section level1">
+<h1>Numeric Types in R</h1>
+<p>Because R is a <a href="https://en.wikipedia.org/wiki/Type_system#DYNAMIC">dynamically-typed</a> programming language, we can almost always ignore the question of precisely how it stores numeric values “under the hood.” In fact R has <em>two</em> numeric types: integer and double. Integers are rare in practice. The operator <code>:</code> returns an integer vector</p>
+<pre class="r"><code>y &lt;- 1:5
+typeof(y)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>and the length of a vector is always an integer</p>
+<pre class="r"><code>n &lt;- length(y)
+typeof(y)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>but nearly every other numeric value you encounter in R will be stored as a double, i.e. a double precision <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">floating point number</a>:</p>
+<pre class="r"><code>typeof(4)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>typeof(4.0)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>typeof(cos(0))</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>To <em>force</em> R to store a value as an integer rather than double, we can either append an <code>L</code></p>
+<pre class="r"><code>z &lt;- 4L
+typeof(z)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>or <em>coerce</em>, i.e. convert, a double to an integer using <code>as.integer()</code></p>
+<pre class="r"><code>a &lt;- 4
+typeof(a)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>b &lt;- as.integer(a)
+typeof(b)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<p>The trade-off between integers and doubles is between precision and range. Calculations carried out with integers are always <em>exact</em>, but integers can only be used to represent a fairly limited number of values. Calculations with doubles, on the other hand, are not <em>always</em> exact, but doubles can store a much larger range of values, including decimals.</p>
+<p>This post isn’t the right place to delve into the details of floating point numbers, of which doubles are an instance, but there are two points worth emphasizing. First, it’s generally safe to store a value that is “truly” an integer, e.g. <code>4</code>, as double. As explained in the help file <code>integer {base}</code></p>
+<blockquote>
+<p>current implementations of R use 32-bit integers for integer vectors, so the range of representable integers is restricted to about +/-2*10^9: doubles can hold much larger integers exactly.</p>
+</blockquote>
+<p>This explains why you may never have encountered the <code>L</code> suffix in the wild. Because doubles can represent very large integers <em>exactly</em>, calculations with whole numbers stored as doubles will also be exact. Notice that R automatically converts integers that are “too big” into doubles:</p>
+<pre class="r"><code>x &lt;- 999999999L
+typeof(x)</code></pre>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<pre class="r"><code>y &lt;- 9999999999L
+typeof(y)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<p>While converting integers to doubles in innocuous, you need to be <em>careful</em> when converting doubles to integers. This turns out to be the root of our problem with <code>rep()</code> from above. Both <code>0.2 * 20</code> and <code>(1 - 0.8) * 20</code> are doubles, and both <em>appear</em> to equal <code>4</code></p>
+<pre class="r"><code>x &lt;- 0.2 * 20
+x</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>typeof(x)</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>y &lt;- (1 - 0.8) * 20
+y</code></pre>
+<pre><code>## [1] 4</code></pre>
+<p>But <code>x</code> and <code>y</code> are coerced to <em>different</em> integer values:</p>
+<pre class="r"><code>as.integer(x)</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>as.integer(y)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>The function <code>rep()</code> expects its second argument <code>times</code> to be an integer. If we supply a double instead, then <code>rep()</code> makes a conversion in the same way as the function <code>as.integer()</code>, namely by <em>truncating</em>. Far down in the help file for <code>rep()</code> we find this crucial caveat:</p>
+<blockquote>
+<p>Non-integer values of <code>times</code> will be truncated towards zero. If times is a computed quantity it is prudent to add a small fuzz or use <code>round()</code>.</p>
+</blockquote>
+<p>But wait: aren’t <code>x</code> and <code>y</code> <em>precisely equal</em> to each other? How can one truncate to <code>4</code> while the other truncates to <code>3</code>? As it turns out, appearances can be deceiving:</p>
+<pre class="r"><code>identical(x, y)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>To find out <em>why</em> these values aren’t equal, we need to learn a bit more about how computers approximate real numbers using doubles.</p>
+</div>
+<div id="what-you-see-isnt-always-what-you-get." class="section level1">
+<h1>What you see isn’t always what you get.</h1>
+<p>R has various handy built-in constants, including <span class="math inline">\(\pi\)</span></p>
+<pre class="r"><code>pi</code></pre>
+<pre><code>## [1] 3.141593</code></pre>
+<p>Notwithstanding <a href="https://en.wikipedia.org/wiki/Indiana_Pi_Bill">bill number 246</a> of the 1897 sitting of the Indiana General Assembly, <span class="math inline">\(\pi\)</span> is an irrational number. By default, however, R only shows us a small number of its digits. To display twenty digits of <span class="math inline">\(\pi\)</span>, we can specify the argument <code>digits</code> to the function <code>print()</code> like so</p>
+<pre class="r"><code>print(pi, digits = 20)</code></pre>
+<pre><code>## [1] 3.141592653589793116</code></pre>
+<p>To see <em>even more</em> digits, we can use the function <code>sprintf()</code>. Let’s try to display 60 digits of <span class="math inline">\(\pi\)</span>:</p>
+<pre class="r"><code>sprintf(&quot;%.60f&quot;, pi)</code></pre>
+<pre><code>## [1] &quot;3.141592653589793115997963468544185161590576171875000000000000&quot;</code></pre>
+<p>Why do the last twelve decimal points display as zero? The answer is that computers cannot represent real numbers to infinite precision. At some point, the remaining digits of <span class="math inline">\(\pi\)</span> get chopped off, and we’re left with an approximation that’s more than sufficient for any practical application.</p>
+<p>At first glance, the number 0.8 seems nothing like <span class="math inline">\(\pi\)</span>. It is, after all, a rational number: 4/5. But <code>sprintf()</code> reveals that there’s more here than meets the eye:</p>
+<pre class="r"><code>sprintf(&quot;%.54f&quot;, 0.8)</code></pre>
+<pre><code>## [1] &quot;0.800000000000000044408920985006261616945266723632812500&quot;</code></pre>
+<p>The fraction 4/5 cannot be represented exactly as a double; it can only be <em>approximated</em>. The same is true of 1/5. Because <code>0.2</code> and <code>0.8</code> can only be represented approximately, <code>1 - 0.8</code> and <code>0.2</code> turn out <em>not</em> to be equal from the computer’s perspective:</p>
+<pre class="r"><code>identical(1 - 0.8, 0.2)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>This in turn explains why <code>(1 - 0.8) * 20</code> and <code>0.2 * 20</code> truncate to different integer values:</p>
+<pre class="r"><code>sprintf(&quot;%.54f&quot;, 20 * c(1 - 0.8, 0.2))</code></pre>
+<pre><code>## [1] &quot;3.999999999999999111821580299874767661094665527343750000&quot;
+## [2] &quot;4.000000000000000000000000000000000000000000000000000000&quot;</code></pre>
+</div>
+<div id="which-decimals-have-an-exact-representation" class="section level1">
+<h1>Which decimals have an exact representation?</h1>
+<p>The fraction <code>1/3</code> lacks a finite decimal expansion. You might guess that R would simply store <code>1/3</code> as a zero, followed by a decimal, followed by a large number of <code>3</code>s. But in fact it does not:</p>
+<pre class="r"><code>sprintf(&quot;%.54f&quot;, 1/3)</code></pre>
+<pre><code>## [1] &quot;0.333333333333333314829616256247390992939472198486328125&quot;</code></pre>
+<p>Every digit from the <code>1</code> onward is <em>wrong</em>. The fraction <code>1/10</code>, on the other hand, clearly <em>does</em> have a finite decimal expansion, <code>0.1</code>, but R gets this one wrong as well:</p>
+<pre class="r"><code>sprintf(&quot;%.54f&quot;, 1/10)</code></pre>
+<pre><code>## [1] &quot;0.100000000000000005551115123125782702118158340454101562&quot;</code></pre>
+<p>At the same time, it handles <code>1/4</code> with perfect accuracy:</p>
+<pre class="r"><code>sprintf(&quot;%.54f&quot;, 1/4)</code></pre>
+<pre><code>## [1] &quot;0.250000000000000000000000000000000000000000000000000000&quot;</code></pre>
+<p>What’s going on? Here’s a clue: the fraction <code>1/32</code> can also be represented exactly as a double. See if you can figure out why before reading further.</p>
+<p>The reason why <code>1/3</code> lacks a terminating decimal expansion is that it can’t be written as a counting number divided by a power of ten. In other words, we can’t find values <span class="math inline">\(m, n \in \mathbb{N}\)</span> such that <span class="math inline">\(m/10^n\)</span> equals <span class="math inline">\(1/3\)</span>. In contrast, <code>3/4</code> has a finite decimal expansion because it equals <code>75/100</code>, corresponding to <span class="math inline">\(m = 75\)</span> and <span class="math inline">\(n = 2\)</span>. Of course I’ve left off a crucial qualification: wherever I wrote “finite decimal expansion” above, I should have added “in base 10.” <em>The same number could have a terminating decimal expansion in one base and not in another.</em></p>
+<p>Although R displays numbers on the screen in base 10, it represents and computes with them in binary. So the question becomes: which values have a terminating decimal expansion in base 2? To find out, simply replace <code>10</code> with <code>2</code> in the expression from above. A rational number has a terminating decimal expansion base 2 if it can be written as <span class="math inline">\(m/2^n\)</span> for some <span class="math inline">\(m, n \in \mathbb{N}\)</span>. Since <code>1/4</code> equals <span class="math inline">\(1/2^2\)</span>, it has an exact representation. Since <code>3/4</code> can be written as <code>3/2^2</code> it <em>also</em> has an exact representation. In contrast, <code>1/5</code> lacks an exact representation because there are no natural numbers <span class="math inline">\(m,n\)</span> such that <span class="math inline">\(5 = 2^n/m\)</span>. We can get <em>close</em> by making <span class="math inline">\(n\)</span> large and choosing <span class="math inline">\(m\)</span> carefully, but we can never satisfy this equation exactly.</p>
+</div>
+<div id="take-home-lesson" class="section level1">
+<h1>Take-home Lesson</h1>
+<p>High-level programming languages like R and Python are extremely convenient: they allow us to focus on the big picture rather than writing line after line of boilerplate code.
+But we should never forget that computers <em>cannot</em> represent all numeric values with perfect accuracy. Sometimes this matters. In R, coercing from integer to double is safe but the reverse can be risky, as we have gleaned from a deceptively simple example involving <code>rep()</code>. To learn more about the subtleties of R, I highly recommend <a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> by Patrick Burns and <a href="https://adv-r.hadley.nz/">Advanced R</a> by Hadley Wickham. Despite what you may have heard, R is quite a capable language, but it does have some quirks!</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Content coming soon!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Health warning: this sentence is satire. The author does not condone the use of STATA or other closed-source statistical packages.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
