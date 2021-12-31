@@ -1,0 +1,101 @@
+---
+title: Lessons from the Oxford Vaccination Survey
+author: Francis J. DiTraglia
+date: '2021-12-31'
+slug: lessons-from-the-oxford-vaccination-survey
+categories: [Statistics]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-12-31T18:04:30Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Back in November a colleague pointed me to a website describing the recent [COVID-19 Student Vaccination Survey](https://www.ox.ac.uk/coronavirus/students/vaccination-survey) carried out by my employer, the University of Oxford. At the time I briefly tweeted my concerns at the University:
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw">@UniofOxford</a>, but this is wildly misleading. Students who choose to reply to a vaccination survey are likely very different from those who choose not to reply. If your estimate is seriously biased, constructing a confidence interval is pointless.<a href="https://t.co/YB7HUa6Y0k">https://t.co/YB7HUa6Y0k</a> <a href="https://t.co/FYQA97QmU1">pic.twitter.com/FYQA97QmU1</a></p>&mdash; Francis DiTraglia (@economictricks) <a href="https://twitter.com/economictricks/status/1461664580543954945?ref_src=twsrc%5Etfw">November 19, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
+but never received a response. In this post, armed with far more than 280 characters, I'll explain what went wrong in the Oxford Vaccination Survey and suggest some ways of doing better next time.
+
+# What We Know About the Survey
+While the [university website](https://www.ox.ac.uk/coronavirus/students/vaccination-survey) doesn't provide detailed information on the survey's methodology, it does allow us to establish a few key facts. First: this was not in fact a survey; it was a *census*.
+
+> All students were invited to complete the COVID-19 Student Vaccination Survey in 3rd and 4th Weeks of Michaelmas term.^[For those of you who live outside the Oxford bubble, "in 3rd and 4th Weeks of Michaelmas term" means in the last week of October and first week of November 2021.]
+> This very short form asked students to confirm their COVID-19 vaccination status. 
+
+Surveys use a sample to learn about a population.
+Pollsters don't ask all American voters if they approve of Biden; they ask a *small subset* of voters, using a carefully-designed sampling scheme.
+A census, on the other hand, attempts to reach each person in the target population.
+This is how the Oxford Vaccination "Survey" was conducted.
+
+Second: roughly half of Oxford students chose not to respond: 
+
+> The response rate was 49.3%, and there were virtually no differences in vaccination rates between different colleges and departments. 
+
+Third: among those who did complete the questionnaire, a very high proportion indicated that they were vaccinated:
+
+> A total of 98% of respondents reported that they were vaccinated (95% fully and 3% partially). 
+
+# How Oxford Interpreted the Results
+
+Their [headline conclusion](https://www.ox.ac.uk/coronavirus/students/vaccination-survey) was that "the survey indicated that the vast majority of students are now vaccinated." Further down, under the FAQs, they added the following clarification:
+
+> **Given that the response rate was 50%, how can you be sure that the vaccination rate reflects the whole student population?**
+>
+> 50% is considered a high response rate in surveys of this type. It allows for a reliable and powerful statistical test to be conducted on the response data.  Based on our evaluation, we can be 95% certain that the true vaccination level among all Oxford students (based on those who responded) is between 97.8% and 98.3%. We can also be 99% certain that the true vaccination level among all Oxford students is between 97.7% and 98.4%. In light of this, we can be extremely confident that the vast majority of Oxford students are either fully or partially vaccinated. 
+
+This is wrong. First, the response rates for other "surveys of this type" are irrelevant: what matters is what we can learn *from this dataset* given the observed response rate and the reasons why students chose not to respond. It seems quite implausible that the vaccination rate among respondents reflects the whole student population. If, as I suspect, conscientious students are both more likely to be vaccinated and more likely to respond to a questionnaire, the 95% figure is almost certainly too high.  Second, statistical tests and confidence intervals are designed to quantify *sampling error*: non-systematic differences in vaccination rates in the sample compared to the population that arise when a sample is drawn at random. But the problem here is *non-sampling error*: students who respond are likely different in their rate of vaccination from those who do not. This kind of systematic difference between sample and population is not accounted for in a confidence interval or statistical test. In light of this, we cannot conclude that "the vast majority of Oxford students are either fully or partially vaccinated." 
+
+So what *can* we conclude? It depends on what we're willing to assume. I'll start off by considering the worst case: suppose we're not willing to assume *anything* about the reasons why some students chose not to respond. 
+
+# Worst-Case Bounds for the Proportion Vaccinated
+
+I have a bowl containing 100 balls; $W$ of them are white and the rest are are black. I remove 50 balls from the bowl and lay them on the table so you can see them all at once. Of these, 49 are white and 1 is black. What can you conclude about $W$? The answer depends crucially on *how I chose which balls to show you*. 
+
+If I drew the balls at random, then you can use standard statistical tools--hypothesis testing, confidence intervals, a Bayesian posterior distribution--to make inferences about $W$. Random sampling ensures that the balls you see before you on the table are *representative* of the balls that remain in the bowl. This creates an inferential link between what you can observe and what you can't, and allows you to quantify uncertainty about $W$ using the language of probability. 
+
+But what if you know *nothing* about how I chose which balls to show you? Perhaps I decided to show you all of the white balls in the urn; or perhaps I decided to show you all of the black balls: you have no idea. In this case the inferential link between what you can see on the table and what remains in the bowl is broken and the familiar tools of statistical inference cannot be directly applied. Unless you are willing to take a stand of some kind on how I chose which balls to remove from the urn, all that you can conclude about $W$ is that it must be at least 49 and no more than 99. Based on an observed fraction of 49/50 white balls on the table, you can conclude only that between 49/100 and 99/100 of the balls in the bowl are white.
+```{r echo = FALSE}
+response_rate <- 0.493
+vax_rate_responders <- 0.98
+n <- 25820L
+n_response <- as.integer(round(n * response_rate))
+n_vax_respond <- as.integer(round(n * response_rate * vax_rate_responders))
+n_novax_respond <- n_response - n_vax_respond
+```
+
+Now replace 100 balls in the bowl with `r n` students in the university, 50 balls on the table with `r n_response` respondents to the questionnaire, and 49 white balls on the table with `r n_vax_respond` vaccinated students among those who responded.^[These are my approximations based on the information taken from the [survey website](https://www.ox.ac.uk/coronavirus/students/vaccination-survey) and [student numbers for the University of Oxford](https://www.ox.ac.uk/about/facts-and-figures/student-numbers).]
+Suppose for simplicity that everyone who responds to the questionnaire does do truthfully. (We'll revisit this below.) 
+Unless we know something about how and why respondents decided to respond, all we can infer from this information is that no fewer than `r n_vax_respond` and no more than `r n - n_novax_respond` Oxford students have been vaccinated. Expressed as a proportion, this works out to between `r round(100 * n_vax_respond / n)`% and `r round(100 * (n - n_novax_respond) / n)`% of students at Oxford with at least one COVID-19 vaccination. 
+
+While this result, [0.48, 0.99], looks superficially similar to a confidence interval, it's a completely different animal. A confidence interval contains the values of an unknown quantity that are "consistent with the data" in a precise sense.^[A 95% confidence interval for an unknown proportion $p$ contains the values of $p$ that we cannot reject based on a hypothesis test with significance level $0.05$.] As explained above, confidence intervals quantifies uncertainty arising from *sampling error*. But our uncertainty in the vaccine example does *not* come from random sampling: it comes from *missing data*. In effect, we have a complete census of the kind of Oxford student who fills out COVID-19 vaccination questionnaires. What we lack is any data whatsoever on the kind of Oxford student who *doesn't reply*. Each point in the interval [0.48, 0.99] corresponds to a different assumption about the relative vaccination rates of respondents compared to non-respondents (the fraction of white balls on the table compared to the fraction remaining in the bowl). 
+
+Besides reporting the rather pessimistic bound [0.48, 0.99], is there anything more that we can say about the share of vaccinated Oxford students? Yes, but only if we're willing to make some assumptions. 
+
+# Missing (Completely) at Random?
+
+Let's start with the strongest possible assumption: data that are *missing completely at random* (MCAR). In the vaccination example, MCAR amounts to assuming that students who respond are representative of students who do not respond. In the language of my balls-and-bowl example, MCAR would hold if the 50 balls on the table were drawn from the bowl at random. Under MCAR, we can effectively ignore the problem of non-response and report an estimate of 95% vaccine coverage among Oxford students. But while it's logically *possible* for the MCAR assumption to hold in this example, it's not very plausible. As I mentioned above, it seems likely that more conscientious students will both be more likely to get vaccinated and to reply to a questionnaire. If so, MCAR fails.
+
+More plausible than MCAR is the assumption of data that are *missing at random* (MAR). This idea is best illustrated with an example. Suppose that there are *four kinds of balls* in the bowl: large white balls, large black balls, small white balls, and small black balls. We're not interested in the size of the balls; we only want to know how many are white and how many are black. As before, I draw 50 balls from the bowl at random and lay them on the table. Unfortunately, small balls tend to sink to the bottom of the bowl so I'm disproportionately likely to draw a large ball. In this case, the balls you can see on the table are no longer representative of the balls in the bowl: there are probably *too many* large balls on the table.
+
+To make progress we need an assumption. Suppose that, after accounting for size, the chance that a I draw a *particular ball* doesn't depend on its color. Under this assumption the *large balls* on the table are representative of the large balls that remain in the bowl. Similarly, the *small balls* on the table are representative of the small balls that remain in the bowl. This is precisely the MAR assumption: conditional on something we know (the size of a ball), the data we can observe (balls on the table) are representative of the missing data (balls in the bowl). MCAR does not hold because the 50 balls on the table are *not* representative of the 50 balls that remain in the urn (large balls are disproportionately likely to be drawn). They only become representative *after* we account for size.
+
+So how might the MAR assumption allow us to learn more in the vaccination example? From the figures on page 85 of this [HSA report](https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1041447/Weekly_Flu_and_COVID-19_report_w50.pdf) we see that, within each UK age group, females are more likely to be vaccinated than males. Suppose that this holds among Oxford students as well. If there is any difference between survey response rates for male and female students, MCAR fails and the 95% estimated vaccination rate will be unreliable. But suppose we are willing to assume that female respondents are representative of female non-respondents. In this case, the share of vaccinated female *respondents* is a good estimate of the share of vaccinated female *students*, and similarly for male respondents. Because we know that 49% of Oxford students are female, we can use this information to calculate a good estimate of the overall share of vaccinated students.^[I computed the share of female students from the University statistics posted at this url: <https://www.ox.ac.uk/about/facts-and-figures/student-numbers>.] If MAR conditional on sex seems like too strong an assumption, perhaps you'd be willing to assume that female *undergraduates from the UK* who respond are representative of all female undergraduates from the UK. After all: overseas students are *almost certainly* vaccinated, given government travel restrictions. In this case we'd form eight groups (male/female $\times$ overseas/home $\times$ undergrad/post-grad), estimate the share of vaccination separately for each group using the data for respondents. To obtain an overall estimate for the share of vaccinated students, we'd simply average the estimates for each "type" of students, weighting by their respective shares in the Oxford student body. This approach of re-weightingestimates for particular groups is called *post-stratification* and is widely used in political polling.^[An example I particularly enjoy is [this paper](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.708.7828&rep=rep1&type=pdf) by Andrew Gelman and co-authors.] The assumption that underlies it is MCAR: conditional on characteristics we can observe, whether a person responds to the survey or not is "as good as random," i.e. unrelated to the question we ask in our poll.
+
+So does MAR hold in our vaccination example? Perhaps not. Getting vaccinated is widely viewed as a pro-social act. The phenomenon of [social desirability bias](https://en.wikipedia.org/wiki/Social-desirability_bias) suggests that people who are not vaccinated may be less likely to respond *even after* conditioning on their observed characteristics. If so MAR will not hold. Even so, I would put *much more faith* in results that used post-stratification to adjust for observed characteristics like sex and home/overseas that are plausibly related to both response rates and vaccination status. Depending on the precise nature of the data that Oxford collected, it's possible that this analysis could still be carried out. 
+
+# Designing a Better Survey
+
+There's an old saying (often attributed to Fisher) that calling in a statistician after you've collected your data is like calling in a doctor after a loved one has died: all she can do is perform a post-mortem; it's too late to save the patient. So how could Oxford do a better job *the next time* that they want to carry out a survey?
+
+One of the key lessons of statistics is that a relatively small sample can still provide reliable inferences about the population provided that the sample is drawn at random. Rather than contacting all students, choose a random sample and focus on *maximizing the response rate*. There are several ways to do this. First is multi-mode surveys: send an email in addition to a letter in addition to a text message. Second is incentives: perhaps offer a gift card upon receipt of the completed survey. In spite of your best efforts, inevitably some people *still* won't reply. This is where two-stage sampling can help: take a second random sample of the non-respondents and contact these people a second time. As long as you reach a *representative* sample of non-respondents, it doesn't matter if you reach them all. If some non-response remains, try to adjust for it using post-stratification.  
+
+All of the discussion thus far has assumed that respondents answer truthfully. But social desirability bias might also lead people to mis-represent their true vaccination status. This is a much harder problem to solve, but ensuring privacy can help. Posting a [detailed privacy policy](https://www.ox.ac.uk/coronavirus/students/vaccination-survey/privacy-policy) is a helpful first step, but students may still be suspicious when a government regulator asks their university to gather potentially sensitive data about them. [Randomized response methods](https://graemeblair.com/papers/randresp.pdf) address this concern by designing surveys in which it is *impossible* for researchers or anyone with whom they share data to infer individual responses. How does this work? In the simplest possible example, I give you a coin and tell you to flip it in secret. I instruct you to answer the survey truthfully if you flip heads, and to simply check "NO I AM NOT VACCINATED" if you flip tails. When I read the survey, I have no way of knowing if you haven't been vaccinated or merely flipped tails. In spite of this, it's *still* possible to construct a reliable estimator of the share of people who are vaccinated.^[If you're studying introductory probability and statistics, see if you can figure out how. It's a great practice exam question!]
+
+# A New Year's Resolution
+Numbers are only valuable when they tell us something meaningful about the world. If we care enough to ask the question, we should care enough to do a good job answering it. While statistical inference and modeling can be extremely valuable tools for learning about the world, what matters most is collecting good, clean data. May you be blessed with 100% response rates in 2022. If you're not, make it your new year's resolution to do something about it!
+
