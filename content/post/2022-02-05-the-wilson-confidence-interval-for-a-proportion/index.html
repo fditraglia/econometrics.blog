@@ -1,0 +1,344 @@
+---
+title: The Wilson Confidence Interval for a Proportion
+author: Francis J. DiTraglia
+date: '2022-02-05'
+slug: the-wilson-confidence-interval-for-a-proportion
+categories: [Statistics]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-02-05T22:50:16Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">first part</a>, I discussed the serious problems with the “textbook” approach, and outlined a simple hack that works amazingly well in practice: the <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550">Agresti-Coull confidence interval</a>.</p>
+<p>Somewhat unsatisfyingly, my earlier post gave no indication of where the Agresti-Coull interval comes from, how to construct it when you want a confidence level <em>other than</em> 95%, and why it works. In this post I’ll fill in some of the gaps by discussing <em>yet another</em> confidence interval for a proportion: the <em>Wilson interval</em>, so-called because it first appeared in <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1927.10502953?journalCode=uasa20">Wilson (1927)</a>. While it’s not usually taught in introductory courses, it easily could be. Not only does the Wilson interval perform extremely well in practice, it packs a powerful pedagogical punch by illustrating the idea of “inverting a hypothesis test.” Spoiler alert: the Agresti-Coull interval is a rough-and-ready approximation to the Wilson interval.</p>
+<p>To understand the Wilson interval, we first need to remember a key fact about statistical inference: hypothesis testing and confidence intervals are two sides of the same coin. We can use a test to create a confidence interval, and vice-versa. In case you’re feeling a bit rusty on this point, let me begin by refreshing your memory with the simplest possible example. If this is old hat to you, skip ahead to the next section.</p>
+<div id="tests-and-cis-two-sides-of-the-same-coin" class="section level1">
+<h1>Tests and CIs – Two Sides of the Same Coin</h1>
+<p>Suppose that we observe a random sample <span class="math inline">\(X_1, \dots, X_n\)</span> from a normal population with unknown mean <span class="math inline">\(\mu\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. Under these assumptions, the sample mean <span class="math inline">\(\bar{X}_n \equiv \left(\frac{1}{n} \sum_{i=1}^n X_i\right)\)</span> follows a <span class="math inline">\(N(\mu, \sigma^2/n)\)</span> distribution. Centering and standardizing,
+<span class="math display">\[ \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \sim N(0,1).\]</span>
+Now, suppose we want to test <span class="math inline">\(H_0\colon \mu = \mu_0\)</span> against the two-sided alternative <span class="math inline">\(H_1\colon \mu = \mu_0\)</span> at the 5% significance level. If <span class="math inline">\(\mu = \mu_0\)</span>, then the test statistic
+<span class="math display">\[T_n \equiv \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}}\]</span>
+follows a standard normal distribution. If <span class="math inline">\(\mu \neq \mu_0\)</span>, then <span class="math inline">\(T_n\)</span> does not follow a standard normal distribution. To carry out the test, we reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n|\)</span> is greater than <span class="math inline">\(1.96\)</span>, the <span class="math inline">\((1 - \alpha/2)\)</span> quantile of a standard normal distribution for <span class="math inline">\(\alpha = 0.05\)</span>. To put it another way, we <em>fail to reject</em> <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n| \leq 1.96\)</span>. So for what values of <span class="math inline">\(\mu_0\)</span> will we fail to reject? By the definition of absolute value and the definition of <span class="math inline">\(T_n\)</span> from above, <span class="math inline">\(|T_n| \leq 1.96\)</span> is equivalent to
+<span class="math display">\[
+- 1.96 \leq \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}} \leq 1.96.
+\]</span>
+Re-arranging, this in turn is equivalent to
+<span class="math display">\[
+\bar{X}_n - 1.96 \times \frac{\sigma}{\sqrt{n}} \leq \mu_0 \leq \bar{X}_n + 1.96 \times \frac{\sigma}{\sqrt{n}}.
+\]</span>
+This tells us that the values of <span class="math inline">\(\mu_0\)</span> we will <em>fail to reject</em> are precisely those that lie in the interval <span class="math inline">\(\bar{X} \pm 1.96 \times \sigma/\sqrt{n}\)</span>. Does this look familiar? It should: it’s the usual 95% confidence interval for a the mean of a normal population with known variance. The 95% confidence interval corresponds exactly to the set of values <span class="math inline">\(\mu_0\)</span> that we <em>fail to reject</em> at the 5% level.</p>
+<p>This example is a special case a more general result. If you give me a <span class="math inline">\((1 - \alpha)\times 100\%\)</span> confidence interval for a parameter <span class="math inline">\(\theta\)</span>, I can use it to test <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> against <span class="math inline">\(H_0 \colon \theta \neq \theta_0\)</span>. All I have to do is check whether <span class="math inline">\(\theta_0\)</span> lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> with significance level <span class="math inline">\(\alpha\)</span>, I can use it to construct a <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(\theta\)</span>. All I have to do is collect the values of <span class="math inline">\(\theta_0\)</span> that are <em>not rejected</em>. This procedure is called <em>inverting a test</em>.</p>
+</div>
+<div id="how-to-confuse-your-introductory-statistics-students" class="section level1">
+<h1>How to Confuse Your Introductory Statistics Students</h1>
+<p>Around the same time as we teach students the duality between testing and confidence intervals–you can use a confidence interval to carry out a test or a test to construct a confidence interval–we throw a wrench into the works. The most commonly-presented test for a population proportion <span class="math inline">\(p\)</span> does <em>not</em> coincide with the most commonly-presented confidence interval for <span class="math inline">\(p\)</span>. To quote from page 355 of <a href="https://imai.fas.harvard.edu/">Kosuke Imai’s</a> fantastic textbook <a href="https://press.princeton.edu/books/hardcover/9780691167039/quantitative-social-science">Quantitative Social Science: An Introduction</a></p>
+<blockquote>
+<p>the standard error used for confidence intervals is different from the standard error used for hypothesis testing. This is because the latter standard error is derived under the null hypothesis … whereas the standard error for confidence intervals is computed using the estimated proportion.</p>
+</blockquote>
+<p>Let’s translate this into mathematics. Suppose that <span class="math inline">\(X_1, ..., X_n \sim \text{iid Bernoulli}(p)\)</span> and let <span class="math inline">\(\widehat{p} \equiv (\frac{1}{n} \sum_{i=1}^n X_i)\)</span>. The two standard errors that Imai describes are
+<span class="math display">\[
+\text{SE}_0 \equiv \sqrt{\frac{p_0(1 - p_0)}{n}} \quad \text{versus} \quad
+\widehat{\text{SE}} \equiv \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}}.
+\]</span>
+Following the advice of our introductory textbook, we test <span class="math inline">\(H_0\colon p = p_0\)</span> against <span class="math inline">\(H_1\colon p \neq p_0\)</span> at the <span class="math inline">\(5\%\)</span> level by checking whether <span class="math inline">\(|(\widehat{p} - p_0) / \text{SE}_0|\)</span> exceeds <span class="math inline">\(1.96\)</span>. This is called the <em>score test</em> for a proportion. Again following the advice of our introductory textbook, we report <span class="math inline">\(\widehat{p} \pm 1.96 \times \widehat{\text{SE}}\)</span> as our 95% confidence interval for <span class="math inline">\(p\)</span>. As you may recall from my <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">earlier post</a>, this is the so-called <em>Wald confidence interval</em> for <span class="math inline">\(p\)</span>. Because the two standard error formulas in general disagree, the relationship between tests and confidence intervals breaks down.</p>
+<p>To make this more concrete, let’s plug in some numbers. Suppose that <span class="math inline">\(n = 25\)</span> and our observed sample contains 5 ones and 20 zeros. Then <span class="math inline">\(\widehat{p} = 0.2\)</span> and we can calculate <span class="math inline">\(\widehat{\text{SE}}\)</span> and the Wald confidence interval as follows</p>
+<pre class="r"><code>n &lt;- 25
+n1 &lt;- 5
+p_hat &lt;- n1 / n
+alpha &lt;- 0.05
+SE_hat &lt;- sqrt(p_hat * (1 - p_hat) / n)
+p_hat + c(-1, 1) * qnorm(1 - alpha / 2) * SE_hat</code></pre>
+<pre><code>## [1] 0.04320288 0.35679712</code></pre>
+<p>The value 0.07 is well within this interval. This suggests that we should <em>fail to reject</em> <span class="math inline">\(H_0\colon p = 0.07\)</span> against the two-sided alternative. But when we compute the score test statistic we obtain a value well above 1.96, so that <span class="math inline">\(H_0\colon p = 0.07\)</span> is soundly rejected:</p>
+<pre class="r"><code>p0 &lt;- 0.07
+SE0 &lt;- sqrt(p0 * (1 - p0) / n)
+abs((p_hat - p0) / SE0)</code></pre>
+<pre><code>## [1] 2.547551</code></pre>
+<p>The test says reject <span class="math inline">\(H_0\colon p = 0.07\)</span> and the confidence interval says don’t. Upon encountering this example, your students decide that statistics is a tangled mess of contradictions, despair of ever making sense of it, and resign themselves to simply memorizing the requisite formulas for the exam.</p>
+</div>
+<div id="should-we-teach-the-wald-test-instead" class="section level1">
+<h1>Should we teach the Wald test instead?</h1>
+<p>How can we dig our way out of this mess? One idea is to <em>use a different test</em>, one that agrees with the Wald confidence interval. If we had used <span class="math inline">\(\widehat{\text{SE}}\)</span> rather than <span class="math inline">\(\text{SE}_0\)</span> to test <span class="math inline">\(H_0\colon p = 0.07\)</span> above, our test statistic would have been</p>
+<pre class="r"><code>abs((p_hat - p0) / SE_hat)</code></pre>
+<pre><code>## [1] 1.625</code></pre>
+<p>which is clearly less than 1.96. Thus we would fail to reject <span class="math inline">\(H_0\colon p = 0.7\)</span> exactly as the Wald confidence interval instructed us above. This procedure is called the <em>Wald test</em> for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">the Wald confidence interval is terrible and you should never use it</a>. Because the Wald test is equivalent to checking whether <span class="math inline">\(p_0\)</span> lies inside the Wald confidence interval, it inherits all of the latter’s defects.</p>
+<p>Indeed, compared to the score test, the Wald test is a disaster, as I’ll now show. Suppose we carry out a 5% test. If the null is true, we should reject it 5% of the time. Because the Wald and Score tests are both based on an approximation provided by the <a href="https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/">central limit theorem</a>, we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5%. Nevertheless, we’d expect them to at least be <em>fairly close</em> to the nominal value of 5%. The following plot shows the <em>actual</em> type I error rates of the score and Wald tests, over a range of values for the true population proportion <span class="math inline">\(p\)</span> with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5%.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-2.png" width="768" style="display: block; margin: auto;" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p>The score test isn’t perfect: if <span class="math inline">\(p\)</span> is extremely close to zero or one, its actual type I error rate can be appreciably higher than its nominal type I error rate: as much as 10% compared to 5% when <span class="math inline">\(n = 25\)</span>. But in general, its performance is good. In contrast, the Wald test is absolutely terrible: its nominal type I error rate is systematically higher than 5% even when <span class="math inline">\(n\)</span> is not especially small and <span class="math inline">\(p\)</span> is not especially close to zero or one.</p>
+<p>Granted, teaching the Wald test alongside the Wald interval would reduce confusion in introductory statistics courses. But it would also equip students with lousy tools for real-world inference. There is a better way: rather than teaching the <em>test</em> that corresponds to the Wald interval, we could teach the <em>confidence interval</em> that corresponds to the score test.</p>
+</div>
+<div id="inverting-the-score-test" class="section level1">
+<h1>Inverting the Score Test</h1>
+<p>Suppose we collect all values <span class="math inline">\(p_0\)</span> that the score test does <em>not reject</em> at the 5% level. If the score test is working well–if its nominal type I error rate is close to 5%–the resulting set of values <span class="math inline">\(p_0\)</span> will be an approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(p\)</span>. Why is this so? Suppose that <span class="math inline">\(p_0\)</span> is the true population proportion. Then an interval constructed in this way will cover <span class="math inline">\(p_0\)</span> <em>precisely when</em> the score test does not reject <span class="math inline">\(H_0\colon p = p_0\)</span>. This occurs with probability <span class="math inline">\((1 - \alpha)\)</span>. Because the score test is much more accurate than the Wald test, the confidence interval that we obtain by inverting it way will be much more accurate than the Wald interval. This interval is called the <em>score interval</em> or the <em>Wilson interval</em>.</p>
+<p>So let’s do it: let’s <em>invert</em> the score test. Our goal is to find all values <span class="math inline">\(p_0\)</span> such that <span class="math inline">\(|(\widehat{p} - p_0)/\text{SE}_0|\leq c\)</span> where <span class="math inline">\(c\)</span> is the normal critical value for a two-sided test with significance level <span class="math inline">\(\alpha\)</span>. Squaring both sides of the inequality and substituting the definition of <span class="math inline">\(\text{SE}_0\)</span> from above gives
+<span class="math display">\[
+(\widehat{p} - p_0)^2 \leq c^2 \left[ \frac{p_0(1 - p_0)}{n}\right].
+\]</span>
+Multiplying both sides of the inequality by <span class="math inline">\(n\)</span>, expanding, and re-arranging leaves us with a quadratic inequality in <span class="math inline">\(p_0\)</span>, namely
+<span class="math display">\[
+(n + c^2) p_0^2 - (2n\widehat{p} + c^2) p_0 + n\widehat{p}^2 \leq 0.
+\]</span>
+Remember: we are trying to find the values of <span class="math inline">\(p_0\)</span> that satisfy the inequality. The terms <span class="math inline">\((n + c^2)\)</span> along with <span class="math inline">\((2n\widehat{p})\)</span> and <span class="math inline">\(n\widehat{p}^2\)</span> are <em>constants</em>. Once we choose <span class="math inline">\(\alpha\)</span>, the critical value <span class="math inline">\(c\)</span> is known. Once we observe the data, <span class="math inline">\(n\)</span> and <span class="math inline">\(\widehat{p}\)</span> are known. Since <span class="math inline">\((n + c^2) &gt; 0\)</span>, the left-hand side of the inequality is a parabola in <span class="math inline">\(p_0\)</span> that opens <em>upwards</em>. This means that the values of <span class="math inline">\(p_0\)</span> that satisfy the inequality must lie <em>between</em> the roots of the quadratic equation
+<span class="math display">\[
+(n + c^2) p_0^2 - (2n\widehat{p} + c^2) p_0 + n\widehat{p}^2 = 0.
+\]</span>
+By the quadratic formula, these roots are
+<span class="math display">\[
+p_0 = \frac{(2 n\widehat{p} + c^2) \pm \sqrt{4 c^2 n \widehat{p}(1 - \widehat{p}) + c^4}}{2(n + c^2)}.
+\]</span>
+Factoring <span class="math inline">\(2n\)</span> out of the numerator and denominator of the right-hand side and simplifying, we can re-write this as
+<span class="math display">\[
+\begin{align*}
+p_0  &amp;= \frac{1}{2\left(n + \frac{n c^2}{n}\right)}\left\{\left(2n\widehat{p} + \frac{2n c^2}{2n}\right) \pm \sqrt{4 n^2c^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n}\right] + 4n^2c^2\left[\frac{c^2}{4n^2}\right] }\right\} \\ \\
+p_0  &amp;= \frac{1}{2n\left(1 + \frac{ c^2}{n}\right)}\left\{2n\left(\widehat{p} + \frac{c^2}{2n}\right) \pm 2nc\sqrt{ \frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}} \right\}
+\\ \\
+p_0  &amp;= \left( \frac{n}{n + c^2}\right)\left\{\left(\widehat{p} + \frac{c^2}{2n}\right) \pm c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2} }\right\}\\ \\
+\end{align*}
+\]</span>
+using our definition of <span class="math inline">\(\widehat{\text{SE}}\)</span> from above. And there you have it: the right-hand side of the final equality is the <span class="math inline">\((1 - \alpha)\times 100\%\)</span> Wilson confidence interval for a proportion, where <span class="math inline">\(c = \texttt{qnorm}(1 - \alpha/2)\)</span> is the normal critical value for a two-sided test with significance level <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\widehat{\text{SE}}^2 = \widehat{p}(1 - \widehat{p})/n\)</span>.</p>
+<p>Compared to the Wald interval, <span class="math inline">\(\widehat{p} \pm c \times \widehat{\text{SE}}\)</span>, the Wilson interval is certainly more complicated. But it is constructed from exactly the same information: the sample proportion <span class="math inline">\(\widehat{p}\)</span>, two-sided critical value <span class="math inline">\(c\)</span> and sample size <span class="math inline">\(n\)</span>. Computing it by hand is tedious, but programming it in R is a snap:</p>
+<pre class="r"><code>get_wilson_CI &lt;- function(x, alpha = 0.05) {
+  #-----------------------------------------------------------------------------
+  # Compute the Wilson (aka Score) confidence interval for a popn. proportion
+  #-----------------------------------------------------------------------------
+  # x        vector of data (zeros and ones)
+  # alpha    1 - (confidence level)
+  #-----------------------------------------------------------------------------
+  n &lt;- length(x)
+  p_hat &lt;- mean(x)
+  SE_hat_sq &lt;- p_hat * (1 - p_hat) / n
+  crit &lt;- qnorm(1 - alpha / 2)
+  omega &lt;- n / (n + crit^2)
+  A &lt;- p_hat + crit^2 / (2 * n)
+  B &lt;- crit * sqrt(SE_hat_sq + crit^2 / (4 * n^2))
+  CI &lt;- c(&#39;lower&#39; = omega * (A - B), 
+          &#39;upper&#39; = omega * (A + B))
+  return(CI)
+}</code></pre>
+<p>Notice that this is only slightly more complicated to implement than the Wald confidence interval:</p>
+<pre class="r"><code>get_wald_CI &lt;- function(x, alpha = 0.05) {
+  #-----------------------------------------------------------------------------
+  # Compute the Wald confidence interval for a popn. proportion
+  #-----------------------------------------------------------------------------
+  # x        vector of data (zeros and ones)
+  # alpha    1 - (confidence level)
+  #-----------------------------------------------------------------------------
+  n &lt;- length(x)
+  p_hat &lt;- mean(x)
+  SE_hat &lt;- sqrt(p_hat * (1 - p_hat) / n)
+  ME &lt;- qnorm(1 - alpha / 2) * SE_hat
+  CI &lt;- c(&#39;lower&#39; = p_hat - ME, 
+          &#39;upper&#39; = p_hat + ME)
+  return(CI)
+}</code></pre>
+<p>With a computer rather than pen and paper there’s very little cost using the more accurate interval. Indeed, the built-in R function <code>prop.test()</code> reports the Wilson confidence interval rather than the Wald interval:</p>
+<pre class="r"><code>set.seed(1234)
+x &lt;- rbinom(20, 1, 0.5)
+prop.test(sum(x), length(x), correct = FALSE) # no continuity correction</code></pre>
+<pre><code>## 
+##  1-sample proportions test without continuity correction
+## 
+## data:  sum(x) out of length(x), null probability 0.5
+## X-squared = 0.2, df = 1, p-value = 0.6547
+## alternative hypothesis: true p is not equal to 0.5
+## 95 percent confidence interval:
+##  0.3420853 0.7418021
+## sample estimates:
+##    p 
+## 0.55</code></pre>
+<pre class="r"><code>get_wilson_CI(x)</code></pre>
+<pre><code>##     lower     upper 
+## 0.3420853 0.7418021</code></pre>
+</div>
+<div id="understanding-the-wilson-interval" class="section level1">
+<h1>Understanding the Wilson Interval</h1>
+<p>You could stop reading here and simply use the code from above to construct the Wilson interval. But computing is only half the battle: we want to <em>understand</em> our measures of uncertainty. While the Wilson interval may look somewhat strange, there’s actually some very simple intuition behind it. It amounts to a <em>compromise</em> between the sample proportion <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\(1/2\)</span>.</p>
+<p>The Wald estimator is centered around <span class="math inline">\(\widehat{p}\)</span>, but the Wilson interval is not.
+Manipulating our expression from the previous section, we find that the midpoint of the Wilson interval is
+<span class="math display">\[
+\begin{align*}
+\widetilde{p} &amp;\equiv \left(\frac{n}{n + c^2} \right)\left(\widehat{p} + \frac{c^2}{2n}\right) =  \frac{n \widehat{p} + c^2/2}{n + c^2} \\
+&amp;= \left( \frac{n}{n + c^2}\right)\widehat{p} +  \left( \frac{c^2}{n + c^2}\right) \frac{1}{2}\\
+&amp;= \omega \widehat{p} + (1 - \omega) \frac{1}{2}
+\end{align*}
+\]</span>
+where the weight <span class="math inline">\(\omega \equiv n / (n + c^2)\)</span> is always strictly between zero and one. In other words, the center of the Wilson interval lies <em>between</em> <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\(1/2\)</span>. In effect, <span class="math inline">\(\widetilde{p}\)</span> pulls us <em>away</em> from extreme values of <span class="math inline">\(p\)</span> and <em>towards</em> the middle of the range of possible values for a population proportion. For a fixed confidence level, the smaller the sample size, the more that we are pulled towards <span class="math inline">\(1/2\)</span>. For a fixed sample size, the higher the confidence level, the more that we are pulled towards <span class="math inline">\(1/2\)</span>.</p>
+<p>Continuing to use the shorthand <span class="math inline">\(\omega \equiv n /(n + c^2)\)</span> and <span class="math inline">\(\widetilde{p} \equiv \omega \widehat{p} + (1 - \omega)/2\)</span>, we can write the Wilson interval as
+<span class="math display">\[
+\widetilde{p} \pm c \times \widetilde{\text{SE}}, \quad \widetilde{\text{SE}} \equiv \omega \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span>
+So what can we say about <span class="math inline">\(\widetilde{\text{SE}}\)</span>? It turns out that the value <span class="math inline">\(1/2\)</span> is lurking behind the scenes here as well. The easiest way to see this is by <em>squaring</em> <span class="math inline">\(\widehat{\text{SE}}\)</span> to obtain
+<span class="math display">\[
+\begin{align*}
+\widetilde{\text{SE}}^2 &amp;= \omega^2\left(\widehat{\text{SE}}^2 + \frac{c^2}{4n^2} \right) = \left(\frac{n}{n + c^2}\right)^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}\right]\\
+&amp;= \frac{1}{n + c^2} \left[\frac{n}{n + c^2} \cdot \widehat{p}(1 - \widehat{p}) + \frac{c^2}{n + c^2}\cdot \frac{1}{4}\right]\\
+&amp;= \frac{1}{\widetilde{n}} \left[\omega \widehat{p}(1 - \widehat{p}) + (1 - \omega) \frac{1}{2} \cdot \frac{1}{2}\right]
+\end{align*}
+\]</span>
+defining <span class="math inline">\(\widetilde{n} = n + c^2\)</span>. To make sense of this result, recall that <span class="math inline">\(\widehat{\text{SE}}^2\)</span>, the quantity that is used to construct the Wald interval, is a ratio of two terms: <span class="math inline">\(\widehat{p}(1 - \widehat{p})\)</span> is the usual estimate of the <em>population variance</em> based on iid samples from a Bernoulli distribution and <span class="math inline">\(n\)</span> is the sample size. Similarly, <span class="math inline">\(\widetilde{\text{SE}}^2\)</span> is a ratio of two terms. The first is a <em>weighted average</em> of the population variance estimator and <span class="math inline">\(1/4\)</span>, the population variance under the assumption that <span class="math inline">\(p = 1/2\)</span>. Once again, the Wilson interval “pulls” away from extremes. In this case it pulls away from extreme estimates of the population variance towards the <em>largest possible</em> population variance: <span class="math inline">\(1/4\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> We divide this by the sample size <em>augmented</em> by <span class="math inline">\(c^2\)</span>, a strictly positive quantity that depends on the confidence level.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>To make this more concrete, Consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Using this approximation we find that
+<span class="math display">\[
+\widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
+\]</span>
+which is <em>precisely</em> the midpoint of the <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">Agresti-Coul confidence interval</a>. And while
+<span class="math display">\[
+\widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
+\]</span>
+is slightly different from the quantity that appears in the Agresti-Coul interval, <span class="math inline">\(\widetilde{p}(1 - \widetilde{p})/\widetilde{n}\)</span>, the two expressions give very similar results in practice. The Agresti-Coul interval is nothing more than a rough-and-ready approximation to the 95% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coul interval with a confidence level that differs from 95%: just construct the Wilson interval!</p>
+</div>
+<div id="comparing-the-wald-and-wilson-intervals" class="section level1">
+<h1>Comparing the Wald and Wilson Intervals</h1>
+<p>Another way of understanding the Wilson interval is to ask how it will differ from the Wald interval when computed from the <em>same dataset</em>. In large samples, these two intervals will be quite similar. This is because <span class="math inline">\(\omega \rightarrow 1\)</span> as <span class="math inline">\(n \rightarrow \infty\)</span>. Using the expressions from the preceding section, this implies that <span class="math inline">\(\widehat{p} \approx \widetilde{p}\)</span> and <span class="math inline">\(\widehat{\text{SE}} \approx \widetilde{\text{SE}}\)</span> for very large sample sizes. For smaller values of <span class="math inline">\(n\)</span>, however, the two intervals can differ markedly. To make a long story short, the Wilson interval gives a much more reasonable description of our uncertainty about <span class="math inline">\(p\)</span> for any sample size. Wilson, unlike Wald, is always an <em>interval</em>; it cannot collapse to a single point. Moreover, unlike the Wald interval, the Wilson interval is always bounded below by zero and above by one.</p>
+<div id="wald-can-collapse-to-a-single-point-wilson-cant" class="section level2">
+<h2>Wald Can Collapse to a Single Point; Wilson Can’t</h2>
+<p>A strange property of the Wald interval is that its width can be zero. Suppose that <span class="math inline">\(\widehat{p} = 0\)</span>, i.e. that we observe zero successes. In this case, regardless of sample size and regardless of confidence level, the Wald interval only contains a single point: zero
+<span class="math display">\[
+\widehat{p} \pm c \sqrt{\widehat{p}(1 - \widehat{p})/n} = 0 \pm c \times \sqrt{0(1 - 0)/n} = \{0 \}.
+\]</span>
+This is clearly insane. If we observe zero successes in a sample of ten observations, it is reasonable to suspect that <span class="math inline">\(p\)</span> is small, but ridiculous to conclude that it must be zero. We encounter a similarly absurd conclusion if <span class="math inline">\(\widehat{p} = 1\)</span>. In contrast, the Wilson interval can never collapse to a single point. Using the expression from the preceding section, we see that its width is given by
+<span class="math display">\[
+ 2c \left(\frac{n}{n + c^2}\right) \times \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}}
+\]</span>
+The first factor in this product is strictly positive. And even when <span class="math inline">\(\widehat{p}\)</span> equals zero or one, the second factor is also positive: the additive term <span class="math inline">\(c^2/(4n^2)\)</span> inside the square root ensures this. For <span class="math inline">\(\widehat{p}\)</span> equal to zero or one, the width of the Wilson interval becomes
+<span class="math display">\[
+2c \left(\frac{n}{n + c^2}\right) \times \sqrt{\frac{c^2}{4n^2}} = \left(\frac{c^2}{n + c^2}\right) = (1 - \omega).
+\]</span>
+Compared to the Wald interval, this is quite reasonable. A sample proportion of zero (or one) conveys much more information when <span class="math inline">\(n\)</span> is large than when <span class="math inline">\(n\)</span> is small. Accordingly, the Wilson interval is shorter for large values of <span class="math inline">\(n\)</span>. Similarly, higher confidence levels should demand wider intervals at a fixed sample size. The Wilson interval, unlike the Wald, retains this property even when <span class="math inline">\(\widehat{p}\)</span> equals zero or one.</p>
+</div>
+<div id="wald-can-include-impossible-values-wilson-cant" class="section level2">
+<h2>Wald Can Include Impossible Values; Wilson Can’t</h2>
+<p>A population proportion necessarily lies in the interval <span class="math inline">\([0,1]\)</span>, so it would make sense that any confidence interval for <span class="math inline">\(p\)</span> should as well. An awkward fact about the Wald interval is that it can extend <em>beyond</em> zero or one. In contrast, the Wilson interval <em>always</em> lies within <span class="math inline">\([0,1]\)</span>. For example, suppose that we observe two successes in a sample of size 10. Then the 95% Wald confidence interval is approximately [-0.05, 0.45] while the corresponding Wilson interval is [0.06, 0.51]. Similarly, if we observe eight successes in ten trials, the 95% Wald interval is approximately [0.55, 1.05] while the Wilson interval is [0.49, 0.94].</p>
+<p>With a bit of algebra we can show that the Wald interval will include negative values whenever <span class="math inline">\(\widehat{p}\)</span> is less than <span class="math inline">\((1 - \omega) \equiv c^2/(n + c^2)\)</span>. Why is this so? The lower confidence limit of the Wald interval is negative if and only if <span class="math inline">\(\widehat{p} &lt; c \times \widehat{\text{SE}}\)</span>. Substituting the definition of <span class="math inline">\(\widehat{\text{SE}}\)</span> and re-arranging, this is equivalent to
+<span class="math display">\[
+\begin{align}
+\widehat{p} &amp;&lt; c \sqrt{\widehat{p}(1 - \widehat{p})/n}\\
+n\widehat{p}^2 &amp;&lt; c^2(\widehat{p} - \widehat{p}^2)\\
+0 &amp;&gt; \widehat{p}\left[(n + c^2)\widehat{p} - c^2\right] 
+\end{align}
+\]</span>
+The right-hand side of the preceding inequality is a quadratic function of <span class="math inline">\(\widehat{p}\)</span> that opens upwards. Its roots are <span class="math inline">\(\widehat{p} = 0\)</span> and <span class="math inline">\(\widehat{p} = c^2/(n + c^2) = (1 - \omega)\)</span>. Thus, whenever <span class="math inline">\(\widehat{p} &lt; (1 - \omega)\)</span>, the Wald interval will include negative values of <span class="math inline">\(p\)</span>. A nearly identical argument, exploiting symmetry, shows that the upper confidence limit of the Wald interval will extend beyond one whenever <span class="math inline">\(\widehat{p} &gt; \omega \equiv n/(n + c^2)\)</span>. Putting these two results together, the Wald interval lies within <span class="math inline">\([0,1]\)</span> if and only if <span class="math inline">\((1 - \omega) &lt; \widehat{p} &lt; \omega\)</span>. This is equivalent to
+<span class="math display">\[
+\begin{align}
+n(1 - \omega) &amp;&lt; \sum_{i=1}^n X_i &lt; n \omega\\
+\left\lceil n\left(\frac{c^2}{n + c^2} \right)\right\rceil &amp;\leq \sum_{i=1}^n X_i \leq \left\lfloor n \left( \frac{n}{n + c^2}\right) \right\rfloor
+\end{align}
+\]</span>
+where <span class="math inline">\(\lceil \cdot \rceil\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceiling</a> function and <span class="math inline">\(\lfloor \cdot \rfloor\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> function.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> Using this inequality, we can calculate the minimum and maximum number of successes in <span class="math inline">\(n\)</span> trials for which a 95% Wald interval will lie inside the range <span class="math inline">\([0,1]\)</span> as follows:</p>
+<pre class="r"><code>n &lt;- 10:20
+omega &lt;- n / (n + qnorm(0.975)^2)
+cbind(&quot;n&quot; = n,  
+      &quot;min_success&quot; = ceiling(n * (1 - omega)),  
+      &quot;max_success&quot; = floor(n * omega))</code></pre>
+<pre><code>##        n min_success max_success
+##  [1,] 10           3           7
+##  [2,] 11           3           8
+##  [3,] 12           3           9
+##  [4,] 13           3          10
+##  [5,] 14           4          10
+##  [6,] 15           4          11
+##  [7,] 16           4          12
+##  [8,] 17           4          13
+##  [9,] 18           4          14
+## [10,] 19           4          15
+## [11,] 20           4          16</code></pre>
+<p>This agrees with our calculations for <span class="math inline">\(n = 10\)</span> from above. With a sample size of ten, any number of successes <em>outside</em> the range <span class="math inline">\(\{3, ..., 7\}\)</span> will lead to a 95% Wald interval that extends beyond zero or one. With a sample size of twenty, this range becomes <span class="math inline">\(\{4, ..., 16\}\)</span>.</p>
+<p>Finally, we’ll show that the Wilson interval can <em>never</em> extend beyond zero or one. There’s nothing more than algebra to follow, but there’s a fair bit of it. If you feel that we’ve factorized too many quadratic equations already, you have my express permission to skip ahead. Suppose by way of contradiction that the lower confidence limit of the Wilson confidence interval were negative. The only way this could occur is if <span class="math inline">\(\widetilde{p} - \widetilde{\text{SE}} &lt; 0\)</span>, i.e. if
+<span class="math display">\[
+ \omega\left\{\left(\widehat{p} + \frac{c^2}{2n}\right) - c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2}} \,\,\right\} &lt; 0.
+\]</span>
+But since <span class="math inline">\(\omega\)</span> is between zero and one, this is equivalent to
+<span class="math display">\[
+ \left(\widehat{p} + \frac{c^2}{2n}\right) &lt; c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span>
+We will show that this leads to a contradiction, proving that lower confidence limit of the Wilson interval <em>cannot be negative</em>. To begin, factorize each side as follows
+<span class="math display">\[
+ \frac{1}{2n}\left(2n\widehat{p} + c^2\right) &lt; \frac{c}{2n}\sqrt{ 4n^2\widehat{\text{SE}}^2 + c^2}.
+\]</span>
+Cancelling the common factor of <span class="math inline">\(1/(2n)\)</span> from both sides and squaring, we obtain
+<span class="math display">\[
+ \left(2n\widehat{p} + c^2\right)^2 &lt; c^2\left(4n^2\widehat{\text{SE}}^2 + c^2\right).
+\]</span>
+Expanding, subtracting <span class="math inline">\(c^4\)</span> from both sides, and dividing through by <span class="math inline">\(4n\)</span> gives
+<span class="math display">\[
+ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}(1 - \widehat{p}) = \widehat{p}c^2 - c^2 \widehat{p}^2
+\]</span>
+by the definition of <span class="math inline">\(\widehat{\text{SE}}\)</span>. Subtracting <span class="math inline">\(\widehat{p}c^2\)</span> from both sides and rearranging, this is equivalent to <span class="math inline">\(\widehat{p}^2(n + c^2) &lt; 0\)</span>. Since the left-hand side cannot be negative, we have a contradiction.</p>
+<p>A similar argument shows that the <em>upper</em> confidence limit of the Wilson interval cannot exceed one. Suppose by way of contradiction that it did. This can only occur if <span class="math inline">\(\widetilde{p} + \widetilde{SE} &gt; 1\)</span>, i.e. if
+<span class="math display">\[
+\left(\widehat{p} + \frac{c^2}{2n}\right) - \frac{1}{\omega} &gt; c \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span>
+By the definition of <span class="math inline">\(\omega\)</span> from above, the left-hand side of this inequality simplifies to
+<span class="math display">\[
+-\frac{1}{2n} \left[2n(1 - \widehat{p}) + c^2\right]
+\]</span>
+so the original inequality is equivalent to
+<span class="math display">\[
+\frac{1}{2n} \left[2n(1 - \widehat{p}) + c^2\right] &lt; c \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span>
+Now, if we introduce the change of variables <span class="math inline">\(\widehat{q} \equiv 1 - \widehat{p}\)</span>, we obtain <em>exactly</em> the same inequality as we did above when studying the lower confidence limit, only with <span class="math inline">\(\widehat{q}\)</span> in place of <span class="math inline">\(\widehat{p}\)</span>. This is because <span class="math inline">\(\widehat{\text{SE}}^2\)</span> is <em>symmetric</em> in <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\((1 - \widehat{p})\)</span>. Since we’ve reduced our problem to one we’ve already solved, we’re done!</p>
+</div>
+</div>
+<div id="more-to-come-on-inference-for-a-proportion" class="section level1">
+<h1>More to Come on Inference for a Proportion!</h1>
+<p>This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore <em>yet another</em> approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical “trinity” of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">never use the Wald confidence interval for a proportion</a>.</p>
+</div>
+<div id="appendix-r-code" class="section level1">
+<h1>Appendix: R Code</h1>
+<pre class="r"><code>get_test_size &lt;- function(p_true, n, test, alpha = 0.05) {
+# Compute the size of a hypothesis test for a population proportion  
+#   p_true    true population proportion
+#   n         sample size
+#   test      function of p_hat, n, and p_0 that computes test stat 
+#   alpha     nominal size of the test
+  x &lt;- 0:n
+  p_x &lt;- dbinom(x, n, p_true)
+  test_stats &lt;- test(p_hat = x / n, sample_size = n, p0 = p_true)
+  reject &lt;- abs(test_stats) &gt; qnorm(1 - alpha / 2)
+  sum(reject * p_x)
+}
+get_score_test_stat &lt;- function(p_hat, sample_size, p0) {
+  SE_0 &lt;- sqrt(p0 * (1 - p0) / sample_size)
+  return((p_hat - p0) / SE_0)
+}
+get_wald_test_stat &lt;- function(p_hat, sample_size, p0) {
+  SE_hat &lt;- sqrt(p_hat * (1 - p_hat) / sample_size)
+  return((p_hat - p0) / SE_hat)
+}
+
+plot_size &lt;- function(n, test, nominal = 0.05, title = &#39;&#39;) {
+  p_seq &lt;- seq(from = 0.01, to = 0.99, by = 0.001)
+  size &lt;- sapply(p_seq, function(p) get_test_size(p, n, test, nominal))
+  plot(p_seq, size, type = &#39;l&#39;, xlab = &#39;p&#39;, 
+       ylab = &#39;Type I Error Rate&#39;, 
+       main = title)
+  text(0.5, 0.98 * max(size), bquote(n == .(n)))
+  abline(h = nominal, lty = 2, col = &#39;red&#39;, lwd = 2)
+}
+plot_size_comparison &lt;- function(n, nominal = 0.05) {
+  par(mfrow = c(1, 2))
+  plot_size(n, get_score_test_stat, nominal, title = &#39;Score Test&#39;)
+  plot_size(n, get_wald_test_stat, nominal, title = &#39;Wald Test&#39;)
+  par(mfrow = c(1, 1))
+}</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>For the R code used to generate these plots, see the Appendix at the end of this post.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%$.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
