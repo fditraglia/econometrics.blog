@@ -1,0 +1,218 @@
+---
+title: A New Way of Looking at Least Squares
+author: Francis J. DiTraglia
+date: '2022-03-14'
+slug: a-new-way-of-looking-at-least-squares
+categories: [statistics, regression]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-03-14T12:08:37Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>Have you got a ruler handy? Fantastic! Then hold out your right hand, extend your thumb and little finger as far as they’ll go, and measure the distance in centimeters, rounding to the nearest half centimeter. This is your <em>handspan</em>. Mine is around 23.5 centimeters, but is that big, small, or merely average?<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Fortunately for you, I’ve asked hundreds of introductory statistics students to measure their handspans over the years and (with their consent) posted the resulting data on my website:</p>
+<pre class="r"><code>library(tidyverse)
+dat &lt;- read_csv(&#39;https://ditraglia.com/econ103/height-handspan.csv&#39;)
+quantile(dat$handspan)</code></pre>
+<pre><code>##   0%  25%  50%  75% 100% 
+## 16.5 20.0 21.5 23.0 28.0</code></pre>
+<p>If we take these 326 students as representative of the population of which I am a member, my handspan is roundabout the 84th percentile.</p>
+<p>The great thing about handspan, and the reason that I used it in my teaching, is that it’s strongly correlated with height but, in contrast to weight, there’s no temptation to shade the truth. (What’s a <em>good</em> handspan anyway?) Here’s a scatterplot of height against handspan along with the regression line and confidence bands:</p>
+<pre class="r"><code>dat %&gt;%
+  ggplot(aes(x = handspan, y = height)) + 
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = &#39;lm&#39;, formula = y ~ x)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Because handspan is only measured to the nearest half of a centimeter and height to the nearest inch, the dataset contains multiple “tied” values. I’ve used darker colors to indicate situations in which more than one student reported a given height and handspan pair.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The correlation between height and handspan is approximately 0.67. From the following simple linear regression, we’d predict approximately a 1.3 inch difference in height between two students whose handspan differed by one centimeter:</p>
+<pre class="r"><code>coef(lm(height ~ handspan, dat))</code></pre>
+<pre><code>## (Intercept)    handspan 
+##   40.943127    1.266961</code></pre>
+<div id="where-does-the-regression-line-come-from" class="section level1">
+<h1>Where does the regression line come from?</h1>
+<p>If you’ve taken an introductory statistics or econometrics course, you most likely learned that the least squares regression line <span class="math inline">\(\widehat{\alpha} + \widehat{\beta} x\)</span> minimizes the <em>sum of squared vertical deviations</em> by solving the optimization problem
+<span class="math display">\[
+\max_{\alpha, \beta} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2.
+\]</span>
+You probably also learned that the solution is given by
+<span class="math display">\[
+\widehat{\alpha} = \bar{y} - \widehat{\beta} \bar{x}, \quad
+\widehat{\beta} = \frac{\sum_{i=1}^n (y_i - \bar{y})(x_i - \bar{x})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{s_{xy}}{s_x^2}
+\]</span>
+In words: the regression slope equals the ratio of the covariance between height and handspan to the variance of handspan, and the regression line passes through the sample average values of height and handspan. We can check that all of these formulas agree with what we calculated above using <code>lm()</code></p>
+<pre class="r"><code>b &lt;- with(dat, cov(height, handspan) / var(handspan))
+a &lt;- with(dat, mean(height) - b * mean(handspan))
+c(a, b)</code></pre>
+<pre><code>## [1] 40.943127  1.266961</code></pre>
+<pre class="r"><code>coef(lm(height ~ handspan, dat))</code></pre>
+<pre><code>## (Intercept)    handspan 
+##   40.943127    1.266961</code></pre>
+<p>This is all perfectly correct, and an entirely reasonable way of looking at the problem. But I’d now like to suggest a <em>completely different</em> way of looking at regression. Why bother? The more different ways we have of understanding an idea or method, the more deeply we understand how it works, when it works, and when it is likely to fail. So bear with me while I take you on what might at first appear to be a poorly-motivated computational detour. I promise that there’s a payoff at the end!</p>
+</div>
+<div id="a-crazy-idea" class="section level1">
+<h1>A Crazy Idea</h1>
+<p>There is a unique line that passes through any two distinct points in a plane. So here’s a crazy idea: let’s form every unique pair of <em>students</em> from my height and handspan dataset. To understand what I have in mind, consider a small subset of the data, call it <code>test</code></p>
+<pre class="r"><code>test &lt;- dat[1:3,]
+test</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   height handspan
+##    &lt;dbl&gt;    &lt;dbl&gt;
+## 1     73     22.5
+## 2     65     17  
+## 3     69     21</code></pre>
+<p>With three students, there are three unique unordered pairs: <span class="math inline">\(\{1,2\}, \{1,3\}, \{2,3\}\)</span>. Corresponding to these three pairs are <em>three line segments</em>, one through each pair:</p>
+<pre class="r"><code>plot(height ~ handspan, test, pch = 20)
+segments(x0 = c(17, 17, 21),     # FROM: x-coordinates
+         y0 = c(65, 65, 69),     # FROM: y-coordinates
+         x1 = c(21, 22.5, 22.5), # TO:   x-coordinates
+         y1 = c(69, 73, 73),     # TO:   y-coordinates
+         lty = 2)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>And associated with each line segment is a <em>slope</em></p>
+<pre class="r"><code>y_differences &lt;- c(69 - 65, 73 - 65, 73 - 69)
+x_differences &lt;- c(21 - 17, 22.5 - 17, 22.5 - 21) 
+slopes &lt;- y_differences / x_differences
+slopes</code></pre>
+<pre><code>## [1] 1.000000 1.454545 2.666667</code></pre>
+<p>And here’s my question for you: <strong>what, if anything, is the relationship between these three slopes and the slope of the regression line</strong>? While it’s a bit silly to run a regression with only three observations, the results are as follows:</p>
+<pre class="r"><code>coef(lm(height ~ handspan, test))</code></pre>
+<pre><code>## (Intercept)    handspan 
+##   41.556701    1.360825</code></pre>
+<p>The slope of the regression line doesn’t equal any of the three slopes we calculated above, but it does lie <em>between them</em>. This makes sense: if the regression line were steeper or less steep than all three line segments from above, it couldn’t possibly minimize the sum of squared vertical deviations. Perhaps the regression slope is the arithmetic mean of <code>slopes</code>? No such luck:</p>
+<pre class="r"><code>mean(slopes)</code></pre>
+<pre><code>## [1] 1.707071</code></pre>
+<p>Something interesting is going on here, but it’s not clear what. To learn more, it would be helpful to play with more than three points. But doing this by hand would be extremely tedious. Time to write a function!</p>
+</div>
+<div id="all-pairs-of-students" class="section level1">
+<h1>All Pairs of Students</h1>
+<p>The following function generates all unique pairs of elements taken from a vector <code>x</code> and stores them in a matrix:</p>
+<pre class="r"><code>make_pairs &lt;- function(x) {
+# Returns a data frame whose rows contain each unordered pair of elements of x
+# i.e. all committees of two with members drawn from x
+  n &lt;- length(x)
+  pair_indices &lt;- combn(1:n, 2)
+  matrix(x[c(pair_indices)], ncol = 2, byrow = TRUE)
+}</code></pre>
+<p>For example, applying <code>make_pairs()</code> to the vector <code>c(1, 2, 3, 4, 5)</code> gives</p>
+<pre class="r"><code>make_pairs(1:5)</code></pre>
+<pre><code>##       [,1] [,2]
+##  [1,]    1    2
+##  [2,]    1    3
+##  [3,]    1    4
+##  [4,]    1    5
+##  [5,]    2    3
+##  [6,]    2    4
+##  [7,]    2    5
+##  [8,]    3    4
+##  [9,]    3    5
+## [10,]    4    5</code></pre>
+<p>Notice that I’ve <code>make_pairs()</code> is constructed such that <em>order doesn’t matter</em>: we don’t distinguish between <span class="math inline">\((4,5)\)</span> and <span class="math inline">\((5,4)\)</span>, for example. This makes sense for our example: Alice and Bob denotes the same pair of students as Bob and Alice.</p>
+<p>To generate all possible pairs of students from <code>dat</code>, we apply <code>make_pairs()</code> to <code>dat$handspan</code> and <code>dat$height</code> <em>separately</em> and then combine the result into a single dataframe:</p>
+<pre class="r"><code>regression_pairs &lt;- data.frame(make_pairs(dat$handspan), 
+                               make_pairs(dat$height))
+head(regression_pairs)</code></pre>
+<pre><code>##     X1   X2 X1.1 X2.1
+## 1 22.5 17.0   73   65
+## 2 22.5 21.0   73   69
+## 3 22.5 25.5   73   71
+## 4 22.5 25.0   73   78
+## 5 22.5 20.0   73   68
+## 6 22.5 20.5   73   75</code></pre>
+<p>The names are ugly, so let’s clean them up a bit. Handspan is our “x” variable and height is our “y” variable, so we’ll refer to the measurements from each pair as <code>x1, x2, y1, y2</code></p>
+<pre class="r"><code>names(regression_pairs) &lt;- c(&#39;x1&#39;, &#39;x2&#39;, &#39;y1&#39;, &#39;y2&#39;)
+head(regression_pairs)</code></pre>
+<pre><code>##     x1   x2 y1 y2
+## 1 22.5 17.0 73 65
+## 2 22.5 21.0 73 69
+## 3 22.5 25.5 73 71
+## 4 22.5 25.0 73 78
+## 5 22.5 20.0 73 68
+## 6 22.5 20.5 73 75</code></pre>
+<p>The <code>1</code> and <code>2</code> indices indicate a particular <em>student</em>: in a given row <code>x1</code> and <code>y1</code> are the handspan and height of the “first student” in the pair while <code>x2</code> and <code>y2</code> are the handspan and height of the “second student.”
+Each student appears many times in the <code>regression_pairs</code> dataframe. This is because there are many pairs of students that include Alice: we can pair her up with any other student in the class. For this reason, <code>regression_pairs</code> has a tremendous number of rows, 52975 to be precise. This is the number of ways to form a committee of size 2 from a collection of 326 people when order doesn’t matter:</p>
+<pre class="r"><code>choose(326, 2)</code></pre>
+<pre><code>## [1] 52975</code></pre>
+</div>
+<div id="i-just-calculated-52975-slopes." class="section level1">
+<h1>I just calculated 52,975 slopes.</h1>
+<p>Corresponding to each row of <code>regression_pairs</code> is a slope. We can calculate and summarize them as follows, using the <code>dplyr</code> package from the <code>tidyverse</code> to make things easier to read:</p>
+<pre class="r"><code>library(dplyr)
+regression_pairs &lt;- regression_pairs %&gt;%
+  mutate(slope = (y2 - y1) / (x2 - x1))
+regression_pairs %&gt;%
+  pull(slope) %&gt;%
+  summary</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##    -Inf   0.000   1.333     NaN   2.667     Inf     419</code></pre>
+<p>The sample mean slope is <code>NaN</code>, the minimum is <code>-Inf</code>, the maximum is <code>Inf</code>, and there are 419 missing values. So what on earth does this mean? First things first: the abbreviation <code>NaN</code> stands for “not a number.” This is R’s way of expressing <span class="math inline">\(0/0\)</span>, and an <code>NaN</code> “counts” as a missing value:</p>
+<pre class="r"><code>0/0</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<pre class="r"><code>is.na(0/0)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>In contrast, <code>Inf</code> and <code>-Inf</code> are R’s way of expressing <span class="math inline">\(\pm \infty\)</span>. These do <em>not</em> count as missing values, and they also arise when a number is too big or too small for your computer to represent:</p>
+<pre class="r"><code>c(-1/0, 1/0, exp(9999999), -exp(9999999))</code></pre>
+<pre><code>## [1] -Inf  Inf  Inf -Inf</code></pre>
+<pre class="r"><code>is.na(c(Inf, -Inf))</code></pre>
+<pre><code>## [1] FALSE FALSE</code></pre>
+<p>So where do these <code>Inf</code> and <code>NaN</code> values come from? Our slope calculation from above was <code>(y2 - y1) / (x2 - x1)</code>. If <code>x2 == x1</code>, the denominator is zero. This occurs when the two students in a given pair have the same handspan. Because we only measured handspan to the nearest 0.5cm, there are many such pairs. Indeed, <code>handspan</code> only takes on 23 distinct values in our dataset but there are 326 students:</p>
+<pre class="r"><code>sort(unique(dat$handspan))</code></pre>
+<pre><code>##  [1] 16.5 17.0 17.5 18.0 18.5 19.0 19.5 20.0 20.5 21.0 21.5 22.0 22.5 23.0 23.5
+## [16] 24.0 24.5 25.0 25.5 26.0 26.5 27.0 28.0</code></pre>
+<p>If <code>y1</code> and <code>y2</code> are different but <code>x1</code> and <code>x2</code> are the same, the slope will either be <code>Inf</code> or <code>-Inf</code>, depending on whether <code>y1 &gt; y2</code> or the reverse. When <code>y1 == y2</code> <em>and</em> <code>x1 == x2</code> the slope is <code>NaN</code>.</p>
+<p>This isn’t an arcane numerical problem. When <code>y1 == y2</code> and <code>x1 == x2</code>, our pair contains only a <em>single point</em>, so there’s no way to draw a line segment. With no line to draw, there’s clearly no slope to calculate. When <code>y1 != y2</code> but <code>x1 == x2</code> we can draw a line segment, but it will be vertical. Should we call the slope of this vertical line <span class="math inline">\(+\infty\)</span>? Or should we call it <span class="math inline">\(-\infty\)</span>? Because the labels <code>1</code> and <code>2</code> for the students in a given pair were arbitrary–order doesn’t matter–there’s no way to choose between <code>Inf</code> and <code>-Inf</code>. <strong>From the perspective of calculating a slope, it simply doesn’t make sense to construct pairs of students with the same handspan.</strong></p>
+<p>With this in mind, let’s see what happens if we average all of the slopes that are <em>not</em> <code>-Inf</code>, <code>Inf</code>, or <code>NaN</code></p>
+<pre class="r"><code>regression_pairs %&gt;%
+  filter(!is.na(slope) &amp; !is.infinite(slope)) %&gt;%
+  pull(slope) %&gt;%
+  mean</code></pre>
+<pre><code>## [1] 1.259927</code></pre>
+<p>This is tantalizingly close to the slope of the regression line from above: 1.266961. But it’s still <em>slightly off</em>.</p>
+</div>
+<div id="not-all-slopes-are-created-equal" class="section level1">
+<h1>Not All Slopes are Created Equal</h1>
+<p>The median handspan in my dataset is 21.5. Let’s take a closer look at the heights of students whose handspans are <em>close</em> to this value:</p>
+<pre class="r"><code>boxplot(height ~ handspan, dat, subset = handspan %in% c(21, 21.5, 22))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>There is a large amount of variation in height for a given value of handspan. Indeed, from this boxplot alone you might not even guess that there is a strong positive relationship between height and handspan in the dataset as a whole! The “boxes” in the figure, representing the middle 50% of heights for a given handspan, overlap substantially. If we were to randomly choose one student with a handspan of 21 and another with a handspan of 21.5, it’s quite likely that the slope between them would be <em>negative</em>. It’s true that students with bigger hands are taller on average. But the difference in height that we’d predict for two students who differed by 0.5cm in handspan is very small: 0.6 inches according to the linear regression from the beginning of this post. In contrast, the standard deviation of height among students with the median handspan is more than five times as large:</p>
+<pre class="r"><code>sd(subset(dat, handspan == 21.5)$height)</code></pre>
+<pre><code>## [1] 3.172248</code></pre>
+<p>The 25th percentile of handspan is 20 while the 75th percentile is 23. Comparing the heights of students with these handspans rather than those close to the median, gives a very different picture:</p>
+<pre class="r"><code>boxplot(height ~ handspan, dat, subset = handspan %in% c(20, 23))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Now there’s much less overlap in the distributions of height. This accords with the predictions of the linear regression from above: for two students whose handspan differs by 3cm, we would predict a difference of 3.8 inches in height. This difference is big enough to discern in spite of the variation in height for students with the same handspan. If we were to choose one student with a handspan of 20cm and another with a handspan of 23cm, it’s fairly unlikely that the slope between these lines would be negative.</p>
+<p>So where does this leave us? Above we saw that forming a pair of students with the <em>same</em> handspan does not allow us to calculate a slope. Now we’ve seen that the slope for a pair of students with a very <em>similar</em> handspan can give a misleading impression about the overall relationship. This turns out to be the key to our puzzle from above. The ordinary least squares slope estimate <em>does</em> equal an average of the slopes for each pair of students, but this average gives more weight to pairs with a larger difference in handspan. As I’ll derive in my next post:
+<span class="math display">\[
+\widehat{\beta}_{\text{OLS}} = \sum_{(i,j)\in C_2^n} \omega_{ij} \left(\frac{y_i - y_j}{x_i - x_j}\right), \quad 
+\omega_{ij} \equiv \frac{(x_i - x_j)^2}{\sum_{(i,j)\in C_2^n} (x_i-x_j)^2}
+\]</span>
+The notation <span class="math inline">\(C_2^n\)</span> is shorthand for the set <span class="math inline">\(\{(i,j)\colon 1 \leq i &lt; j \leq n\}\)</span>, in other words the set of all unique <em>pairs</em> <span class="math inline">\((i,j)\)</span> where order doesn’t matter. The weights <span class="math inline">\(\omega_{ij}\)</span> are between zero and one and sum to one over all pairs. Pairs with <span class="math inline">\(x_i = x_j\)</span> are given <em>zero weight</em>; pairs in which <span class="math inline">\(x_i\)</span> is far from <span class="math inline">\(x_j\)</span> are given more weight than pairs where these values are closer. And you don’t have to wait for my next post to see that it works:</p>
+<pre class="r"><code>regression_pairs &lt;- regression_pairs %&gt;%
+  mutate(x_dist = abs(x2 - x1),
+         weight = x_dist^2 / sum(x_dist^2))
+
+regression_pairs %&gt;%
+  filter(!is.infinite(slope) &amp; !is.na(slope)) %&gt;%
+  summarize(sum(weight * slope)) %&gt;%
+  pull</code></pre>
+<pre><code>## [1] 1.266961</code></pre>
+<pre class="r"><code>coef(lm(height ~ handspan, dat))[2]</code></pre>
+<pre><code>## handspan 
+## 1.266961</code></pre>
+<p>So there you have it: in a simple linear regression, the OLS slope estimate is a weighted average of the slopes of the line segments between all pairs of observations. The weights are proportional to the squared Euclidean distance between <span class="math inline">\(x\)</span>-coordinates. I’ll leave things here for today, but there’s much more to say on this topic. Stay tuned for the next installment!</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>If you play the piano, this may help: I can play parallel 10ths but only just.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Another way to show this is by “jittering” the data: simply replace <code>geom_point(alpha = 0.3)</code> with <code>geom_jitter(alpha = 0.3)</code>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
