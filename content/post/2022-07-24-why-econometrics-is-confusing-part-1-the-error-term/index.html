@@ -1,0 +1,79 @@
+---
+title: 'Why Econometrics is Confusing Part 1: The Error Term'
+author: Francis J. DiTraglia
+date: '2022-07-24'
+slug: why-econometrics-is-confusing-part-1-the-error-term
+categories: [regression,teaching]
+tags: [rants]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-07-24T19:34:46+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>“Suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span>.” A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be stamped out completely. Without further clarification, this sentence could mean any number of different things. Even with clarification, it is a source of endless confusion for beginning students. What is <span class="math inline">\(U\)</span> exactly? What is the meaning of “<span class="math inline">\(=\)</span>” in this context? We can do better. Here are a few suggestions.</p>
+<div id="population-linear-regression" class="section level2">
+<h2>Population Linear Regression</h2>
+<p>Sometimes <span class="math inline">\(Y = \alpha + \beta X + U\)</span> is nothing more than the <em>population linear regression model</em>. In other words <span class="math inline">\((\alpha, \beta)\)</span> are the solutions to
+<span class="math display">\[
+\min_{\alpha, \beta} \mathbb{E}[(Y - \alpha - \beta X)^2].
+\]</span></p>
+<p>The usual way to signal this is by adding the “assumptions” that <span class="math inline">\(\mathbb{E}[XU] = \mathbb{E}[U] = 0\)</span>. It’s no wonder that students find this confusing. Neither of these equalities is in fact an assumption; each is true <em>by construction</em>. Rather than “let <span class="math inline">\(Y = \alpha + \beta X + U\)</span>,” I suggest</p>
+<blockquote>
+<p>Define <span class="math inline">\(U \equiv Y - (\alpha + \beta X)\)</span> where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are the slope and intercept from a population linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</p>
+</blockquote>
+<p>This makes it clear that <span class="math inline">\(U\)</span> has no life of its own; it is defined by the coefficients <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. In this way, the equalities <span class="math inline">\(\mathbb{E}[XU] = \mathbb{E}[U] = 0\)</span> become a theorem to be deduced rather than a spurious “assumption” of linear regression. Repeat after me: <strong>the population linear regression model has no assumptions</strong>. We can always choose <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> to ensure that <span class="math inline">\(U\)</span> satisfies the equalities from above. The solution to the population least squares problem is
+<span class="math display">\[
+\beta = \text{Cov}(X,Y)/\text{Var}(X),\quad
+\alpha = \mathbb{E}[Y] - \beta \mathbb{E}[X].
+\]</span>
+By the linearity of expectation, it follows that
+<span class="math display">\[
+\mathbb{E}[U] = \mathbb{E}[Y - \alpha - \beta X] = \mathbb{E}[Y] - (\mathbb{E}[Y] - \beta \mathbb{E}[X]) - \beta \mathbb{E}[X] = 0
+\]</span>
+and similarly, although with a bit more algebra<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+<span class="math display">\[
+\begin{align}
+\mathbb{E}[XU] &amp;= \mathbb{E}[X(Y - \alpha - \beta X)] \\
+&amp;= \mathbb{E}[X(Y - \left\{\mathbb{E}(Y) - \beta \mathbb{E}(X)\right\} - \beta X)]\\
+&amp;= \mathbb{E}[X\left\{Y - \mathbb{E}(Y) \right\}] -  \beta \mathbb{E}[X\left\{X - \mathbb{E}(X)\right\} ]\\
+&amp;= \text{Cov}(X,Y) - \beta \text{Var}(X) = 0.
+\end{align}
+\]</span></p>
+</div>
+<div id="conditional-mean-function" class="section level2">
+<h2>Conditional Mean Function</h2>
+<p>In other situations <span class="math inline">\(Y = \alpha + \beta X + U\)</span> is intended to represent a <em>conditional mean function</em>. This is usually signaled by the assumption <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span>. This time around I haven’t written the word assumption in “scare quotes.” That’s because there is an assumption lurking here, unlike in the population linear regression model from above. Still, this is a hopelessly confusing way of indicating it. Here’s a better way:</p>
+<blockquote>
+<p>Define <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|X)\)</span> and assume that <span class="math inline">\(\mathbb{E}(Y|X) = \alpha + \beta X\)</span>.</p>
+</blockquote>
+<p>Again, this makes it clear that <span class="math inline">\(U\)</span> has no life of its own. It is <em>constructed</em> from <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>. The conditional mean function <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is simply the minimizer of <span class="math inline">\(\mathbb{E}[\left\{ Y - f(X)\right\}^2]\)</span> over all (well-behaved) functions.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> By construction <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span> since
+<span class="math display">\[
+\mathbb{E}[U|X] = \mathbb{E}[Y - \mathbb{E}(Y|X)|X] = \mathbb{E}[Y|X] - \mathbb{E}[Y|X] = 0
+\]</span>
+by the linearity of conditional expectation and the fact that <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a function of <span class="math inline">\(X\)</span>. But how can we be sure that the conditional mean function is linear? This is a <em>bona fide</em> assumption: it may be true or it may be false. Either way, it is much clearer to emphasize that we are making an assumption about the <em>form</em> of the conditional mean function, <em>not</em> an assumption about the error term <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|X)\)</span>.</p>
+</div>
+<div id="causal-model" class="section level2">
+<h2>Causal Model</h2>
+<p>Both interpretations of <span class="math inline">\(Y = \alpha + \beta X + U\)</span> from above are purely predictive; they say nothing about whether <span class="math inline">\(X\)</span> <em>causes</em> <span class="math inline">\(Y\)</span>. To indicate that a linear model is mean to be causal, it is traditional to write something like “suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span> where <span class="math inline">\(X\)</span> may be endogenous.” Often “may be endogenous” is replaced by “where <span class="math inline">\(X\)</span> may be correlated with <span class="math inline">\(U\)</span>.” What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of “<span class="math inline">\(=\)</span>” beyond all reason. Here’s my suggested improvement:</p>
+<blockquote>
+<p>Consider the causal model <span class="math inline">\(Y \leftarrow (\alpha + \beta X + U)\)</span> where <span class="math inline">\(U\)</span> is unobserved and <span class="math inline">\((X,U)\)</span> may be dependent.</p>
+</blockquote>
+<p>Causality is intrinsically directional: cigarettes cause lung cancer; lung cancer doesn’t cause cigarettes. The notation “<span class="math inline">\(\leftarrow\)</span>” makes this clear. In stark contrast, the notion of mathematical equality is <em>symmetric</em>. If <span class="math inline">\(Y = \alpha + \beta X + U\)</span>, it is just as true to say that <span class="math inline">\(X = (Y - \alpha - U) / \beta\)</span>. Of course this is nonsensical when applied to cigarettes and cancer.</p>
+<p>In a causal model, <span class="math inline">\(U\)</span> <em>does</em> have a life of its own; it represents the causes of <span class="math inline">\(Y\)</span> that we cannot observe. Perhaps <span class="math inline">\(Y\)</span> is wage, <span class="math inline">\(X\)</span> is years of schooling and <span class="math inline">\(U\)</span> is “family background” plus “ability.” For this reason I do <em>not</em> write “define <span class="math inline">\(U \equiv (\text{something})\)</span>.” We aren’t defining a residual in a prediction problem. We are taking a stand on how the world works by writing down a particular causal model. In a randomized controlled trial, any unobserved causes <span class="math inline">\(U\)</span> would be independent of <span class="math inline">\(X\)</span>. Here we have not made this assumption. We have, however, assumed a particular form for the causal relationship: linear with constant coefficients. Each additional year of schooling causes the same increase (or decrease) in wage regardless of who you are or how many years of schooling you already have. This model could be wrong. But right or wrong, it is fundamentally distinct from the population linear regression and conditional mean models described above. Let’s endeavour to make this clear in our notation.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Surprised that <span class="math inline">\(\mathbb{E}[X(Y - \mathbb{E}[Y])]] = \text{Cov}(X,Y)\)</span> and <span class="math inline">\(\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)\)</span>? These are great homework problems! Work through the algebra using the definitions of variance and covariance.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>See Section 2.1 of my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a> for details.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

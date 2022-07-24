@@ -1,0 +1,74 @@
+---
+title: 'Why Econometrics is Confusing Part 1: The Error Term'
+author: Francis J. DiTraglia
+date: '2022-07-24'
+slug: why-econometrics-is-confusing-part-1-the-error-term
+categories: [regression,teaching]
+tags: [rants]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-07-24T19:34:46+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+"Suppose that $Y = \alpha + \beta X + U$." A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be stamped out completely. Without further clarification, this sentence could mean any number of different things. Even with clarification, it is a source of endless confusion for beginning students. What is $U$ exactly? What is the meaning of "$=$" in this context? We can do better. Here are a few suggestions. 
+
+## Population Linear Regression
+
+Sometimes $Y = \alpha + \beta X + U$ is nothing more than the *population linear regression model*. In other words $(\alpha, \beta)$ are the solutions to 
+$$
+\min_{\alpha, \beta} \mathbb{E}[(Y - \alpha - \beta X)^2].
+$$
+
+The usual way to signal this is by adding the "assumptions" that $\mathbb{E}[XU] = \mathbb{E}[U] = 0$. It's no wonder that students find this confusing. Neither of these equalities is in fact an assumption; each is true *by construction*. Rather than "let $Y = \alpha + \beta X + U$," I suggest 
+
+> Define $U \equiv Y - (\alpha + \beta X)$ where $\alpha$ and $\beta$ are the slope and intercept from a population linear regression of $Y$ on $X$. 
+
+This makes it clear that $U$ has no life of its own; it is defined by the coefficients $\alpha$ and $\beta$. In this way, the equalities $\mathbb{E}[XU] = \mathbb{E}[U] = 0$ become a theorem to be deduced rather than a spurious "assumption" of linear regression. Repeat after me: **the population linear regression model has no assumptions**. We can always choose $\alpha$ and $\beta$ to ensure that $U$ satisfies the equalities from above. The solution to the population least squares problem is 
+$$
+\beta = \text{Cov}(X,Y)/\text{Var}(X),\quad 
+\alpha = \mathbb{E}[Y] - \beta \mathbb{E}[X].
+$$
+By the linearity of expectation, it follows that 
+$$
+\mathbb{E}[U] = \mathbb{E}[Y - \alpha - \beta X] = \mathbb{E}[Y] - (\mathbb{E}[Y] - \beta \mathbb{E}[X]) - \beta \mathbb{E}[X] = 0
+$$
+and similarly, although with a bit more algebra^[Surprised that $\mathbb{E}[X(Y - \mathbb{E}[Y])]] = \text{Cov}(X,Y)$ and $\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)$? These are great homework problems! Work through the algebra using the definitions of variance and covariance.]
+$$
+\begin{align}
+\mathbb{E}[XU] &= \mathbb{E}[X(Y - \alpha - \beta X)] \\
+&= \mathbb{E}[X(Y - \left\{\mathbb{E}(Y) - \beta \mathbb{E}(X)\right\} - \beta X)]\\
+&= \mathbb{E}[X\left\{Y - \mathbb{E}(Y) \right\}] -  \beta \mathbb{E}[X\left\{X - \mathbb{E}(X)\right\} ]\\
+&= \text{Cov}(X,Y) - \beta \text{Var}(X) = 0.
+\end{align}
+$$
+
+## Conditional Mean Function
+
+In other situations $Y = \alpha + \beta X + U$ is intended to represent a *conditional mean function*. This is usually signaled by the assumption $\mathbb{E}[U|X] = 0$. This time around I haven't written the word assumption in "scare quotes." That's because there is an assumption lurking here, unlike in the population linear regression model from above. Still, this is a hopelessly confusing way of indicating it. Here's a better way: 
+
+> Define $U \equiv Y - \mathbb{E}(Y|X)$ and assume that $\mathbb{E}(Y|X) = \alpha + \beta X$.
+
+Again, this makes it clear that $U$ has no life of its own. It is *constructed* from $Y$ and $X$. The conditional mean function $\mathbb{E}(Y|X)$ is simply the minimizer of $\mathbb{E}[\left\{ Y - f(X)\right\}^2]$ over all (well-behaved) functions.^[See Section 2.1 of my [lecture notes](https://www.economictricks.com/limdep-notes.pdf) for details.] By construction $\mathbb{E}[U|X] = 0$ since
+$$
+\mathbb{E}[U|X] = \mathbb{E}[Y - \mathbb{E}(Y|X)|X] = \mathbb{E}[Y|X] - \mathbb{E}[Y|X] = 0 
+$$
+by the linearity of conditional expectation and the fact that $\mathbb{E}(Y|X)$ is a function of $X$. But how can we be sure that the conditional mean function is linear? This is a *bona fide* assumption: it may be true or it may be false. Either way, it is much clearer to emphasize that we are making an assumption about the *form* of the conditional mean function, *not* an assumption about the error term $U \equiv Y - \mathbb{E}(Y|X)$.
+
+## Causal Model
+
+Both interpretations of $Y = \alpha + \beta X + U$ from above are purely predictive; they say nothing about whether $X$ *causes* $Y$. To indicate that a linear model is mean to be causal, it is traditional to write something like "suppose that $Y = \alpha + \beta X + U$ where $X$ may be endogenous." Often "may be endogenous" is replaced by "where $X$ may be correlated with $U$." What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of "$=$" beyond all reason. Here's my suggested improvement:
+
+> Consider the causal model $Y \leftarrow (\alpha + \beta X + U)$ where $U$ is unobserved and $(X,U)$ may be dependent.
+
+Causality is intrinsically directional: cigarettes cause lung cancer; lung cancer doesn't cause cigarettes. The notation "$\leftarrow$" makes this clear. In stark contrast, the notion of mathematical equality is *symmetric*. If $Y = \alpha + \beta X + U$, it is just as true to say that $X = (Y - \alpha - U) / \beta$. Of course this is nonsensical when applied to cigarettes and cancer.
+
+In a causal model, $U$ *does* have a life of its own; it represents the causes of $Y$ that we cannot observe. Perhaps $Y$ is wage, $X$ is years of schooling and $U$ is "family background" plus "ability." For this reason I do *not* write "define $U \equiv (\text{something})$." We aren't defining a residual in a prediction problem. We are taking a stand on how the world works by writing down a particular causal model. In a randomized controlled trial, any unobserved causes $U$ would be independent of $X$. Here we have not made this assumption. We have, however, assumed a particular form for the causal relationship: linear with constant coefficients. Each additional year of schooling causes the same increase (or decrease) in wage regardless of who you are or how many years of schooling you already have. This model could be wrong. But right or wrong, it is fundamentally distinct from the population linear regression and conditional mean models described above. Let's endeavour to make this clear in our notation.
+
+
