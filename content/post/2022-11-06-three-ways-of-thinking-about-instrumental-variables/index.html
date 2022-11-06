@@ -1,0 +1,194 @@
+---
+title: Three Ways of Thinking About Instrumental Variables
+author: Francis J. DiTraglia
+date: '2022-11-06'
+slug: three-ways-of-thinking-about-instrumental-variables
+categories: [econometrics, R]
+tags: [control function, IV, TSLS]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-06T21:14:25Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>In this post we’ll examine a very simple instrumental variables model from three different perspectives: two familiar and one a bit more exotic. While all three yield the same solution in this particular model, they lead in different directions in more complicated examples. Crucially, each gives us a different way of <em>thinking</em> about the problem of endogeneity and how to solve it.</p>
+<div id="the-setup" class="section level2">
+<h2>The Setup</h2>
+<p>Consider a simple linear causal model of the form <span class="math inline">\(Y \leftarrow \alpha + \beta X + U\)</span> where <span class="math inline">\(X\)</span> is <strong>endogenous</strong>, i.e. related to the unobserved random variable <span class="math inline">\(U\)</span>. Our goal is to learn <span class="math inline">\(\beta\)</span>, the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>. To take a simple example, suppose that <span class="math inline">\(Y\)</span> is wage and <span class="math inline">\(X\)</span> is years of schooling. Then <span class="math inline">\(\beta\)</span> is the causal effect of one additional year of schooling on a person’s wage. The random variable <span class="math inline">\(U\)</span> is a catchall, representing all <em>unobserved</em> causes of wage, such as ability, family background, and so on. A linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> will not allow us to learn <span class="math inline">\(\beta\)</span>. For example, if you’re very smart, you will probably find school easier and stay in school longer. But being smarter likely has <em>its own</em> effect on your wage, separate from years of education. Ability is a <strong>confounder</strong> because it causes both years of schooling and wage.</p>
+<p>Now suppose that <span class="math inline">\(Z\)</span> is an <strong>instrumental variable</strong>: something that is uncorrelated with <span class="math inline">\(U\)</span> (<strong>exogenous</strong>) but correlated with <span class="math inline">\(X\)</span> (<strong>relevant</strong>). For example, <a href="https://youtu.be/NeAkMcgdWxA?t=2044">a very famous paper</a> pointed out that quarter of birth is correlated with years of schooling in the US and argued that it is unrelated to other causes of wages. Finding a good instrumental variable is very hard in practice. Indeed, <a href="https://youtu.be/NeAkMcgdWxA?t=2528">I remain skeptical</a> that quarter of birth is really unrelated to <span class="math inline">\(U\)</span>. But that’s a conversation for another day. For the moment, suppose we have a <em>bona fide</em> exogenous and relevant instrument at our disposal. To make things even simpler, suppose that the true causal effect <span class="math inline">\(\beta\)</span> is <strong>homogeneous</strong>, i.e. the same for everyone.</p>
+</div>
+<div id="st-perspective-the-iv-approach" class="section level2">
+<h2>1st Perspective: The IV Approach</h2>
+<blockquote>
+<p>Regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> to find the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>. Rescale it to obtain the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>.</p>
+</blockquote>
+<p>If <span class="math inline">\(Z\)</span> is a valid and relevant instrument, then
+<span class="math display">\[
+\beta_{\text{IV}} \equiv \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} = \frac{\text{Cov}(Z, \alpha + \beta X + U)}{\text{Cov}(Z,X)}  = \frac{\beta\text{Cov}(Z,X) + \text{Cov}(Z,U)}{\text{Cov}(Z,X)} = \beta
+\]</span>
+which is precisely the causal effect we’re after! The ratio of <span class="math inline">\(\text{Cov}(Z,Y)\)</span> to <span class="math inline">\(\text{Cov}(Z,X)\)</span> is called the <strong>instrumental variables</strong> (IV) estimand, but it seems to come out of nowhere. A more intuitive way to write this quantity multiplies the numerator and denominator by <span class="math inline">\(\text{Var}(Z)\)</span> to yield
+<span class="math display">\[
+\beta_{\text{IV}} \equiv \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} =  \frac{\text{Cov}(Y,Z)/\text{Var}(Z)}{\text{Cov}(X,Z)/\text{Var}(Z)} \equiv \frac{\gamma}{\pi}.
+\]</span>
+We see that <span class="math inline">\(\beta_{\text{IV}}\)</span> is the ratio of two <strong>linear regression slopes</strong>: the slope <span class="math inline">\(\gamma\)</span> from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> divided by the slope <span class="math inline">\(\pi\)</span> from a regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. This makes intuitive sense if we think about units. Because <span class="math inline">\(Z\)</span> is unrelated to <span class="math inline">\(U\)</span>, <span class="math inline">\(\gamma\)</span> gives the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>. If <span class="math inline">\(Y\)</span> is measured in dollars and <span class="math inline">\(Z\)</span> is measured in miles (e.g. distance to college), then <span class="math inline">\(\gamma\)</span> is measured in dollars per mile. If <span class="math inline">\(X\)</span> is years of schooling, then <span class="math inline">\(\beta\)</span> should be measured in dollars per year. To convert from dollars/mile to dollars/year, we need to multiply by miles/year or equivalently to divide by years/mile. And indeed, <span class="math inline">\(\pi\)</span> is measured in years/mile as required! This is yet another example of my favorite maxim: <strong>most formulas in statistics and econometrics are obvious if you keep track of the units.</strong></p>
+</div>
+<div id="nd-perspective-the-tsls-approach" class="section level2">
+<h2>2nd Perspective: The TSLS Approach</h2>
+<blockquote>
+<p>Construct <span class="math inline">\(\tilde{X}\)</span> by using <span class="math inline">\(Z\)</span> to “clean out” the part of <span class="math inline">\(X\)</span> that is correlated with <span class="math inline">\(U\)</span>. Then regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span>.</p>
+</blockquote>
+<p>Let <span class="math inline">\(\delta\)</span> be the intercept and <span class="math inline">\(\pi\)</span> be the slope from a population linear regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. Defining <span class="math inline">\(V \equiv X - \delta - \pi Z\)</span>, we can write
+<span class="math display">\[
+X = \tilde{X} + V, \quad \tilde{X} \equiv \delta + \pi Z, \quad \pi \equiv \frac{\text{Cov}(X,Z)}{\text{Var}(Z)}, \quad
+\delta \equiv \mathbb{E}(X) - \pi\mathbb{E}(Z).
+\]</span>
+By definition <span class="math inline">\(\tilde{X} \equiv \delta + \pi Z\)</span> is the <strong>best linear predictor</strong> of <span class="math inline">\(X\)</span> based on <span class="math inline">\(Z\)</span>, in that <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\pi\)</span> solve the optimization problem
+<span class="math display">\[
+\min_{a, b} \mathbb{E}[(X - a - bZ)^2].
+\]</span>
+What’s more, <span class="math inline">\(\text{Cov}(Z,V) = 0\)</span> <em>by construction</em> since:
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(Z,V) &amp;= \text{Cov}(Z, X - \delta - \pi Z) = \text{Cov}(Z,X) - \pi \text{Var}(Z)\\
+&amp;= \text{Cov}(Z,X) - \frac{\text{Cov}(X,Z)}{\text{Var}(Z)} \text{Var}(Z) = 0.
+\end{align*}
+\]</span>
+And since <span class="math inline">\(Z\)</span> is uncorrelated with <span class="math inline">\(U\)</span>, so is <span class="math inline">\(\tilde{X}\)</span>:
+<span class="math display">\[
+\text{Cov}(\tilde{X}, U) = \text{Cov}(\delta + \pi Z, U) = \pi\text{Cov}(Z,U) = 0.
+\]</span>
+So now we have a variable <span class="math inline">\(\tilde{X}\)</span> that is a good predictor of <span class="math inline">\(X\)</span> but is uncorrelated with <span class="math inline">\(U\)</span>. In essence, we’ve used <span class="math inline">\(Z\)</span> to “clean out” the endogeneity from <span class="math inline">\(X\)</span> and we did this using a <strong>first stage</strong> regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. <strong>Two-stage least squares</strong> (TSLS) combines this with a <strong>second stage</strong> regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span> to recover <span class="math inline">\(\beta\)</span>. To see why this works, substitute <span class="math inline">\(\tilde{X} +V\)</span> for <span class="math inline">\(X\)</span> in the causal model, yielding
+<span class="math display">\[
+\begin{align*}
+Y &amp;= \alpha + \beta X + U = \alpha + \beta (\tilde{X} + V) + U\\
+&amp;= \alpha + \beta \tilde{X} + (\beta V + U)\\
+&amp;= \alpha + \beta \tilde{X} + \tilde{U}
+\end{align*}
+\]</span>
+where we define <span class="math inline">\(\tilde{U} \equiv \beta V + U\)</span>. Finally, since
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(\tilde{X}, \tilde{U}) &amp;= \text{Cov}(\tilde{X}, \beta V + U)\\
+&amp;= \beta\text{Cov}(\tilde{X}, V) + \text{Cov}(\tilde{X}, U)\\
+&amp;= \beta\text{Cov}(\delta + \pi Z , V) + 0 \\
+&amp;= \beta\pi\text{Cov}(Z, V) = 0
+\end{align*}
+\]</span>
+a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span> recovers the causal effect <span class="math inline">\(\beta\)</span> of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>.</p>
+</div>
+<div id="rd-perspective-the-control-function-approach" class="section level2">
+<h2>3rd Perspective: The Control Function Approach</h2>
+<blockquote>
+<p>Use <span class="math inline">\(Z\)</span> to solve for <span class="math inline">\(V\)</span>, the part of <span class="math inline">\(U\)</span> that is correlated with <span class="math inline">\(X\)</span>. Then regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> controlling for <span class="math inline">\(V\)</span>.</p>
+</blockquote>
+<p>I’m willing to bet that you haven’t seen this approach before! The so-called <strong>control function</strong> approach starts from the same place as TSLS: the first-stage regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span> from above, namely
+<span class="math display">\[
+X = \delta + \pi Z + V, \quad \text{Cov}(Z,V) = 0.
+\]</span>
+Like the error term <span class="math inline">\(U\)</span> from the causal model <span class="math inline">\(Y \leftarrow \alpha + \beta X + U\)</span>, the first stage regression error <span class="math inline">\(V\)</span> is unobserved. But as strange as it sounds, <em>imagine</em> running a regression of <span class="math inline">\(U\)</span> on <span class="math inline">\(V\)</span>. Then we would obtain
+<span class="math display">\[
+U = \kappa + \lambda V + \epsilon,
+\quad \lambda \equiv \frac{\text{Cov}(U,V)}{\text{Var}(V)},
+\quad \kappa \equiv \mathbb{E}(U) - \lambda \mathbb{E}(V)
+\]</span>
+where <span class="math inline">\(\text{Cov}(V, \epsilon) = 0\)</span> by construction. Now, since the causal model for <span class="math inline">\(Y\)</span> includes an intercept, <span class="math inline">\(\mathbb{E}(U) = 0\)</span>. And since the first-stage linear regression model that defines <span class="math inline">\(V\)</span> likewise includes an intercept, <span class="math inline">\(\mathbb{E}(V) = 0\)</span> as well. This means that <span class="math inline">\(\kappa = 0\)</span> so the regression of <span class="math inline">\(U\)</span> on <span class="math inline">\(V\)</span> becomes
+<span class="math display">\[
+U = \lambda V + \epsilon,  \quad \lambda \equiv \frac{\text{Cov}(U,V)}{\text{Var}(V)}
+\quad \text{Cov}(V, \epsilon) = 0.
+\]</span>
+Now, substituting for <span class="math inline">\(U\)</span> in the causal model gives
+<span class="math display">\[
+Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
+\]</span>
+By construction <span class="math inline">\(\text{Cov}(V, \epsilon) = 0\)</span>. And since <span class="math inline">\(X = \delta + \pi Z + V\)</span>, it follows that
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(X,\epsilon) &amp;= \text{Cov}(\delta + \pi Z + V, \epsilon)\\
+&amp;= \pi \text{Cov}(Z,\epsilon) + \text{Cov}(V, \epsilon) \\
+&amp;= \pi \text{Cov}(Z, U - \lambda V) + 0\\
+&amp;= \pi \left[ \text{Cov}(Z,U) - \lambda \text{Cov}(Z,V)\right] = 0.
+\end{align*}
+\]</span>
+Therefore, <em>if only we could observe <span class="math inline">\(V\)</span></em>, a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> that controls for <span class="math inline">\(V\)</span> would allow us to recover the causal effect of interest, namely <span class="math inline">\(\beta\)</span>. Such a regression would also give us <span class="math inline">\(\lambda\)</span>. To see why this is interesting, notice that
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(X,U) &amp;= \text{Cov}(\gamma + \pi Z + V, U) = \pi\text{Cov}(Z,U) + \text{Cov}(V,U)\\
+&amp;= 0 + \text{Cov}(V, \lambda V + \epsilon) \\
+&amp;= \lambda \text{Var}(V).
+\end{align*}
+\]</span>
+Since <span class="math inline">\(\text{Var}(V) &gt; 0\)</span>, <span class="math inline">\(\lambda\)</span> tell us the <strong>direction of endogeneity</strong> in <span class="math inline">\(X\)</span>. If <span class="math inline">\(\lambda &gt;0\)</span> then <span class="math inline">\(X\)</span> is positively correlated with <span class="math inline">\(U\)</span>, if <span class="math inline">\(\lambda &lt; 0\)</span> then <span class="math inline">\(X\)</span> is negatively correlated with <span class="math inline">\(U\)</span>, and if <span class="math inline">\(\lambda = 0\)</span> then <span class="math inline">\(X\)</span> is exogenous. If <span class="math inline">\(U\)</span> is ability and ability has a positive effect on years of schooling, for example, then <span class="math inline">\(\lambda\)</span> will be positive.</p>
+<p>Now it’s time to address the elephant in the room: <span class="math inline">\(V\)</span> is <strong>unobserved</strong>! It’s all fine and well to say that if <span class="math inline">\(V\)</span> were observed our problems would be solved, but given that it is not in fact observed what are we supposed to do? Here’s where the TSLS first stage regression comes to the rescue. Both <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> are observed, so we can learn <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\pi\)</span> by regressing <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. Given these coefficients, we can simply solve for the unobserved error: <span class="math inline">\(V = X - \delta - \pi Z\)</span>. Like TSLS, the control function approach relies crucially on the first stage regression. But whereas TSLS uses it to construct <span class="math inline">\(\tilde{X} = \delta + \pi Z\)</span>, the control function approach uses it to construct <span class="math inline">\(V = X - \delta - \pi Z\)</span>. We don’t replace <span class="math inline">\(X\)</span> with its exogenous component <span class="math inline">\(\tilde{X}\)</span>; instead we “pull out” the component of <span class="math inline">\(U\)</span> that is correlated with <span class="math inline">\(X\)</span>, namely <span class="math inline">\(V\)</span>. In effect we control for the “omitted variable” <span class="math inline">\(V\)</span>, hence the name <strong>control function</strong>.</p>
+</div>
+<div id="simulating-the-three-approaches" class="section level2">
+<h2>Simulating the Three Approaches</h2>
+<p>Perhaps that was all a bit abstract. Let’s make it concrete by simulating some data and actually <em>calculating</em> estimates of <span class="math inline">\(\beta\)</span> using each of the three approaches described above. Because this exercise relies on a sample of data rather than a population, estimates will replace parameters and residuals will replace error terms.</p>
+<p>To begin, we need to simulate <span class="math inline">\(Z\)</span> independently of <span class="math inline">\((U,V)\)</span>. For simplicity I’ll make these standard normal and set the correlation between <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> to 0.5.</p>
+<pre class="r"><code>set.seed(1983) # for replicability of pseudo-random draws
+n &lt;- 1000
+Z &lt;- rnorm(n)
+library(mvtnorm)
+cor_mat &lt;- matrix(c(1, 0.5,
+                    0.5, 1), 2, 2, byrow = TRUE)
+errors &lt;- rmvnorm(n, sigma = cor_mat)
+head(errors)</code></pre>
+<pre><code>##            [,1]        [,2]
+## [1,]  0.1612255 -0.96692422
+## [2,]  1.4020130  1.55818062
+## [3,]  1.7212525 -0.01997204
+## [4,] -0.6972637 -0.68551762
+## [5,]  1.3471669 -0.01766333
+## [6,] -1.0441467 -0.23113677</code></pre>
+<pre class="r"><code>U &lt;- errors[,1]
+V &lt;- errors[,2]
+rm(errors)</code></pre>
+<p>Since this is a simulation we actually <em>can</em> observe <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> and hence could regress the one on the other. Since I set the standard deviation of both of them equal to one, <span class="math inline">\(\lambda\)</span> will simply equal the correlation between them, namely 0.5</p>
+<pre class="r"><code>coef(lm(U ~ V - 1)) # exclude an intercept</code></pre>
+<pre><code>##         V 
+## 0.5047334</code></pre>
+<p>Excellent! Everything is working as it should. The next step is to generate <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Again to keep things simple, in my simulation I’ll set <span class="math inline">\(\alpha = \delta = 0\)</span>.</p>
+<pre class="r"><code>pi &lt;- 0.3
+beta &lt;- 1.1
+X &lt;- pi * Z + V
+Y &lt;- beta * X + U</code></pre>
+<p>Now we’re ready to run some regressions! We’ll start with an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>. This substantially overestimates <span class="math inline">\(\beta\)</span> because <span class="math inline">\(X\)</span> is in fact positively correlated with <span class="math inline">\(U\)</span>.</p>
+<pre class="r"><code>OLS &lt;- coef(lm(Y ~ X))[2]
+OLS</code></pre>
+<pre><code>##        X 
+## 1.567642</code></pre>
+<p>In contrast, the IV approach works well.</p>
+<pre class="r"><code>IV &lt;- cov(Y, Z) / cov(X, Z)
+IV</code></pre>
+<pre><code>## [1] 1.049043</code></pre>
+<p>For the TSLS and control function approaches we need to run the first-stage regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span> and store the results.</p>
+<pre class="r"><code>first_stage &lt;- lm(X ~ Z)</code></pre>
+<p>The TSLS approach uses the <em>fitted values</em> of this regression as <span class="math inline">\(\tilde{X}\)</span>.</p>
+<pre class="r"><code>Xtilde &lt;- predict(first_stage)
+TSLS &lt;- coef(lm(Y ~ Xtilde))[2] # drop the intercept since we&#39;re not interested in it
+TSLS</code></pre>
+<pre><code>##   Xtilde 
+## 1.049043</code></pre>
+<p>In contrast, the control function approach uses the <em>residuals</em> from the first stage regression. It also gives us <span class="math inline">\(\lambda\)</span> in addition to <span class="math inline">\(\beta\)</span>.</p>
+<pre class="r"><code>Vhat &lt;- residuals(first_stage) 
+CF &lt;- coef(lm(Y ~ X + Vhat))[-1] # drop the intercept since we&#39;re not interested in it
+CF # The coefficient on Vhat is lambda</code></pre>
+<pre><code>##         X      Vhat 
+## 1.0490432 0.5558904</code></pre>
+<p>Notice that we obtain <em>precisely</em> the same estimates for <span class="math inline">\(\beta\)</span> using each of the three approaches.</p>
+<pre class="r"><code>c(IV, TSLS, CF[1])</code></pre>
+<pre><code>##            Xtilde        X 
+## 1.049043 1.049043 1.049043</code></pre>
+<p>It turns out that in this simple linear model with a single endogenous regressor and a single instrument, the three approaches are <em>numerically equivalent</em>. In other words, they give <em>exactly</em> the same answer. This will not necessarily be true in more complicated models, so be careful!</p>
+</div>
+<div id="epilogue" class="section level2">
+<h2>Epilogue</h2>
+<p>It’s time to admit that this post had a secret agenda: to introduce the idea of a control function in the <em>simplest way possible</em>! If you’re interested in learning more about control functions, a canonical example that <em>does not</em> turn out to be identical to IV is the so-called <strong>Heckman Selection Model</strong>, which you can learn more about <a href="https://www.economictricks.com/videos/">here</a>. (Scroll down until you see the heading “Heckman Selection Model.”) The basic logic is similar: to solve an endogeneity problem, use a first-stage regression to estimate an unobserved quantity that “soaks up” the part of the error term that is correlated with your endogenous regressor of interest. If these videos whet your appetite for more control function fun, <a href="http://jhr.uwpress.org/content/50/2/420.short">Wooldridge (2015)</a> provides a helpful overview along with many references to the econometrics literature.</p>
+</div>

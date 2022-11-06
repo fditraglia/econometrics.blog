@@ -1,0 +1,196 @@
+---
+title: Three Ways of Thinking About Instrumental Variables
+author: Francis J. DiTraglia
+date: '2022-11-06'
+slug: three-ways-of-thinking-about-instrumental-variables
+categories: [econometrics, R]
+tags: [control function, IV, TSLS]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-06T21:14:25Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+In this post we'll examine a very simple instrumental variables model from three different perspectives: two familiar and one a bit more exotic. While all three yield the same solution in this particular model, they lead in different directions in more complicated examples. Crucially, each gives us a different way of *thinking* about the problem of endogeneity and how to solve it.
+
+## The Setup
+Consider a simple linear causal model of the form $Y \leftarrow \alpha + \beta X + U$ where $X$ is **endogenous**, i.e. related to the unobserved random variable $U$. Our goal is to learn $\beta$, the causal effect of $X$ on $Y$. To take a simple example, suppose that $Y$ is wage and $X$ is years of schooling. Then $\beta$ is the causal effect of one additional year of schooling on a person's wage. The random variable $U$ is a catchall, representing all *unobserved* causes of wage, such as ability, family background, and so on. A linear regression of $Y$ on $X$ will not allow us to learn $\beta$. For example, if you're very smart, you will probably find school easier and stay in school longer. But being smarter likely has *its own* effect on your wage, separate from years of education. Ability is a **confounder** because it causes both years of schooling and wage. 
+
+Now suppose that $Z$ is an **instrumental variable**: something that is uncorrelated with $U$ (**exogenous**) but correlated with $X$ (**relevant**). For example, [a very famous paper](https://youtu.be/NeAkMcgdWxA?t=2044) pointed out that quarter of birth is correlated with years of schooling in the US and argued that it is unrelated to other causes of wages. Finding a good instrumental variable is very hard in practice. Indeed, [I remain skeptical](https://youtu.be/NeAkMcgdWxA?t=2528) that quarter of birth is really unrelated to $U$. But that's a conversation for another day. For the moment, suppose we have a *bona fide* exogenous and relevant instrument at our disposal. To make things even simpler, suppose that the true causal effect $\beta$ is **homogeneous**, i.e. the same for everyone.
+
+## 1st Perspective: The IV Approach 
+
+> Regress $Y$ on $Z$ to find the causal effect of $Z$ on $Y$. Rescale it to obtain the causal effect of $X$ on $Y$.
+
+If $Z$ is a valid and relevant instrument, then 
+$$
+\beta_{\text{IV}} \equiv \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} = \frac{\text{Cov}(Z, \alpha + \beta X + U)}{\text{Cov}(Z,X)}  = \frac{\beta\text{Cov}(Z,X) + \text{Cov}(Z,U)}{\text{Cov}(Z,X)} = \beta
+$$
+which is precisely the causal effect we're after! The ratio of $\text{Cov}(Z,Y)$ to $\text{Cov}(Z,X)$ is called the **instrumental variables** (IV) estimand, but it seems to come out of nowhere. A more intuitive way to write this quantity multiplies the numerator and denominator by $\text{Var}(Z)$ to yield 
+$$
+\beta_{\text{IV}} \equiv \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} =  \frac{\text{Cov}(Y,Z)/\text{Var}(Z)}{\text{Cov}(X,Z)/\text{Var}(Z)} \equiv \frac{\gamma}{\pi}.
+$$
+We see that $\beta_{\text{IV}}$ is the ratio of two **linear regression slopes**: the slope $\gamma$ from a regression of $Y$ on $Z$ divided by the slope $\pi$ from a regression of $X$ on $Z$. This makes intuitive sense if we think about units. Because $Z$ is unrelated to $U$, $\gamma$ gives the causal effect of $Z$ on $Y$. If $Y$ is measured in dollars and $Z$ is measured in miles (e.g. distance to college), then $\gamma$ is measured in dollars per mile. If $X$ is years of schooling, then $\beta$ should be measured in dollars per year. To convert from dollars/mile to dollars/year, we need to multiply by miles/year or equivalently to divide by years/mile. And indeed, $\pi$ is measured in years/mile as required! This is yet another example of my favorite maxim: **most formulas in statistics and econometrics are obvious if you keep track of the units.** 
+
+
+
+## 2nd Perspective: The TSLS Approach
+
+> Construct $\tilde{X}$ by using $Z$ to "clean out" the part of $X$ that is correlated with $U$. Then regress $Y$ on $\tilde{X}$.
+
+Let $\delta$ be the intercept and $\pi$ be the slope from a population linear regression of $X$ on $Z$. Defining $V \equiv X - \delta - \pi Z$, we can write
+$$
+X = \tilde{X} + V, \quad \tilde{X} \equiv \delta + \pi Z, \quad \pi \equiv \frac{\text{Cov}(X,Z)}{\text{Var}(Z)}, \quad
+\delta \equiv \mathbb{E}(X) - \pi\mathbb{E}(Z).
+$$
+By definition $\tilde{X} \equiv \delta + \pi Z$ is the **best linear predictor** of $X$ based on $Z$, in that $\delta$ and $\pi$ solve the optimization problem
+$$
+\min_{a, b} \mathbb{E}[(X - a - bZ)^2].
+$$
+What's more, $\text{Cov}(Z,V) = 0$ *by construction* since:
+$$
+\begin{align*}
+\text{Cov}(Z,V) &= \text{Cov}(Z, X - \delta - \pi Z) = \text{Cov}(Z,X) - \pi \text{Var}(Z)\\
+&= \text{Cov}(Z,X) - \frac{\text{Cov}(X,Z)}{\text{Var}(Z)} \text{Var}(Z) = 0. 
+\end{align*}
+$$
+And since $Z$ is uncorrelated with $U$, so is $\tilde{X}$:
+$$
+\text{Cov}(\tilde{X}, U) = \text{Cov}(\delta + \pi Z, U) = \pi\text{Cov}(Z,U) = 0.
+$$
+So now we have a variable $\tilde{X}$ that is a good predictor of $X$ but is uncorrelated with $U$. In essence, we've used $Z$ to "clean out" the endogeneity from $X$ and we did this using a **first stage** regression of $X$ on $Z$. **Two-stage least squares** (TSLS) combines this with a **second stage** regression of $Y$ on $\tilde{X}$ to recover $\beta$. To see why this works, substitute $\tilde{X} +V$ for $X$ in the causal model, yielding 
+$$
+\begin{align*}
+Y &= \alpha + \beta X + U = \alpha + \beta (\tilde{X} + V) + U\\
+&= \alpha + \beta \tilde{X} + (\beta V + U)\\
+&= \alpha + \beta \tilde{X} + \tilde{U}
+\end{align*}
+$$
+where we define $\tilde{U} \equiv \beta V + U$. Finally, since
+$$
+\begin{align*}
+\text{Cov}(\tilde{X}, \tilde{U}) &= \text{Cov}(\tilde{X}, \beta V + U)\\
+&= \beta\text{Cov}(\tilde{X}, V) + \text{Cov}(\tilde{X}, U)\\
+&= \beta\text{Cov}(\delta + \pi Z , V) + 0 \\
+&= \beta\pi\text{Cov}(Z, V) = 0
+\end{align*}
+$$
+a regression of $Y$ on $\tilde{X}$ recovers the causal effect $\beta$ of $X$ on $Y$.
+
+
+## 3rd Perspective: The Control Function Approach
+
+> Use $Z$ to solve for $V$, the part of $U$ that is correlated with $X$. Then regress $Y$ on $X$ controlling for $V$. 
+
+I'm willing to bet that you haven't seen this approach before! The so-called **control function** approach starts from the same place as TSLS: the first-stage regression of $X$ on $Z$ from above, namely
+$$
+X = \delta + \pi Z + V, \quad \text{Cov}(Z,V) = 0.
+$$
+Like the error term $U$ from the causal model $Y \leftarrow \alpha + \beta X + U$, the first stage regression error $V$ is unobserved. But as strange as it sounds, *imagine* running a regression of $U$ on $V$. Then we would obtain 
+$$
+U = \kappa + \lambda V + \epsilon, 
+\quad \lambda \equiv \frac{\text{Cov}(U,V)}{\text{Var}(V)}, 
+\quad \kappa \equiv \mathbb{E}(U) - \lambda \mathbb{E}(V)
+$$
+where $\text{Cov}(V, \epsilon) = 0$ by construction. Now, since the causal model for $Y$ includes an intercept, $\mathbb{E}(U) = 0$. And since the first-stage linear regression model that defines $V$ likewise includes an intercept, $\mathbb{E}(V) = 0$ as well. This means that $\kappa = 0$ so the regression of $U$ on $V$ becomes 
+$$
+U = \lambda V + \epsilon,  \quad \lambda \equiv \frac{\text{Cov}(U,V)}{\text{Var}(V)}
+\quad \text{Cov}(V, \epsilon) = 0. 
+$$
+Now, substituting for $U$ in the causal model gives
+$$
+Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
+$$
+By construction $\text{Cov}(V, \epsilon) = 0$. And since $X = \delta + \pi Z + V$, it follows that
+$$
+\begin{align*}
+\text{Cov}(X,\epsilon) &= \text{Cov}(\delta + \pi Z + V, \epsilon)\\
+&= \pi \text{Cov}(Z,\epsilon) + \text{Cov}(V, \epsilon) \\
+&= \pi \text{Cov}(Z, U - \lambda V) + 0\\
+&= \pi \left[ \text{Cov}(Z,U) - \lambda \text{Cov}(Z,V)\right] = 0.
+\end{align*}
+$$
+Therefore, *if only we could observe $V$*, a regression of $Y$ on $X$ that controls for $V$ would allow us to recover the causal effect of interest, namely $\beta$. Such a regression would also give us $\lambda$. To see why this is interesting, notice that
+$$
+\begin{align*}
+\text{Cov}(X,U) &= \text{Cov}(\gamma + \pi Z + V, U) = \pi\text{Cov}(Z,U) + \text{Cov}(V,U)\\
+&= 0 + \text{Cov}(V, \lambda V + \epsilon) \\
+&= \lambda \text{Var}(V).
+\end{align*}
+$$
+Since $\text{Var}(V) > 0$, $\lambda$ tell us the **direction of endogeneity** in $X$. If $\lambda >0$ then $X$ is positively correlated with $U$, if $\lambda < 0$ then $X$ is negatively correlated with $U$, and if $\lambda = 0$ then $X$ is exogenous. If $U$ is ability and ability has a positive effect on years of schooling, for example, then $\lambda$ will be positive.
+
+Now it's time to address the elephant in the room: $V$ is **unobserved**! It's all fine and well to say that if $V$ were observed our problems would be solved, but given that it is not in fact observed what are we supposed to do? Here's where the TSLS first stage regression comes to the rescue. Both $X$ and $Z$ are observed, so we can learn $\delta$ and $\pi$ by regressing $X$ on $Z$. Given these coefficients, we can simply solve for the unobserved error: $V = X - \delta - \pi Z$. Like TSLS, the control function approach relies crucially on the first stage regression. But whereas TSLS uses it to construct $\tilde{X} = \delta + \pi Z$, the control function approach uses it to construct $V = X - \delta - \pi Z$. We don't replace $X$ with its exogenous component $\tilde{X}$; instead we "pull out" the component of $U$ that is correlated with $X$, namely $V$. In effect we control for the "omitted variable" $V$, hence the name **control function**. 
+
+## Simulating the Three Approaches 
+
+Perhaps that was all a bit abstract. Let's make it concrete by simulating some data and actually *calculating* estimates of $\beta$ using each of the three approaches described above. Because this exercise relies on a sample of data rather than a population, estimates will replace parameters and residuals will replace error terms.
+
+To begin, we need to simulate $Z$ independently of $(U,V)$. For simplicity I'll make these standard normal and set the correlation between $U$ and $V$ to 0.5.
+```{r}
+set.seed(1983) # for replicability of pseudo-random draws
+n <- 1000
+Z <- rnorm(n)
+library(mvtnorm)
+cor_mat <- matrix(c(1, 0.5,
+                    0.5, 1), 2, 2, byrow = TRUE)
+errors <- rmvnorm(n, sigma = cor_mat)
+head(errors)
+U <- errors[,1]
+V <- errors[,2]
+rm(errors)
+```
+Since this is a simulation we actually *can* observe $U$ and $V$ and hence could regress the one on the other. Since I set the standard deviation of both of them equal to one, $\lambda$ will simply equal the correlation between them, namely 0.5
+```{r}
+coef(lm(U ~ V - 1)) # exclude an intercept
+```
+Excellent! Everything is working as it should. The next step is to generate $X$ and $Y$. Again to keep things simple, in my simulation I'll set $\alpha = \delta = 0$.
+```{r}
+pi <- 0.3
+beta <- 1.1
+X <- pi * Z + V
+Y <- beta * X + U
+```
+Now we're ready to run some regressions! We'll start with an OLS regression of $Y$ on $X$. This  substantially overestimates $\beta$ because $X$ is in fact positively correlated with $U$.
+```{r}
+OLS <- coef(lm(Y ~ X))[2]
+OLS
+```
+In contrast, the IV approach works well.
+```{r}
+IV <- cov(Y, Z) / cov(X, Z)
+IV
+```
+For the TSLS and control function approaches we need to run the first-stage regression of $X$ on $Z$ and store the results.
+```{r}
+first_stage <- lm(X ~ Z)
+```
+The TSLS approach uses the *fitted values* of this regression as $\tilde{X}$.
+```{r}
+Xtilde <- predict(first_stage)
+TSLS <- coef(lm(Y ~ Xtilde))[2] # drop the intercept since we're not interested in it
+TSLS
+```
+In contrast, the control function approach uses the *residuals* from the first stage regression. It also gives us $\lambda$ in addition to $\beta$. 
+```{r}
+Vhat <- residuals(first_stage) 
+CF <- coef(lm(Y ~ X + Vhat))[-1] # drop the intercept since we're not interested in it
+CF # The coefficient on Vhat is lambda
+```
+Notice that we obtain *precisely* the same estimates for $\beta$ using each of the three approaches.
+```{r}
+c(IV, TSLS, CF[1])
+```
+It turns out that in this simple linear model with a single endogenous regressor and a single instrument, the three approaches are *numerically equivalent*. In other words, they give *exactly* the same answer. This will not necessarily be true in more complicated models, so be careful!
+
+## Epilogue
+
+It's time to admit that this post had a secret agenda: to introduce the idea of a control function in the *simplest way possible*! If you're interested in learning more about control functions, a canonical example that *does not* turn out to be identical to IV is the so-called **Heckman Selection Model**, which you can learn more about [here](https://www.economictricks.com/videos/). (Scroll down until you see the heading "Heckman Selection Model.") The basic logic is similar: to solve an endogeneity problem, use a first-stage regression to estimate an unobserved quantity that "soaks up" the part of the error term that is correlated with your endogenous regressor of interest. If these videos whet your appetite for more control function fun, [Wooldridge (2015)](http://jhr.uwpress.org/content/50/2/420.short) provides a helpful overview along with many references to the econometrics literature. 
+
