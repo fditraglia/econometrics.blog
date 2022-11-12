@@ -1,0 +1,121 @@
+---
+title: 'Local Asymptotics: The Simplest Possible Example'
+author: Francis J. DiTraglia
+date: '2022-11-12'
+slug: local-asymptotics-the-simplest-possible-example
+categories: [econometrics]
+tags: [asymptotics, power]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-12T19:23:25Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to *change with sample size*. 
+This peculiar notion goes by a variety of names including "Pitman drift," a "sequence of local alternatives," and "local mis-specification," and crops up in a wide range of problems from weak instruments, to model selection, to power analysis.^[I've used this idea in some of my own work on [moment selection](https://doi.org/10.1016/j.jeconom.2016.07.006) and [model selection](https://doi.org/10.1002/jae.2614).]
+Whatever you choose to call it, the idea of a parameter that changes with sample size is *bizarre*, and I remember spending weeks trying to understand it when I was a graduate student. 
+How could parameters, fixed quantities that we're trying to estimate, possibly know anything about our sample size? 
+
+Do we expect parameters to be smaller when we have more data? 
+Do we expect them to be larger when we have less data?
+The answer to both questions is a resounding *NO*.
+Like all asymptotics, what I will call *local asymptotics* are nothing more than a thought experiment that we set up for mathematical convenience.
+Ideally we would derive finite sample results for every problem of interest, but this is rarely possible in practice.
+For this reason we turn to asymptotic results, such as the central limit theorem.
+Sometimes this works out OK, and sometimes it's a [disaster](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/).
+The goal of local asymptotics is to derive results that *more closely approximate* the finite sample behavior that we can understand from simple examples, in the hope that this will lead to better approximations in more complicated problems.
+In this post, I'll illustrate the usefulness of local asymptotics in the simplest example I could think of: a one-sided test for the mean of a normal distribution with known variance.
+No advanced statistics or econometrics are used below, so even if you found the preceding paragraph off-putting give the rest a go: you may be pleasantly surprised!
+
+Suppose that we observe 
+$$
+X_1, X_2, \dots, X_{n} \overset{iid}{\sim}N(\mu, 1)
+$$
+and want to test $H_0\colon \mu = 0$ against the one-sided alternative $H_1\colon \mu >0$.
+In this admittedly very simple example, the Econometrics 101 test statistic is 
+$$
+T_{n} = \sqrt{n} \bar{X}_{n} \sim N\left(\mu \sqrt{n}, 1\right)
+$$
+where $\bar{X}_{n}$ is the sample mean. 
+We reject when $\sqrt{n} \bar{X}_{n}>z_{1-\alpha}$ where $z_{1-\alpha}$ is the $1-\alpha$ quantile of a standard normal distribution. 
+Let's calculate the *power* of this test: the probability of rejecting the null hypothesis *given that it is false*.
+We find that
+$$
+\begin{eqnarray*}
+  \mbox{Power}(T_{n}) &=& P\left(\sqrt{n} \bar{X}_{n}>z_{1-\alpha}\right) = P\left(Z + \mu\sqrt{n} >z_{1-\alpha}\right)\\
+  &=&P\left(Z >z_{1-\alpha} - \mu\sqrt{n}\right) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right)
+  \end{eqnarray*}
+$$
+where $Z$ is a standard normal random variable and $\Phi$ is the standard normal CDF. 
+
+Now suppose we decided to do something completely crazy: throw away half our sample. 
+Let $\bar{X}_{n/2}$ denote the sample mean based on observations $1, 2, \dots, \lfloor N/2 \rfloor$ *only*, where $\lfloor x \rfloor$ denotes the [floor function](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions), i.e. the greatest integer less than or equal to $x$.^[If you don't like this, ignore it and pretend that $n$ is an even number!]
+We can still construct a perfectly valid test with size $\alpha$ as follows. 
+Define
+$$
+T_{n/2} = \sqrt{\lfloor n/2 \rfloor } \bar{X}_{n/2} \sim N\left(\mu \sqrt{\lfloor n/2 \rfloor }, 1\right)
+$$
+and reject if $\sqrt{n} \bar{X}_n > z_{1-\alpha}$.
+But there's an obvious problem here: there *must* be a cost for throwing away perfectly good data. 
+Indeed, if we calculate the power for this crazy test, we'll find that it's *strictly lower* than that of the sensible test based on the full sample. 
+In particular,
+$$\mbox{Power}(T_{n/2}) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right)$$
+using the same argument as above with $\lfloor N/2 \rfloor$ in place of $n$.
+Unsurprisingly, it turns out to be a bad idea to throw away half of your data!
+
+Now, for an example this simple we'd never resort to asymptotics, but suppose we did. 
+How do these two tests compare as the sample size goes to infinity? 
+The asymptotic size in this example is the same as the finite-sample size since we know the exact sampling distribution of the test statistics under the null and neither depends on sample size. 
+But what about the power? 
+We have,
+$$
+\begin{eqnarray*}
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right) \right] = 1\\
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right) \right] = 1
+  \end{eqnarray*}
+$$
+In other words, both of these tests are *consistent*: as the sample size goes to infinity, the power goes to one. 
+Think about this for a moment: we know that for *any* fixed sample size a test based on the full sample is *strictly more powerful* but in the limit this difference disappears. 
+This strongly suggests that something is wrong with comparing two tests on the basis of their asymptotic power.
+Clearly the second test is worse than the first, but the asymptotics obscure this.
+  
+You might object that I've cooked up a particularly perverse example, but it turns out that this phenomenon is quite general. 
+It's easy to find consistent tests, in fact it's difficult to find tests that *aren't* consistent. 
+But we know from simulation studies that not all consistent tests are created equal: some have *much* better finite sample power than others and it's ultimately finite sample performance that we care about.
+One way around this problem would be to only compare the finite-sample properties of different tests and never use asymptotics. 
+But we almost *never* know the exact sampling distribution of our test statistics.^[This blog post is a very special exception created for pedagogical purposes :)]
+
+This is where *local alternatives* come in.
+Rather than evaluating our tests against a *fixed* alternative $\mu$, suppose we were to evaluate it against a *sequence* of *local* alternatives that *drift towards the null* at rate $n^{-1/2}$. 
+In other words, our alternative becomes $H_{1,n} \colon \mu = \delta / \sqrt{n}$ where, for this one-sided test, $\delta > 0$. 
+If we substitute $\delta/\sqrt{n}$ for $\mu$ and take the limit as $n\rightarrow \infty$, we find
+$$
+\begin{eqnarray*}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{n}\right) \right]\\
+&=& 1 - \Phi\left(z_{1-\alpha} - \delta \right)
+\end{eqnarray*}
+$$
+and similarly
+$$
+\begin{eqnarray*}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{\lfloor n/2 \rfloor }\right) \right]\\
+&=& 1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{2}} \right)
+\end{eqnarray*}
+$$
+Wow! Our problem has disappeared! 
+The asymptotic power of the two tests now differs in essentially the same way as the finite sample power. 
+Also note that the power no longer converges to one.
+Intuitively, this is because the drifting sequence of alternatives $\delta/\sqrt{n}$ makes it "harder and harder" to reject the null as the sample size grows by shrinking *just fast enough* but not so fast that the power goes to zero. 
+This type of calculation is called a *local power analysis*. 
+A test that has asymptotic power greater than zero in such a setting is said to have "power against local alternatives."
+
+This example was a bit silly since we already knew the answer.
+But this is precisely what made it so obvious that local asymptotics make *more sense* in this setting than fixed-parameter asymptotics.
+Now that you understand this basic intuition, I hope you'll feel more confident tackling examples of local asymptotics that come up in the econometrics literature.
+

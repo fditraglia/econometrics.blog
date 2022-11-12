@@ -1,0 +1,123 @@
+---
+title: 'Local Asymptotics: The Simplest Possible Example'
+author: Francis J. DiTraglia
+date: '2022-11-12'
+slug: local-asymptotics-the-simplest-possible-example
+categories: [econometrics]
+tags: [asymptotics, power]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-12T19:23:25Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to <em>change with sample size</em>.
+This peculiar notion goes by a variety of names including “Pitman drift,” a “sequence of local alternatives,” and “local mis-specification,” and crops up in a wide range of problems from weak instruments, to model selection, to power analysis.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Whatever you choose to call it, the idea of a parameter that changes with sample size is <em>bizarre</em>, and I remember spending weeks trying to understand it when I was a graduate student.
+How could parameters, fixed quantities that we’re trying to estimate, possibly know anything about our sample size?</p>
+<p>Do we expect parameters to be smaller when we have more data?
+Do we expect them to be larger when we have less data?
+The answer to both questions is a resounding <em>NO</em>.
+Like all asymptotics, what I will call <em>local asymptotics</em> are nothing more than a thought experiment that we set up for mathematical convenience.
+Ideally we would derive finite sample results for every problem of interest, but this is rarely possible in practice.
+For this reason we turn to asymptotic results, such as the central limit theorem.
+Sometimes this works out OK, and sometimes it’s a <a href="https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/">disaster</a>.
+The goal of local asymptotics is to derive results that <em>more closely approximate</em> the finite sample behavior that we can understand from simple examples, in the hope that this will lead to better approximations in more complicated problems.
+In this post, I’ll illustrate the usefulness of local asymptotics in the simplest example I could think of: a one-sided test for the mean of a normal distribution with known variance.
+No advanced statistics or econometrics are used below, so even if you found the preceding paragraph off-putting give the rest a go: you may be pleasantly surprised!</p>
+<p>Suppose that we observe
+<span class="math display">\[
+X_1, X_2, \dots, X_{n} \overset{iid}{\sim}N(\mu, 1)
+\]</span>
+and want to test <span class="math inline">\(H_0\colon \mu = 0\)</span> against the one-sided alternative <span class="math inline">\(H_1\colon \mu &gt;0\)</span>.
+In this admittedly very simple example, the Econometrics 101 test statistic is
+<span class="math display">\[
+T_{n} = \sqrt{n} \bar{X}_{n} \sim N\left(\mu \sqrt{n}, 1\right)
+\]</span>
+where <span class="math inline">\(\bar{X}_{n}\)</span> is the sample mean.
+We reject when <span class="math inline">\(\sqrt{n} \bar{X}_{n}&gt;z_{1-\alpha}\)</span> where <span class="math inline">\(z_{1-\alpha}\)</span> is the <span class="math inline">\(1-\alpha\)</span> quantile of a standard normal distribution.
+Let’s calculate the <em>power</em> of this test: the probability of rejecting the null hypothesis <em>given that it is false</em>.
+We find that
+<span class="math display">\[
+\begin{eqnarray*}
+  \mbox{Power}(T_{n}) &amp;=&amp; P\left(\sqrt{n} \bar{X}_{n}&gt;z_{1-\alpha}\right) = P\left(Z + \mu\sqrt{n} &gt;z_{1-\alpha}\right)\\
+  &amp;=&amp;P\left(Z &gt;z_{1-\alpha} - \mu\sqrt{n}\right) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right)
+  \end{eqnarray*}
+\]</span>
+where <span class="math inline">\(Z\)</span> is a standard normal random variable and <span class="math inline">\(\Phi\)</span> is the standard normal CDF.</p>
+<p>Now suppose we decided to do something completely crazy: throw away half our sample.
+Let <span class="math inline">\(\bar{X}_{n/2}\)</span> denote the sample mean based on observations <span class="math inline">\(1, 2, \dots, \lfloor N/2 \rfloor\)</span> <em>only</em>, where <span class="math inline">\(\lfloor x \rfloor\)</span> denotes the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor function</a>, i.e. the greatest integer less than or equal to <span class="math inline">\(x\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+We can still construct a perfectly valid test with size <span class="math inline">\(\alpha\)</span> as follows.
+Define
+<span class="math display">\[
+T_{n/2} = \sqrt{\lfloor n/2 \rfloor } \bar{X}_{n/2} \sim N\left(\mu \sqrt{\lfloor n/2 \rfloor }, 1\right)
+\]</span>
+and reject if <span class="math inline">\(\sqrt{n} \bar{X}_n &gt; z_{1-\alpha}\)</span>.
+But there’s an obvious problem here: there <em>must</em> be a cost for throwing away perfectly good data.
+Indeed, if we calculate the power for this crazy test, we’ll find that it’s <em>strictly lower</em> than that of the sensible test based on the full sample.
+In particular,
+<span class="math display">\[\mbox{Power}(T_{n/2}) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right)\]</span>
+using the same argument as above with <span class="math inline">\(\lfloor N/2 \rfloor\)</span> in place of <span class="math inline">\(n\)</span>.
+Unsurprisingly, it turns out to be a bad idea to throw away half of your data!</p>
+<p>Now, for an example this simple we’d never resort to asymptotics, but suppose we did.
+How do these two tests compare as the sample size goes to infinity?
+The asymptotic size in this example is the same as the finite-sample size since we know the exact sampling distribution of the test statistics under the null and neither depends on sample size.
+But what about the power?
+We have,
+<span class="math display">\[
+\begin{eqnarray*}
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &amp;=&amp; \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right) \right] = 1\\
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &amp;=&amp; \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right) \right] = 1
+  \end{eqnarray*}
+\]</span>
+In other words, both of these tests are <em>consistent</em>: as the sample size goes to infinity, the power goes to one.
+Think about this for a moment: we know that for <em>any</em> fixed sample size a test based on the full sample is <em>strictly more powerful</em> but in the limit this difference disappears.
+This strongly suggests that something is wrong with comparing two tests on the basis of their asymptotic power.
+Clearly the second test is worse than the first, but the asymptotics obscure this.</p>
+<p>You might object that I’ve cooked up a particularly perverse example, but it turns out that this phenomenon is quite general.
+It’s easy to find consistent tests, in fact it’s difficult to find tests that <em>aren’t</em> consistent.
+But we know from simulation studies that not all consistent tests are created equal: some have <em>much</em> better finite sample power than others and it’s ultimately finite sample performance that we care about.
+One way around this problem would be to only compare the finite-sample properties of different tests and never use asymptotics.
+But we almost <em>never</em> know the exact sampling distribution of our test statistics.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>This is where <em>local alternatives</em> come in.
+Rather than evaluating our tests against a <em>fixed</em> alternative <span class="math inline">\(\mu\)</span>, suppose we were to evaluate it against a <em>sequence</em> of <em>local</em> alternatives that <em>drift towards the null</em> at rate <span class="math inline">\(n^{-1/2}\)</span>.
+In other words, our alternative becomes <span class="math inline">\(H_{1,n} \colon \mu = \delta / \sqrt{n}\)</span> where, for this one-sided test, <span class="math inline">\(\delta &gt; 0\)</span>.
+If we substitute <span class="math inline">\(\delta/\sqrt{n}\)</span> for <span class="math inline">\(\mu\)</span> and take the limit as <span class="math inline">\(n\rightarrow \infty\)</span>, we find
+<span class="math display">\[
+\begin{eqnarray*}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &amp;=&amp; \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{n}\right) \right]\\
+&amp;=&amp; 1 - \Phi\left(z_{1-\alpha} - \delta \right)
+\end{eqnarray*}
+\]</span>
+and similarly
+<span class="math display">\[
+\begin{eqnarray*}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &amp;=&amp; \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{\lfloor n/2 \rfloor }\right) \right]\\
+&amp;=&amp; 1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{2}} \right)
+\end{eqnarray*}
+\]</span>
+Wow! Our problem has disappeared!
+The asymptotic power of the two tests now differs in essentially the same way as the finite sample power.
+Also note that the power no longer converges to one.
+Intuitively, this is because the drifting sequence of alternatives <span class="math inline">\(\delta/\sqrt{n}\)</span> makes it “harder and harder” to reject the null as the sample size grows by shrinking <em>just fast enough</em> but not so fast that the power goes to zero.
+This type of calculation is called a <em>local power analysis</em>.
+A test that has asymptotic power greater than zero in such a setting is said to have “power against local alternatives.”</p>
+<p>This example was a bit silly since we already knew the answer.
+But this is precisely what made it so obvious that local asymptotics make <em>more sense</em> in this setting than fixed-parameter asymptotics.
+Now that you understand this basic intuition, I hope you’ll feel more confident tackling examples of local asymptotics that come up in the econometrics literature.</p>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I’ve used this idea in some of my own work on <a href="https://doi.org/10.1016/j.jeconom.2016.07.006">moment selection</a> and <a href="https://doi.org/10.1002/jae.2614">model selection</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>If you don’t like this, ignore it and pretend that <span class="math inline">\(n\)</span> is an even number!<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>This blog post is a very special exception created for pedagogical purposes :)<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
