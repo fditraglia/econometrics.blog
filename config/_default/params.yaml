@@ -89,7 +89,7 @@ breadcrumb:
   page_types:
     book: true
 comments:
-  provider: ''
+  provider: 'utterances'
   commentable:
     post: true
     book: true
@@ -101,6 +101,10 @@ comments:
     show_count: true
   commento:
     url: ''
+  utterances:
+    repo: 'fditraglia/econometrics.blog-comments'
+    issue_term: 'pathname'
+    theme: 'github-light'
 search:
   provider: wowchemy
   algolia:
