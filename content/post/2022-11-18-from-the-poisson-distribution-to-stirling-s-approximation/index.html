@@ -1,0 +1,280 @@
+---
+title: From the Poisson Distribution to Stirling's Approximation
+author: Francis J. DiTraglia
+date: '2022-11-18'
+slug: from-the-poisson-distribution-to-stirling-s-approximation
+categories: [computing, R, probability]
+tags: [CLT, Poisson]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-18T13:06:18Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>The <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Poisson distribution</a> is the most famous probability model for <em>counts</em>, non-negative integer values. Many real-world phenomena are well approximated by this distribution, including the <a href="https://www.jstor.org/stable/41138751">number of German bombs</a> that landed in 1/4km grid squares in south London during WWII.
+Formally, we say that a discrete random variable <span class="math inline">\(X\)</span> follows a Poisson distribution with rate parameter <span class="math inline">\(\mu &gt; 0\)</span>, abbreviated <span class="math inline">\(X \sim \text{Poisson}(\mu)\)</span>, if <span class="math inline">\(X\)</span> has support set <span class="math inline">\(\{0, 1, 2, ...\}\)</span> and probability mass function
+<span class="math display">\[
+p(x) \equiv \mathbb{P}(X=x) = \frac{e^{-\mu }\mu^x}{x!}.
+\]</span>
+Using some <a href="https://drive.explaineverything.com/thecode/CHAKTHR">clever algebra with sums</a> it’s not too hard to show that the rate parameter, <span class="math inline">\(\mu\)</span>, is <em>both the mean and the variance</em> of <span class="math inline">\(X\)</span>.</p>
+<div id="numerical-problems-try-taking-logs." class="section level2">
+<h2>Numerical problems? Try taking logs.</h2>
+<p>Now, suppose that we wanted to plot the pmf of a Poisson RV with rate <span class="math inline">\(\mu = 171\)</span>.
+The R function for the pmf of a Poisson RV is <code>dpois()</code>, so we can make our plot as follows (indicating the rate parameter as a vertical line)</p>
+<pre class="r"><code>library(tidyverse)
+tibble(x = 0:300) %&gt;% 
+  mutate(p = dpois(x, 171)) %&gt;%
+  ggplot(aes(x, p)) +
+  geom_point() +
+  geom_vline(xintercept = 171) +
+  ylab(&#39;Poisson(171) pmf&#39;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>For such a large value of <span class="math inline">\(\mu\)</span>, this distribution looks decidedly bell-shaped.
+And indeed, it turns out to be extremely well-approximated by a normal distribution, as we’ll see below.
+It’s also clear that <span class="math inline">\(X\)</span> is most likely to take on a value relatively close to 171.
+We can use <code>dpois()</code> to calculate the exact probability that <span class="math inline">\(X = 171\)</span> as follows: the answer is just over 3%.</p>
+<pre class="r"><code>dpois(171, 171)</code></pre>
+<pre><code>## [1] 0.03049301</code></pre>
+<p>Now let’s try to calculate exactly the same probability <em>by hand</em>, that is by using the formula for the Poisson pmf from above.</p>
+<pre class="r"><code>my_dpois &lt;- function(x, mu) {
+  exp(-mu) * mu^x / factorial(x)
+}
+my_dpois(171, 171)</code></pre>
+<pre><code>## [1] NaN</code></pre>
+<p>What gives?!
+The abbreviation <code>NaN</code> stands for “not a number.”
+The problem in this case is that both the numerator and denominator of the fraction inside of <code>my_dpois()</code> evaluate to infinity when <code>mu</code> and <code>x</code> are 171, and the ratio <span class="math inline">\(\infty/\infty\)</span> is undefined.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>c(numerator = exp(-171) * 171^171, denominator = factorial(171))</code></pre>
+<pre><code>##   numerator denominator 
+##         Inf         Inf</code></pre>
+<p>As I discussed in an <a href="https://www.econometrics.blog/post/street-fighting-numerical-analysis-part-1/">earlier post</a>, computers can only store a finite number of distinct numeric values.
+It’s not literally true that <code>factorial(171)</code> equals <span class="math inline">\(\infty\)</span>.
+What’s really going on here is that <code>factorial(171)</code> is <em>such a large number</em> that it can’t be stored as a <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">floating-point number</a>.
+In this case there’s a very simple fix.
+If you haven’t seen this trick before, it’s a helpful one to keep up your sleeves: <strong>if you run into numerical problems with very large or very small values, try taking logs.</strong><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+The log of the Poisson pmf is simply
+<span class="math display">\[
+\log p(x) = -\mu + x \log(\mu) - \log(x!).
+\]</span>
+R even has a convenient, built-in function for evaluating the natrual log of a factorial: <code>lfactorial()</code>.
+Now we can compute the log of our desired probability as follows:</p>
+<pre class="r"><code>-171 + 171 * log(171) - lfactorial(171)</code></pre>
+<pre><code>## [1] -3.490258</code></pre>
+<p>To obtain the probability, simply exponentiate:</p>
+<pre class="r"><code>exp(-171 + 171 * log(171) - lfactorial(171))</code></pre>
+<pre><code>## [1] 0.03049301</code></pre>
+<p>Of course this just passes the buck to <code>lfactorial()</code>. So how does this mysterious function work? The bad news is that I’m not going to tell you; the good news is that I’m going to show you something <em>even better</em>, namely <a href="https://en.wikipedia.org/wiki/Stirling%27s_approximation">Stirling’s approximation</a>: a way to understand now <span class="math inline">\(n!\)</span> behaves <em>qualitatively</em> that turns out to give a pretty darned good approximation to <code>lfactorial()</code>.
+This may seem like an odd topic for a blog devoted to econometrics and statistics, so allow me to offer a few words of justification.
+First, computations involving <span class="math inline">\(n!\)</span> come up all the time in applied work.
+Second, it can be extremely helpful for certain theoretical arguments to have good approximations to <span class="math inline">\(n!\)</span> for large values of <span class="math inline">\(n\)</span>.
+Finally, and most importantly from my perspective, the heuristic argument I’ll use below relies on none other than the <a href="https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/">central limit theorem</a>.
+So even if you’ve seen a more traditional proof of Stirling’s approximation, I hope you’ll enjoy this alternative approach.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+</div>
+<div id="stirlings-approximation" class="section level2">
+<h2>Stirling’s Approximation</h2>
+<p>The key step in our argument is to show that the pmf of a <span class="math inline">\(\text{Poisson}(\mu)\)</span> random variable is well-approximated by the <span class="math inline">\(\text{Normal}(\mu, \mu)\)</span> density.
+This explains the bell-shaped curve that we plotted above.
+To obtain this result, we’ll use the central limit theorem.
+But there is one fact that you will need to take on faith if you don’t already know it: if <span class="math inline">\(X_1 \sim \text{Poisson}(\mu_1)\)</span> is independent of <span class="math inline">\(X_2 \sim \text{Poisson}(\mu_2)\)</span> then <span class="math inline">\(X_1 + X_2 \sim \text{Poisson}(\mu_1 + \mu_2)\)</span>.
+Proceeding <a href="https://en.wikipedia.org/wiki/Mathematical_induction">by induction</a> we can view a Poisson(171) random variable as the sum of 171 independent Poisson(1) random variables.
+More generally, we can view a Poisson RV with rate parameter <span class="math inline">\(n\)</span> as the num of <span class="math inline">\(n\)</span> iid Poisson(1) random variables.
+By the <a href="https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/">central limit theorem</a>, it follows that
+<span class="math display">\[
+\sqrt{n}(\bar{X}_n - 1) \rightarrow_d \text{N}(0,1)
+\]</span>
+since the mean and variance of a Poisson(1) RV are both equal to one.
+From a practical perspective, this means that <span class="math inline">\(\sqrt{n}(\bar{X}_n - 1)\)</span> is approximately equal to <span class="math inline">\(Z\)</span>, a standard normal random variable.
+Re-arranging,
+<span class="math display">\[
+X_1 + X_2 + ... + X_n = n\bar{X}_n = n + \sqrt{n} \times [\sqrt{n}(\bar{X}_n - 1)] \approx n + \sqrt{n} Z
+\]</span>
+and <span class="math inline">\(n + \sqrt{n} Z\)</span> is simply a <span class="math inline">\(\text{N}(n, n)\)</span> random variable!
+This is a quick way of seeing why the <span class="math inline">\(\text{Poisson}(\mu)\)</span> distribution is well-approximated by the <span class="math inline">\(\text{N}(\mu, \mu)\)</span> distribution when <span class="math inline">\(\mu\)</span> is large.</p>
+<p>Now let’s run with this.
+As we just saw, for large <span class="math inline">\(\mu\)</span> the Poisson<span class="math inline">\((\mu)\)</span> pmf is well-approximated by the Normal<span class="math inline">\((\mu, \mu)\)</span> density:
+<span class="math display">\[
+\frac{e^{-\mu}\mu^x}{x!} \approx \frac{1}{\sqrt{2\pi \mu}} \exp\left\{ -\frac{1}{2}\left( \frac{x - \mu}{\sqrt{\mu}}\right)^2\right\}
+\]</span>
+This approximation is particularly accurate for <span class="math inline">\(x\)</span> near the <em>mean</em>. This is convenient, because substituting <span class="math inline">\(\mu\)</span> for <span class="math inline">\(x\)</span> considerably simplifies the right hand side:
+<span class="math display">\[
+\frac{e^{-\mu}\mu^\mu}{\mu!} \approx \frac{1}{\sqrt{2\pi\mu}}
+\]</span>
+Re-arranging, we obtain
+<span class="math display">\[
+\mu! \approx \mu^\mu e^{-\mu} \sqrt{2 \pi \mu}
+\]</span>
+Taking logs of both sides gives:
+<span class="math display">\[
+\log(\mu!) \approx \mu \log(\mu) - \mu + \frac{1}{2} \log(2 \pi \mu)
+\]</span>
+Writing this with <span class="math inline">\(n\)</span> in place of <span class="math inline">\(\mu\)</span> gives the following:
+<span class="math display">\[
+\log(n!) \approx n \log(n) - n + \frac{1}{2} \log(2 \pi n)
+\]</span>
+This is called <em>Stirling’s Approximation</em>. The usual way of writing this excludes the <span class="math inline">\(\log(2\pi n)/2\)</span> term, yielding <span class="math inline">\(\log(n!) \approx n\log(n) - n\)</span>, which is fairly easy to remember. Including the extra term, however, gives increased accuracy for smaller values of <span class="math inline">\(n\)</span>.
+While I haven’t formally proved this, it turns out that
+<span class="math display">\[
+\log(n!) \sim n \log(n) - n + \frac{1}{2} \log(2 \pi n)
+\]</span>
+as <span class="math inline">\(n \rightarrow \infty\)</span>. In other words, the ratio of the LHS and RHS tends to one in the large <span class="math inline">\(n\)</span> limit.
+Perhaps surprisingly, this approximately is extremely accurate even for fairly small values of <span class="math inline">\(n\)</span>, as we can see by comparing it against <code>lfactorial()</code>.</p>
+<pre class="r"><code>stirling1 &lt;- function(n) n * log(n) - n 
+stirling2 &lt;- function(n) n * log(n) - n + 0.5 * log(2 * pi * n)
+tibble(n = 1:20) %&gt;%
+  mutate(Stirling1 = stirling1(n), 
+         Stirling2 = stirling2(n), 
+         R = lfactorial(n)) %&gt;%
+  knitr::kable(digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">n</th>
+<th align="right">Stirling1</th>
+<th align="right">Stirling2</th>
+<th align="right">R</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">-1.000</td>
+<td align="right">-0.081</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">-0.614</td>
+<td align="right">0.652</td>
+<td align="right">0.693</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.296</td>
+<td align="right">1.764</td>
+<td align="right">1.792</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.545</td>
+<td align="right">3.157</td>
+<td align="right">3.178</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">3.047</td>
+<td align="right">4.771</td>
+<td align="right">4.787</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">4.751</td>
+<td align="right">6.565</td>
+<td align="right">6.579</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">6.621</td>
+<td align="right">8.513</td>
+<td align="right">8.525</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">8.636</td>
+<td align="right">10.594</td>
+<td align="right">10.605</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">10.775</td>
+<td align="right">12.793</td>
+<td align="right">12.802</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">13.026</td>
+<td align="right">15.096</td>
+<td align="right">15.104</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">15.377</td>
+<td align="right">17.495</td>
+<td align="right">17.502</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">17.819</td>
+<td align="right">19.980</td>
+<td align="right">19.987</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="right">20.344</td>
+<td align="right">22.546</td>
+<td align="right">22.552</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="right">22.947</td>
+<td align="right">25.185</td>
+<td align="right">25.191</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="right">25.621</td>
+<td align="right">27.894</td>
+<td align="right">27.899</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="right">28.361</td>
+<td align="right">30.667</td>
+<td align="right">30.672</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="right">31.165</td>
+<td align="right">33.500</td>
+<td align="right">33.505</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="right">34.027</td>
+<td align="right">36.391</td>
+<td align="right">36.395</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="right">36.944</td>
+<td align="right">39.335</td>
+<td align="right">39.340</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="right">39.915</td>
+<td align="right">42.331</td>
+<td align="right">42.336</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="epilogue" class="section level2">
+<h2>Epilogue</h2>
+<p>I have a bad habit of trying to add a “moral” or “lesson” to the end of my posts, but I suppose there’s no point trying to break the habit today! While there are easier ways to derive Stirling’s approximation, there are two things I enjoy about this one. First, we get a more accurate approximation than <span class="math inline">\(n \log(n) - n\)</span> with practically no effort. Second, making unexpected connections between facts that we already know both <em>deepens our understanding</em> and helps us “compress” information. If you ever forget Stirling’s approximation, now you know how to very quickly re-derive it on the spot!</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>There’s an important but subtle difference between <code>NA</code> and <code>NaN</code>. The former is synonymous with “missing.” If <code>x</code> equals <code>NA</code> this means “we don’t know the value of <code>x</code>.” If instead <code>x</code> equals <code>NaN</code>, this means “<code>x</code> isn’t missing, but it’s not a well-defined numeric value either.”<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Unless otherwise specified log always means “natural logarithm” on this blog :)<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>I first came across this argument from the late David MacKay’s fantastic book <a href="http://www.inference.org.uk/mackay/itila/book.html">Information Theory, Inference, and Learning Algorithms</a>. His book on <a href="http://www.withouthotair.com/">sustainable energy</a>, while a bit out-of-date at this point, is also spectacularly good.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>

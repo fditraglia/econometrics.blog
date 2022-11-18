@@ -1,0 +1,145 @@
+---
+title: From the Poisson Distribution to Stirling's Approximation
+author: Francis J. DiTraglia
+date: '2022-11-18'
+slug: from-the-poisson-distribution-to-stirling-s-approximation
+categories: [computing, R, probability]
+tags: [CLT, Poisson]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2022-11-18T13:06:18Z'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+The [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution) is the most famous probability model for *counts*, non-negative integer values. Many real-world phenomena are well approximated by this distribution, including the [number of German bombs](https://www.jstor.org/stable/41138751) that landed in 1/4km grid squares in south London during WWII.
+Formally, we say that a discrete random variable $X$ follows a Poisson distribution with rate parameter $\mu > 0$, abbreviated  $X \sim \text{Poisson}(\mu)$, if $X$ has support set $\{0, 1, 2, ...\}$ and probability mass function 
+$$
+p(x) \equiv \mathbb{P}(X=x) = \frac{e^{-\mu }\mu^x}{x!}.
+$$
+Using some [clever algebra with sums](https://drive.explaineverything.com/thecode/CHAKTHR) it's not too hard to show that the rate parameter, $\mu$, is *both the mean and the variance* of $X$. 
+
+## Numerical problems? Try taking logs.
+Now, suppose that we wanted to plot the pmf of a Poisson RV with rate $\mu = 171$.
+The R function for the pmf of a Poisson RV is `dpois()`, so we can make our plot as follows (indicating the rate parameter as a vertical line)
+```{r, message = FALSE}
+library(tidyverse)
+tibble(x = 0:300) %>% 
+  mutate(p = dpois(x, 171)) %>%
+  ggplot(aes(x, p)) +
+  geom_point() +
+  geom_vline(xintercept = 171) +
+  ylab('Poisson(171) pmf')
+```
+
+For such a large value of $\mu$, this distribution looks decidedly bell-shaped.
+And indeed, it turns out to be extremely well-approximated by a normal distribution, as we'll see below.
+It's also clear that $X$ is most likely to take on a value relatively close to 171.
+We can use `dpois()` to calculate the exact probability that $X = 171$ as follows: the answer is just over 3%.
+```{r}
+dpois(171, 171)
+```
+Now let's try to calculate exactly the same probability *by hand*, that is by using the formula for the Poisson pmf from above.
+```{r}
+my_dpois <- function(x, mu) {
+  exp(-mu) * mu^x / factorial(x)
+}
+my_dpois(171, 171)
+```
+What gives?!
+The abbreviation `NaN` stands for "not a number." 
+The problem in this case is that both the numerator and denominator of the fraction inside of `my_dpois()` evaluate to infinity when `mu` and `x` are 171, and the ratio $\infty/\infty$ is undefined.^[There's an important but subtle difference between `NA` and `NaN`. The former is synonymous with "missing." If `x` equals `NA` this means "we don't know the value of `x`." If instead `x` equals `NaN`, this means "`x` isn't missing, but it's not a well-defined numeric value either."]
+```{r}
+c(numerator = exp(-171) * 171^171, denominator = factorial(171))
+```
+As I discussed in an [earlier post](https://www.econometrics.blog/post/street-fighting-numerical-analysis-part-1/), computers can only store a finite number of distinct numeric values. 
+It's not literally true that `factorial(171)` equals $\infty$.
+What's really going on here is that `factorial(171)` is *such a large number* that it can't be stored as a [floating-point number](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html). 
+In this case there's a very simple fix. 
+If you haven't seen this trick before, it's a helpful one to keep up your sleeves: **if you run into numerical problems with very large or very small values, try taking logs.**^[Unless otherwise specified log always means "natural logarithm" on this blog :)]
+The log of the Poisson pmf is simply
+$$
+\log p(x) = -\mu + x \log(\mu) - \log(x!).
+$$
+R even has a convenient, built-in function for evaluating the natrual log of a factorial: `lfactorial()`.
+Now we can compute the log of our desired probability as follows:
+```{r}
+-171 + 171 * log(171) - lfactorial(171)
+```
+To obtain the probability, simply exponentiate:
+```{r}
+exp(-171 + 171 * log(171) - lfactorial(171))
+```
+
+Of course this just passes the buck to `lfactorial()`. So how does this mysterious function work? The bad news is that I'm not going to tell you; the good news is that I'm going to show you something *even better*, namely [Stirling's approximation](https://en.wikipedia.org/wiki/Stirling%27s_approximation): a way to understand now $n!$ behaves *qualitatively* that turns out to give a pretty darned good approximation to `lfactorial()`. 
+This may seem like an odd topic for a blog devoted to econometrics and statistics, so allow me to offer a few words of justification. 
+First, computations involving $n!$ come up all the time in applied work. 
+Second, it can be extremely helpful for certain theoretical arguments to have good approximations to $n!$ for large values of $n$. 
+Finally, and most importantly from my perspective, the heuristic argument I'll use below relies on none other than the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/).
+So even if you've seen a more traditional proof of Stirling's approximation, I hope you'll enjoy this alternative approach.^[I first came across this argument from the late David MacKay's fantastic book [Information Theory, Inference, and Learning Algorithms](http://www.inference.org.uk/mackay/itila/book.html). His book on [sustainable energy](http://www.withouthotair.com/), while a bit out-of-date at this point, is also spectacularly good.]
+
+## Stirling's Approximation
+The key step in our argument is to show that the pmf of a $\text{Poisson}(\mu)$ random variable is well-approximated by the $\text{Normal}(\mu, \mu)$ density.
+This explains the bell-shaped curve that we plotted above.
+To obtain this result, we'll use the central limit theorem.
+But there is one fact that you will need to take on faith if you don't already know it: if $X_1 \sim \text{Poisson}(\mu_1)$ is independent of $X_2 \sim \text{Poisson}(\mu_2)$ then $X_1 + X_2 \sim \text{Poisson}(\mu_1 + \mu_2)$.
+Proceeding [by induction](https://en.wikipedia.org/wiki/Mathematical_induction) we can view a Poisson(171) random variable as the sum of 171 independent Poisson(1) random variables.
+More generally, we can view a Poisson RV with rate parameter $n$ as the num of $n$ iid Poisson(1) random variables.
+By the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/), it follows that 
+$$
+\sqrt{n}(\bar{X}_n - 1) \rightarrow_d \text{N}(0,1)
+$$
+since the mean and variance of a Poisson(1) RV are both equal to one.
+From a practical perspective, this means that $\sqrt{n}(\bar{X}_n - 1)$ is approximately equal to $Z$, a standard normal random variable.
+Re-arranging, 
+$$
+X_1 + X_2 + ... + X_n = n\bar{X}_n = n + \sqrt{n} \times [\sqrt{n}(\bar{X}_n - 1)] \approx n + \sqrt{n} Z
+$$
+and $n + \sqrt{n} Z$ is simply a $\text{N}(n, n)$ random variable!
+This is a quick way of seeing why the $\text{Poisson}(\mu)$ distribution is well-approximated by the $\text{N}(\mu, \mu)$ distribution when $\mu$ is large. 
+
+Now let's run with this.
+As we just saw, for large $\mu$ the Poisson$(\mu)$ pmf is well-approximated by the Normal$(\mu, \mu)$ density:
+$$
+\frac{e^{-\mu}\mu^x}{x!} \approx \frac{1}{\sqrt{2\pi \mu}} \exp\left\{ -\frac{1}{2}\left( \frac{x - \mu}{\sqrt{\mu}}\right)^2\right\}
+$$
+This approximation is particularly accurate for $x$ near the *mean*. This is convenient, because substituting $\mu$ for $x$ considerably simplifies the right hand side:
+$$
+\frac{e^{-\mu}\mu^\mu}{\mu!} \approx \frac{1}{\sqrt{2\pi\mu}} 
+$$
+Re-arranging, we obtain
+$$
+\mu! \approx \mu^\mu e^{-\mu} \sqrt{2 \pi \mu}
+$$
+Taking logs of both sides gives:
+$$
+\log(\mu!) \approx \mu \log(\mu) - \mu + \frac{1}{2} \log(2 \pi \mu)
+$$
+Writing this with $n$ in place of $\mu$ gives the following: 
+$$
+\log(n!) \approx n \log(n) - n + \frac{1}{2} \log(2 \pi n)
+$$
+This is called *Stirling's Approximation*. The usual way of writing this excludes the $\log(2\pi n)/2$ term, yielding $\log(n!) \approx n\log(n) - n$, which is fairly easy to remember. Including the extra term, however, gives increased accuracy for smaller values of $n$. 
+While I haven't formally proved this, it turns out that 
+$$
+\log(n!) \sim n \log(n) - n + \frac{1}{2} \log(2 \pi n)
+$$
+as $n \rightarrow \infty$. In other words, the ratio of the LHS and RHS tends to one in the large $n$ limit.
+Perhaps surprisingly, this approximately is extremely accurate even for fairly small values of $n$, as we can see by comparing it against `lfactorial()`.
+```{r, message = FALSE}
+stirling1 <- function(n) n * log(n) - n 
+stirling2 <- function(n) n * log(n) - n + 0.5 * log(2 * pi * n)
+tibble(n = 1:20) %>%
+  mutate(Stirling1 = stirling1(n), 
+         Stirling2 = stirling2(n), 
+         R = lfactorial(n)) %>%
+  knitr::kable(digits = 3)
+```
+
+## Epilogue
+I have a bad habit of trying to add a "moral" or "lesson" to the end of my posts, but I suppose there's no point trying to break the habit today! While there are easier ways to derive Stirling's approximation, there are two things I enjoy about this one. First, we get a more accurate approximation than $n \log(n) - n$ with practically no effort. Second, making unexpected connections between facts that we already know both *deepens our understanding* and helps us "compress" information. If you ever forget Stirling's approximation, now you know how to very quickly re-derive it on the spot!  
