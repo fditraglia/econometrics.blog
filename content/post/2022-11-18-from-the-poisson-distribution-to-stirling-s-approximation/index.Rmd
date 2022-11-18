@@ -1,5 +1,5 @@
 ---
-title: From the Poisson Distribution to Stirling's Approximation
+title: "From the Poisson Distribution to Stirling's Approximation"
 author: Francis J. DiTraglia
 date: '2022-11-18'
 slug: from-the-poisson-distribution-to-stirling-s-approximation
