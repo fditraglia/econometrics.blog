@@ -1,0 +1,339 @@
+---
+title: 'Why Econometrics is Confusing Part II: The Independence Zoo'
+author: Francis J. DiTraglia
+date: '2023-01-01'
+slug: why-econometrics-is-confusing-part-ii-the-independence-zoo
+categories: [econometrics]
+tags: [dependence,correlation,mean independence]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-01-01T15:56:52-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical introductory econometrics course moves back and forth between different notions of dependence, stopping occasionally to mention that they’re not equivalent but never fully explaining why, on the premise that “you’ve certainly already learned this in your introductory probability and statistics course.” I remember finding this extremely frustrating as a student, but only recently managed to translate this frustration into meaningful changes in my own teaching.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Building on some of my recent teaching materials, this post is a field guide to the menagerie–or at least petting zoo–of “dependence” notions that appear regularly in econometrics. We’ll examine each property on its own along with the relationships between them, using the simple examples to build your intuition. Since a picture is worth a thousand words, here’s one that summarizes the entire post:</p>
+<!-- Note that the following requires the magick and pdftools R packages. These can be installed from cran.-->
+<div class="figure"><span style="display:block;" id="fig:tikz-ex"></span>
+<img src="{{< blogdown/postref >}}index_files/figure-html/tikz-ex-1.png" alt="Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another." width="480" />
+<p class="caption">
+Figure 1: Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another.
+</p>
+</div>
+<div id="prerequisites" class="section level2">
+<h2>Prerequisites</h2>
+<p>While written at an introductory level, this post assumes basic familiarity with calculations involving discrete and continuous random variables.
+In particular, I assume that:</p>
+<ul>
+<li>You know the definitions of expected value, variance, covariance, and correlation.</li>
+<li>You are comfortable working with joint, marginal, and conditional distributions of a pair of discrete random variables.</li>
+<li>You understand the uniform distribution and how to compute its moments (mean, variance, etc.).</li>
+<li>You’ve encountered the notion of conditional expectation and the law of iterated expectations.</li>
+</ul>
+<p>If you’re a bit rusty on this material, lectures 7-11 from <a href="http://ditraglia.com/Econ103Public/slides/lecture_slides.pdf">these slides</a> should be helpful. For bivariate, discrete distributions I also suggest watching <a href="https://vimeo.com/119881985">this video</a> from 1:07:00 to the end and <a href="https://vimeo.com/141473625">this other video</a> from 0:00:00 up to the one hour mark.</p>
+</div>
+<div id="two-examples" class="section level2">
+<h2>Two Examples</h2>
+<div id="example-1---discrete-rvs-xy" class="section level3">
+<h3>Example #1 - Discrete RVs <span class="math inline">\((X,Y)\)</span></h3>
+<p>My first example involves two discrete random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> with joint probability mass function <span class="math inline">\(p_{XY}(x,y)\)</span> given by</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right"></th>
+<th align="center"><span class="math inline">\(Y=0\)</span></th>
+<th align="center"><span class="math inline">\(Y=1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><span class="math inline">\(X = -1\)</span></td>
+<td align="center"><span class="math inline">\(1/3\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td align="right"><span class="math inline">\(X = 0\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+<td align="center"><span class="math inline">\(1/3\)</span></td>
+</tr>
+<tr class="odd">
+<td align="right"><span class="math inline">\(X= 1\)</span></td>
+<td align="center"><span class="math inline">\(1/3\)</span></td>
+<td align="center"><span class="math inline">\(0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Even without doing any math, we see that knowing <span class="math inline">\(X\)</span> conveys information about <span class="math inline">\(Y\)</span>, and <em>vice-versa</em>. For example, if <span class="math inline">\(X = -1\)</span> then we know that <span class="math inline">\(Y\)</span> must equal zero. Similarly, if <span class="math inline">\(Y=1\)</span> then <span class="math inline">\(X\)</span> must equal zero. Spend a bit of time thinking about this joint distribution before reading further. We’ll have plenty of time for mathematics below, but it’s always worth seeing where our intuition takes us <em>before</em> calculating everything.</p>
+<p>To streamline our discussion below, it will be helpful to work out a few basic results about <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. A quick calculation with <span class="math inline">\(p_{XY}\)</span> shows that
+<span class="math display">\[
+\mathbb{E}(XY) \equiv \sum_{\text{all } x} \sum_{\text{all } y}= x y \cdot p_{XY}(x,y) = 0.
+\]</span>
+Calculating the marginal pmfs for <span class="math inline">\(X\)</span> we see that
+<span class="math display">\[
+p_X(-1) = p_X(0) = p_X(1) = 1/3 \implies \mathbb{E}(X) \equiv \sum_{\text{all } x} x \cdot p_X(x) = 0.
+\]</span>
+Similarly, calculating the marginal pmf of <span class="math inline">\(Y\)</span>, we obtain
+<span class="math display">\[
+p_Y(0) = 2/3,\, p_Y(1) = 1/3 \implies \mathbb{E}(Y) \equiv \sum_{\text{all } y} p_Y(y) = 1/3.
+\]</span>
+We’ll use these results as ingredients below as we explain and relate three key notions of dependence: <em>correlation</em>, <em>conditional mean independence</em>, and <em>statistical independence</em>.</p>
+</div>
+<div id="example-2---continuous-rvs-wz" class="section level3">
+<h3>Example #2 - Continuous RVs <span class="math inline">\((W,Z)\)</span></h3>
+<p>My second example concerns two continuous random variables <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>, where <span class="math inline">\(W \sim \text{Uniform}(-1, 1)\)</span> and <span class="math inline">\(Z = W^2\)</span>.
+In this example, <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are very strongly related: if I tell you that the realization of <span class="math inline">\(W\)</span> is <span class="math inline">\(w\)</span>, then you know for sure that the realization of <span class="math inline">\(Z\)</span> must be <span class="math inline">\(w^2\)</span>. Again, keep this intuition in mind as we work through the mathematics below.</p>
+<p>In the remainder of the post, we’ll find it helpful to refer to a few properties of <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>, namely
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}[W] &amp;\equiv \int_{-\infty}^\infty w\cdot f_W(w)\, dw = \int_{-1}^1 w\cdot \frac{1}{2}\,dw = \left. \frac{w^2}{4}\right|_{-1}^1 = 0\\
+\mathbb{E}[Z] &amp;\equiv \mathbb{E}[W^2] = \int_{-\infty}^{\infty} w^2 \cdot f_W(w)\, dw = \int_{-1}^1 w^2 \cdot \frac{1}{2} \, dw = \left. \frac{w^3}{6}\right|_{-1}^1 = \frac{1}{3}\\
+\mathbb{E}[WZ] &amp;= \mathbb{E}[W^3] \equiv \int_{-\infty}^\infty w^3 \cdot f_W(w)\, dw =\int_{-1}^1 w^3 \cdot \frac{1}{2}\, dw = \left. \frac{w^4}{8}  \right|_{-1}^1 = 0.
+\end{aligned}
+\]</span>
+Since <span class="math inline">\(W\)</span> is uniform on the interval <span class="math inline">\([-1,1]\)</span>, its pdf is simply <span class="math inline">\(1/2\)</span> on this interval, and zero otherwise.
+All else equal, I prefer easy integration problems!</p>
+<!-- # Example #3
+**This example is too complicated when it comes to calculating $E(V|U)$. The post is getting too long already, so ditch this one and just finish up based on the other two examples.** 
+
+$U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need to think about whether the math is too complicated here. Maybe it would be better to have a Uniform(-1,1) conditional on $V=0$ and a Uniform$(-1-v, 1+v)$ conditional on $V=1$? The idea of this example is to show that conditional mean independence does *not* imply independence. This is relevant in econometrics courses when studies encounter heteroskedasticity. Poisson regression is a useful case here, and robust standard errors. Don't get too deep into this, but I could provide some references for further reading. 
+-->
+</div>
+</div>
+<div id="uncorrelatedness" class="section level2">
+<h2>Uncorrelatedness</h2>
+<p>Recall that the correlation between two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is defined as
+<span class="math display">\[
+\text{Corr}(X,Y) \equiv \frac{\text{Cov}(X,Y)}{\text{SD}(X)\text{SD}(Y)} = \frac{\mathbb{E}[(X - \mu_X)(Y - \mu_Y)]}{\sqrt{\mathbb{E}[(X - \mu_X)^2]\mathbb{E}[(Y - \mu_Y)^2]}}
+\]</span>
+where <span class="math inline">\(\mu_X \equiv \mathbb{E}(X)\)</span> and <span class="math inline">\(\mu_Y \equiv \mathbb{E}(Y)\)</span>. We say that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>uncorrelated</strong> if <span class="math inline">\(\text{Corr}(X,Y)= 0\)</span>. Unless <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both constants their variances must be positive. This means that the denominator of our expression for <span class="math inline">\(\text{Corr}(X,Y)\)</span> is likewise positive.
+It follows that <em>zero correlation is the same thing as zero covariance</em>. Correlation is simply covariance <em>rescaled</em> so that the units of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> cancel out and the result always lies between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>.</p>
+<p>Correlation and covariance are both measures of <em>linear dependence</em>. If <span class="math inline">\(X\)</span> is, on average, above its mean when <span class="math inline">\(Y\)</span> is above its mean, then <span class="math inline">\(\text{Corr}(X,Y)\)</span> and <span class="math inline">\(\text{Cov}(X,Y)\)</span> are both positive. If <span class="math inline">\(X\)</span> is, on average, below its mean when <span class="math inline">\(Y\)</span> is above its mean, then <span class="math inline">\(\text{Corr}(X,Y)\)</span> and <span class="math inline">\(\text{Cov}(X,Y)\)</span> are both negative. If there is, on average, no linear relationship <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, then both the correlation and covariance between them are zero. Using the “shortcut formula” for covariance, namely
+<span class="math display">\[
+\text{Cov}(X,Y) \equiv \mathbb{E}[(X - \mu_X)(Y - \mu_Y)] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y],
+\]</span>
+it follows that uncorrelatedness is equivalent to
+<span class="math display">\[
+\mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y].
+\]</span>
+Rendering this in English rather than mathematics,</p>
+<blockquote>
+<p>Two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>uncorrelated</strong> if and only if the expectation of their product equals the product of their expectations.</p>
+</blockquote>
+<div id="example-1-x-and-y-are-uncorrelated." class="section level3">
+<h3>Example #1: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated.</h3>
+<p>In Example #1 from above, <span class="math inline">\(\mathbb{E}[XY]=0\)</span> and <span class="math inline">\(\mathbb{E}(X)\mathbb{E}(Y) = 0 \times 1/3 = 0\)</span> so <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated. Lack of correlation is one possible way in which two random variables can be thought of as “unrelated.” But it is a relatively <em>weak</em> property. Indeed, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are in fact <em>highly dependent</em> in Example #1. For example, if <span class="math inline">\(X=-1\)</span> then we know for sure that <span class="math inline">\(Y=0\)</span>. I simply cooked up the numbers to ensure that <span class="math inline">\(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\)</span> in spite of this.</p>
+</div>
+<div id="example-2-w-and-z-are-uncorrelated." class="section level3">
+<h3>Example #2: <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are uncorrelated.</h3>
+<p>Because Example #1 is discrete, it can be a bit tricky to think about what it would mean for a dependence relationship to be <em>nonlinear</em>. Here Example #2 can help. As mentioned above, there is clearly a relationship between <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span>. But this relationship is <em>nonlinear</em> in that <span class="math inline">\(Z\)</span> is a <em>quadratic</em> function of <span class="math inline">\(X\)</span>.
+Since <span class="math inline">\(\mathbb{E}(WZ) = 0\)</span> and <span class="math inline">\(\mathbb{E}(W) \times \mathbb{E}(Z) = 0 \times \mathbb{E}(Z) = 0\)</span>, we see that <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are <em>uncorrelated</em>. Another way to see this is by simulating some data with the same properties as Example #2</p>
+<pre class="r"><code>set.seed(1983)
+n_sims &lt;- 250
+w &lt;- runif(n_sims, -1, 1)
+z &lt;- w^2
+cor(w, z)</code></pre>
+<pre><code>## [1] 0.008379101</code></pre>
+<pre class="r"><code>plot(w, z)
+abline(lm(w ~ z))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>The regression line is flat despite there being an obvious relationship between <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>. When <span class="math inline">\(W\)</span> is positive, there is a positive relationship between the two RVs; but when <span class="math inline">\(W\)</span> is negative the picture is reverses. The line of best fit “averages out” the increasing and decreasing relationships on either side of zero to give an overall slope of zero.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+</div>
+</div>
+<div id="conditional-mean-independence" class="section level2">
+<h2>Conditional Mean Independence</h2>
+<p>We say that <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> if <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{E}(Y)\)</span>. In words,</p>
+<blockquote>
+<p><span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> if the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span> equals the unconditional mean of <span class="math inline">\(Y\)</span>.</p>
+</blockquote>
+<p>Just to make things confusing, this property is sometimes called “conditional mean independence” and sometimes called simply “mean independence.” The terms are completely interchangeagle. Reversing the roles of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, we say that <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span> if the conditional mean of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y\)</span> is the same as the unconditional mean of <span class="math inline">\(X\)</span>.
+<strong>Spoiler alert:</strong> it is possible for <span class="math inline">\(X\)</span> to be mean independent of <span class="math inline">\(Y\)</span> while <span class="math inline">\(Y\)</span> is <em>not</em> mean independent of <span class="math inline">\(X\)</span>. We’ll discuss this further below.</p>
+<p>To better understand the concept of mean independence, let’s quickly review the difference between an unconditional mean and a conditional mean. The unconditional mean <span class="math inline">\(\mathbb{E}(Y)\)</span>, also known as the “expected value” or “expectation” of <span class="math inline">\(Y\)</span>, is a <em>constant number</em>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> If <span class="math inline">\(Y\)</span> is discrete, this is simply the probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>, namely
+<span class="math display">\[
+\mathbb{E}(Y) = \sum_{\text{all } y} y \cdot p_Y(y).
+\]</span>
+If <span class="math inline">\(Y\)</span> is continuous, it’s the same idea but with an integral replacing the sum and a probability density <span class="math inline">\(f_Y(y)\)</span> multiplied by <span class="math inline">\(dy\)</span> replacing the probability mass function <span class="math inline">\(p_Y(y)\)</span>. Either way, we’re simply multiplying numbers together and adding up the result.
+Despite the similarity in notation, the conditional expectation <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a <em>function of <span class="math inline">\(X\)</span></em> that tells us how the mean of <span class="math inline">\(Y\)</span> varies with <span class="math inline">\(X\)</span>. Since <span class="math inline">\(X\)</span> is a random variable, so is <span class="math inline">\(\mathbb{E}(Y|X)\)</span>. If <span class="math inline">\(Y\)</span> is conditionally mean independent of <span class="math inline">\(X\)</span> then <span class="math inline">\(\mathbb{E}(Y|X)\)</span> equals <span class="math inline">\(\mathbb{E}(Y)\)</span>. In words, the mean of <span class="math inline">\(Y\)</span> <em>does not vary with <span class="math inline">\(X\)</span></em>. Regardless of the value that <span class="math inline">\(X\)</span> takes on, the mean of <span class="math inline">\(Y\)</span> is the same: <span class="math inline">\(\mathbb{E}(Y)\)</span>.</p>
+<p>There’s another way to think about this property in terms of <em>prediction</em>. With a bit of calculus, we can show that <span class="math inline">\(\mathbb{E}(Y)\)</span> solves the following optimization problem:
+<span class="math display">\[
+\min_{\text{all constants } c} \mathbb{E}[(Y - c)^2].
+\]</span>
+In other words, <span class="math inline">\(\mathbb{E}(Y)\)</span> is the <em>constant number</em> that is as close as possible to <span class="math inline">\(Y\)</span> on average, where “close” is measured by squared euclidean distance. In this sense, we can think of <span class="math inline">\(\mathbb{E}(Y)\)</span> as our “best guess” of the value that <span class="math inline">\(Y\)</span> will take. Again using a bit of calculus, it turns out that <span class="math inline">\(\mathbb{E}(Y|X)\)</span> solves the following optimization problem:
+<span class="math display">\[
+\min_{\text{all functions } g} \mathbb{E}[\{Y - g(X) \}^2].
+\]</span>
+(See <a href="https://drive.explaineverything.com/thecode/YZFFBCH">this video</a> for a proof.) Thus, <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is the <em>function of <span class="math inline">\(X\)</span></em> that is <em>as close as possible</em> to <span class="math inline">\(Y\)</span> on average, where “close” is measured using squared Euclidean distance. Thus, <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is our “best guess” of <span class="math inline">\(Y\)</span> after observing <span class="math inline">\(X\)</span>. We have seen that <span class="math inline">\(\mathbb{E}(Y)\)</span> and <span class="math inline">\(\mathbb{E}(Y|X)\)</span> are the solutions to two related but distinct optimization problems; the former is a <em>constant number</em> that doesn’t depend on the realization of <span class="math inline">\(X\)</span> whereas the latter is a <em>function of <span class="math inline">\(X\)</span></em>. Mean independence is the special case in which the solutions to the two optimization problems coincide: <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{E}(Y)\)</span>.
+Therefore,</p>
+<blockquote>
+<p><span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> if our best guess of <span class="math inline">\(Y\)</span> taking <span class="math inline">\(X\)</span> into account is the same as our best guess of <span class="math inline">\(Y\)</span> ignoring <span class="math inline">\(X\)</span>, where “best” is defined by “minimizes average squared distance to <span class="math inline">\(Y\)</span>.”</p>
+</blockquote>
+<div id="example-1-x-is-mean-independent-of-y." class="section level3">
+<h3>Example #1: <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>.</h3>
+<p>Using the table of joint probabilities for Example #1 above, we found that <span class="math inline">\(\mathbb{E}(X) = 0\)</span>. To determine whether <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, we need to calculate <span class="math inline">\(\mathbb{E}(X|Y=y)\)</span>, which we can accomplish as follows:
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(X|y=0) &amp;= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=0) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=0)}{\mathbb{P}(Y=0)}\\ \\
+\mathbb{E}(X|y=1) &amp;= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=1) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=1)}{\mathbb{P}(Y=1)}.
+\end{aligned}
+\]</span>
+Substituting the joint and marginal probabilities from the table above, we find that
+<span class="math display">\[
+\mathbb{E}(X|Y=0) = 0, \quad
+\mathbb{E}(X|Y=1) = 0.
+\]</span>
+Thus <span class="math inline">\(\mathbb{E}(X|Y=y)\)</span> simply equals zero, regardless of the realization <span class="math inline">\(y\)</span> of <span class="math inline">\(Y\)</span>. Since <span class="math inline">\(\mathbb{E}(X) = 0\)</span> we have shown that <span class="math inline">\(X\)</span> is conditionally mean independent of <span class="math inline">\(X\)</span>.</p>
+</div>
+<div id="example-1-y-is-not-mean-independent-of-x." class="section level3">
+<h3>Example #1: <span class="math inline">\(Y\)</span> is <em>NOT</em> mean independent of <span class="math inline">\(X\)</span>.</h3>
+<p>To determine whether <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> we need to calculate <span class="math inline">\(\mathbb{E}(Y|X)\)</span>.
+But this is easy. From the table we see that <span class="math inline">\(Y\)</span> is <em>known with certainty</em> after we observe <span class="math inline">\(X\)</span>: if <span class="math inline">\(X = -1\)</span> then <span class="math inline">\(Y = 0\)</span>, if <span class="math inline">\(X = 0\)</span> then <span class="math inline">\(Y = 1\)</span>, and if <span class="math inline">\(X = 1\)</span> then <span class="math inline">\(Y = 0\)</span>. Thus, without doing any math at all we find that
+<span class="math display">\[
+\mathbb{E}(Y|X=-1) = 0, \quad
+\mathbb{E}(Y|X=0) = 1, \quad
+\mathbb{E}(Y|X=1) = 0.
+\]</span>
+(If you don’t believe me, work through the arithmetic yourself!) This <em>clearly</em> depends on <span class="math inline">\(X\)</span>, so <span class="math inline">\(Y\)</span> is <em>not</em> mean independent of <span class="math inline">\(X\)</span>.</p>
+</div>
+<div id="example-2-z-is-not-mean-independent-of-w." class="section level3">
+<h3>Example #2: <span class="math inline">\(Z\)</span> is <em>NOT</em> mean independent of <span class="math inline">\(W\)</span>.</h3>
+<p>Above we calculated that <span class="math inline">\(\mathbb{E}(Z) = \mathbb{E}(W^2) = 1/3\)</span>. But the conditional expectation is
+<span class="math display">\[
+\mathbb{E}(Z|W) = \mathbb{E}(W^2|W) = W^2
+\]</span>
+using the “taking out what is known” property: conditional on <span class="math inline">\(W\)</span>, we know <span class="math inline">\(W^2\)</span> and can hence treat it as though it were a constant in an unconditional expectation, pulling it in front of the <span class="math inline">\(\mathbb{E}\)</span> operator. We see that <span class="math inline">\(\mathbb{E}(Z|W)\)</span> does not equal <span class="math inline">\(1/3\)</span>: its value depends on <span class="math inline">\(W\)</span>. Therefore <span class="math inline">\(Z\)</span> is not mean independent of <span class="math inline">\(W\)</span>.</p>
+</div>
+<div id="example-2-w-is-mean-independent-of-z." class="section level3">
+<h3>Example #2: <span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span>.</h3>
+<p>This one is trickier. To keep this post at an elementary level, my explanation won’t be completely rigorous. For more details <a href="https://math.stackexchange.com/questions/829779/conditional-expectation-of-x-given-x2">see here</a>. We need to calculate <span class="math inline">\(\mathbb{E}(W|Z)\)</span>. Since <span class="math inline">\(Z \equiv W^2\)</span> this is the same thing as <span class="math inline">\(\mathbb{E}(W|W^2)\)</span>. Let’s start with an example. Suppose we observe <span class="math inline">\(Z = 1\)</span>. This means that <span class="math inline">\(W^2 = 1\)</span> so <span class="math inline">\(W\)</span> either equals <span class="math inline">\(1\)</span> or <span class="math inline">\(-1\)</span>. How likely is each of these possible realizations of <span class="math inline">\(W\)</span> given that <span class="math inline">\(W^2 = 1\)</span>? Because the density of <span class="math inline">\(W\)</span> is <em>symmetric about zero</em>, <span class="math inline">\(f_W(-1) = f_W(1)\)</span>. So given that <span class="math inline">\(W^2 = 1\)</span>, it is just as likely that <span class="math inline">\(W = 1\)</span> as it is that <span class="math inline">\(W = -1\)</span>. Therefore,
+<span class="math display">\[
+\mathbb{E}(W|W^2 = 1) = 0.5 \times 1 + 0.5 \times -1 = 0.
+\]</span>
+Generalizing this idea, if we observe <span class="math inline">\(Z = z\)</span> then <span class="math inline">\(W = \sqrt{z}\)</span> or <span class="math inline">\(-\sqrt{z}\)</span>. But since <span class="math inline">\(f_W(\cdot)\)</span> is symmetric about zero, these possibilities are equally likely. Therefore,
+<span class="math display">\[
+\mathbb{E}(W|Z=z) = 0.5 \times \sqrt{z} - 0.5 \times \sqrt{z} = 0.
+\]</span>
+Above we calculated that <span class="math inline">\(\mathbb{E}(W) = 0\)</span>. Therefore, <span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span>.</p>
+</div>
+</div>
+<div id="statistical-independence" class="section level2">
+<h2>Statistical Independence</h2>
+<p>When you see the word “independent” without any qualification, this means “statistically independent.” In keeping with this usage, I often write “independent” rather than “statistically independent.” Whichever terminology you prefer, there are three equivalent ways of defining this idea:</p>
+<blockquote>
+<p><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are statistically independent if and only if:</p>
+<ol style="list-style-type: decimal">
+<li>their joint distribution equals the product of their marginals, or</li>
+<li>the conditional distribution of <span class="math inline">\(Y|X\)</span> equals the unconditional distribution of <span class="math inline">\(Y\)</span>, or</li>
+<li>the conditional distribution of <span class="math inline">\(X|Y\)</span> equals the unconditional distribution of <span class="math inline">\(X\)</span>.</li>
+</ol>
+</blockquote>
+<p>The link between these three alternatives is the <em>definition of conditional probability</em>. Suppose that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are discrete random variables with joint pmf <span class="math inline">\(p_{XY}\)</span>, marginal pmfs <span class="math inline">\(p_X\)</span> and <span class="math inline">\(p_Y\)</span>, and conditional pmfs <span class="math inline">\(p_{X|Y}\)</span> and <span class="math inline">\(p_{Y|X}\)</span>. Version 1 requires that <span class="math inline">\(p_{XY}(x,y) = p_X(x) p_Y(y)\)</span> for all realizations <span class="math inline">\(x,y\)</span>. But by the definition of conditional probability,
+<span class="math display">\[
+p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)}, \quad
+p_{Y|X}(y|x) \equiv \frac{p_{XY}(x,y)}{p_X(x)}.
+\]</span>
+If <span class="math inline">\(p_{XY} = p_X p_Y\)</span>, these expressions simplify to
+<span class="math display">\[
+p_{X|Y}(x|y) \equiv \frac{p_{X}(x)p_Y(y)}{p_Y(y)} = p_X(x), \quad
+p_{Y|X}(y|x) \equiv \frac{p_{X}(x)p_Y(y)}{p_X(x)} = p_Y(y)
+\]</span>
+so 1 implies 2 and 3. Similarly, if <span class="math inline">\(p_{X|Y}=p_X\)</span> then by the definition of conditional probability
+<span class="math display">\[
+p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
+\]</span>
+Re-arranging, this shows that <span class="math inline">\(p_{XY} = p_X p_Y\)</span>, so 3 implies 1. An almost identical argument shows that 2 implies 1, completing our proof that these three seemingly different definitions of statistical independence are equivalent.
+If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are continuous, the idea is the same but with densities replacing probability mass functions, e.g. <span class="math inline">\(f_{XY}(x,y) = f_X(x) f_Y(y)\)</span> and so on.</p>
+<p>In most examples, it’s easier to show independence (or the lack thereof) using 2 or 3 rather than 1. These latter two definitions are also more intuitively appealing. To say that the conditional distribution of <span class="math inline">\(X|Y\)</span> is the same as the unconditional distribution of <span class="math inline">\(X\)</span> is the same thing as saying that</p>
+<blockquote>
+<p><span class="math inline">\(Y\)</span> provides absolutely no information about <span class="math inline">\(Y\)</span> whatsoever.</p>
+</blockquote>
+<p>If learning <span class="math inline">\(Y\)</span> tells us anything at all about <span class="math inline">\(X\)</span>, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent. Similarly, if <span class="math inline">\(X\)</span> tells us anything about <span class="math inline">\(Y\)</span> at all, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent.</p>
+<div id="example-1-x-and-y-are-not-independent." class="section level3">
+<h3>Example #1: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <em>NOT</em> independent.</h3>
+<p>If I tell you that <span class="math inline">\(X = 0\)</span>, then you know for sure that <span class="math inline">\(Y = 0\)</span>. Before I told you this, you did not know that <span class="math inline">\(Y\)</span> would equal zero: it’s a random variable with support set <span class="math inline">\(\{0,1\}\)</span>. Since learning <span class="math inline">\(X\)</span> has the potential to tell you something about <span class="math inline">\(Y\)</span>, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent. That was easy! For extra credit, <span class="math inline">\(p_{XY}(-1,0) = 1/3\)</span> but <span class="math inline">\(p_X(-1)p_Y(0) = 1/3 \times 2/3 = 2/9\)</span>. Since these are not equal, <span class="math inline">\(p_{XY}\neq p_X p_Y\)</span> so the marginal doesn’t equal the product of the joint. We didn’t need to check this, but it’s reassuring to see that everything works out as it should.</p>
+</div>
+<div id="example-2-w-and-z-are-not-independent." class="section level3">
+<h3>Example #2: <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are <em>NOT</em> independent.</h3>
+<p>Again, this one is easy: learning that <span class="math inline">\(W = w\)</span> tells us that <span class="math inline">\(Z = w^2\)</span>. We didn’t know this before, so <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> cannot be independent.</p>
+</div>
+</div>
+<div id="relating-the-three-properties" class="section level2">
+<h2>Relating the Three Properties</h2>
+<p>Now that we’ve described uncorrelatedness, mean independence, and statistical independence, we’re ready to see how these properties relate to one another. Let’s start by reviewing what we learned from the examples given above. In example #1:</p>
+<ul>
+<li><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated</li>
+<li><span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span></li>
+<li><span class="math inline">\(Y\)</span> is <em>not mean independent</em> of <span class="math inline">\(X\)</span></li>
+<li><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <em>not</em> independent.</li>
+</ul>
+<p>In example #2, we found that</p>
+<ul>
+<li><span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are uncorrelated</li>
+<li><span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span>.</li>
+<li><span class="math inline">\(Z\)</span> is <em>not</em> mean independent of <span class="math inline">\(W\)</span>.</li>
+<li><span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are <em>not</em> independent.</li>
+</ul>
+<p>These are worth remembering, because they are relatively simple and provide a source of <em>counterexamples</em> to help you avoid making tempting but incorrect statements about correlation, mean independence, and statistical independence. For example:</p>
+<ol style="list-style-type: decimal">
+<li>Uncorrelatedness does <strong>NOT IMPLY</strong> statistical independence: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent, but they are uncorrelated. (Ditto for <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>.)</li>
+<li>Mean independence does <strong>NOT IMPLY</strong> statistical independence: <span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span> but these random variables are not independent.</li>
+<li>Mean independence is <strong>NOT SYMMETRIC</strong>: <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, but <span class="math inline">\(Y\)</span> is not mean independent of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<p>Now that we have a handle on what’s <em>not true</em>, let’s see what can be said about correlation, mean independence, and statistical independence.</p>
+<div id="uncorrelatedness-and-statistical-independence-are-symmetric" class="section level3">
+<h3>Uncorrelatedness and Statistical Independence are Symmetric</h3>
+<p>In the equality <span class="math inline">\(\mathbb{E}(XY) = \mathbb{E}(X) \mathbb{E}(Y)\)</span>, nothing changes if we swap the roles of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>; this statement is equivalent to <span class="math inline">\(\mathbb{E}(YX) = \mathbb{E}(Y) \mathbb{E}(X)\)</span>. This shows that uncorrelatedness is <em>symmetric</em>. The same goes for statistical independence: we showed that <span class="math inline">\(p_{Y|X} = p_Y\)</span> is equivalent to <span class="math inline">\(p_{X|Y} = p_X\)</span> above. In contrast, mean independence is not symmetric: <span class="math inline">\(X\)</span> can be mean independent of <span class="math inline">\(Y\)</span> without <span class="math inline">\(Y\)</span> being mean independent of <span class="math inline">\(X\)</span>.</p>
+<p>Here’s an analogy: uncorrelatedness and independence are like the relation “being biological siblings.” If <span class="math inline">\(X\)</span> is the sibling of <span class="math inline">\(Y\)</span>, then <span class="math inline">\(Y\)</span> must be the sibling of <span class="math inline">\(X\)</span> because “being siblings” is defined as “having the same parents.” In contrast, mean independence is like the relation “being in love.” Sadly, it’s possible for <span class="math inline">\(X\)</span> to be in love with <span class="math inline">\(Y\)</span> despite <span class="math inline">\(Y\)</span> not being in love with <span class="math inline">\(X\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+</div>
+<div id="statistical-independence-implies-conditional-mean-independence" class="section level3">
+<h3>Statistical Independence Implies Conditional Mean Independence</h3>
+<p>Statistical independence is the “strongest” of the three properties: it implies both mean independence and uncorrelatedness. We’ll show this in two steps. In the first step, we’ll show that statistical independence implies mean independence. In the second step we’ll show that mean independence implies uncorrelatedness. Then we’ll bring this overly-long blog post to a close! Suppose that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are discrete random variables. (For the continuous case, replace sums with integrals.) If <span class="math inline">\(X\)</span> is statistically independent of <span class="math inline">\(Y\)</span>, then <span class="math inline">\(p_{Y|X} = p_Y\)</span> and <span class="math inline">\(p_{X|Y} = p_X\)</span>. Hence,
+<span class="math display">\[
+\begin{aligned}
+\mathbb{E}(Y|X=x) &amp;\equiv \sum_{\text{all } y} y \cdot p_{Y|X}(y|x) = \sum_{\text{all } y} y \cdot p_Y(y) \equiv \mathbb{E}(Y)\\
+\mathbb{E}(X|Y=y) &amp;\equiv \sum_{\text{all } x} x \cdot p_{X|Y}(x|y) = \sum_{\text{all } x} x \cdot p_X(x) \equiv \mathbb{E}(X)
+\end{aligned}
+\]</span>
+so <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> and <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>.</p>
+<!--**Bonus fact: statistical independence implies $\mathbb{E}[g(X) h(Y)] = \mathbb{E}[g(X)]\mathbb{E}[h(Y)]$ for any functions $h$ and $g$.**-->
+</div>
+<div id="conditional-mean-independence-implies-uncorrelatedness" class="section level3">
+<h3>Conditional Mean Independence Implies Uncorrelatedness</h3>
+<p>If <em>either</em> <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{E}(Y)\)</span> <em>or</em> <span class="math inline">\(\mathbb{E}(X|Y) = \mathbb{E}(X)\)</span>, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated.
+To show this, we use the <strong>Law of Iterated Expectations</strong> and the “taking out what is known” property, along with the fact that <span class="math inline">\(\mathbb{E}(X)\)</span> and <span class="math inline">\(\mathbb{E}(Y)\)</span> are constants. Suppose first that <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span>, i.e. <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{E}(Y)\)</span>. Then, taking iterated expectations over <span class="math inline">\(X\)</span>,
+<span class="math display">\[
+\mathbb{E}(XY) = \mathbb{E}[\mathbb{E}(XY|X)] = \mathbb{E}[X \mathbb{E}(Y|X)] = \mathbb{E}[X \mathbb{E}(Y)] = \mathbb{E}(X) \mathbb{E}(Y).
+\]</span>
+Alternatively, suppose that <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, i.e. <span class="math inline">\(\mathbb{E}(X|Y) = \mathbb{E}(X)\)</span>. Then, taking iterated expectations over <span class="math inline">\(Y\)</span>,
+<span class="math display">\[
+\mathbb{E}(XY) = \mathbb{E}[\mathbb{E}(XY|Y)] = \mathbb{E}[Y\mathbb{E}(X|Y)] = \mathbb{E}[Y \mathbb{E}(X)] = \mathbb{E}(Y) \mathbb{E}(X).
+\]</span>
+Therefore, if either <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, or <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span>, or both, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated. Since statistical independence implies mean independence, it follows that statistical independence implies uncorrelatedness.
+And we’re finally done!</p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>In this post we shown that that:</p>
+<ul>
+<li>Statistical Independence <span class="math inline">\(\implies\)</span> Mean Independence <span class="math inline">\(\implies\)</span> Uncorrelatedness.</li>
+<li>Uncorrelatedness does not imply mean independence or statistical independence.</li>
+<li>Mean independence does not imply statistical independence.</li>
+<li>Statistical independence and correlation are symmetric; mean independence is not.</li>
+</ul>
+<p>Reading the figure from the very beginning of this post from top to bottom: statistical independence is the <em>strongest</em> notion, followed by mean independence, followed by uncorrelatedness.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>It turns out that teaching well is extremely hard. I am incredibly grateful to those intrepid souls who bravely raise their hand and inform me that no one in the room has any idea what I’m talking about!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I used a small number of simulation draws so it would be easier to see the data in the plot. If you use a larger number of simulations, the correlation will be even closer to zero and the line almost perfectly flat.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Throughout this post, I make the tacit assumption that all means–conditional or unconditional–exist and are finite.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>But on the plus side, we got a lot of great pop songs out of the deal!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
