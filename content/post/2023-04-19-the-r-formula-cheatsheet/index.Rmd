@@ -1,0 +1,38 @@
+---
+title: The R Formula Cheatsheet
+author: Francis J. DiTraglia
+date: '2023-04-19'
+slug: the-r-formula-cheatsheet
+categories: [statistics, R]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-04-19T19:42:55+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+R's formula syntax is extremely powerful but can be confusing for beginners.^[Fun fact: R's formula syntax originated in [this 1973 paper](https://www.jstor.org/stable/2346786) by Wilkinson and Rogers.]
+This post is a quick reference covering all of the symbols that have a "special" meaning inside of an R formula: `~, +, ., -, 1, :, *, ^`, and `I()`.
+You may never use some of these in practice, but it's nice to know that they exist.
+It was many years before I realized that I could simply type `y ~ x * z` instead of the lengthier `y ~ x + z + x:z`, for example. 
+While R formulas crop up in a variety of places, they are probably most familiar as the first argument of `lm()`. 
+For this reason, my verbal explanations assume a simple linear regression setting in which we hope to predict `y` using a number of regressors `x`, `z`, and `w`.
+
+
+| Symbol | Purpose | Example | In Words |
+|:-------|:----------------|:--------|:----------------------|
+| `~` | separate LHS and RHS of formula | `y ~ x` | regress `y` on `x` |
+| `+` | add variable to a formula | `y ~ x + z` | regress `y` on `x` *and* `z` |
+| `.` | denotes "everything else" | `y ~ .` | regress `y` on *all other variables* in a data frame |
+| `-` | remove variable from a formula | `y ~ . - x` | regress `y` on all other variables *except* `z` |
+| `1` | denotes intercept | `y ~ x - 1` | regress `y` on `x` *without an intercept* |
+| `:` | construct interaction term | `y ~ x + z + x:z` | regress `y` on `x`, `z`, and the product `x` times `z` |
+| `*` | shorthand for levels plus interaction | `y ~ x * z` | regress `y` on `x`, `z`, and the product `x` times `z` |
+| `^` | higher order interactions | `y ~ (x + z + w)^3` | regress `y` on `x`, `z`, `w`, all two-way interactions, and the three-way interactions |
+| `I()` | "as-is" - override special meanings of other symbols from this table | `y ~ x + I(x^2)` | regress `y` on `x` and `x` squared |

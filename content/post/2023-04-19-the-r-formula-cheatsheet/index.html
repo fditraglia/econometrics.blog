@@ -1,0 +1,105 @@
+---
+title: The R Formula Cheatsheet
+author: Francis J. DiTraglia
+date: '2023-04-19'
+slug: the-r-formula-cheatsheet
+categories: [statistics, R]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-04-19T19:42:55+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>R’s formula syntax is extremely powerful but can be confusing for beginners.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+This post is a quick reference covering all of the symbols that have a “special” meaning inside of an R formula: <code>~, +, ., -, 1, :, *, ^</code>, and <code>I()</code>.
+You may never use some of these in practice, but it’s nice to know that they exist.
+It was many years before I realized that I could simply type <code>y ~ x * z</code> instead of the lengthier <code>y ~ x + z + x:z</code>, for example.
+While R formulas crop up in a variety of places, they are probably most familiar as the first argument of <code>lm()</code>.
+For this reason, my verbal explanations assume a simple linear regression setting in which we hope to predict <code>y</code> using a number of regressors <code>x</code>, <code>z</code>, and <code>w</code>.</p>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="29%" />
+<col width="15%" />
+<col width="40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Symbol</th>
+<th align="left">Purpose</th>
+<th align="left">Example</th>
+<th align="left">In Words</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>~</code></td>
+<td align="left">separate LHS and RHS of formula</td>
+<td align="left"><code>y ~ x</code></td>
+<td align="left">regress <code>y</code> on <code>x</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>+</code></td>
+<td align="left">add variable to a formula</td>
+<td align="left"><code>y ~ x + z</code></td>
+<td align="left">regress <code>y</code> on <code>x</code> <em>and</em> <code>z</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>.</code></td>
+<td align="left">denotes “everything else”</td>
+<td align="left"><code>y ~ .</code></td>
+<td align="left">regress <code>y</code> on <em>all other variables</em> in a data frame</td>
+</tr>
+<tr class="even">
+<td align="left"><code>-</code></td>
+<td align="left">remove variable from a formula</td>
+<td align="left"><code>y ~ . - x</code></td>
+<td align="left">regress <code>y</code> on all other variables <em>except</em> <code>z</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>1</code></td>
+<td align="left">denotes intercept</td>
+<td align="left"><code>y ~ x - 1</code></td>
+<td align="left">regress <code>y</code> on <code>x</code> <em>without an intercept</em></td>
+</tr>
+<tr class="even">
+<td align="left"><code>:</code></td>
+<td align="left">construct interaction term</td>
+<td align="left"><code>y ~ x + z + x:z</code></td>
+<td align="left">regress <code>y</code> on <code>x</code>, <code>z</code>, and the product <code>x</code> times <code>z</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>*</code></td>
+<td align="left">shorthand for levels plus interaction</td>
+<td align="left"><code>y ~ x * z</code></td>
+<td align="left">regress <code>y</code> on <code>x</code>, <code>z</code>, and the product <code>x</code> times <code>z</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>^</code></td>
+<td align="left">higher order interactions</td>
+<td align="left"><code>y ~ (x + z + w)^3</code></td>
+<td align="left">regress <code>y</code> on <code>x</code>, <code>z</code>, <code>w</code>, all two-way interactions, and the three-way interactions</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>I()</code></td>
+<td align="left">“as-is” - override special meanings of other symbols from this table</td>
+<td align="left"><code>y ~ x + I(x^2)</code></td>
+<td align="left">regress <code>y</code> on <code>x</code> and <code>x</code> squared</td>
+</tr>
+</tbody>
+</table>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Fun fact: R’s formula syntax originated in <a href="https://www.jstor.org/stable/2346786">this 1973 paper</a> by Wilkinson and Rogers.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
