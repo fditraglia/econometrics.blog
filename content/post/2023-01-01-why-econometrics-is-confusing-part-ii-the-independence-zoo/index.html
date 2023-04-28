@@ -141,7 +141,7 @@ z &lt;- w^2
 cor(w, z)</code></pre>
 <pre><code>## [1] 0.008379101</code></pre>
 <pre class="r"><code>plot(w, z)
-abline(lm(w ~ z))</code></pre>
+abline(lm(z ~ w))</code></pre>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>The regression line is flat despite there being an obvious relationship between <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>. When <span class="math inline">\(W\)</span> is positive, there is a positive relationship between the two RVs; but when <span class="math inline">\(W\)</span> is negative the picture is reverses. The line of best fit “averages out” the increasing and decreasing relationships on either side of zero to give an overall slope of zero.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 </div>
@@ -250,7 +250,7 @@ Re-arranging, this shows that <span class="math inline">\(p_{XY} = p_X p_Y\)</sp
 If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are continuous, the idea is the same but with densities replacing probability mass functions, e.g. <span class="math inline">\(f_{XY}(x,y) = f_X(x) f_Y(y)\)</span> and so on.</p>
 <p>In most examples, it’s easier to show independence (or the lack thereof) using 2 or 3 rather than 1. These latter two definitions are also more intuitively appealing. To say that the conditional distribution of <span class="math inline">\(X|Y\)</span> is the same as the unconditional distribution of <span class="math inline">\(X\)</span> is the same thing as saying that</p>
 <blockquote>
-<p><span class="math inline">\(Y\)</span> provides absolutely no information about <span class="math inline">\(Y\)</span> whatsoever.</p>
+<p><span class="math inline">\(Y\)</span> provides absolutely no information about <span class="math inline">\(X\)</span> whatsoever.</p>
 </blockquote>
 <p>If learning <span class="math inline">\(Y\)</span> tells us anything at all about <span class="math inline">\(X\)</span>, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent. Similarly, if <span class="math inline">\(X\)</span> tells us anything about <span class="math inline">\(Y\)</span> at all, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent.</p>
 <div id="example-1-x-and-y-are-not-independent." class="section level3">

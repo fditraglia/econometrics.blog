@@ -30,7 +30,7 @@ For this reason, my verbal explanations assume a simple linear regression settin
 | `~` | separate LHS and RHS of formula | `y ~ x` | regress `y` on `x` |
 | `+` | add variable to a formula | `y ~ x + z` | regress `y` on `x` *and* `z` |
 | `.` | denotes "everything else" | `y ~ .` | regress `y` on *all other variables* in a data frame |
-| `-` | remove variable from a formula | `y ~ . - x` | regress `y` on all other variables *except* `z` |
+| `-` | remove variable from a formula | `y ~ . - x` | regress `y` on all other variables *except* `x` |
 | `1` | denotes intercept | `y ~ x - 1` | regress `y` on `x` *without an intercept* |
 | `:` | construct interaction term | `y ~ x + z + x:z` | regress `y` on `x`, `z`, and the product `x` times `z` |
 | `*` | shorthand for levels plus interaction | `y ~ x * z` | regress `y` on `x`, `z`, and the product `x` times `z` |

@@ -129,7 +129,7 @@ w <- runif(n_sims, -1, 1)
 z <- w^2
 cor(w, z)
 plot(w, z)
-abline(lm(w ~ z))
+abline(lm(z ~ w))
 ```
 
 The regression line is flat despite there being an obvious relationship between $W$ and $Z$.  When $W$ is positive, there is a positive relationship between the two RVs; but when $W$ is negative the picture is reverses. The line of best fit "averages out" the increasing and decreasing relationships on either side of zero to give an overall slope of zero.^[I used a small number of simulation draws so it would be easier to see the data in the plot. If you use a larger number of simulations, the correlation will be even closer to zero and the line almost perfectly flat.]
@@ -238,7 +238,7 @@ If $X$ and $Y$ are continuous, the idea is the same but with densities replacing
 
 In most examples, it's easier to show independence (or the lack thereof) using 2 or 3 rather than 1. These latter two definitions are also more intuitively appealing. To say that the conditional distribution of $X|Y$ is the same as the unconditional distribution of $X$ is the same thing as saying that
 
-> $Y$ provides absolutely no information about $Y$ whatsoever.
+> $Y$ provides absolutely no information about $X$ whatsoever.
 
 If learning $Y$ tells us anything at all about $X$, then $X$ and $Y$ are not independent. Similarly, if $X$ tells us anything about $Y$ at all, then $X$ and $Y$ are not independent.
 
