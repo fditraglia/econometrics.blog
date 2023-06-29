@@ -1,0 +1,200 @@
+---
+title: A Good Instrument is a Bad Control
+author: Francis J. DiTraglia
+date: '2023-06-29'
+slug: a-good-instrument-is-a-bad-control
+categories: [econometrics, R, IV, control function, TSLS]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-06-29T16:04:58+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+Here's a puzzle for you.
+What will happen if we regress some outcome of interest on *both* an endogenous regressor *and* a valid instrument for that regressor? 
+I hadn't thought about this question until 2018, when one of my undergraduate students asked it during class. 
+If memory serves, my off-the-cuff answer left much to be desired.^[I seem to recall saying something like "this won't in general give us the causal effect we're interested in, but I don't think it's possible to say anything more without extra assumptions." Fortunately my lackluster response didn't derail the student who asked the question: he's currently pursuing a PhD in Economics at UChicago!]
+Five years later I'm finally ready to give a fully satisfactory answer; better late than never I suppose!
+
+# The Model
+We'll start by being a bit more precise about the setup.
+Suppose that $Y$ is related to $X$ according to the following **linear causal model** $$
+Y \leftarrow \alpha + \beta X + U
+$$
+where $\beta$ is the causal effect of interest and $U$ represents unobserved causes of $Y$ that may be related to $X$.
+Now, for *any* observed random variable $Z$, we can define
+$$
+V \equiv X - (\pi_0 + \pi_1 Z), \quad \pi_0 \equiv \mathbb{E}[X] - \pi_1 \mathbb{E}[Z], \quad \pi_1 \equiv \frac{\text{Cov}(X,Z)}{\text{Var}(Z)}.
+$$
+This is the **population linear regression** of $X$ on $Z$.
+By construction it satisfies $\mathbb{E}[V] = \text{Cov}(Z,V) = 0$.^[Check if you don't believe me: substitute the expressions for $\pi_0$ and $\pi_1$, take expectations / covariances, and simplify.] 
+Thus we can write,
+$$
+X = \pi_0 + \pi_1 Z + V, \quad \mathbb{E}[V] = \text{Cov}(Z,V) = 0
+$$
+for *any* random variables $X$ and $Z$, simply by constructing $V$ as described above.
+If $\pi_1 \neq 0$, we say that $Z$ is **relevant**. 
+If $\text{Cov}(Z,U) = 0$, we say that $Z$ is **exogenous**.
+If $Z$ is both relevant and exogenous, we say that it is a **valid instrument** for $X$.
+
+As we've defined it above, $V$ is simply a regression residual.
+But if $Z$ is a valid instrument, it turns out that we can think of $V$ as the "endogenous part" of $X$.
+To see why, expand $\text{Cov}(X,U)$ as follows:
+$$
+\text{Cov}(X,U) = \text{Cov}(\pi_0 + \pi_1 Z + V, \,U) = \pi_1 \text{Cov}(Z,U) + \text{Cov}(U,V) = \text{Cov}(U,V)
+$$
+since we have assumed that $\text{Cov}(Z,U) = 0$.
+In words, the endogeneity of $X$ is *precisely the same thing* as the covariance between $U$ and $V$.
+
+Here's a helpful way of thinking about this.
+If $Z$ is exogenous then our regression of $X$ on $Z$ *partitions* the overall variation in $X$ into two components: the "good" (exogenous) variation $\pi_1 Z$ is uncorrelated with $U$, while the "bad" (endogenous) variation $V$ is correlated with $U$.
+The logic of two-stage least squares is that regressing $Y$ on the "good" variation, $\pi_1 Z$ allows us to recover $\beta$, the causal effect of interest.^[See [this blog post](https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/) for more discussion.]
+
+# A Simulation Example
+
+Using the model and derivations from above, let's run a little simulation.
+To simulate a valid instrument $Z$ and an endogenous regressor $X$ we can proceed as follows.
+First generate independent standard normal draws $\{Z_i\}_{i=1}^n$.
+Next independently generate pairs of correlated standard normal draws $\{(U_i, V_i)\}_{i=1}^n$ with $\text{Corr}(U_i, V_i) = \rho$.
+Finally, set
+$$
+X_i = \pi_0 + \pi_1 Z_i + V_i \quad \text{and} \quad
+Y_i = \alpha + \beta X_i + U_i
+$$
+for each value of $i$ between $1$ and $n$.^[We don't necessarily need $Z_i$ to be normally distributed, as long as it's independent of $(U_i, V_i)$, so you could use e.g. uniform draws if you prefer. Generating $(U_i, V_i)$ from a bivariate normal distribution isn't necessary either, but it's a simple way of controlling the endogeneity in $X$.]
+The following chunk of R code runs this simulation with $n = 5000$, $\rho = 0.5$, $\pi_0 = 0.5$, $\pi_1 = 0.8$, $\alpha = -0.3$ and $\beta = 1$:
+```{r, message = FALSE}
+set.seed(1234)
+n <- 5000
+z <- rnorm(n)
+
+library(mvtnorm)
+Rho <- matrix(c(1, 0.5, 
+                0.5, 1), 2, 2, byrow = TRUE)
+errors <- rmvnorm(n, sigma = Rho)
+
+u <- errors[, 1]
+v <- errors[, 2]
+x <- 0.5 + 0.8 * z + v
+y <- -0.3 + x + u
+```
+In the simulation $Z$ is a valid instrument, $X$ is an endogenous regressor, and the true causal effect of interest equals one.
+Using our simulation data, let's test out three possible estimators:
+
+- $\widehat{\beta}_\text{OLS}\equiv$ the slope coefficient from an OLS regression of $Y$ on $X$.
+- $\widehat{\beta}_\text{IV}\equiv$ slope coefficient from an IV regression of $Y$ on $X$ with $Z$ as an instrument.
+- $\widehat{\beta}_{X.Z}\equiv$ the coefficient on $X$ in an OLS regression of $Y$ on $X$ and $Z$.
+
+```{r}
+c(truth = 1,
+  b_OLS = cov(x, y) / var(x), 
+  b_IV = cov(z, y) / cov(z, x), 
+  b_x.z = unname(coef(lm(y ~ x + z))[2])) |> # unname() makes the names prettier!
+  round(2)
+```
+As expected, OLS is far from the truth while IV pretty much nails it. 
+Interestingly, the regression of `y` on `x` and `z` gives the worst performance of all! Is this just a fluke? 
+Perhaps it's an artifact of the simulation parameters I chose, or just bad luck arising from some unusual simulation draws.
+To find out, we'll need a bit more algebra.
+But stay with me: the payoff is worth it, and there's not too much extra math required!
+
+# The General Result 
+
+## Regression of $Y$ on $X$ and $Z$
+The coefficient on $X$ in a population linear regression of $Y$ on $X$ and $Z$ is given by
+$$
+\beta_{X.Z} = \frac{\text{Cov}(\tilde{X}, Y)}{\text{Var}(\tilde{X})} 
+$$
+where $\tilde{X}$ is defined as the *residual* in another population linear regresasion: the regression of $X$ on $Z$.^[This is a special case of the so-called [FWL Theorem](https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem), although I'd argue that we should call it "Yule's Rule" since [George Udny Yule](https://en.wikipedia.org/wiki/Udny_Yule) was arguably the first person to popularize it, decades before F, W, or L.]
+But wait a minute: we've *already seen* this residual!
+Above we called it $V$ and used it to write $X = \pi_0 + \pi_1 Z + V$.
+Using this equation, along with the linear causal model relating $Y$ to $X$ and $U$, we can re-express $\beta_{X.Z}$ as 
+$$
+\begin{align*}
+\beta_{X.Z} &= \frac{\text{Cov}(V, Y)}{\text{Var}(V)} = \frac{\text{Cov}(V, \alpha + \beta X + U)}{\text{Var}(V)}\\
+&= \frac{\text{Cov}(U,V) + \beta\text{Cov}(V, \pi_0 + \pi_1 Z + V)}{\text{Var}(V)}\\
+&= \beta + \frac{\text{Cov}(U,V)}{\text{Var}(V)} 
+\end{align*}
+$$
+since $\text{Cov}(Z, V) = 0$ by construction.
+We have some simulation data at our disposal, so let's check this calculation.
+In the simulation $\beta = 1$ and
+$$
+\frac{\text{Cov}(U, V)}{\text{Var}(V)} = 0.5
+$$
+since $\text{Var}(U) = \text{Var}(V) = 1$ and $\text{Cov}(U, V) = 0.5$.
+Therefore $\beta_{X.Z} = 1.5$.
+And, indeed, this is almost *exactly* the value of our estimate from our simulation above.
+
+## Regression of $Y$ on $X$ Only
+
+So far so good.
+Now what about the "usual" OLS estimator?
+A quick calculation gives
+$$
+\beta_{\text{OLS}} = \beta + \frac{\text{Cov}(X,U)}{\text{Var}(X)} = \beta + \frac{\text{Cov}(V,U)}{\text{Var}(X)} 
+$$
+using the fact that $\text{Cov}(X,U) = \text{Cov}(U,V)$, as explained above.
+Again, we can check this against our simulation results.
+We know that $\text{Cov}(V,U) = 0.5$ and
+$$
+\text{Var}(X) = \text{Var}(\pi_0 + \pi_1 Z + V) = \pi_1^2 \text{Var}(Z) + \text{Var}(V) = (0.8)^2 + 1 = 41/25 
+$$
+since $Z$ and $V$ are uncorrelated by construction, $\text{Var}(Z) = \text{Var}(V) = 1$ and $\pi_1 = 0.8$ in the simulation design.
+Hence, $\beta_{\text{OLS}} = 1 + 25/82 \approx 1.305$.
+Again, this agrees almost perfectly with our simulation.
+
+## Comparing the Results
+To summarize, we have shown that
+$$
+\beta_{X.Z} = \beta + \frac{\text{Cov}(U,V)}{\text{Var}(V)}, \quad \text{while} \quad
+\beta_{\text{OLS}} = \beta + \frac{\text{Cov}(U,V)}{\text{Var}(X)}.
+$$
+There is only one difference between these two expressions: $\beta_{X.Z}$ has $\text{Var}(V)$ where $\beta_{\text{OLS}}$ has $\text{Var}(X)$.
+Returning to our expression for $\text{Var}(X)$ from above, 
+$$
+\text{Var}(X) = \pi_1^2 \text{Var}(Z) + \text{Var}(V) > \text{Var}(V)
+$$
+as long as $\pi_1 \neq 0$ and $\text{Var}(Z) \neq 0$.
+In other words, there is always *more* variation in $X$ than there is in $V$, since $V$ is the "leftover" part of $X$ after regressing on $Z$.
+Because the variances of $X$ and $V$ appear in the denominators of our expressions from above, it follows that
+$$
+\left| \text{Cov}(U,V)/\text{Var}(V)\right| > \left| \text{Cov}(U,V)/\text{Var}(X)\right|.
+$$
+In other words, $\beta_{X.Z}$ is **always farther from the truth** than $\beta_{OLS}$, exactly as we found in our simulation.
+
+
+# Some Intuition
+
+In our simulation, $\widehat{\beta}_{X.Z}$ gave a *worse* estimate of $\beta$ than $\widehat{\beta}_{X.Z}$.
+The derivations from above show that this wasn't a fluke: adding a valid instrument $Z$ as an additional control regressor only makes the bias in our estimated causal effect *worse* than it was to begin with.
+This holds for any valid instrument and any endogenous regressor in a linear causal model.
+I hope you found the derivations from above convincing.
+But even so, you may be wondering if there's an intuitive explanation for this phenomenon.
+I am please to inform you that the answer is yes!
+
+In an [earlier post](https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/) I described the **control function** approach to instrumental variables regression.
+That post showed that the coefficient on $X$ in a regression of $Y$ on $X$ and $V$ gives the *correct* causal effect. 
+We don't know $V$, but we can estimate it by regressing $X$ on $Z$ and saving the residuals.
+The logic of multiple regression shows that including $V$ as a control regressor "soaks up" the portion of $X$ that is explained by $V$.
+Because $V$ represents the "bad" (endogenous) variation in $X$, this solves our endogeneity problem.
+In effect, $V$ captures the unobserved "omitted variables" that play havoc with a naive regression of $Y$ on $X$.
+
+Now, contrast this with a regression of $Y$ on $X$ and $Z$. 
+In this case, we soak up the variation in $X$ that is explained by $Z$. 
+But $Z$ represents the **good** (exogenous) variation in $X$!
+Soaking up this variation leaves only the bad variation behind, making our endogeneity problem worse than it was to begin with.
+In this example, $Z$ is what is known as a [bad control](https://ditraglia.com/erm/16-DAGs-bad-controls.pdf), a control regressor that makes things worse rather than better.
+A common piece of advice for avoiding bad controls is to only include control regressors that are correlated with $X$ and $Y$ but are *not themselves* caused by $Z$.
+The example in this post shows that this advice **wrong**.
+Here $Z$ is not caused by $X$, and is correlated with both $X$ and $Y$.
+Nevertheless, it is a bad control
+In short, a valid instrument provides a powerful way to carry out causal inference from observational data, but only if you use it in the right way.
+A good instrument is a bad control!

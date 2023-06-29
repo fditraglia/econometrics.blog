@@ -1,0 +1,209 @@
+---
+title: A Good Instrument is a Bad Control
+author: Francis J. DiTraglia
+date: '2023-06-29'
+slug: a-good-instrument-is-a-bad-control
+categories: [econometrics, R, IV, control function, TSLS]
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-06-29T16:04:58+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>Here’s a puzzle for you.
+What will happen if we regress some outcome of interest on <em>both</em> an endogenous regressor <em>and</em> a valid instrument for that regressor?
+I hadn’t thought about this question until 2018, when one of my undergraduate students asked it during class.
+If memory serves, my off-the-cuff answer left much to be desired.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Five years later I’m finally ready to give a fully satisfactory answer; better late than never I suppose!</p>
+<div id="the-model" class="section level1">
+<h1>The Model</h1>
+<p>We’ll start by being a bit more precise about the setup.
+Suppose that <span class="math inline">\(Y\)</span> is related to <span class="math inline">\(X\)</span> according to the following <strong>linear causal model</strong> <span class="math display">\[
+Y \leftarrow \alpha + \beta X + U
+\]</span>
+where <span class="math inline">\(\beta\)</span> is the causal effect of interest and <span class="math inline">\(U\)</span> represents unobserved causes of <span class="math inline">\(Y\)</span> that may be related to <span class="math inline">\(X\)</span>.
+Now, for <em>any</em> observed random variable <span class="math inline">\(Z\)</span>, we can define
+<span class="math display">\[
+V \equiv X - (\pi_0 + \pi_1 Z), \quad \pi_0 \equiv \mathbb{E}[X] - \pi_1 \mathbb{E}[Z], \quad \pi_1 \equiv \frac{\text{Cov}(X,Z)}{\text{Var}(Z)}.
+\]</span>
+This is the <strong>population linear regression</strong> of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>.
+By construction it satisfies <span class="math inline">\(\mathbb{E}[V] = \text{Cov}(Z,V) = 0\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+Thus we can write,
+<span class="math display">\[
+X = \pi_0 + \pi_1 Z + V, \quad \mathbb{E}[V] = \text{Cov}(Z,V) = 0
+\]</span>
+for <em>any</em> random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, simply by constructing <span class="math inline">\(V\)</span> as described above.
+If <span class="math inline">\(\pi_1 \neq 0\)</span>, we say that <span class="math inline">\(Z\)</span> is <strong>relevant</strong>.
+If <span class="math inline">\(\text{Cov}(Z,U) = 0\)</span>, we say that <span class="math inline">\(Z\)</span> is <strong>exogenous</strong>.
+If <span class="math inline">\(Z\)</span> is both relevant and exogenous, we say that it is a <strong>valid instrument</strong> for <span class="math inline">\(X\)</span>.</p>
+<p>As we’ve defined it above, <span class="math inline">\(V\)</span> is simply a regression residual.
+But if <span class="math inline">\(Z\)</span> is a valid instrument, it turns out that we can think of <span class="math inline">\(V\)</span> as the “endogenous part” of <span class="math inline">\(X\)</span>.
+To see why, expand <span class="math inline">\(\text{Cov}(X,U)\)</span> as follows:
+<span class="math display">\[
+\text{Cov}(X,U) = \text{Cov}(\pi_0 + \pi_1 Z + V, \,U) = \pi_1 \text{Cov}(Z,U) + \text{Cov}(U,V) = \text{Cov}(U,V)
+\]</span>
+since we have assumed that <span class="math inline">\(\text{Cov}(Z,U) = 0\)</span>.
+In words, the endogeneity of <span class="math inline">\(X\)</span> is <em>precisely the same thing</em> as the covariance between <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span>.</p>
+<p>Here’s a helpful way of thinking about this.
+If <span class="math inline">\(Z\)</span> is exogenous then our regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span> <em>partitions</em> the overall variation in <span class="math inline">\(X\)</span> into two components: the “good” (exogenous) variation <span class="math inline">\(\pi_1 Z\)</span> is uncorrelated with <span class="math inline">\(U\)</span>, while the “bad” (endogenous) variation <span class="math inline">\(V\)</span> is correlated with <span class="math inline">\(U\)</span>.
+The logic of two-stage least squares is that regressing <span class="math inline">\(Y\)</span> on the “good” variation, <span class="math inline">\(\pi_1 Z\)</span> allows us to recover <span class="math inline">\(\beta\)</span>, the causal effect of interest.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+</div>
+<div id="a-simulation-example" class="section level1">
+<h1>A Simulation Example</h1>
+<p>Using the model and derivations from above, let’s run a little simulation.
+To simulate a valid instrument <span class="math inline">\(Z\)</span> and an endogenous regressor <span class="math inline">\(X\)</span> we can proceed as follows.
+First generate independent standard normal draws <span class="math inline">\(\{Z_i\}_{i=1}^n\)</span>.
+Next independently generate pairs of correlated standard normal draws <span class="math inline">\(\{(U_i, V_i)\}_{i=1}^n\)</span> with <span class="math inline">\(\text{Corr}(U_i, V_i) = \rho\)</span>.
+Finally, set
+<span class="math display">\[
+X_i = \pi_0 + \pi_1 Z_i + V_i \quad \text{and} \quad
+Y_i = \alpha + \beta X_i + U_i
+\]</span>
+for each value of <span class="math inline">\(i\)</span> between <span class="math inline">\(1\)</span> and <span class="math inline">\(n\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>
+The following chunk of R code runs this simulation with <span class="math inline">\(n = 5000\)</span>, <span class="math inline">\(\rho = 0.5\)</span>, <span class="math inline">\(\pi_0 = 0.5\)</span>, <span class="math inline">\(\pi_1 = 0.8\)</span>, <span class="math inline">\(\alpha = -0.3\)</span> and <span class="math inline">\(\beta = 1\)</span>:</p>
+<pre class="r"><code>set.seed(1234)
+n &lt;- 5000
+z &lt;- rnorm(n)
+
+library(mvtnorm)
+Rho &lt;- matrix(c(1, 0.5, 
+                0.5, 1), 2, 2, byrow = TRUE)
+errors &lt;- rmvnorm(n, sigma = Rho)
+
+u &lt;- errors[, 1]
+v &lt;- errors[, 2]
+x &lt;- 0.5 + 0.8 * z + v
+y &lt;- -0.3 + x + u</code></pre>
+<p>In the simulation <span class="math inline">\(Z\)</span> is a valid instrument, <span class="math inline">\(X\)</span> is an endogenous regressor, and the true causal effect of interest equals one.
+Using our simulation data, let’s test out three possible estimators:</p>
+<ul>
+<li><span class="math inline">\(\widehat{\beta}_\text{OLS}\equiv\)</span> the slope coefficient from an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</li>
+<li><span class="math inline">\(\widehat{\beta}_\text{IV}\equiv\)</span> slope coefficient from an IV regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> with <span class="math inline">\(Z\)</span> as an instrument.</li>
+<li><span class="math inline">\(\widehat{\beta}_{X.Z}\equiv\)</span> the coefficient on <span class="math inline">\(X\)</span> in an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>.</li>
+</ul>
+<pre class="r"><code>c(truth = 1,
+  b_OLS = cov(x, y) / var(x), 
+  b_IV = cov(z, y) / cov(z, x), 
+  b_x.z = unname(coef(lm(y ~ x + z))[2])) |&gt; # unname() makes the names prettier!
+  round(2)</code></pre>
+<pre><code>## truth b_OLS  b_IV b_x.z 
+##  1.00  1.31  1.01  1.49</code></pre>
+<p>As expected, OLS is far from the truth while IV pretty much nails it.
+Interestingly, the regression of <code>y</code> on <code>x</code> and <code>z</code> gives the worst performance of all! Is this just a fluke?
+Perhaps it’s an artifact of the simulation parameters I chose, or just bad luck arising from some unusual simulation draws.
+To find out, we’ll need a bit more algebra.
+But stay with me: the payoff is worth it, and there’s not too much extra math required!</p>
+</div>
+<div id="the-general-result" class="section level1">
+<h1>The General Result</h1>
+<div id="regression-of-y-on-x-and-z" class="section level2">
+<h2>Regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span></h2>
+<p>The coefficient on <span class="math inline">\(X\)</span> in a population linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> is given by
+<span class="math display">\[
+\beta_{X.Z} = \frac{\text{Cov}(\tilde{X}, Y)}{\text{Var}(\tilde{X})}
+\]</span>
+where <span class="math inline">\(\tilde{X}\)</span> is defined as the <em>residual</em> in another population linear regresasion: the regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
+But wait a minute: we’ve <em>already seen</em> this residual!
+Above we called it <span class="math inline">\(V\)</span> and used it to write <span class="math inline">\(X = \pi_0 + \pi_1 Z + V\)</span>.
+Using this equation, along with the linear causal model relating <span class="math inline">\(Y\)</span> to <span class="math inline">\(X\)</span> and <span class="math inline">\(U\)</span>, we can re-express <span class="math inline">\(\beta_{X.Z}\)</span> as
+<span class="math display">\[
+\begin{align*}
+\beta_{X.Z} &amp;= \frac{\text{Cov}(V, Y)}{\text{Var}(V)} = \frac{\text{Cov}(V, \alpha + \beta X + U)}{\text{Var}(V)}\\
+&amp;= \frac{\text{Cov}(U,V) + \beta\text{Cov}(V, \pi_0 + \pi_1 Z + V)}{\text{Var}(V)}\\
+&amp;= \beta + \frac{\text{Cov}(U,V)}{\text{Var}(V)}
+\end{align*}
+\]</span>
+since <span class="math inline">\(\text{Cov}(Z, V) = 0\)</span> by construction.
+We have some simulation data at our disposal, so let’s check this calculation.
+In the simulation <span class="math inline">\(\beta = 1\)</span> and
+<span class="math display">\[
+\frac{\text{Cov}(U, V)}{\text{Var}(V)} = 0.5
+\]</span>
+since <span class="math inline">\(\text{Var}(U) = \text{Var}(V) = 1\)</span> and <span class="math inline">\(\text{Cov}(U, V) = 0.5\)</span>.
+Therefore <span class="math inline">\(\beta_{X.Z} = 1.5\)</span>.
+And, indeed, this is almost <em>exactly</em> the value of our estimate from our simulation above.</p>
+</div>
+<div id="regression-of-y-on-x-only" class="section level2">
+<h2>Regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> Only</h2>
+<p>So far so good.
+Now what about the “usual” OLS estimator?
+A quick calculation gives
+<span class="math display">\[
+\beta_{\text{OLS}} = \beta + \frac{\text{Cov}(X,U)}{\text{Var}(X)} = \beta + \frac{\text{Cov}(V,U)}{\text{Var}(X)}
+\]</span>
+using the fact that <span class="math inline">\(\text{Cov}(X,U) = \text{Cov}(U,V)\)</span>, as explained above.
+Again, we can check this against our simulation results.
+We know that <span class="math inline">\(\text{Cov}(V,U) = 0.5\)</span> and
+<span class="math display">\[
+\text{Var}(X) = \text{Var}(\pi_0 + \pi_1 Z + V) = \pi_1^2 \text{Var}(Z) + \text{Var}(V) = (0.8)^2 + 1 = 41/25
+\]</span>
+since <span class="math inline">\(Z\)</span> and <span class="math inline">\(V\)</span> are uncorrelated by construction, <span class="math inline">\(\text{Var}(Z) = \text{Var}(V) = 1\)</span> and <span class="math inline">\(\pi_1 = 0.8\)</span> in the simulation design.
+Hence, <span class="math inline">\(\beta_{\text{OLS}} = 1 + 25/82 \approx 1.305\)</span>.
+Again, this agrees almost perfectly with our simulation.</p>
+</div>
+<div id="comparing-the-results" class="section level2">
+<h2>Comparing the Results</h2>
+<p>To summarize, we have shown that
+<span class="math display">\[
+\beta_{X.Z} = \beta + \frac{\text{Cov}(U,V)}{\text{Var}(V)}, \quad \text{while} \quad
+\beta_{\text{OLS}} = \beta + \frac{\text{Cov}(U,V)}{\text{Var}(X)}.
+\]</span>
+There is only one difference between these two expressions: <span class="math inline">\(\beta_{X.Z}\)</span> has <span class="math inline">\(\text{Var}(V)\)</span> where <span class="math inline">\(\beta_{\text{OLS}}\)</span> has <span class="math inline">\(\text{Var}(X)\)</span>.
+Returning to our expression for <span class="math inline">\(\text{Var}(X)\)</span> from above,
+<span class="math display">\[
+\text{Var}(X) = \pi_1^2 \text{Var}(Z) + \text{Var}(V) &gt; \text{Var}(V)
+\]</span>
+as long as <span class="math inline">\(\pi_1 \neq 0\)</span> and <span class="math inline">\(\text{Var}(Z) \neq 0\)</span>.
+In other words, there is always <em>more</em> variation in <span class="math inline">\(X\)</span> than there is in <span class="math inline">\(V\)</span>, since <span class="math inline">\(V\)</span> is the “leftover” part of <span class="math inline">\(X\)</span> after regressing on <span class="math inline">\(Z\)</span>.
+Because the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(V\)</span> appear in the denominators of our expressions from above, it follows that
+<span class="math display">\[
+\left| \text{Cov}(U,V)/\text{Var}(V)\right| &gt; \left| \text{Cov}(U,V)/\text{Var}(X)\right|.
+\]</span>
+In other words, <span class="math inline">\(\beta_{X.Z}\)</span> is <strong>always farther from the truth</strong> than <span class="math inline">\(\beta_{OLS}\)</span>, exactly as we found in our simulation.</p>
+</div>
+</div>
+<div id="some-intuition" class="section level1">
+<h1>Some Intuition</h1>
+<p>In our simulation, <span class="math inline">\(\widehat{\beta}_{X.Z}\)</span> gave a <em>worse</em> estimate of <span class="math inline">\(\beta\)</span> than <span class="math inline">\(\widehat{\beta}_{X.Z}\)</span>.
+The derivations from above show that this wasn’t a fluke: adding a valid instrument <span class="math inline">\(Z\)</span> as an additional control regressor only makes the bias in our estimated causal effect <em>worse</em> than it was to begin with.
+This holds for any valid instrument and any endogenous regressor in a linear causal model.
+I hope you found the derivations from above convincing.
+But even so, you may be wondering if there’s an intuitive explanation for this phenomenon.
+I am please to inform you that the answer is yes!</p>
+<p>In an <a href="https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/">earlier post</a> I described the <strong>control function</strong> approach to instrumental variables regression.
+That post showed that the coefficient on <span class="math inline">\(X\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(V\)</span> gives the <em>correct</em> causal effect.
+We don’t know <span class="math inline">\(V\)</span>, but we can estimate it by regressing <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span> and saving the residuals.
+The logic of multiple regression shows that including <span class="math inline">\(V\)</span> as a control regressor “soaks up” the portion of <span class="math inline">\(X\)</span> that is explained by <span class="math inline">\(V\)</span>.
+Because <span class="math inline">\(V\)</span> represents the “bad” (endogenous) variation in <span class="math inline">\(X\)</span>, this solves our endogeneity problem.
+In effect, <span class="math inline">\(V\)</span> captures the unobserved “omitted variables” that play havoc with a naive regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</p>
+<p>Now, contrast this with a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>.
+In this case, we soak up the variation in <span class="math inline">\(X\)</span> that is explained by <span class="math inline">\(Z\)</span>.
+But <span class="math inline">\(Z\)</span> represents the <strong>good</strong> (exogenous) variation in <span class="math inline">\(X\)</span>!
+Soaking up this variation leaves only the bad variation behind, making our endogeneity problem worse than it was to begin with.
+In this example, <span class="math inline">\(Z\)</span> is what is known as a <a href="https://ditraglia.com/erm/16-DAGs-bad-controls.pdf">bad control</a>, a control regressor that makes things worse rather than better.
+A common piece of advice for avoiding bad controls is to only include control regressors that are correlated with <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> but are <em>not themselves</em> caused by <span class="math inline">\(Z\)</span>.
+The example in this post shows that this advice <strong>wrong</strong>.
+Here <span class="math inline">\(Z\)</span> is not caused by <span class="math inline">\(X\)</span>, and is correlated with both <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.
+Nevertheless, it is a bad control
+In short, a valid instrument provides a powerful way to carry out causal inference from observational data, but only if you use it in the right way.
+A good instrument is a bad control!</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I seem to recall saying something like “this won’t in general give us the causal effect we’re interested in, but I don’t think it’s possible to say anything more without extra assumptions.” Fortunately my lackluster response didn’t derail the student who asked the question: he’s currently pursuing a PhD in Economics at UChicago!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Check if you don’t believe me: substitute the expressions for <span class="math inline">\(\pi_0\)</span> and <span class="math inline">\(\pi_1\)</span>, take expectations / covariances, and simplify.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>See <a href="https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/">this blog post</a> for more discussion.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>We don’t necessarily need <span class="math inline">\(Z_i\)</span> to be normally distributed, as long as it’s independent of <span class="math inline">\((U_i, V_i)\)</span>, so you could use e.g. uniform draws if you prefer. Generating <span class="math inline">\((U_i, V_i)\)</span> from a bivariate normal distribution isn’t necessary either, but it’s a simple way of controlling the endogeneity in <span class="math inline">\(X\)</span>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>This is a special case of the so-called <a href="https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem">FWL Theorem</a>, although I’d argue that we should call it “Yule’s Rule” since <a href="https://en.wikipedia.org/wiki/Udny_Yule">George Udny Yule</a> was arguably the first person to popularize it, decades before F, W, or L.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
