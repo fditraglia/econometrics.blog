@@ -1,0 +1,32 @@
+---
+title: The Return of econometrics.blog!
+author: Francis J. DiTraglia
+date: '2024-07-14'
+slug: the-return-of-econometrics-blog
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2024-07-14T22:22:21+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+After a year-long hiatus, I'm excited to return to regular blogging about econometrics! I have a long list of posts that I'm eager to write, and I hope you'll find them interesting. To whet your appetite, here's a preview of some of the topics I plan to cover in the coming weeks:
+
+- Bayesian versus Frequentist Approaches to Unit Roots
+- How Not To Do Regression Adjustment 
+- Understanding the James-Stein Estimator
+
+In the meantime, I have a few econometrics-related announcements:
+
+1. I'll be teaching a summer course on causal inference at Oxford this September. If you're interested in attending here are the [registration details](https://ouess.web.ox.ac.uk/event/treatment-effects-beyond-the-basics-econometrics) and here's the [course website](https://www.treatment-effects.com/beyond/). 
+2. I'm currently running a virtual summer reading group on Bayesian Econometrics that will continue at least until September and potentially beyond, depending on interest. If you have an email address that ends in `.ox.ac.uk` you can self-register [here](https://edstem.org/us/join/6j2hay). If you don't have an Oxford email address, send me an email and I'll add you manually.
+3. [Martin Weidner](https://users.ox.ac.uk/~econ0610/) and I recently kicked of an initiative to change the way that research in econometrics is assessed. To find out more, visit [sqare.org](https://sqare.org/).
+
+I'm looking forward to getting back to regular posting. If you have any special requests, please add them in the comments below.
