@@ -2,7 +2,7 @@
 title: How to Read an Econometrics Paper
 author: Francis J. DiTraglia
 date: '2024-07-20'
-slug: how-to-read-and-present-an-econometrics-paper
+slug: how-to-read-an-econometrics-paper
 categories: [econometrics, research skills]
 tags: []
 subtitle: ''
