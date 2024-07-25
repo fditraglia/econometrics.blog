@@ -1,0 +1,111 @@
+---
+title: Is it better to improve sensitivity or specificity?
+author: Francis J. DiTraglia
+date: '2024-07-25'
+slug: is-it-better-to-improve-sensitivity-or-specificity
+categories: [probability, teaching]
+tags: [Bayes, sensitivity, specificity, probability, teaching]
+subtitle: ''
+summary: ''
+authors: [Frank DiTraglia]
+lastmod: '2024-07-25T10:32:51+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability. Imagine that you’re developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test’s <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity or its specificity</a>. If your goal is to maximize the <a href="https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values">positive predictive value (PPV)</a> of your test, i.e. the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?</p>
+<div id="an-open-invitation" class="section level2">
+<h2>An Open Invitation</h2>
+<p>If you’re still hungry for more Bayes’ Theorem after reading this post, then why not join the <em>Summer of Bayes 2024</em> online reading group? If you’d like to be added to the mailing list, just send an email to <code>bayes [at] user.sent.as</code>. Recordings of past sessions along with slides and other materials are available to group members via the Summer of Bayes discussion board. And now back your regularly-scheduled blog content…</p>
+</div>
+<div id="odds-arent-so-odd" class="section level2">
+<h2>Odds aren’t so odd!</h2>
+<p>While I give you a few minutes to pause and ponder this question, here’s a brief rant on the topic of odds. If you’re anything like me, the first time you encountered odds, you thought to yourself</p>
+<blockquote>
+<p>What is this $*@%^!? Why would anyone want to spoil a perfectly good probability by dividing it by one minus itself?“<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+</blockquote>
+<p>But it’s time to take the red pill and see the world as it really is: <strong>the only reason you prefer to think in terms of probabilities rather than odds is because you’ve been brainwashed by the educational system</strong>. Of course I exaggerate slightly, but the point is that odds are just as natural as probabilities; we’re just not as accustomed to working with them. In many situations in probability, statistics, and econometrics, it turns out that working with odds (or their logarithm) makes life <em>much</em> simpler, as I will try to convince you with a simple example.</p>
+<p>First we need to define odds. Consider some event <span class="math inline">\(A\)</span> with probability <span class="math inline">\(p\)</span> of occurring. Then we say that the <strong>odds</strong> of <span class="math inline">\(A\)</span> are <span class="math inline">\(p/(1 - p)\)</span>. For example, if <span class="math inline">\(p = 1/3\)</span> then the event <span class="math inline">\(A\)</span> is equivalent to drawing a red ball from an urn that contains one red and two blue balls: the probability gives the <em>ratio of red balls to total balls</em>. The odds of <span class="math inline">\(A\)</span>, on the other hand, equal <span class="math inline">\(1/2\)</span>: odds give the <em>ratio of red balls to blue balls</em>. Since probabilities are between 0 and 1, odds are between 0 and <span class="math inline">\(\infty\)</span>. Odds of 0 mean that the event is impossible, while odds of <span class="math inline">\(\infty\)</span> mean that the event is certain. Odds of 1 mean that the event is just as likely to occur as not to occur.</p>
+<p>Now here’s an example that you’ve surely seen before:</p>
+<blockquote>
+<p>One in a hundred women has breast cancer <span class="math inline">\((B)\)</span>. If you have breast cancer, there is a 95% chance that you will test positive <span class="math inline">\((+)\)</span>; if you do not have breast cancer <span class="math inline">\((B^C)\)</span>, there is a 2% chance that you will nonetheless test positive <span class="math inline">\((+)\)</span>. We know nothing about Alice other than the fact that she tested positive. How likely is it that she has breast cancer?</p>
+</blockquote>
+<p>It’s easy enough to solve this problem using Bayes’ Theorem, as long as you have pen and paper handy:
+<span class="math display">\[
+\begin{aligned}
+P(B | +) &amp;= \frac{P(+|B)P(B)}{P(+)} = \frac{P(+|B)P(B)}{P(+|B)P(B) + P(+|B^C)P(B^C)}\\
+&amp;= \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.02 \times 0.99} \approx 0.32.
+\end{aligned}
+\]</span>
+But what if I asked you how the result would change if only one in a thousand women had breast cancer? What if I changed the <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity</a> of the test from 95% to 99% or the <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">specificity</a> from 98% to 95%? If you’re anything like me, you would struggle to do these calculations in your head. +hat’s because <span class="math inline">\(P(B|+)\)</span> is a <em>highly non-linear</em> function of <span class="math inline">\(P(B)\)</span>, <span class="math inline">\(P(+|B)\)</span>, and <span class="math inline">\(P(+|B^C)\)</span>.</p>
+<p>In contrast, working with odds makes this problem a snap. The key point is that <span class="math inline">\(P(B|+)\)</span> and <span class="math inline">\(P(B^C|+)\)</span> have the same denominator, namely <span class="math inline">\(P(+)\)</span>:
+<span class="math display">\[
+P(B | +) = \frac{P(+|B)P(B)}{P(+)}, \quad
+P(B^C | +) = \frac{P(+|B^C)P(B^C)}{P(+)}
+\]</span>
+Notice that <span class="math inline">\(P(+)\)</span> was the “complicated” term in <span class="math inline">\(P(B|+)\)</span>; the numerator was simple. Since the odds of <span class="math inline">\(B\)</span> given <span class="math inline">\((+)\)</span> is defined as the ratio of <span class="math inline">\(P(B|+)\)</span> to <span class="math inline">\(P(B^C|+)\)</span>, the denominator cancels and we’re left with
+<span class="math display">\[
+\text{Odds}(B|+) \equiv \frac{P(B|+)}{P(B^C|+)} = \frac{P(+|B)}{P(+|B^C)} \times \frac{P(B)}{P(B^C)}.
+\]</span>
+In other words, the <em>posterior odds</em> of <span class="math inline">\(B\)</span> equal the <em>likelihood ratio</em>, <span class="math inline">\(P(+|B)/P(+|B^C)\)</span>, multiplied by the <em>prior odds</em> of <span class="math inline">\(B\)</span>, <span class="math inline">\(P(B)/P(B^C)\)</span>:
+<span class="math display">\[
+\text{Posterior Odds} = \text{(Likelihood Ratio)} \times \text{(Prior Odds)}.
+\]</span>
+Now we can easily solve the original problem in our head. The prior odds are 1/99 while the likelihood ratio is 95/2. Rounding these to 0.01 and 50 respectively, we find that the posterior odds are around 1/2. This means that Alice’s chance of having breast cancer is roughly equivalent to the chance of drawing a red ball from an urn with one red and two blue balls. There’s no need to convert this back to a probability since we can already answer the question: it’s considerably more likely that Alice <em>does not</em> have breast cancer. But if you insist, odds of 1/2 give a probability of 1/3, so in spite of rounding and calculating in our heads we’re within 0.3% of the exact answer!</p>
+<p>Repeat after me: <strong>odds are on a multiplicative scale</strong>. This is their key virtue and the reason why they make it so easy to explore variations on the original problem. If one in a thousand women has breast cancer, the prior odds become 1/999 so we simply divide our previous result by 10, giving posterior odds of around 1/20. If we instead changed the sensitivity from 95% to 99% and the specificity from 98% to 95%, then the likelihood ratio would change from <span class="math inline">\(95/2 \approx 50\)</span> to <span class="math inline">\(99/5 \approx 20\)</span>.</p>
+</div>
+<div id="the-solution" class="section level2">
+<h2>The Solution</h2>
+<p>Have I given you enough time to come up with your own solution? Fantastic! In case you hadn’t already guessed, that little digression about odds served an important purpose: my solution will use odds rather than probabilities. Our goal is to increase the positive predictive value (PPV) of the test, namely
+<span class="math display">\[
+\text{PPV} \equiv P(\text{Has Disease}|\text{Test Positive}),
+\]</span>
+by as much as possible, either by improving the test’s sensitivity
+<span class="math display">\[
+\text{Sensitivity} \equiv P(\text{Test Positive} | \text{Has Disease})
+\]</span>
+or its specificity
+<span class="math display">\[
+\text{Specificity} \equiv P(\text{Test Negative} | \text{Doesn&#39;t Have Disease}).
+\]</span>
+To answer this question, we’ll start by substituting these definitions into the odds form of Bayes’ Theorem introduced above, yielding
+<span class="math display">\[
+\text{Posterior Odds} = \frac{\text{PPV}}{1 - \text{PPV}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}} \times \text{Prior Odds}.
+\]</span>
+This expression makes it clear that increasing either the sensitivity or specificity of the test increases the posterior odds. And because the PPV is a <em>strictly increasing</em> function of the posterior odds, namely
+<span class="math display">\[
+\text{PPV} = \frac{\text{Posterior Odds}}{1 + \text{Posterior Odds}},
+\]</span>
+this also increases the PPV. So now the question is: which of these two possibilities gives us the most bang for our buck? A natural idea would be to compare the <em>marginal effect</em> of increasing sensitivity by a small amount to the marginal effect of increasing specificity by the same amount. We can do this by comparing the <em>partial derivatives</em> of the PPV with respect to sensitivity and specificity. But, again, the PPV is an <em>increasing</em> function of the posterior odds, so we can simplify our task by comparing the <em>derivatives</em> of the posterior odds with respect to sensitivity and specificity. By the chain rule, any claim about the relative magnitudes of these derivatives computed for the odds will also hold for the PPV.</p>
+<p>But why stop with the odds? We can simplify our task even further by comparing the <em>derivatives</em> of the <em>logarithm</em> of the posterior odds with respect to sensitivity and specificity. This is because the logarithm is, again, an <em>increasing transformation</em> of the odds.
+Since
+<span class="math display">\[
+\log(\text{Posterior Odds}) = \log(\text{Sensitivity}) - \log(1 - \text{Specificity})  + \log(\text{Prior Odds}).
+\]</span>
+our required derivatives are
+<span class="math display">\[
+\frac{\partial \log(\text{Posterior Odds})}{\partial \text{Sensitivity}} = \frac{1}{\text{Sensitivity}} \quad \text{and} \quad \frac{\partial \log(\text{Posterior Odds})}{\partial \text{Specificity}} = \frac{1}{1 - \text{Specificity}}.
+\]</span>
+Now for the punchline: the ratio of the derivative with respect to specificity divided by that with respect to sensitivity is
+<span class="math display">\[
+\frac{\partial \log(\text{Posterior Odds})/\partial \text{Specificity}}{\partial \log(\text{Posterior Odds})/\partial \text{Sensitivity}} = \frac{1/(1 - \text{Specificity})}{1/\text{Sensitivity}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}}
+\]</span>
+and this is <em>precisely the likelihood ratio</em> from the odds form of Bayes Theorem! Hence, <strong>whenever the likelihood ratio is greater than one we’d prefer to increase the test’s specificity; whenever it’s less than one we’d prefer to increase the sensitivity.</strong> If the likelihood ratio is equal to one, then it doesn’t matter which we choose.</p>
+<p>Case closed, right? Well not quite. We can say a bit more by thinking about what it <em>means</em> for the likelihood ratio to be greater than or less than one. Examining the odds form of Bayes’ Theorem from above, we see that a likelihood ratio less than one means that our posterior probability that a person is sick <em>falls</em> when she tests positive. In other words, this corresponds to a test that is <em>worse than useless</em>: it’s actually <em>misleading</em>. In contrast, a likelihood ratio greater than one means that the test is <em>informative</em>: a positive test result increases our belief that the person is sick. Any real-world diagnostic test will have a likelihood ratio greater than one. Indeed, if we <em>had</em> such an actively mis-leading test, we could easily convert it into an informative one by simply reversing the test’s outcome: if someone tests positive, we tell them they’re negative, and vice versa. This reversal would result in a likelihood ratio greater than one. Therefore, in all cases–whether we start with an informative test or reverse a misleading one–<strong>we should prefer to increase the test’s specificity</strong>.</p>
+</div>
+<div id="epilogue" class="section level2">
+<h2>Epilogue</h2>
+<p>Of course, this exercise is predicated upon the assumption that we want to maximize the PPV and that we can freely adjust both the test’s sensitivity and its specificity. In practice, one or more of these assumptions might not hold. Indeed, PPV is not the be all and end all of diagnostic testing. A full accounting would need to consider the relative costs of false positives and false negatives along with the prevalence of the disease. Still, I hope this exercise gives you a flavor of the power of odds for simplifying complex problems in probability and statistics.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I know first-hand that this sentiment is shared by at least one distinguished professor of probability theory, so at least I’m not completely alone in my earlier view of things!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
