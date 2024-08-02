@@ -1,0 +1,405 @@
+---
+title: How to Do Regression Adjustment
+author: Francis J. DiTraglia
+date: '2024-08-02'
+slug: how-to-do-regression-adjustment
+categories: [treatment effects]
+tags: []
+subtitle: ''
+summary: ''
+authors: [Frank DiTraglia]
+lastmod: '2024-08-02T13:10:33+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter <em>regression adjustment</em>, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a “good control” that will help us learn the causal effect of interest or a “bad control” that will only make things worse.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Another, and the topic of today’s post, is how to actually <em>implement</em> regression adjustment after we’ve decided which covariates to adjust for.</p>
+<p>The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you’re a bit rusty on these points, you might find it helpful to glance at the first half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">lecture slides</a> along with this series of <a href="https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&amp;si=zqxf9LmexMh0cL2E">short videos</a>. If you’re still hungry for more after this, you might also enjoy this <a href="https://www.econometrics.blog/post/misunderstanding-selection-on-observables/">earlier post</a> from <a href="https://econometrics.blog">econometrics.blog</a> on common misunderstandings about the selection-on-observables assumption.</p>
+<div id="a-quick-review" class="section level2">
+<h2>A Quick Review</h2>
+<p>Consider a binary treatment <span class="math inline">\(D\)</span> and an observed outcome <span class="math inline">\(Y\)</span>. Let <span class="math inline">\((Y_0, Y_1)\)</span> be the <a href="https://youtu.be/EXgOSj7GdSs?si=0Nhx5p2GwJHH3d69">potential outcomes</a> corresponding to the treatment <span class="math inline">\(D\)</span>. Our goal is to learn the average treatment effect <span class="math inline">\(\text{ATE} \equiv \mathbb{E}(Y_1 - Y_0)\)</span> but, unless <span class="math inline">\(D\)</span> is randomly assigned, using the difference of observed means <span class="math inline">\(\mathbb{E}(Y|D=1) - \mathbb{E}(Y|D=0)\)</span> to estimate the ATE in general <a href="https://youtu.be/zbgN0GLolFo?si=aYH_huGqezsWIuUv">won’t work</a>. The idea of <strong>selection-on-observables</strong> is that <span class="math inline">\(D\)</span> might be “as good as randomly assigned” after we adjust for a collection of observed covariates <span class="math inline">\(X\)</span>.</p>
+<p>Regression adjustment relies on two assumptions: <strong>selection-on-observables</strong> and <strong>overlap</strong>. The selection-on-observables assumption says that learning <span class="math inline">\(D\)</span> provides no additional information about the average values of <span class="math inline">\(Y_0\)</span> and <span class="math inline">\(Y_1\)</span>, provided that we already know <span class="math inline">\(X\)</span>. This implies that we can learn the <em>conditional average treatment effect</em> (CATE) by comparing observed outcomes of the treated and untreated <strong>holding <span class="math inline">\(X\)</span> fixed</strong>:
+<span class="math display">\[
+\text{CATE}(x) \equiv \mathbb{E}[Y_1 - Y_0|X = x] = \mathbb{E}[Y|D=1, X = x] - \mathbb{E}[Y|D=0, X = x].
+\]</span>
+For example: older people might be more likely to take a new medication but also more likely to die without it. If so, perhaps by comparing average outcomes <em>holding age fixed</em> we can learn the causal effect of the medication.
+The overlap assumption says that, for any fixed value <span class="math inline">\(x\)</span> of the covariates, there are some treated and some untreated people. This allows us to learn <span class="math inline">\(\text{CATE}(x)\)</span> for every value of <span class="math inline">\(x\)</span> in the population and average it using the law of iterated expectations to recover the ATE:<br />
+<span class="math display">\[
+\text{ATE} = \mathbb{E}[\text{CATE}(X)] = \mathbb{E}[\mathbb{E}(Y|D=1, X) - \mathbb{E}(Y|D=0, X)].
+\]</span>
+In the medication example, this would correspond to computing the difference of means for each age group <em>separately</em>, and then averaging them using the share of people in each age group. Notice that this is only possible if there are some people who took the medication and some who didn’t in each age group. That’s exactly what the overlap assumption buys us. For example, if there were no senior citizens who <em>didn’t</em> take the medication, we wouldn’t be able to learn the effect of the medication for senior citizens.</p>
+</div>
+<div id="which-regression-should-we-run" class="section level2">
+<h2>Which regression should we run?</h2>
+<p>So suppose that we’ve found a set of covariates <span class="math inline">\(X\)</span> that satisfy the required assumptions. How should we actually <em>carry out</em> regression adjustment? To answer this question, let’s start by making things a bit simpler. Suppose that <span class="math inline">\(X\)</span> is a single <em>binary</em> covariate. At the end of the post, we’ll return to the general case. Since <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span> are both binary, we can write the conditional mean function of <span class="math inline">\(Y\)</span> given <span class="math inline">\((D, X)\)</span> as
+<span class="math display">\[
+\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX.
+\]</span>
+Since the true conditional mean function is linear, a linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span>, <span class="math inline">\(DX\)</span> and an intercept will recover <span class="math inline">\((\beta_0, \beta_1, \beta_2, \beta_3)\)</span>.
+But what on earth do these coefficients actually <em>mean</em>?! Substituting all possible values of <span class="math inline">\((D, X)\)</span>,
+<span class="math display">\[
+\begin{align*}
+\mathbb{E}(Y|D=0, X=0) &amp;= \beta_0 \\
+\mathbb{E}(Y|D=1, X=0) &amp;= \beta_0 + \beta_1 \\
+\mathbb{E}(Y|D=0, X=1) &amp;= \beta_0 + \beta_2 \\
+\mathbb{E}(Y|D=1, X=1) &amp;= \beta_0 + \beta_1 + \beta_2 + \beta_3.
+\end{align*}
+\]</span>
+And so, after a bit of re-arranging,
+<span class="math display">\[
+\begin{align*}
+\beta_0 &amp;= \mathbb{E}(Y|D=0, X=0)\\
+\beta_1 &amp;= \mathbb{E}(Y|D=1, X=0) - \mathbb{E}(Y|D=0, X=0)\\
+\beta_2 &amp;= \mathbb{E}(Y|D=0, X=1) - \mathbb{E}(Y|D=0, X=0)\\
+\beta_3 &amp;= \mathbb{E}(Y|D=1, X=1) - \mathbb{E}(Y|D=1, X=0) - \mathbb{E}(Y|D=0, X=1) + \mathbb{E}(Y|D=0, X=0).
+\end{align*}
+\]</span>
+<strong>What a mess!</strong> Alas, we’ll need a few more steps of algebra to figure out how these relate to the ATE. Notice that <span class="math inline">\(\beta_1\)</span> equals the CATE when <span class="math inline">\(X=0\)</span> since
+<span class="math display">\[
+\begin{align*}
+\text{CATE}(0) &amp;\equiv \mathbb{E}(Y|D=1, X=0) - \mathbb{E}(Y|D=0, X=0)\\
+&amp;= (\beta_0 + \beta_1) - \beta_0\\
+&amp; = \beta_1
+\end{align*}
+\]</span>
+Proceeding similarly for the CATE when <span class="math inline">\(X = 1\)</span>, we find that
+<span class="math display">\[
+\begin{align*}
+\text{CATE}(1) &amp;\equiv \mathbb{E}(Y|D=1, X=1) - \mathbb{E}(Y|D=0, X=1) \\
+&amp;= (\beta_0 + \beta_1 + \beta_2 + \beta_3) - (\beta_0 + \beta_2) \\
+&amp;= \beta_1 + \beta_3.
+\end{align*}
+\]</span>
+Now that we have expressions for each of the two conditional average treatment effects, corresponding to each of the values that <span class="math inline">\(X\)</span> can take, we’re finally ready to compute the ATE:
+<span class="math display">\[
+\begin{align*}
+\text{ATE} &amp;= \mathbb{E}[\text{CATE}(X)] \\
+&amp;= \text{CATE}(0) \times \mathbb{P}(X = 0) + \text{CATE}(1) \times \mathbb{P}(X = 1) \\
+&amp;= \beta_1 \left[1 - \mathbb{P}(X = 1)\right] + (\beta_1 + \beta_3) \mathbb{P}(X = 1) \\
+&amp;= \beta_1 + \beta_3 p
+\end{align*}
+\]</span>
+where we define the shorthand <span class="math inline">\(p \equiv \mathbb{P}(X=1)\)</span>. So to compute the ATE, we need to know the coefficients <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_3\)</span> from the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span>, and <span class="math inline">\(DX\)</span>, <em>in addition</em> to the share of people with <span class="math inline">\(X = 1\)</span>. Needless to say, your favorite regression package will not spit out the ATE for you if you run the regression from above. And it <em>certainly</em> won’t spit out the standard error! So what can we do besides computing everything by hand?</p>
+</div>
+<div id="two-simple-alternatives" class="section level2">
+<h2>Two Simple Alternatives</h2>
+<p>It turns out that there are two simple ways to get the your favorite software package to spit out the ATE for you and associated standard error. Each involves a slight <em>re-parameterization</em> of the conditional mean expression from above. The first one replaces <span class="math inline">\(DX\)</span> with <span class="math inline">\(D\tilde{X}\)</span> where <span class="math inline">\(\tilde{X} \equiv X - p\)</span> and <span class="math inline">\(p \equiv \mathbb{P}(X=1)\)</span>. To see why this works, notice that
+<span class="math display">\[
+\begin{align*}
+\mathbb{E}(Y|D, X) &amp;= \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX \\
+&amp;= \beta_0 + \beta_1 D + \beta_2 X + \beta_3 D(X - p) + \beta_3 pD\\
+&amp;= \beta_0 + (\beta_1 + \beta_3 p) D + \beta_2 X + \beta_3 D\tilde{X}\\
+&amp;= \beta_0 + \text{ATE}\times D + \beta_2 X + \beta_3 D\tilde{X}.
+\end{align*}
+\]</span>
+This works perfectly well, but there’s something about it that offends my sense of order: why subtract the mean from <span class="math inline">\(X\)</span> in <em>one place but not in another</em>? If you share my aesthetic sensibilities, then you can feel free to replace that offending <span class="math inline">\(X\)</span> with another <span class="math inline">\(\tilde{X}\)</span> since
+<span class="math display">\[
+\begin{align*}
+\mathbb{E}(Y|D, X) &amp;= \beta_0 + \text{ATE}\times D + \beta_2 X + \beta_3 D\tilde{X}\\
+&amp;= \beta_0 + \text{ATE}\times D + \beta_2 (X-p) + p \beta_2 + \beta_3 D\tilde{X}\\
+&amp;= (\beta_0 + p \beta_2) + \text{ATE}\times D + \beta_2 \tilde{X} + \beta_3 D\tilde{X}\\
+&amp;= \tilde{\beta}_0 + \text{ATE}\times D + \beta_2 \tilde{X} + \beta_3 D\tilde{X}
+\end{align*}
+\]</span>
+where we define <span class="math inline">\(\tilde{\beta}_0 \equiv \beta_0 + p \beta_2\)</span>. Notice that the only coefficient that changes is the intercept, and we’re typically not interested in this anyway!</p>
+</div>
+<div id="what-if-we-ignore-the-interaction" class="section level2">
+<h2>What if we ignore the interaction?</h2>
+<p>Wait a minute, you may be ready to object, when researchers claim to be “adjusting” or “controlling” for <span class="math inline">\(X\)</span> in practice, they very rarely include an interaction term between <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> in their regression! Instead, they just regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span>. What can we say about this approach? To answer this question, let’s continue with our example from above and define the following population linear regression model:
+<span class="math display">\[
+Y = \alpha_0 + \alpha_1 D + \alpha_2 X + V
+\]</span>
+where <span class="math inline">\(U\)</span> is the population linear regression error term so that, <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>, <span class="math inline">\(\mathbb{E}(U) = \mathbb{E}(XU) = 0\)</span>. Notice that I’ve called the coefficients in this regression <span class="math inline">\(\alpha\)</span> rather than <span class="math inline">\(\beta\)</span>. That’s because they will <em>not in general coincide</em> with the conditional mean function from above, namely <span class="math inline">\(\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX\)</span>. In particular, the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> without an interaction will <em>only</em> coincide with the true conditional mean function if <span class="math inline">\(\beta_3 = 0\)</span>.</p>
+<p>So what, if anything, can we say about <span class="math inline">\(\alpha_1\)</span> in relation to the ATE? By <a href="https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem">Yule’s Rule</a><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> we have
+<span class="math display">\[
+\alpha_1 = \frac{\text{Cov}(Y, \tilde{D})}{\text{Var}(\tilde{D})}, \quad
+D = \gamma_0 + \gamma_1 X + \tilde{D}, \quad \mathbb{E}(\tilde{D}) = \mathbb{E}(X\tilde{D}) = 0
+\]</span>
+where <span class="math inline">\(\tilde{D}\)</span> is the error term from a population linear regression of <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span>. In words, the way that a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> “adjusts” for <span class="math inline">\(X\)</span> is by first regressing <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span>, taking the part of <span class="math inline">\(D\)</span> that is <em>not</em> correlated with <span class="math inline">\(X\)</span>, namely <span class="math inline">\(\tilde{D}\)</span>, and regressing <span class="math inline">\(Y\)</span> on this alone.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> As shown in the appendix to this post,
+<span class="math display">\[
+\frac{\text{Cov}(Y,\tilde{D})}{\text{Var}(\tilde{D})} = \frac{\mathbb{E}[\text{Var}(D|X)(\beta_1 + \beta_3 X)]}{\mathbb{E}[\text{Var}(D|X)]}.
+\]</span>
+in this example. And since <span class="math inline">\(\text{CATE}(X) = \beta_1 + \beta_3 X\)</span> it follows that
+<span class="math display">\[
+\alpha_1 = \frac{\mathbb{E}[\text{Var}(D|X) \cdot \text{CATE}(X)]}{\mathbb{E}[\text{Var}(D|X)]}.
+\]</span>
+The only thing that’s random in this expression is <span class="math inline">\(X\)</span>. Both expectations involve averaging over its distribution. To make this clearer, define the <strong>propensity score</strong> <span class="math inline">\(\pi(x) \equiv \mathbb{P}(D=1|X=x)\)</span>. Using this notation,
+<span class="math display">\[
+\begin{align*}
+\text{Var}(D|X) &amp;= \mathbb{E}(D^2|X) - \mathbb{E}(D|X)^2 = \mathbb{E}(D|X) - \mathbb{E}(D|X)^2\\
+&amp;= \pi(X) - \pi(X)^2 = \pi(X)[1 - \pi(X)]
+\end{align*}
+\]</span>
+since <span class="math inline">\(D\)</span> is binary. Defining <span class="math inline">\(p(x) \equiv \mathbb{P}(X = x)\)</span>, we see that
+<span class="math display">\[
+\begin{align*}
+\alpha_1  &amp;= \frac{\mathbb{E}[\pi(X)\{1 - \pi(X)\}\cdot \text{CATE}(X)]}{\mathbb{E}[\pi(X)\{1 - \pi(X)\}]}\\ \\
+&amp;= \frac{p(0) \cdot \pi(0)[1 - \pi(0)]\cdot \text{CATE}(0) + p(1) \cdot \pi(1)[1 - \pi(1)]\cdot \text{CATE}(1)}{p(0) \cdot \pi(0)[1 - \pi(0)] + p(1) \cdot \pi(1)[1 - \pi(1)]}\\ \\
+&amp;= w_0 \cdot \text{CATE}(0) + w_1 \cdot \text{CATE}(1)
+\end{align*}
+\]</span>
+where we introduce the shorthand
+<span class="math display">\[
+w(x) \equiv \frac{p(x) \cdot \pi(x)[1 - \pi(x)]}{\sum_{\text{all } k} p(k) \cdot \pi(k)[1 - \pi(k)]}.
+\]</span>
+In other words, the coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> excluding the interaction term <span class="math inline">\(DX\)</span> gives a <strong>weighted average</strong> of the conditional average treatment effects for the different values of <span class="math inline">\(X\)</span>. The weights are between zero and one and sum to one. Because <span class="math inline">\(w(x)\)</span> is increasing in <span class="math inline">\(p(x)\)</span>, values of <span class="math inline">\(X\)</span> that are <em>more common</em> are given more weight just as they are in the ATE. But since <span class="math inline">\(w(x)\)</span> is <em>also</em> increasing in <span class="math inline">\(\pi(x)[1 - \pi(x)]\)</span>, values of <span class="math inline">\(X\)</span> for which <span class="math inline">\(\pi(x)\)</span> is closer to 0.5 are given more weight, <em>unlike</em> in the ATE. As such, we could describe <span class="math inline">\(\alpha_1\)</span> as a <em>variance-weighted average</em> of the conditional average treatment effects.</p>
+<p>In general, the weighted average <span class="math inline">\(\alpha_1\)</span> will <em>not</em> coincide with the ATE, although there are two special cases where it will. The first case is when <span class="math inline">\(\text{CATE}(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, i.e. treatment effects are <em>homogeneous</em>. In this case <span class="math inline">\(\beta_3 = 0\)</span> so there <em>is no interaction term in the conditional mean function</em>! The second is when <span class="math inline">\(\pi(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, in which case the probability of treatment does not depend on <span class="math inline">\(X\)</span>, so we don’t need to adjust for <span class="math inline">\(X\)</span> in the first place!</p>
+</div>
+<div id="what-about-the-general-case" class="section level2">
+<h2>What about the general case?</h2>
+<p>All of the above derivations assumed that <span class="math inline">\(X\)</span> is one-dimensional and binary. So how much of this still applies more generally? First, if <span class="math inline">\(X\)</span> is a vector of binary variables representing categories like sex, race etc., everything goes through <em>exactly</em> as above.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> All that changes is that <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span> and <span class="math inline">\(p = \mathbb{E}(X)\)</span> become vectors. The coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span> and the interaction <span class="math inline">\(D \tilde{X}\)</span> is still the ATE, and the coefficient on <span class="math inline">\(D\)</span> in a regression that <em>excludes</em> the interaction term is still a weighted average of CATEs that does <em>not in general</em> equal the ATE.</p>
+<p>So whenever the covariates you need to adjust for are categorical, this post has you covered.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> But what if some of our covariates are continuous? In this case things are a bit more complicated, but all of the results from above still go through if we’re willing to assume that the conditional mean functions <span class="math inline">\(\mathbb{E}(Y|D=0, X)\)</span>, <span class="math inline">\(\mathbb{E}(Y|D=1,X)\)</span> and <span class="math inline">\(\mathbb{E}(D|,X)\)</span> are linear in <span class="math inline">\(X\)</span>. This is undoubtedly a strong assumption, but not perhaps as strong as it seems. For example, <span class="math inline">\(X\)</span> could include logs, squares or other functions of some underlying continuous covariates, e.g. age or years of experience. In this case, the weighted average interpretation of the coefficient on <span class="math inline">\(D\)</span> in a regression that excludes the interaction term still holds but now involves an integral rather than a sum.</p>
+</div>
+<div id="does-it-really-work-an-empirical-example" class="section level2">
+<h2>Does it really work? An Empirical Example</h2>
+<p>But perhaps you don’t trust my algebra.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> To assuage your fears, let’s take this to the data! The following example is based on <a href="https://www.almendron.com/tribuna/wp-content/uploads/2018/04/electoral-effects-of-biased-media-russian-television-in-ukraine.pdf">Peisakhin &amp; Rozenas (2018) - Electoral Effects of Biased Media: Russian Television in Ukraine</a>. I’ve adapted it from Llaudet and Imai’s fantastic book <a href="https://press.princeton.edu/books/hardcover/9780691199429/data-analysis-for-social-science">Data Analysis for Social Science</a>, the perfect holiday or birthday gift for the budding social scientist in your life.</p>
+<p>Here’s a bit of background. In the lead-up to Ukraine’s 2014 parliamentary election, Russian state-controlled TV mounted a fierce media campaign against the Ukrainian government. Ukrainians who lived near the border with Russia could <em>potentially</em> receive Russian TV signals. Did receiving these signals <em>cause</em> them to support pro-Russia parties in the election? To answer this question, we’ll use a dataset called <code>precincts</code> that contains aggregate election results in precincts close to the Russian border:</p>
+<pre class="r"><code>library(tidyverse)
+precincts &lt;- read_csv(&#39;https://ditraglia.com/data/UA_precincts.csv&#39;)</code></pre>
+<p>Each row of <code>precincts</code> is an electoral precinct in Ukraine that is near the Russian border. The columns <code>pro_russion</code> and <code>prior_pro_russian</code> give the vote share (in percentage points) of pro-Russian parties in the 2014 and 2012 Ukrainian elections, respectively. Our outcome of interest will be the <em>change</em> in pro-Russian vote share between the two elections, so we first need to construct this:</p>
+<pre class="r"><code>precincts &lt;- precincts |&gt;
+  mutate(change = pro_russian - prior_pro_russian) |&gt; 
+  select(-pro_russian, -prior_pro_russian)
+precincts</code></pre>
+<pre><code>## # A tibble: 3,589 × 3
+##    russian_tv within_25km change
+##         &lt;dbl&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+##  1          0           1  -22.4
+##  2          0           0  -34.5
+##  3          1           1  -18.8
+##  4          0           1  -12.2
+##  5          0           0  -27.7
+##  6          1           0  -44.2
+##  7          0           0  -34.5
+##  8          0           0  -29.5
+##  9          0           0  -24.1
+## 10          0           0  -25.4
+## # ℹ 3,579 more rows</code></pre>
+<p>The column <code>russian_tv</code> equals <code>1</code> if the precinct has Russian TV reception. This is our treatment variable: <span class="math inline">\(D\)</span>. But crucially, this is <em>not</em> randomly assigned. While it’s true that there is some natural variation in signal strength that is plausibly independent of other factors related to voting behavior, on average <em>precincts closer to Russia</em> are more likely to receive a signal. So suppose for the sake of argument that <em>conditional</em> on proximity to the Russian border, <code>russian_tv</code> is as good as randomly assigned. This is the <em>selection on observables</em> assumption. There’s no way to check this using our data alone. It’s something we need to justify based on our understanding of the world and the substantive problem at hand.</p>
+<p>As our measure of proximity, we’ll use the dummy variable <code>within_25km</code> which equals <code>1</code> if the precinct is within 25km of the Russian border. This our <span class="math inline">\(X\)</span>-variable. The <em>overlap</em> assumption requires that there are some precincts with Russian TV reception and some without in each distance category. This is an assumption that we <em>can</em> check using the data, so let’s do so before proceeding:</p>
+<pre class="r"><code>precincts |&gt; 
+  group_by(within_25km) |&gt;
+  summarize(`share with Russion tv` = mean(russian_tv))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   within_25km `share with Russion tv`
+##         &lt;dbl&gt;                   &lt;dbl&gt;
+## 1           0                   0.105
+## 2           1                   0.692</code></pre>
+<p>We see that just over 10% of that are <em>not</em> within 25km of the border have Russian TV reception while just under 70% of those within 25km have reception, so overlap is satisfied in this example. Neither of these values is close to 0% or 100%, so this dataset comfortably satisfies the overlap assumption.</p>
+<p>To avoid taxing your memory about which variable is which, for the rest of this exercise, I’ll create a new dataset that renames the columns of <code>precincts</code> to <code>D</code>, <code>X</code>, and <code>Y</code> for the treatment, covariate, and outcome, respectively.</p>
+<pre class="r"><code>dat &lt;- precincts |&gt; 
+  rename(D = russian_tv, X = within_25km, Y = change)</code></pre>
+<div id="computing-the-ate-the-hard-way" class="section level3">
+<h3>Computing the ATE the Hard Way</h3>
+<p>Now we’re ready to verify the calculations from above. First we’ll compute the ATE “the hard way”, in other words by computing each of the CATEs separately and averaging them. Warning: there’s a fair bit of <code>dplyr</code> to come!</p>
+<pre class="r"><code># Step 1: compute the mean Y for each combination of (D, X)
+means &lt;- dat |&gt; 
+  group_by(D, X) |&gt; 
+  summarize(Ybar = mean(Y))
+means # display the results</code></pre>
+<pre><code>## # A tibble: 4 × 3
+## # Groups:   D [2]
+##       D     X  Ybar
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0     0 -24.6
+## 2     0     1 -34.2
+## 3     1     0 -13.0
+## 4     1     1 -32.2</code></pre>
+<pre class="r"><code># Step 2: reshape so the means of Y|D=0,X and Y|D=1,X are in separate cols
+means &lt;- means |&gt;
+  pivot_wider(names_from = D, 
+              values_from = Ybar, 
+              names_prefix = &#39;Ybar&#39;)
+means # display the results</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##       X Ybar0 Ybar1
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0 -24.6 -13.0
+## 2     1 -34.2 -32.2</code></pre>
+<pre class="r"><code># Step 3: attach a column with the proportion of X = 0 and X = 1
+regression_adjustment &lt;- dat |&gt; 
+  group_by(X) |&gt; 
+  summarize(count = n()) |&gt; 
+  mutate(p = count / sum(count)) |&gt; 
+  select(-count) |&gt; 
+  left_join(means) |&gt; 
+  mutate(CATE = Ybar1 - Ybar0) # compute the CATEs
+regression_adjustment # display the results</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##       X     p Ybar0 Ybar1  CATE
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0 0.849 -24.6 -13.0 11.6 
+## 2     1 0.151 -34.2 -32.2  2.01</code></pre>
+<pre class="r"><code># Step 4: at long last, compute the ATE!
+ATE &lt;- regression_adjustment |&gt; 
+  mutate(out = (Ybar1 - Ybar0) * p) |&gt; 
+  pull(out) |&gt; 
+  sum()
+ATE</code></pre>
+<pre><code>## [1] 10.12062</code></pre>
+</div>
+<div id="computing-the-ate-the-easy-way" class="section level3">
+<h3>Computing the ATE the Easy Way</h3>
+<p>And now the easy way, using the two regressions described above<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<pre class="r"><code># Construct Xtilde = X - mean(X) 
+dat &lt;- dat |&gt; 
+  mutate(Xtilde = X - mean(X))
+
+# Regression of Y on D, X, and D*Xtilde
+lm(Y ~ D + X + D:Xtilde, dat)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ D + X + D:Xtilde, data = dat)
+## 
+## Coefficients:
+## (Intercept)            D            X     D:Xtilde  
+##     -24.591       10.121       -9.604       -9.562</code></pre>
+<pre class="r"><code># Regression of Y on D, Xtilde, and Xtilde
+lm(Y ~ D * Xtilde, dat)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ D * Xtilde, data = dat)
+## 
+## Coefficients:
+## (Intercept)            D       Xtilde     D:Xtilde  
+##     -26.045       10.121       -9.604       -9.562</code></pre>
+<p>Everything works as it should! The coefficient on <code>D</code> in each regression equals the ATE we computed by hand, namely 10.121, and the two regression agree with each other with the exception of the intercept.</p>
+</div>
+<div id="standard-errors" class="section level3">
+<h3>Standard Errors</h3>
+<p>The nice thing about computing the ATE by running a regression rather than computing it “by hand” is that we can easily obtain valid standard errors, confidence intervals, and p-values if desired. For example, if you wanted “robust” standard errors for the ATE, you could simply use <code>lm_robust()</code> from the <code>estimatr</code> package as follows</p>
+<pre class="r"><code>library(estimatr)
+library(broom)
+lm_robust(Y ~ D * Xtilde, dat) |&gt; 
+  tidy() |&gt; 
+  filter(term == &#39;D&#39;) |&gt; 
+  select(-df, -outcome)</code></pre>
+<pre><code>##   term estimate std.error statistic      p.value conf.low conf.high
+## 1    D 10.12062 0.4838613  20.91636 9.315921e-92 9.171946  11.06929</code></pre>
+<p>Getting these “by hand” would have been much more work!</p>
+<p>There is one subtle point that I should mention. I’ve heard it said on numerous occasions that the above standard error calculation is “not quite right” since we <em>estimated</em> the mean of <code>X</code> and used it to re-center <code>X</code> in the regression. Surely we should account for the sampling variability in <span class="math inline">\(\bar{X}\)</span> around its mean, the argument goes.</p>
+<p>Perhaps I’m about to get blacklisted by the Econometrician’s alliance for saying this, but I’m not convinced. The usual way of thinking about inference for regression is <em>conditional</em> on the regressors, in this case <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span>. Viewed from this perspective, <span class="math inline">\(\bar{X}\)</span> <em>isn’t random</em>. Now, of course, if you prefer to see the world through finite-population design-based lenses, <span class="math inline">\(D\)</span> is <em>definitely</em> random. But in this case it’s the <em>only</em> thing that’s random. The design-based view situates randomness exclusively in the <em>treatment assignment mechanism</em>. Under this view, since the units in our dataset are not considered as having been drawn from a hypothetical super-population, any summary statistic of their covariates <span class="math inline">\(X\)</span> is <em>fixed</em>. So again, <span class="math inline">\(\bar{X}\)</span> isn’t random and doesn’t contribute any uncertainty. As far as I can see, it’s perfectly reasonable to use the sample mean of <span class="math inline">\(X\)</span> to re-center <span class="math inline">\(X\)</span> in the regression.</p>
+</div>
+<div id="excluding-the-interaction" class="section level3">
+<h3>Excluding the Interaction</h3>
+<p>Finally, we’ll verify the derivations from above for <span class="math inline">\(\alpha_1\)</span> in the regression that <em>excludes</em> an interaction term. First we’ll compute the “variance weighted average” of CATEs by hand and check that it does not agree with the ATE:</p>
+<pre class="r"><code># Compute the propensity score pi(X)
+pscore &lt;- dat |&gt; 
+  group_by(X) |&gt;
+  summarize(pi = mean(D))
+
+# Compute the weights w 
+regression_adjustment &lt;- left_join(regression_adjustment, pscore) |&gt; 
+  mutate(w = p * pi * (1 - pi) / sum(p * pi * (1 - pi))) 
+
+regression_adjustment # display the results</code></pre>
+<pre><code>## # A tibble: 2 × 7
+##       X     p Ybar0 Ybar1  CATE    pi     w
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0 0.849 -24.6 -13.0 11.6  0.105 0.713
+## 2     1 0.151 -34.2 -32.2  2.01 0.692 0.287</code></pre>
+<pre class="r"><code># Compute the variance weighted average of the CATEs
+wCATE &lt;- regression_adjustment |&gt; 
+  summarize(wCATE = sum(w * CATE)) |&gt; 
+  pull(wCATE)
+
+c(wCATE = wCATE, ATE = ATE)</code></pre>
+<pre><code>##     wCATE       ATE 
+##  8.822285 10.120617</code></pre>
+<p>Finally, we’ll compare this hand calculation to the results of a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> without an interaction:</p>
+<pre class="r"><code>lm(Y ~ D + X, dat)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ D + X, data = dat)
+## 
+## Coefficients:
+## (Intercept)            D            X  
+##     -24.302        8.822      -14.614</code></pre>
+<p>As promised, the coefficient on <span class="math inline">\(D\)</span> equals the variance-weighted average of CATEs that we computed by hand, namely 8.822, which does not equal the ATE, 10.121. Here the CATE for <span class="math inline">\(X=1\)</span> receives <em>more weight</em> when the interaction term is omitted, pulling the coefficient on <span class="math inline">\(D\)</span> away from the ATE and towards the (smaller) CATE for <span class="math inline">\(X=1\)</span>.</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>I hope this post has convinced you that regression adjustment isn’t simply a matter of tossing a collection of covariates into your regression! In general, the coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span> will <em>not</em> equal the ATE of <span class="math inline">\(D\)</span>. Instead it will be a weighted average of CATEs. To obtain the ATE we need to include an <em>interaction</em> between <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span>. The simplest way to get your favorite statistical software package to calculate this for you, along with an appropriate standard error, is by <em>de-meaning</em> <span class="math inline">\(X\)</span> before including the interaction. And don’t forget that causal inference <em>always requires untestable assumptions</em>, in this case the selection-on-observables assumption. While implementation details are important, getting them right won’t make any difference if you’re not adjusting for the right covariates in the first place.</p>
+</div>
+<div id="appendix-the-missing-algebra" class="section level2">
+<h2>Appendix: The Missing Algebra</h2>
+<p>This section provides the algebra needed to justify the expression for <span class="math inline">\(\alpha_1\)</span> from a regression that omits the interaction between <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span>. In particular, we will show that
+<span class="math display">\[
+\frac{\text{Cov}(Y,\tilde{D})}{\text{Var}(\tilde{D})} = \frac{\mathbb{E}[\text{Var}(D|X)(\beta_1 + \beta_3 X)]}{\mathbb{E}[\text{Var}(D|X)]}.
+\]</span>
+where <span class="math inline">\(\tilde{D}\)</span> is the error term from a population linear regression of <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span>, namely <span class="math inline">\(D = \gamma_0 + \gamma_1 X + \tilde{D}\)</span> so that <span class="math inline">\(\mathbb{E}(\tilde{D}) = \mathbb{E}(X\tilde{D}) = 0\)</span> by construction. The proof isn’t too difficult, but it’s a bit tedious so I thought you might prefer to skip it on a first reading. Still here? Great! Let’s dive into the algebra.</p>
+<p>We need to calculate <span class="math inline">\(\text{Cov}(Y, \tilde{D})\)</span> and <span class="math inline">\(\text{Var}(\tilde{D})\)</span>. A nice way to carry out this calculation is by applying the <a href="https://en.wikipedia.org/wiki/Law_of_total_covariance">law of total covariance</a>. You may have heard of the law of total variance, but in my view the law of total covariance is more useful. Just as you can deduce all the properties of variance from the properties of covariance, using <span class="math inline">\(\text{Cov}(W, W) = \text{Var}(W)\)</span>, you can deduce the law of total variance from the law of covariance! In the present example, the law of total covariance allows us to write
+<span class="math display">\[
+\text{Cov}(Y, \tilde{D}) = \mathbb{E}[\text{Cov}(Y, \tilde{D}|X)] + \text{Cov}[\mathbb{E}(Y|X), \mathbb{E}(\tilde{D}|X)].
+\]</span>
+If this looks intimidating, don’t worry: we’ll break it down piece by piece. The second term on the RHS is a covariance between two random variables: <span class="math inline">\(\mathbb{E}(Y|X)\)</span> and <span class="math inline">\(\mathbb{E}(\tilde{D},X)\)</span>.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> We already have an equation for <span class="math inline">\(\tilde{D}\)</span>, namely the population linear regression of <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span>, so let’s use it to simplify <span class="math inline">\(\mathbb{E}(\tilde{D}|X)\)</span>:
+<span class="math display">\[
+\mathbb{E}(\tilde{D}|X) = \mathbb{E}(D - \gamma_0 - \gamma_1 X|X) = \mathbb{E}(D|X) - \gamma_0 - \gamma_1 X.
+\]</span>
+Here’s the key thing to note: since <span class="math inline">\(D\)</span> is binary, the population linear regression of <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span> is <em>identical</em> to the conditional mean of <span class="math inline">\(D\)</span> given <span class="math inline">\(X\)</span>.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> This tells us that <span class="math inline">\(\mathbb{E}(\tilde{D}|X)=0\)</span>. Since the covariance of anything with a constant is zero, the second term on the RHS of the law of total covariance drops out, leaving us with
+<span class="math display">\[
+\text{Cov}(Y, \tilde{D}) = \mathbb{E}[\text{Cov}(Y, \tilde{D}|X)] = \mathbb{E}[\text{Cov}(Y, D - \gamma_0 - \gamma_1 X | X)].
+\]</span>
+Now let’s deal with the conditional covariance inside the expectation. Remember that conditioning on <span class="math inline">\(X\)</span> is equivalent to saying “suppose that <span class="math inline">\(X\)</span> were known”. Anything that’s known is constant, not random. So we can treat <em>both</em> <span class="math inline">\(X\)</span> and <span class="math inline">\(\delta\)</span> as constants and apply the usual rules for covariance to obtain
+<span class="math display">\[
+\text{Cov}(Y, D - \gamma_0 - \gamma_1 X | X) = \text{Cov}(Y, D|X).
+\]</span>
+Therefore, <span class="math inline">\(\text{Cov}(Y, \tilde{D}) = \mathbb{E}[\text{Cov}(Y, D|X)]\)</span>. A very similar calculation using the <a href="https://en.wikipedia.org/wiki/Law_of_total_variance">law of total variance</a> gives
+<span class="math display">\[
+\begin{align*}
+\text{Var}(\tilde{D}) &amp;= \mathbb{E}[\text{Var}(\tilde{D}|X)] + \text{Var}[\mathbb{E}(\tilde{D}|X)] =\mathbb{E}[\text{Var}(\tilde{D}|X)]\\
+&amp;= \mathbb{E}[\text{Var}(D - \gamma_0 - \gamma_1 X| X)]\\
+&amp;= \mathbb{E}[\text{Var}(D|X)]
+\end{align*}
+\]</span>
+since <span class="math inline">\(\mathbb{E}(\tilde{D}|X) = 0\)</span> and the variance of any constant is simply zero. So, with the help of the laws of total covariance and variance, we’ve established that<br />
+<span class="math display">\[
+\alpha_1 \equiv \frac{\text{Cov}(Y, \tilde{D})}{\text{Var}(\tilde{D})}= \frac{\mathbb{E}[\text{Cov}(Y, D|X)]}{\mathbb{E}[\text{Var}(D|X)]}
+\]</span>
+in this example. Note that this does <em>not</em> hold in general: it relies on the fact that <span class="math inline">\(\mathbb{E}(\tilde{D}|X)=0\)</span>, which holds in our example because <span class="math inline">\(\mathbb{E}(D|X) = \gamma_0 + \gamma_1 X\)</span> given that <span class="math inline">\(X\)</span> is binary.</p>
+<p>We’re very nearly finished. All that remains is to simplify the numerator. To do this, we’ll use the equality
+<span class="math display">\[
+Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
+\]</span>
+where <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|D, X)\)</span> satisfies <span class="math inline">\(\mathbb{E}(U|D,X) = 0\)</span> <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>. This allows us to write
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(Y, D|X) &amp;= \text{Cov}(\beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U, D|X)\\
+&amp;= \beta_1 \text{Cov}(D, D|X) + \beta_3 \text{Cov}(DX, D|X) + \text{Cov}(U,D|X)\\
+&amp;= \beta_1 \text{Var}(D|X) + \beta_3 X \cdot \text{Var}(D|X) + \text{Cov}(U,D|X)\\
+&amp;= \text{Var}(D|X)(\beta_1 + \beta_3 X) + \text{Cov}(U, D| X).
+\end{align*}
+\]</span>
+So what about that pesky <span class="math inline">\(\text{Cov}(U,D|X)\)</span> term? By the law of iterated iterations this turns out to equal zero, since
+<span class="math display">\[
+\begin{align*}
+\text{Cov}(U,D|X) &amp;= \mathbb{E}(DU|X) - \mathbb{E}(D|X) \mathbb{E}(U|X)\\
+&amp;= \mathbb{E}_{D|X}[D\mathbb{E}(U|D,X)] - \mathbb{E}(D|X) \mathbb{E}_{D|X}[\mathbb{E}(U|D,X)]
+\end{align*}
+\]</span>
+and, again, <span class="math inline">\(\mathbb{E}(U|D,X) = 0\)</span> <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>. So we’re left with
+<span class="math display">\[
+\alpha_1 = \frac{\mathbb{E}[\text{Cov}(Y, D|X)]}{\mathbb{E}[\mathbb{E}[\text{Var}(D|X)]} = \frac{\mathbb{E}[\text{Var}(D|X)(\beta_1 + \beta_3 X)]}{\mathbb{E}[\text{Var}(D|X)]}.
+\]</span></p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>See <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://arxiv.org/abs/2307.00369">make fetch happen</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>If you want the standard error of <span class="math inline">\(\beta\)</span> and not just the point estimate, then replace <span class="math inline">\(Y\)</span> with the residual from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>This is a nice homework exercise to test your understanding of the post!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day!<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>I certainly don’t!<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>If you’re rusty on R’s formula syntax, you may find my <a href="https://www.econometrics.blog/post/the-r-formula-cheatsheet/">cheat sheet</a> helpful.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>An unconditional expectation like <span class="math inline">\(\mathbb{E}(Y)\)</span> is a constant: it’s a probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>. In contrast, a conditional expectation like <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a random variable: it’s our “best guess” of <span class="math inline">\(Y\)</span> based on observing <span class="math inline">\(X\)</span>, where “best” means “minimum mean-squared error”. See <a href="https://youtu.be/CbsZHNQX54s?si=MN80w00yj1W5yDmX">this video</a> for some more details on conditional expectation.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>In general, a population linear regression gives the best linear approximation of the conditional mean, but when the conditional mean is in fact linear, the two coincide. The reason these coincide in our example is that we can write <span class="math inline">\(\mathbb{E}[D|X] = X \mathbb{E}(D|X=1) + (1 - X) \mathbb{E}(D|X=0)\)</span>. There are only two values that <span class="math inline">\(X\)</span> can take, and we are simply “picking out” the average value of <span class="math inline">\(D\)</span> in each case. But we can re-arrange this to take precisely the form <span class="math inline">\(\delta + \kappa X\)</span> defining <span class="math inline">\(\delta = \mathbb{E}(D|X=0)\)</span> and <span class="math inline">\(\kappa = \mathbb{E}(D|X=1) - \mathbb{E}(X=0)\)</span>.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
