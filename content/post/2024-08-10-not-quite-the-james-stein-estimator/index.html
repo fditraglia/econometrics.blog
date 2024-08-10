@@ -1,0 +1,346 @@
+---
+title: Not Quite the James-Stein Estimator
+author: Francis J. DiTraglia
+date: '2024-08-10'
+slug: not-quite-the-james-stein-estimator
+categories: [shrinkage, decision theory]
+tags: []
+subtitle: ''
+summary: ''
+authors: [Frank DiTraglia]
+lastmod: '2024-08-10T16:32:30+01:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>If you study enough econometrics or statistics, you’ll eventually hear someone mention “Stein’s Paradox” or the <a href="https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator">“James-Stein Estimator”</a>. You’ve probably learned in your introductory econometrics course that ordinary least squares (OLS) is the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem">best linear unbiased estimator</a> (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations “linear” and “unbiased” are crucial here. If we remove them, it’s possible to do better–maybe even <em>much better</em>–than OLS.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Stein’s paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by <a href="https://en.wikipedia.org/wiki/Charles_M._Stein">Charles Stein</a> in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity.</p>
+<p>The supposed <a href="https://youtu.be/XXhJKzI1u48?si=cS--uLd09_JnAXdr">paradox</a> is most simply stated by considering a special case of linear regression–that of estimating multiple unknown means. <a href="https://www.jstor.org/stable/24954030">Efron &amp; Morris (1977)</a> introduce the basic idea as follows:</p>
+<blockquote>
+<p>A baseball player who gets seven hits in 20 official times at bat is said to have a batting average of .350. In computing this statistic we are forming an estimate of the player’s true batting ability in terms of his observed average rate of success. Asked how well the player will do in his next 100 times at bat, we would probably predict 35 more hits. In traditional statistical theory it can be proved that no other estimation rule is uniformly better than the observed average. The paradoxical element in Stein’s result is that it sometimes contradicts this elementary law of statistical theory. If we have three or more baseball players, and if we are interested in predicting future batting averages for each of them, then there is a procedure that is better than simply extrapolating from the three separate averages. Here “better” has a strong meaning. The statistician who employs Stein’s method can expect to predict the future averages more accurately no matter what the true batting abilities of the players may be.</p>
+</blockquote>
+<p>I first encountered Stein’s Paradox in an offhand remark by my PhD supervisor. I dutifully looked it up in an attempt to better understand the point he had been making, but lacked sufficient understanding of decision theory at the time to see what the fuss was all about. The second time I encountered it, after I knew a bit more, it seemed astounding: almost like magic. I decided to include the topic in my <a href="https://ditraglia.com/econ722">Econ 722</a> course at Penn, but struggled to make it accessible to my students. A big problem, in my view, is that the proof–see <a href="https://ditraglia.com/econ722/slides/econ722slides.pdf">lecture 1</a> or <a href="https://ditraglia.com/econ722/main.pdf">section 7.3</a>–is ultimately a bit of a let-down: algebra, followed by repeated integration by parts, and then a fact about the existence of moments for an <a href="https://en.wikipedia.org/wiki/Inverse-chi-squared_distribution">inverse-chi-squared random variable</a>. It seems like a sterile technical exercise when in fact that result itself is deep, surprising, and important. As if a benign deity were keen on making my point for me, the wikipedia article on the <a href="https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator">James-Stein Estimator</a> is flagged as “may be too technical for readers to understand” at the time of this writing!</p>
+<p>After six months of pondering, this post is my attempt to explain the James-Stein Estimator in a way that is accessible to a broad audience. The assumed background is minimal: just an introductory course probability and statistics. I’ll show how we can arrive at something that is <em>very nearly</em> the James-Stein estimator by following some very simple and natural intuition. After you understand my “not quite James-Stein” estimator, it’s a short step to the real thing. So the “let-down” proof I mentioned before becomes merely a technical justification for a slight modification of a formula that is already intuitively compelling. As far as possible, I’ve tried to keep this post self-contained by introducing, or at least reviewing, key background material as we go along. The cost of this approach, unfortunately, is that the post is pretty long! I hope you’ll soldier on the the end and that you’ll find the payoff worth your time and effort.</p>
+<p>As far as I know, the precise way that I motivate the James-Stein estimator in this post is new, but there are are many other papers that aim to make sense of the supposed paradox in an intuitive way. In keeping with my injunction that you should always consider <a href="https://www.econometrics.blog/post/how-to-read-an-econometrics-paper/">reading something else instead</a>, here are a few references that you may find helpful. <a href="https://www.jstor.org/stable/24954030">Efron &amp; Morris (1977)</a> is a classic article aimed at the general reader without a background in statistics. <a href="https://projecteuclid.org/journals/statistical-science/volume-5/issue-1/The-1988-Neyman-Memorial-Lecture--A-Galtonian-Perspective-on/10.1214/ss/1177012274.full">Stigler (1988)</a> is a more technical but still accessible discussion of the topic while <a href="https://www.jstor.org/stable/2682801">Casella (1985)</a> is a very readable paper that discusses the James-Stein estimator in the context of empirical Bayes. A less well-known paper that I found helpful is <a href="https://www.jstor.org/stable/2490394">Ijiri &amp; Leitch (1980)</a>, who consider the James-Stein estimator in a real-world setting, namely “Audit Sampling” in accounting. They discuss several interesting practical and philosophical issues including the distinction between “composite” and “individual” risk that I’ll pick up on below.</p>
+<div id="warm-up-exercise" class="section level2">
+<h2>Warm-up Exercise</h2>
+<p>This section provides some important background that we’ll need to understand Stein’s Paradox later in the post reviewing the ideas of <strong>bias</strong>, <strong>variance</strong> and <strong>mean-squared error</strong> along with introducing a very simple <strong>shrinkage estimator</strong>. To make these ideas as transparent as possible we’ll start with a ridiculously simple problem. Suppose that you observe <span class="math inline">\(X \sim \text{Normal}(\mu, 1)\)</span>, a single draw from a normal distribution with variance one and unknown mean <span class="math inline">\(\mu\)</span>. Your task is to estimate <span class="math inline">\(\mu\)</span>. This may strike you as a very silly problem: it only involves a single datapoint and we assume the variance of <span class="math inline">\(X\)</span> is one! But in fact there’s nothing special about <span class="math inline">\(n = 1\)</span> and a variance of one: these merely make the notation simpler. If you prefer, you can think of <span class="math inline">\(X\)</span> as the sample mean of <span class="math inline">\(n\)</span> iid draws from a population with unknown mean <span class="math inline">\(\mu\)</span> where we’ve <em>rescaled</em> everything to have variance one. So how should we estimate <span class="math inline">\(\mu\)</span>? A natural and reasonable idea is to use the sample mean, in this case <span class="math inline">\(X\)</span> itself. This is in fact the <a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">maximum likelihood estimator</a> for <span class="math inline">\(\mu\)</span>, so I’ll define <span class="math inline">\(\hat{\mu}_{\text{ML}} = X\)</span>. But is this estimator any good? And can we find something better?</p>
+<div id="review-of-bias-variance-and-mse" class="section level3">
+<h3>Review of Bias, Variance and MSE</h3>
+<p>The concepts of <em>bias</em> and <em>variance</em> are key ideas that we typically reach for when considering the quality of an estimator. To refresh your memory, <em>bias</em> is the difference between an estimators expected value and the true value of the parameter being estimated while <em>variance</em> is the expected squared difference between an estimator and its expected value. So if <span class="math inline">\(\hat{\theta}\)</span> is an estimator of some unknown parameter <span class="math inline">\(\theta\)</span>, then <span class="math inline">\(\text{Bias}(\hat{\theta}) = \mathbb{E}[\hat{\theta}] - \theta\)</span> while <span class="math inline">\(\text{Var}(\hat{\theta}) = \mathbb{E}[(\hat{\theta} - \mathbb{E}[\hat{\theta}])^2]\)</span>. A bias of zero means that an estimator is <em>correctly centered</em>: its expectation equals the truth. We say that such an estimator is <em>unbiased</em>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> A small variance means that an estimator is <em>precise</em>: it doesn’t “jump around” too much. Ideally we’d like an estimator that is correctly centered and precise. But it turns out that there is generally a <em>trade-off</em> between bias and variance: if you want to reduce one of them, you have to accept an increase in the other.</p>
+<p>A common way of trading off bias and variance relies on a concept called <em>mean-squared error</em> (MSE) defined as the <em>sum</em> of the squared bias and the variance.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+In particular: <span class="math inline">\(\text{MSE}(\hat{\theta}) = \text{Var}(\hat{\theta}) + \text{Bias}(\hat{\theta})^2\)</span>. Equivalently, we can write <span class="math inline">\(\text{MSE}(\hat{\theta}) = \mathbb{E}[(\hat{\theta} - \theta)^2]\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> To borrow some terminology from introductory microeconomics, you can think of MSE as the <em>negative</em> of a utility function over bias and variance. Both bias and variance are “bads” in that we’d rather have less rather than more of each. This formula expresses our <em>preferences</em> in terms of how much of one we’d be willing to accept in exchange for less of the other. Slightly foreshadowing something that will come later in this post, we can think of MSE as the square of the average distance that an archer’s arrows land from the bulls-eye. Smaller values of MSE are better: variance measures how closely the arrows cluster together while bias measures how far the center of the cluster is from the bulls-eye, as in the following diagram:</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="a-shrinkage-estimator" class="section level3">
+<h3>A Shrinkage Estimator</h3>
+<p>Returning to our maximum likelihood estimator: it’s unbiased, <span class="math inline">\(\text{Bias}(\hat{\mu}_{\text{ML}}) = 0\)</span>, so <span class="math inline">\(\text{MSE}(\hat{\mu}_{\text{ML}}) = \text{Var}(\hat{\mu}_{\text{ML}}) = 1\)</span>. Suppose that low MSE is what we’re after. Is there any way to improve on the ML estimator? In other words, can we achieve an MSE that’s lower than one? The answer turns out to be <em>yes</em>. Here’s the idea. Suppose we had some reason to believe that the true mean <span class="math inline">\(\mu\)</span> isn’t very large. Then perhaps we could try to adjust our maximum likelihood estimate by <em>shrinking</em> slightly towards zero. One way to do this would be by taking a weighted average of the ML estimator and zero:
+<span class="math display">\[
+\hat{\mu}(\lambda) = (1 - \lambda) \times \hat{\mu}_{\text{ML}} + \lambda \times 0 = (1 - \lambda)X
+\]</span>
+for <span class="math inline">\(0 \leq \lambda \leq 1\)</span>. The constant <span class="math inline">\((1 - \lambda)\)</span> is called the “shrinkage factor” and controls how the ML estimator gets pulled towards zero.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
+We get a different estimator for every value of <span class="math inline">\(\lambda\)</span>. If <span class="math inline">\(\lambda = 0\)</span> then we get the ML estimator back. If <span class="math inline">\(\lambda = 1\)</span> then we get a very silly estimator that ignores the data and simply reports zero no matter what! So let’s see how the MSE depends on our choice of <span class="math inline">\(\lambda\)</span>. Substituting the definition of <span class="math inline">\(\hat{\mu}(\lambda)\)</span> into the formulas for bias and variance gives:
+<span class="math display">\[
+\begin{align*}
+\text{Bias}[\hat{\mu}(\lambda)]&amp;= \mathbb{E}[(1 - \lambda)\hat{\mu}_\text{ML}] - \mu = (1 - \lambda)\mathbb{E}[\hat{\mu}_\text{ML}] - \mu = (1 - \lambda)\mu - \mu = -\lambda\mu\\ \\
+\text{Var}[\hat{\mu}(\lambda)]&amp;= \text{Var}[(1 - \lambda)\hat{\mu}_\text{ML}] = (1 - \lambda)^2\text{Var}[\hat{\mu}_\text{ML}] = (1 - \lambda)^2\\ \\
+\text{MSE}[\hat{\mu}(\lambda)]&amp;= \text{Var}[\hat{\mu}(\lambda)] + \text{Bias}[\hat{\mu}(\lambda)]^2 = (1 - \lambda)^2 + \lambda^2\mu^2
+\end{align*}
+\]</span>
+Unless <span class="math inline">\(\lambda = 0\)</span>, the shrinkage estimator is <em>biased</em>. And while the MSE of the ML estimator is always one, regardless of the true value of <span class="math inline">\(\mu\)</span>, the MSE of the shrinkage estimator <em>depends on the unknown parameter</em> <span class="math inline">\(\mu\)</span>.</p>
+<p>So why should we use a biased estimator? The answer is that by tolerating a small amount of bias we may be able to achieve a <em>larger</em> reduction in variance, resulting in a lower MSE compared to the higher variance but unbiased ML estimator. A quick plot shows us that the shrinkage estimator <em>can indeed</em> have a lower MSE than the ML estimator depending on the value of <span class="math inline">\(\lambda\)</span> and the true value of <span class="math inline">\(\mu\)</span>:</p>
+<pre class="r"><code># Range of values for the unknown parameter mu
+mu &lt;- seq(-4, 4, length = 100)
+# Try three different values of lambda
+lambda1 &lt;- 0.1
+lambda2 &lt;- 0.2
+lambda3 &lt;- 0.3
+# Plot the MSE of the shrinkage estimator as a function of mu for all 
+# three values of lambda at once
+matplot(mu, cbind((1 - lambda1)^2 + lambda1^2 * mu^2, 
+                  (1 - lambda2)^2 + lambda2^2 * mu^2, 
+                  (1 - lambda3)^2 + lambda3^2 * mu^2), 
+        type = &#39;l&#39;, lty = 1, lwd = 2, 
+        col = c(&#39;red&#39;, &#39;blue&#39;, &#39;green&#39;), 
+        xlab = expression(mu), ylab = &#39;MSE&#39;, 
+        main = &#39;MSE of Shrinkage Estimator&#39;)
+# Add legend
+legend(&#39;topright&#39;, legend = c(expression(lambda == 0.1), 
+                              expression(lambda == 0.2), 
+                              expression(lambda == 0.3)), 
+       col = c(&#39;red&#39;, &#39;blue&#39;, &#39;green&#39;), lty = 1, lwd = 2)
+# Add dashed line for MSE of ML estimator
+abline(h = 1, lty = 2, lwd = 2)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="some-algebra" class="section level3">
+<h3>Some Algebra</h3>
+<p>It’s time for some algebra. If you’re tempted to skip this <em>please don’t</em>: this section is a warm-up for our main event. If you thoroughly understand the mechanics of shrinkage in this simple example, everything that follows below will seem much more natural.</p>
+<p>As seen from the plot above, the MSE of our shrinkage estimator (the solid lines) is lower than that of the ML estimator (the dashed line) provided that our chosen value of <span class="math inline">\(\lambda\)</span> isn’t too large relative to the true value of <span class="math inline">\(\mu\)</span>. With a bit of algebra, we can work out <em>precisely</em> how large <span class="math inline">\(\lambda\)</span> can be to make shrinkage worthwhile. Since <span class="math inline">\(\text{MSE}[\hat{\mu}_\text{ML}]= 1\)</span>, by expanding and simplifying the expression for <span class="math inline">\(\text{MSE}[\hat{\mu}(\lambda)]\)</span> we see that <span class="math inline">\(\text{MSE}[\hat{\mu}(\lambda)] &lt; \text{MSE}[\hat{\mu}_\text{ML}]\)</span> if and only if
+<span class="math display">\[
+\begin{align*}
+(1 - \lambda)^2 + \lambda^2\mu^2 &amp;&lt; 1 \\
+1 - 2\lambda + \lambda^2 + \lambda^2\mu^2 &amp;&lt; 1 \\
+\lambda^2 (1 + \mu^2) -2 \lambda &amp;&lt; 0 \\
+\lambda [\lambda (1 + \mu^2) - 2] &amp;&lt; 0.
+\end{align*}
+\]</span>
+Since <span class="math inline">\(\lambda \geq 0\)</span>, the final inequality can only hold if the factor inside the square brackets is negative, i.e. 
+<span class="math display">\[
+\begin{align*}
+\lambda (1 + \mu^2) - 2 &amp;&lt; 0 \\
+\lambda &amp;&lt; \frac{2}{1 + \mu^2}.
+\end{align*}
+\]</span>
+This shows that any choice of <span class="math inline">\(\lambda\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(2 / (1 + \mu^2)\)</span> will give us a shrinkage estimator with an MSE less than one. To check our algebra, we can change the inequality to an equality and solve for <span class="math inline">\(\mu\)</span> to obtain the boundary of the region where shrinkage is better than ML:
+<span class="math display">\[
+\begin{align*}
+\lambda (1 + \mu^2) - 2 &amp;= 0 \\
+1 + \mu^2 &amp;= 2/\lambda \\
+\mu &amp;= \pm \sqrt{2/\lambda - 1}.
+\end{align*}
+\]</span>
+Adding these boundaries to a simplified version of our previous plot with only <span class="math inline">\(\lambda = 0.3\)</span> we see that everything works out correctly: the dashed red lines intersect the blue curve at the points where the MSE of the shrinkage estimator equals that of the ML estimator.</p>
+<pre class="r"><code># Plot the MSE of the shrinkage estimator as a function of mu for lambda = 0.3
+lambda &lt;- 0.3
+plot(mu, (1 - lambda)^2 + lambda^2 * mu^2, type = &#39;l&#39;, lty = 1, lwd = 2, 
+     col = &#39;blue&#39;, xlab = expression(mu), ylab = &#39;MSE&#39;, 
+     main = &#39;Boundary of Region Where Shrinkage is Better than ML&#39;)
+# Add dashed line for MSE of ML estimator
+abline(h = 1, lty = 2, lwd = 2)
+# Add boundaries of region where shrinkage is better than ML estimator
+abline(v = c(sqrt(2/lambda - 1), -sqrt(2/lambda - 1)), lty = 3, lwd = 2,
+       col = &#39;red&#39;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>But there’s still more to learn! Suppose we wanted to take things <em>one step further</em> and find the <em>optimal</em> value of <span class="math inline">\(\lambda\)</span> for any given value of <span class="math inline">\(\mu\)</span>. In other words, suppose we wanted the value of <span class="math inline">\(\lambda\)</span> that <em>minimizes</em> the MSE of our shrinkage estimator given a particular assumed value for <span class="math inline">\(\mu\)</span>. Since <span class="math inline">\(\text{MSE}[\hat{\mu}(\lambda)]\)</span> is a quadratic function of <span class="math inline">\(\lambda\)</span>, as shown above, this turns out to be a fairly straightforward calculation. Differentiating,
+<span class="math display">\[
+\begin{align*}
+\frac{d}{d\lambda}\text{MSE}[\hat{\mu}(\lambda)] &amp;= \frac{d}{d\lambda}[(1 - \lambda)^2 + \lambda^2 \mu^2] \\
+&amp;= -2(1 - \lambda) + 2\lambda \mu^2 \\
+&amp;= 2 [\lambda (1 + \mu^2) - 1]\\ \\
+\frac{d^2}{d\lambda^2}\text{MSE}[\hat{\mu}(\lambda)] &amp;= 2(1 + \mu^2) &gt; 0
+\end{align*}
+\]</span>
+so there is a unique global minimum at <span class="math inline">\(\lambda^* \equiv 1/(1 + \mu^2)\)</span>. This gives the <em>optimal</em> shrinkage factor in the sense that it minimizes the MSE of the shrinkage estimator. Substituting <span class="math inline">\(\lambda^*\)</span> into the expression for <span class="math inline">\(\text{MSE}[\hat{\mu}(\lambda)]\)</span> gives:
+<span class="math display">\[
+\begin{align*}
+\text{MSE}[\hat{\mu}(\lambda^*)] &amp;= \left(1 - \frac{1}{1 + \mu^2} \right)^2 + \left(\frac{1}{1 + \mu^2}\right)^2 \mu^2  \\
+&amp;= \left( \frac{\mu^2}{1 + \mu^2}\right)^2 + \left(\frac{1}{1 + \mu^2}\right)^2 \mu^2 \\
+&amp;= \left( \frac{1}{1 + \mu^2}\right)^2 (\mu^4 + \mu^2) \\
+&amp;= \left( \frac{1}{1 + \mu^2}\right)^2 \mu^2(1 + \mu^2) \\
+&amp;= \frac{\mu^2}{1 + \mu^2} &lt; 1.
+\end{align*}
+\]</span></p>
+</div>
+</div>
+<div id="steins-paradox" class="section level2">
+<h2>Stein’s Paradox</h2>
+<div id="recap" class="section level3">
+<h3>Recap</h3>
+<p>We’re moments away from having all the ingredients we need to introduce Stein’s Paradox! But first let’s review what we’ve uncovered thus far. We’ve seen that the shrinkage estimator can improve on the ML estimator in terms of MSE provided that <span class="math inline">\(\lambda\)</span> is chosen judiciously: it needs to be between zero and <span class="math inline">\(2/(1 + \mu^2)\)</span>. The optimal choice of <span class="math inline">\(\lambda\)</span>, namely <span class="math inline">\(\lambda^* = 1 / (1 + \mu^2)\)</span>, gives an MSE of <span class="math inline">\(\mu^2/(1 + \mu^2)\)</span>. This is always lower than one, the MSE of the ML estimator.</p>
+<p>There’s just one massive problem we’ve ignored this whole time: <strong>we don’t know the value of</strong> <span class="math inline">\(\mu\)</span>! As seen from the figure plotted above, the MSE curves for different values of <span class="math inline">\(\lambda\)</span> <em>cross each other</em>: the best one to use depends on the true value of <span class="math inline">\(\mu\)</span>. This doesn’t mean that all is lost. Perhaps in practice we have some outside information about the likely value of <span class="math inline">\(\mu\)</span> that could help guide our choice of <span class="math inline">\(\lambda\)</span>. What it does mean is that there’s no “one-size-fits-all” value.</p>
+</div>
+<div id="admissibility" class="section level3">
+<h3>Admissibility</h3>
+<p>It’s time to introduce a bit of technical vocabulary. We say that an estimator <span class="math inline">\(\tilde{\theta}\)</span> <strong>dominates</strong> another estimator <span class="math inline">\(\hat{\theta}\)</span> if <span class="math inline">\(\text{MSE}[\tilde{\theta}] \leq \text{MSE}[\hat{\theta}]\)</span> for <em>all</em> possible values of the parameter <span class="math inline">\(\theta\)</span> being estimated and <span class="math inline">\(\text{MSE}[\tilde{\theta}] &lt; \text{MSE}[\hat{\theta}]\)</span> for at least <em>one</em> possible value of <span class="math inline">\(\theta\)</span>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> In words, this means that it never makes sense to use <span class="math inline">\(\hat{\theta}\)</span> in preference to <span class="math inline">\(\tilde{\theta}\)</span>. No matter what the true parameter value is, you can’t do worse with <span class="math inline">\(\tilde{\theta}\)</span> and you might do better. An estimator that is <em>not dominated</em> by any other estimator is called <strong>admissible</strong>; an estimator that <em>is dominated</em> by some other estimator is called <strong>inadmissible</strong>. The concept of <em>admissibility</em> in decision theory is a bit like the concept of <a href="https://en.wikipedia.org/wiki/Pareto_efficiency">Pareto efficiency</a> in microeconomics. An admissible estimator is only “good” in the sense that it doesn’t leave any money on the table: there’s no way to do better for one parameter value without doing worse for another. In a similar way, a Pareto efficient allocation in economics is one in which no individual can be made better off without making another person worse off.</p>
+<p>It’s quite challenging to prove, but in fact the ML estimator <span class="math inline">\(\hat{\theta}_{ML} = X\)</span> turns out to be admissible in our little example. So while we could potentially do better by using shrinkage, it’s not a slam-dunk case. If we really have no idea of how large <span class="math inline">\(\mu\)</span> is likely to be, the ML estimator is a reasonable choice. Because it’s admissible, at the very least we know that there’s no free lunch!</p>
+</div>
+<div id="a-more-general-example" class="section level3">
+<h3>A More General Example</h3>
+<p>Now let’s make things a bit more interesting. For the rest of this post, suppose that we observe not a single draw <span class="math inline">\(X\)</span> from a <span class="math inline">\(\text{Normal}(\mu, 1)\)</span> distribution but a <em>collection</em> of <span class="math inline">\(p\)</span> independent draws from <span class="math inline">\(p\)</span> <em>different</em> normal distributions:
+<span class="math display">\[
+X_1, X_2, ..., X_p \sim \text{independent Normal}(\mu_j, 1), \quad j = 1, ..., p.
+\]</span>
+You can think of this as <span class="math inline">\(p\)</span> copies of our original problem: we observe <span class="math inline">\(X_j \sim \text{Normal}(\mu_j, 1)\)</span> and our task is to estimate <span class="math inline">\(\mu_j\)</span>. The observations are all independent, and each comes from a distribution with a potentially <strong>different mean</strong>. At first glance it seems like these <span class="math inline">\(p\)</span> separate problems should have <em>absolutely nothing to do with each other</em>. And indeed the maximum likelihood estimator for the collection of <span class="math inline">\(p\)</span> means is simply <span class="math inline">\(\hat{\mu}^{(j)}_\text{ML} = X_j\)</span>. As above in our example with <span class="math inline">\(p=1\)</span>, the question is: how good is the ML estimator, and can we do any better?</p>
+</div>
+<div id="composite-mse" class="section level3">
+<h3>Composite MSE</h3>
+<p>But first things first: how can we evaluate the quality of <span class="math inline">\(p\)</span> estimators for <span class="math inline">\(p\)</span> different parameters <em>at the same time</em>? A common approach, and the one we will follow here, is to take the <em>sum</em> of the individual MSEs of each estimator, yielding a quantity called <strong>composite MSE</strong>. If <span class="math inline">\(\hat{\mu}_1, \hat{\mu}_2, \dots, \hat{\mu}_p\)</span> is a collection of estimators for each of the individual unknown means, then the composite MSE is defined as
+<span class="math display">\[
+\text{Composite MSE} \equiv \sum_{j=1}^p \text{MSE}(\hat{\mu}_j) = \sum_{j=1}^p \left[ \text{Bias}(\hat{\mu}_j)^2 + \text{Var}(\hat{\mu}_j)\right] = \sum_{j=1}^p \mathbb{E}[(\hat{\mu}_j - \mu_j)^2].
+\]</span>
+Adopting composite MSE as our measure of <em>good</em> performance means that we view each of the <span class="math inline">\(p\)</span> estimation problems as in some way “interchangeable”–we’re happy to accept a trade in which we do a slightly worse job estimating <span class="math inline">\(\mu_j\)</span> in exchange for doing a much better job estimating <span class="math inline">\(\mu_k\)</span>. At the end of the post I’ll say a few more words about this idea and when it may or may not be reasonable. But for the rest of the post, we will assume that our goal is to <strong>minimize the composite MSE</strong>. The concept of composite MSE will be crucial in understanding why the James-Stein estimator works the way it does.</p>
+</div>
+<div id="steins-paradox-1" class="section level3">
+<h3>Stein’s Paradox</h3>
+<p>Putting our new idea into practice, we see that the composite MSE of the ML estimator is <span class="math inline">\(p\)</span> regardless of the true values of the individual means <span class="math inline">\(\mu_1, \dots, \mu_p\)</span> since
+<span class="math display">\[
+\sum_{j=1}^p \text{MSE}\left[\hat{\mu}^{(j)}_\text{ML}\right] = \sum_{j=1}^p \text{MSE}(X_j) = \sum_{j=1}^p \text{Var}(X_j) = p.
+\]</span>
+If the ML estimator is admissible, then there should be no other estimator that always has an MSE less than or equal to <span class="math inline">\(p\)</span> and sometimes has an MSE strictly less than <span class="math inline">\(p\)</span>. I’ve already told you that this is true when <span class="math inline">\(p = 1\)</span>. When <span class="math inline">\(p = 2\)</span> it’s still true: the ML estimator remains admissible. But when <span class="math inline">\(p \geq 3\)</span> something very unexpected happens: it becomes possible to construct an estimator that <strong>dominates</strong> the ML estimator by using information from <em>all</em> of the <span class="math inline">\((X_1, ..., X_p)\)</span> observations to estimate <span class="math inline">\(\mu_j\)</span>. This is spite of the fact that there is <em>no obvious connection</em> between the observations. Again: they are all independent and come from distributions with different means!</p>
+<p>The estimator that does the trick is the so-called “James-Stein Estimator” (JS), defined according to
+<span class="math display">\[
+\hat{\mu}^{(j)}_\text{JS} = \left(1 - \frac{p - 2}{\sum_{k=1}^p X_k^2}\right)X_j.
+\]</span>
+This this estimator dominates the ML estimator when <span class="math inline">\(p \geq 3\)</span> in that<br />
+<span class="math display">\[
+\sum_{j=1}^p \text{MSE}\left[\hat{\mu}^{(j)}_\text{JS}\right] \leq \sum_{j=1}^p \text{MSE}\left[\hat{\mu}^{(j)}_\text{ML}\right]= p
+\]</span>
+for <em>all</em> possible values of the <span class="math inline">\(p\)</span> unknown means <span class="math inline">\(\mu_j\)</span> with strict inequality for at least <em>some</em> values. Taking a closer look at the formula, we see that the James-Stein estimator is just a <em>shrinkage</em> estimator applied to each of the <span class="math inline">\(p\)</span> means, namely
+<span class="math display">\[
+\hat{\mu}^{(j)}_\text{JS} = (1 - \hat{\lambda}_\text{JS})X_j, \quad \hat{\lambda}_\text{JS} \equiv \frac{p - 2}{\sum_{k=1}^p X_k^2}.
+\]</span>
+The shrinkage factor in the James-Stein estimator depends on the number of means we’re estimating, <span class="math inline">\(p\)</span>, along with the <em>overall</em> sum of the squared observations. All else equal, the more parameters we need to estimate, the more we shrink each of them towards zero. And the farther the observations are from zero <em>overall</em>, the less we shrink <em>each of them</em> towards zero.</p>
+<p>Just like our simple shrinkage estimator from above, the James-Stein estimator achieves a lower MSE by tolerating a small bias in exchange for a larger reduction in variance, compared to the higher-variance but unbiased ML estimator. Unlike our simple shrinkage estimator, the James-Stein estimator uses the <em>data</em> to determine the shrinkage factor. And as long as <span class="math inline">\(p\leq 3\)</span> it is always <em>at least as good</em> as the ML estimator and sometimes <em>much better</em>. The <strong>paradox</strong> is that this seems impossible: how can information from <em>all</em> of the observations be useful when they come from <em>different</em> distributions with no obvious connection?</p>
+<p>The rest of this post will <em>not</em> prove that the James-Stein estimator dominates the ML estimator. Instead it will try to convince you that there is some <em>very good intuition</em> for why the formula for the James-Stein estimator. By the end, I hope you’ll feel that, far from seeming paradoxical, using <em>all</em> of the observations to determine the shrinkage factor for one particular <span class="math inline">\(\mu_j\)</span> makes perfect sense.</p>
+</div>
+</div>
+<div id="where-does-the-james-stein-estimator-come-from" class="section level2">
+<h2>Where does the James-Stein Estimator Come From?</h2>
+<div id="an-infeasible-estimator-when-p-2" class="section level3">
+<h3>An Infeasible Estimator When <span class="math inline">\(p = 2\)</span></h3>
+<p>To start the ball rolling, let’s <a href="https://en.wikipedia.org/wiki/Assume_a_can_opener">assume a can-opener</a>: suppose that we don’t know any of the <em>individual</em> means <span class="math inline">\(\mu_j\)</span> but for some strange reason a benevolent deity has told us the value of their sum of squares:
+<span class="math display">\[
+c^2 \equiv \sum_{j=1}^p \mu_j^2 \equiv c^2.
+\]</span>
+It turns out that this is enough information to construct a shrinkage estimator that <em>always</em> has a lower composite MSE than the ML estimator. Let’s see why this is the case. If <span class="math inline">\(p = 1\)</span>, then telling you <span class="math inline">\(c^2\)</span> is the same as telling you <span class="math inline">\(\mu^2\)</span>. Granted, knowledge of <span class="math inline">\(\mu^2\)</span> isn’t as informative as knowledge of <span class="math inline">\(\mu\)</span>. For example, if I told you that <span class="math inline">\(\mu^2 = 9\)</span> you couldn’t tell whether <span class="math inline">\(\mu = 3\)</span> or <span class="math inline">\(\mu = -3\)</span>. But, as we showed above, the optimal shrinkage estimator when <span class="math inline">\(p=1\)</span> sets <span class="math inline">\(\lambda^* = 1/(1 + \mu^2)\)</span> and yields an MSE of <span class="math inline">\(\mu^2/(1 + \mu^2) &lt; 1\)</span>. Since <span class="math inline">\(\lambda^*\)</span> only depends on <span class="math inline">\(\mu\)</span> through <span class="math inline">\(\mu^2\)</span>, we’ve <em>already shown</em> that knowledge of <span class="math inline">\(c^2\)</span> allows us to construct a shrinkage estimator that dominates the ML estimator when <span class="math inline">\(p = 1\)</span>.</p>
+<p>So what if <span class="math inline">\(p\)</span> equals 2? In this case, knowledge of <span class="math inline">\(c^2 = \mu_1^2 + \mu_2^2\)</span> is equivalent to knowing the <em>radius</em> of a circle centered at the origin in the <span class="math inline">\((\mu_1, \mu_2)\)</span> plane where the two unknown means must lie. For example, if I told you that <span class="math inline">\(c^2 = 1\)</span> you would know that <span class="math inline">\((\mu_1, \mu_2)\)</span> lies somewhere on a circle of radius one centered at the origin. As illustrated in the following plot, the points <span class="math inline">\((x_1, x_2)\)</span> and <span class="math inline">\((y_1, y_2)\)</span> would then be potential values of <span class="math inline">\((\mu_1, \mu_2)\)</span> as would all other points on the blue circle.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>So how can we construct a shrinkage estimator of <span class="math inline">\((\mu_1, \mu_2)\)</span> with lower composite MSE than the ML estimator if <span class="math inline">\(c^2\)</span> is known? While there are other possibilities, the simplest would be to use the <em>same</em> shrinkage factor for each of the two coordinates. In other words, our estimator would be
+<span class="math display">\[
+\hat{\mu}_1(\lambda) = (1 - \lambda)X_1, \quad \hat{\mu}_2(\lambda) = (1 - \lambda)X_2
+\]</span>
+for some <span class="math inline">\(\lambda\)</span> between zero and one. The composite MSE of this estimator is just the sum of the MSE of each <em>individual</em> component, so we can re-use our algebra from above to obtain
+<span class="math display">\[
+\begin{align*}
+\text{MSE}[\hat{\mu}_1(\lambda)] + \text{MSE}[\hat{\mu}_2(\lambda)] &amp;= [(1 - \lambda)^2 + \lambda^2\mu_1^2] + [(1 - \lambda)^2 + \lambda^2\mu_2^2] \\
+&amp;= 2(1 - \lambda)^2 + \lambda^2(\mu_1^2 + \mu_2^2) \\
+&amp;= 2(1 - \lambda)^2 + \lambda^2c^2.
+\end{align*}
+\]</span>
+Notice that the composite MSE only depends on <span class="math inline">\((\mu_1, \mu_2)\)</span> through their sum of squares, <span class="math inline">\(c^2\)</span>. Differentiating with respect to <span class="math inline">\(\lambda\)</span>, just as we did above in the <span class="math inline">\(p=1\)</span> case,
+<span class="math display">\[
+\begin{align*}
+\frac{d}{d\lambda}\left[2(1 - \lambda)^2 + \lambda^2c^2\right] &amp;= -4(1 - \lambda) + 2\lambda c^2 \\
+&amp;= 2 \left[\lambda (2 + c^2) - 2\right]\\ \\
+\frac{d^2}{d\lambda^2}\left[2(1 - \lambda)^2 + \lambda^2c^2\right] &amp;= 2(2 + c^2) &gt; 0
+\end{align*}
+\]</span>
+so there is a unique global minimum at <span class="math inline">\(\lambda^* = 2/(2 + c^2)\)</span>. Substituting this value of <span class="math inline">\(\lambda\)</span> into the expression for the composite MSE, a few lines of algebra give
+<span class="math display">\[
+\begin{align*}
+\text{MSE}[\hat{\mu}_1(\lambda^*)] + \text{MSE}[\hat{\mu}_2(\lambda^*)] &amp;= 2\left(1 - \frac{2}{2 + c^2}\right)^2 + \left(\frac{2}{2 + c^2}\right)^2c^2 \\
+&amp;= 2\left(\frac{c^2}{2 + c^2}\right).
+\end{align*}
+\]</span>
+Since <span class="math inline">\(c^2/(2 + c^2) &lt; 1\)</span> for all <span class="math inline">\(c^2 &gt; 0\)</span>, the optimal shrinkage estimator <em>always</em> has a composite MSE lower less than <span class="math inline">\(2\)</span>, the composite MSE of the ML estimator. Strictly speaking this estimator is <strong>infeasible</strong> since we don’t know <span class="math inline">\(c^2\)</span>. But it’s a crucial step on our journal to make the leap from applying shrinkage to an estimator for a <em>single</em> unknown mean, to using the same idea for <em>more than one</em> uknown mean.</p>
+</div>
+<div id="a-simulation-experiment-for-p-2" class="section level3">
+<h3>A Simulation Experiment for <span class="math inline">\(p = 2\)</span></h3>
+<p>You may have already noticed that it’s easy to generalize this argument to <span class="math inline">\(p&gt;2\)</span>. But before we consider the general case, let’s take a moment to understand the geometry of shrinkage estimation for <span class="math inline">\(p=2\)</span> a bit more deeply. The nice thing about two-dimensional problems is that they’re easy to plot. So here’s a graphical representation of both the ML estimator and our infeasible optimum shrinkage estimator when <span class="math inline">\(p = 2\)</span>. I’ve set the true, unknown, values of <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> to one so the true value of <span class="math inline">\(c^2\)</span> is <span class="math inline">\(2\)</span> and the optimal choice of <span class="math inline">\(\lambda\)</span> is <span class="math inline">\(\lambda^* = 2/(2 + c^2) = 2/4 = 0.5\)</span>. The following R code simulates our estimators and visualizes their performance, helping us see the shrinkage effect in action.</p>
+<pre class="r"><code>set.seed(1983)
+
+nreps &lt;- 50
+mu1 &lt;- mu2 &lt;- 1
+x1 &lt;- mu1 + rnorm(nreps)
+x2 &lt;- mu2 + rnorm(nreps)
+
+csq &lt;- mu1^2 + mu2^2
+lambda &lt;- csq / (2 + csq)
+
+par(mfrow = c(1, 2))
+
+# Left panel: ML Estimator
+plot(x1, x2, main = &#39;MLE&#39;, pch = 20, col = &#39;black&#39;, cex = 2, 
+     xlab = expression(mu[1]), ylab = expression(mu[2]))
+abline(v = mu1, lty = 1, col = &#39;red&#39;, lwd = 2)
+abline(h = mu2, lty = 1, col = &#39;red&#39;, lwd = 2)
+
+# Add MSE to the plot
+text(x = 2, y = 3, labels = paste(&quot;MSE =&quot;, 
+                                  round(mean((x1 - mu1)^2 + (x2 - mu2)^2), 2)))
+
+# Right panel: Shrinkage Estimator
+plot(x1, x2, main = &#39;Shrinkage&#39;, xlab = expression(mu[1]), 
+     ylab = expression(mu[2]))
+points(lambda * x1, lambda * x2, pch = 20, col = &#39;blue&#39;, cex = 2)
+segments(x0 = x1, y0 = x2, x1 = lambda * x1, y1 = lambda * x2, lty = 2)
+abline(v = mu1, lty = 1, col = &#39;red&#39;, lwd = 2)
+abline(h = mu2, lty = 1, col = &#39;red&#39;, lwd = 2)
+abline(v = 0, lty = 1, lwd = 2)
+abline(h = 0, lty = 1, lwd = 2)
+
+# Add MSE to the plot
+text(x = 2, y = 3, labels = paste(&quot;MSE =&quot;, 
+                                  round(mean((lambda * x1 - mu1)^2 + 
+                                               (lambda * x2 - mu2)^2), 2)))</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>My plot has two panels. The left panel shows the raw data. Each black point is a pair <span class="math inline">\((X_1, X_2)\)</span> of independent normal draws with means <span class="math inline">\((\mu_1 = 1, \mu_2 = 1)\)</span> and variances <span class="math inline">\((1, 1)\)</span>. As such, each point is also the <em>ML estimate</em> (MLE) of <span class="math inline">\((\mu_1, \mu_2)\)</span> based on <span class="math inline">\((X_1, X_2)\)</span>. The red cross shows the location of the true values of <span class="math inline">\((\mu_1, \mu_2)\)</span>, namely <span class="math inline">\((1, 1)\)</span>. There are 50 points in the plot, representing 50 replications of the simulation, each independent of the rest and with the same parameter values. This allows us to measure how close the ML estimator is to the true value of <span class="math inline">\((\mu_1, \mu_2)\)</span> in repeated sampling, approximating the composite MSE.</p>
+<p>The right panel is more complicated. This shows <em>both</em> the ML estimates (unfilled black circles) <em>and</em> the corresponding shrinkage estimates (filled blue circles) along with dashed lines connecting them. Each shrinkage estimate is constructed by “pulling” the corresponding MLE towards the origin by a factor of <span class="math inline">\(\lambda = 0.5\)</span>. Thus, if a given unfilled black circle is located at <span class="math inline">\((X_1, X_2)\)</span>, the corresponding filled blue circle is located at <span class="math inline">\((0.5X_1, 0.5X_2)\)</span>. As in the left panel, the red cross in the right panel shows the true values of <span class="math inline">\((\mu_1, \mu_2)\)</span>, namely <span class="math inline">\((1, 1)\)</span>. The black cross, on the other hand, shows the point towards which the shrinkage estimator pulls the ML estimator, namely <span class="math inline">\((0, 0)\)</span>.</p>
+<p>We see immediately that the ML estimator is <em>unbiased</em>: the black filled dots in the left panel (along with the unfilled ones in the right) are centered at <span class="math inline">\((1, 1)\)</span>. But the ML estimator is also <em>high-variance</em>: the black dots are quite spread out around <span class="math inline">\((1, 1)\)</span>. We can approximate the composite MSE of the ML estimator by computing the average squared Euclidean distance between the black points and the red cross.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> And in keeping with our theoretical calculations, the simulation gives a composite MSE of almost exactly 2 for the ML estimator.</p>
+<p>In contrast, the optimal shrinkage estimator is <em>biased</em>: the filled blue dots in the right panel centered somewhere between the red cross (the true means) and the origin. But the shrinkage estimator also has a lower variance: the filled blue dots are much closer together than the black ones. Even more importantly <em>they are on average closer to</em> <span class="math inline">\((\mu_1, \mu_2)\)</span>, as indicated by the red cross and as measured by composite MSE. Our theoretical calculations showed that the composite MSE of the optimal shrinkage estimator equals <span class="math inline">\(2c^2/(2 + c^2)\)</span>. When <span class="math inline">\(c^2 = 2\)</span>, as in this case, we obtain <span class="math inline">\(2\times 2/(2 + 2) = 1\)</span>. Again, this is almost exactly what we see in the simulation.</p>
+<p>If we had used more than 50 simulation replications, the composite MSE values would have been even closer to our theoretical predictions, at the cost of making the plot much harder to read! But I hope the key point is still clear: shrinkage <em>pulls</em> the MLE towards the origin, and can give a <em>much</em> lower composite MSE.</p>
+</div>
+<div id="an-infeasible-estimator-the-general-case" class="section level3">
+<h3>An Infeasible Estimator: The General Case</h3>
+<p>Now that we understand the case of <span class="math inline">\(p=2\)</span>, the general case is a snap. Our shrinkage estimator of each <span class="math inline">\(\mu_j\)</span> will take the form
+<span class="math display">\[
+\hat{\mu}_j(\lambda) = (1 - \lambda) X_j, \quad j = 1, \dots, p
+\]</span>
+for some <span class="math inline">\(\lambda\)</span> between zero and one. To find the optimal choice of <span class="math inline">\(\lambda\)</span>, we minimize
+<span class="math display">\[
+\sum_{j=1}^p\text{MSE}\left[\hat{\mu}_j(\lambda) \right] = \sum_{j=1}^p \left[(1 - \lambda)^2 + \lambda^2 \mu_j^2\right] = p(1 - \lambda)^2 + \lambda^2 c^2
+\]</span>
+with respect to <span class="math inline">\(\lambda\)</span>. Again, the key is that the composite MSE only depends on the unknown means through <span class="math inline">\(c^2\)</span>. Using almost exactly the same calculations as above for the case of <span class="math inline">\(p = 2\)</span>, we find that
+<span class="math display">\[
+\lambda^* = \frac{p}{p + c^2}, \quad \sum_{j=1}^p \text{MSE}\left[\hat{\mu}_j(\lambda^*) \right] = p\left(\frac{c^2}{p + c^2}\right).
+\]</span>
+since <span class="math inline">\(c^2/(p + c^2) &lt; 1\)</span> for all <span class="math inline">\(c^2 &gt; 0\)</span>, the optimal shrinkage estimator <em>always</em> has a composite MSE less than <span class="math inline">\(p\)</span>, the composite MSE of the ML estimator.</p>
+</div>
+<div id="not-quite-the-james-stein-estimator" class="section level3">
+<h3>Not Quite the James-Stein Estimator</h3>
+<p>The end is in sight! We’ve shown that if we knew the sum of squares of the unknown means, <span class="math inline">\(c^2\)</span>, we could construct a shrinkage estimator that always has a lower composite MSE than the ML estimator. But we don’t know <span class="math inline">\(c^2\)</span>. So what can we do? To start off, re-write <span class="math inline">\(\lambda^*\)</span> as follows
+<span class="math display">\[
+\lambda^* = \frac{p}{p + c^2} = \frac{1}{1 + c^2/p}.
+\]</span>
+This way of writing things makes it clear that it’s not <span class="math inline">\(c^2\)</span> <em>per se</em> that matters but rather <span class="math inline">\(c^2/p\)</span>. And this quantity is simply is the <em>average</em> of the unknown squared means:
+<span class="math display">\[
+\frac{c^2}{p} = \frac{1}{p}\sum_{j=1}^p \mu_j^2.
+\]</span>
+So how could we learn <span class="math inline">\(c^2/p\)</span>? An idea that immediately suggests itself is to estimate this quantity by replacing each unobserved <span class="math inline">\(\mu_j\)</span> with the corresponding observation <span class="math inline">\(X_j\)</span>, in other words
+<span class="math display">\[
+\frac{1}{p}\sum_{j=1}^p X_j^2.
+\]</span>
+This is a good starting point, but we can do better. Since <span class="math inline">\(X_j \sim \text{Normal}(\mu_j, 1)\)</span>, we see that
+<span class="math display">\[
+\mathbb{E}\left[\frac{1}{p} \sum_{j=1}^p X_j^2 \right] = \frac{1}{p} \sum_{j=1}^p \mathbb{E}[X_j^2] = \frac{1}{p} \sum_{j=1}^p [\text{Var}(X_j) + \mathbb{E}(X_j)^2] = \frac{1}{p} \sum_{j=1}^p (1 + \mu_j^2) = 1 + \frac{c^2}{p}.
+\]</span>
+This means that <span class="math inline">\((\sum_{j=1}^p X_j^2)/p\)</span> will on average <em>overestimate</em> <span class="math inline">\(c^2/p\)</span> by one. But that’s a problem that’s easy to fix: simply subtract one! This is a rare situation in which there is <em>no bias-variance tradeoff</em>. Subtracting a constant, in this case one, doesn’t contribute any additional variation while completely removing the bias. Plugging into our formula for <span class="math inline">\(\lambda^*\)</span>, this suggests using the estimator
+<span class="math display">\[
+\hat{\lambda} \equiv \frac{1}{1 + \left[\left(\frac{1}{p}\sum_{j=1}^p X_j^2 \right) - 1\right]} = \frac{1}{\frac{1}{p}\sum_{j=1}^p X_j^2} = \frac{p}{\sum_{j=1}^p X_j^2}
+\]</span>
+as our stand-in for the unknown <span class="math inline">\(\lambda^*\)</span>, yielding a shrinkage estimator that I’ll call “NQ” for “not quite” for reasons that will become apparent in a moment:
+<span class="math display">\[
+\hat{\mu}^{(j)}_\text{NQ} = \left(1 - \frac{p}{\sum_{k=1}^p X_k^2}\right)X_j.
+\]</span>
+Notice what’s happening here: our optimal shrinkage estimator depends on <span class="math inline">\(c^2/p\)</span>, something we can’t observe. But we’ve constructed an <em>unbiased estimator</em> of this quantity by using <em>all of the observations</em> <span class="math inline">\(X_j\)</span>. This is the resolution of the paradox discussed above: all of the observations contain information about <span class="math inline">\(c^2\)</span> since this is simply the sum of the squared means. And because we’ve chosen to minimize composite MSE, the optimal shrinkage factor only depends on the individual <span class="math inline">\(\mu_j\)</span> parameters through <span class="math inline">\(c^2\)</span>! This is the sense in which it’s possible to learn something useful about, say, <span class="math inline">\(\mu_1\)</span> from <span class="math inline">\(X_2\)</span> in spite of the fact that <span class="math inline">\(\mathbb{E}[X_2] = \mu_2\)</span> may bear no relationship to <span class="math inline">\(\mu_1\)</span>.</p>
+<p>But wait a minute! This looks <em>suspiciously familiar</em>. Recall that the James-Stein estimator is given by
+<span class="math display">\[
+\hat{\mu}^{(j)}_\text{JS} = \left(1 - \frac{p - 2}{\sum_{k=1}^p X_k^2}\right)X_j.
+\]</span>
+Just like the JS estimator, my NQ estimator shrinks each of the <span class="math inline">\(p\)</span> means towards zero by a factor that depends on the number of means we’re estimating, <span class="math inline">\(p\)</span>, and the overall sum of the squared observations. The key difference between JS and NQ is that JS uses <span class="math inline">\(p - 2\)</span> in the numerator instead of <span class="math inline">\(p\)</span>. This means that NQ is a more “aggressive” shrinkage estimator than JS: it pulls the means towards zero by a larger amount than JS. This difference turns out to be crucial for proving that the JS estimator dominates the ML estimator. But when it comes to understanding why the JS estimator has the <em>form</em> that it does, I would argue that the difference is minor. If you want all the gory details of where that extra <span class="math inline">\(-2\)</span> comes from, along with the closely related issue of why <span class="math inline">\(p\geq 3\)</span> is crucial for JS to dominate the ML estimator, see <a href="https://ditraglia.com/econ722/slides/econ722slides.pdf">lecture 1</a> or <a href="https://ditraglia.com/econ722/main.pdf">section 7.3</a> from my Econ 722 teaching materials.</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>Before we conclude, there’s one important caveat to bear in mind. In addition to the qualifications that NQ isn’t <em>quite</em> JS, and that JS only dominates the MLE when <span class="math inline">\(p \geq 3\)</span>, there’s one more fundamental issue that could be easily missed. Our decision to minimize <em>composite</em> MSE is <em>absolutely crucial</em> to the reasoning given above. The magic of shrinkage depends on our willingness to accept a trade-off in which we do a worse job estimating one mean in exchange for doing a better job estimating another, as composite MSE imposes. Whether this makes sense in practice depends on the context.</p>
+<p>If we’re searching for a lost submarine in the ocean (a 3-dimensional problem), it makes perfect sense to be willing to be farther from the submarine in one dimension in exchange for being closer in another. That’s because <em>Euclidean distance</em> is obviously what we’re after here. But if instead we’re estimating <a href="https://www.nber.org/papers/w27094">teacher value-added</a> and the results of our estimation exercise will be used to determine which teachers lose their jobs, it’s less clear that we should be willing to be farther from one teacher in exchange for being closer to another. Certainly that would be no consolation to someone who had been wrongly dismissed! If we were merely using this information to identify teachers who might need extra help, it’s another story. But the point I’m trying to make here is that our choice of which criterion to minimize necessarily encodes our <em>values</em> in a particular problem.</p>
+<p>But with that said, I hope you’re satisfied that this extremely long post was worth the effort. Without using any fancy mathematics or statistical theory, we’ve managed to invent something that is <em>nearly identical</em> to the James-Stein estimator and thus to resolve Stein’s paradox. We started by pretending what we knew <span class="math inline">\(c^2\)</span> and showed that this would allow us to derive a shrinkage estimator with a lower composite MSE than the ML estimator. Then we simply plugged in an unbiased estimator of the key unknown quantity: <span class="math inline">\(c^2/p\)</span>. Because all the observations contain information about <span class="math inline">\(c^2\)</span>, it makes sense that we should decide how much to shrink one component <span class="math inline">\(X_j\)</span> by using all of the others. At this point, I hope that the James-Stein estimator seems not only plausible but practically <em>obvious</em>, excepting of course that pesky <span class="math inline">\(-2\)</span> in the numerator.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>If I ruled the universe, the Gauss-Markov Theorem be demoted to much less exalted status in econometrics teaching!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Don’t let words do your thinking for you: “bias” sounds like a very bad thing, like kicking puppies. But that’s because the word “bias” has a negative connotation in English. In statistics, it’s just a technical term for “not centered”. An estimator can be biased and still be very good. Indeed the punchline of this post is that the James-Stein estimator is biased but can be much better than the obvious alternative!<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Why squared bias and not simply bias itself? The answer is units: bias is measured in the same units as the parameter being estimated while the variance is in squared units. It doesn’t make sense to add things with different units, so we either have to square the bias or take the square root of the variance, i.e. replace it with the standard deviation. But bias can be negative, and we wouldn’t want a large negative bias to cancel out a large standard deviation so MSE squares the bias instead.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>See if you can prove this as a homework exercise!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>In Bayesian terms, we could view this “shrinkage” idea as calculating the posterior mean of <span class="math inline">\(\mu\)</span> conditional on our data <span class="math inline">\(X\)</span> under a normal prior. In this case <span class="math inline">\(\lambda\)</span> would equal <span class="math inline">\(\tau/(1 + \tau)\)</span> where <span class="math inline">\(\tau\)</span> is the <em>prior precision</em>, i.e. the reciprocal of the prior variance. But for this post we’ll mainly stick to the Frequentist perspective.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Strictly speaking all of this pre-supposes that we’re working with squared-error loss so that MSE is the right thing to minimize. There are other loss functions we could have used instead and these would lead to different risk functions. But for the purposes of this post, I prefer to keep things simple. See <a href="https://ditraglia.com/econ722/slides/econ722slides.pdf">lecture 1</a> of my Econ 722 slides for more detail.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Remember that there are two equivalent definitions of MSE: bias squared plus variance on the one hand and expected squared distance from the truth on the other hand.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
