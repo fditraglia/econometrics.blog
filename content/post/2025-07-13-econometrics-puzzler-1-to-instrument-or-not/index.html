@@ -1,0 +1,106 @@
+---
+title: 'Econometrics Puzzler #1: To Instrument or Not?'
+author: Francis J. DiTraglia
+date: '2025-07-13'
+slug: econometrics-puzzler-1-to-instrument-or-not
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-07-13T18:00:53-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition. Here’s the format: I’ll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you’ll find them both challenging and enlightening. Today we’ll revisit everyone’s favorite example: Angrist &amp; Krueger’s 1991 paper on the returns to education.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div id="to-instrument-or-not-to-instrument" class="section level2">
+<h2>To Instrument or Not to Instrument?</h2>
+<p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <span class="math inline">\(Y_i\)</span> and years of schooling <span class="math inline">\(X_i\)</span>. I could use an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background.
+Fortunately, I also have a valid and relevant instrument: quarter of birth <span class="math inline">\(Z_i\)</span> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
+</div>
+<div id="taking-it-to-the-data" class="section level2">
+<h2>Taking it to the Data</h2>
+<p>The Angrist &amp; Krueger (1991) dataset is available from Michal Kolesár’s <a href="https://github.com/kolesarm/ManyIV?tab=readme-ov-file"><code>ManyIV</code> R package</a>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+Here I’ll restrict attention to people born in the first or fourth quarter of the year.
+Instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:</p>
+<pre class="r"><code># remotes::install_github(&quot;kolesarm/ManyIV&quot;) # if needed
+
+library(ManyIV) # Contains Angrist &amp; Krueger (1991) dataset
+
+# For information about the dataset, see the package documentation:
+# ?ManyIV::ak80
+
+library(dplyr)
+
+dat &lt;- ak80 |&gt; 
+  as_tibble() |&gt; 
+  filter(qob %in% c(&#39;Q1&#39;, &#39;Q4&#39;)) |&gt; 
+  mutate(z = (qob == &#39;Q4&#39;)) |&gt; 
+  select(x = education, y = lwage, z)</code></pre>
+<p>To test how well OLS and IV perform as predictors, we’ll carry out a “pseudo-out-of-sample” experiment. First we’ll randomly split <code>dat</code> into a “training” sample containing 80% of the observations and a “test” sample containing the remaining 20%:</p>
+<pre class="r"><code>set.seed(1693) # For reproducibility
+
+n_total &lt;- nrow(dat) 
+n_train &lt;- round(0.8 * n_total) 
+n_test &lt;- n_total - n_train 
+
+train_indices &lt;- sample(n_total, n_train, replace = FALSE) 
+
+dat_train &lt;- dat[train_indices, ] 
+dat_test &lt;- dat[-train_indices, ] </code></pre>
+<p>Now we’ll use <code>dat_train</code> to fit IV and OLS:</p>
+<pre class="r"><code>ols_fit &lt;- lm(y ~ x, data = dat_train) 
+ols_coefs &lt;- coef(ols_fit)
+
+library(ivreg) # install with `install.packages(&quot;ivreg&quot;)` if needed 
+iv_fit &lt;- ivreg(y ~ x | z, data = dat_train)
+iv_coefs &lt;- coef(iv_fit)
+
+rbind(OLS = ols_coefs, IV = iv_coefs)</code></pre>
+<pre><code>##     (Intercept)          x
+## OLS    5.004283 0.07008633
+## IV     4.749959 0.09000644</code></pre>
+<p>Now we’re ready to make our predictive comparison! We’ll “pretend” that we don’t know the wages of the people in our test sample and use the OLS and IV coefficients from above to predict the “missing” wages:</p>
+<pre class="r"><code>dat_test &lt;- dat_test |&gt; 
+  mutate(ols_pred = ols_coefs[1] + ols_coefs[2] * x,
+         iv_pred = iv_coefs[1] + iv_coefs[2] * x) </code></pre>
+<p>Of course we actually <em>do</em> know the wages of everyone in <code>dat_test</code>; this is the column <code>y</code>. So we can now compare our predictions against the truth.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> A common measure of predictive quality is mean squared error (MSE), the average squared difference between the truth and our predictions. Because it squares the difference between the truth and our prediction, MSE penalizes larger errors more than smaller ones. While there are other ways to measure prediction error, MSE is a common choice and one that will play a key role in the rest of this post. And the winner is … <strong>OLS</strong>! Because it has a lower MSE, the predictions from the OLS model are, on average, closer to the true wages than the predictions from the IV model:</p>
+<pre class="r"><code>dat_test |&gt; 
+  summarize(ols_mse = mean((y - ols_pred)^2),
+            iv_mse = mean((y - iv_pred)^2))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   ols_mse iv_mse
+##     &lt;dbl&gt;  &lt;dbl&gt;
+## 1   0.407  0.411</code></pre>
+<p>OLS beats IV by a small but appreciable margin. (The relatively small difference in this case reflects the fact that IV and OLS estimates are fairly similar in this example.) It turns out that this <em>isn’t a fluke</em>. The same will be true in <em>any example</em>. Unless the instrument is perfectly correlated with the endogenous regressor, OLS will always have a lower predictive MSE than IV.</p>
+</div>
+<div id="whats-really-going-on-here" class="section level2">
+<h2>What’s really going on here?</h2>
+<p>I ask this question of my introductory econometric students every year and most of them are surprised by the answer. If we have an endogenous regressor OLS is biased and inconsistent; why would we ever pass up the opportunity to use a valid and relevant instrument! The answer is surprisingly simple: <em>by definition</em> the OLS estimand gives the best linear predictor of <span class="math inline">\(Y\)</span>, the one that minimizes MSE: <span class="math inline">\(\min_{a,b} \mathbb{E}[\{Y - (a + b X)\}^2]\)</span>. This is true <em>regardless</em> of whether <span class="math inline">\(X\)</span> is endogenous. Indeed, from a predictive perspective, endogeneity is a feature not a bug! The fact that years of schooling “smuggles in” information about ability and family background is exactly why it gives better predictions than IV. Remember: the whole point of IV is to <em>remove</em> the part of <span class="math inline">\(X\)</span> that is related to unobserved causes of <span class="math inline">\(Y\)</span>. This is exactly what we want if our goal is to understand cause-and-effect, but it’s the <em>opposite</em> of what would make sense in a prediction problem, where we’d like to use as much information as possible.</p>
+</div>
+<div id="a-red-herring-the-bias-variance-tradeoff" class="section level2">
+<h2>A Red Herring: The Bias-Variance Tradeoff</h2>
+<p>Students sometimes answer this question by invoking the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a>, pointing out that “OLS is biased but has a lower variance than IV, so it could have a lower MSE.” This is correct, but misses the deeper point. They’re thinking about bias in estimating the <em>causal parameter</em>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> But, again, the point here is that this isn’t relevant when prediction is our goal. When ML researchers discuss the bias-variance tradeoff in predictive settings, they mean something entirely different: bias of a linear predictive model relative to the true conditional mean function. OLS gives the best linear approximation to <span class="math inline">\(\mathbb{E}[Y|X]\)</span>, so it’s what we want in this example, since I stipulated we’d be working with linear models.</p>
+</div>
+<div id="take-home-message" class="section level2">
+<h2>Take Home Message</h2>
+<p>Causal inference and prediction are different goals. Causality is about <em>counterfactuals</em>: what would happen if we <em>intervened</em> to change someone’s years of education? Prediction answers a different question: if I <em>observe</em> that someone has eight years of schooling, what is my best guess of their wage? If you want to predict, use OLS; if you want to estimate a causal effect, use IV.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I’m sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>If you’re unfamiliar with this example check out my <a href="https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&amp;t=2034">video overview</a>, including some discussion of why quarter of birth might <em>not</em> really be exogenous after all!<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>You can install this package using the <a href="https://cran.r-project.org/web/packages/remotes/index.html"><code>remotes</code></a> package, which is a convenient way to install packages from GitHub.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>It’s crucial that we used one dataset to <em>estimate</em> our models and a <em>different</em> one to evaluate their predictive performance to avoid a problem called “overfitting”. This issue calls for a post of it’s own, but if you want a preview check out this blog post on <a href="https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html">Goodhart’s law</a>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>When our goal is to learn the causal parameter, this bias-variance tradeoff becomes relevant. I even <a href="https://doi.org/10.1016/j.jeconom.2016.07.006">wrote a paper</a>!<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
