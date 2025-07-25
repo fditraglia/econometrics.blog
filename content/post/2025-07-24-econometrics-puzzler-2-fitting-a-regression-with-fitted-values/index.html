@@ -1,0 +1,88 @@
+---
+title: 'Econometrics Puzzler #2: Fitting a Regression with Fitted Values'
+author: Francis J. DiTraglia
+date: '2025-07-24'
+slug: econometrics-puzzler-2-fitting-a-regression-with-fitted-values
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-07-24T19:33:08-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a <em>second</em> regression of the outcome variable on the fitted values, what will I get? For extra credit: how will the R-squared from the second regression compare to that from the first regression?</p>
+<div id="example-height-and-handspan" class="section level2">
+<h2>Example: Height and Handspan</h2>
+<p>Here’s a simple example: a regression of height, measured in inches, on handspan, measured in centimeters.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>library(tidyverse)
+library(broom)
+dat &lt;- read_csv(&#39;https://ditraglia.com/data/height-handspan.csv&#39;)
+
+ggplot(dat, aes(y = height, x = handspan)) +
+  geom_point(alpha = 0.2) +
+  geom_smooth(method = &quot;lm&quot;, color = &quot;red&quot;) +
+  labs(y = &quot;Height (in)&quot;, x = &quot;Handspan (cm)&quot;)</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code># Fit the regression
+reg1 &lt;- lm(height ~ handspan, data = dat)
+tidy(reg1)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    40.9     1.67        24.5 9.19e-76
+## 2 handspan        1.27    0.0775      16.3 3.37e-44</code></pre>
+<p>As expected, bigger people are bigger in all dimensions, on average, so we see a positive relationship between handspan and height. Now let’s save the fitted values from this regression and run a second regression of height on the fitted values:</p>
+<pre class="r"><code>dat &lt;- reg1 |&gt; 
+  augment(dat)
+reg2 &lt;- lm(height ~ .fitted, data = dat)
+tidy(reg2)</code></pre>
+<pre><code>## # A tibble: 2 × 5
+##   term         estimate std.error statistic   p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -1.76e-13    4.17   -4.23e-14 1.000e+ 0
+## 2 .fitted      1.00e+ 0    0.0612  1.63e+ 1 3.37 e-44</code></pre>
+<p>The intercept isn’t <em>quite</em> zero, but it’s about as close as we can reasonably expect to get on a computer and the slope is <em>exactly</em> one. Now how about the R-squared? Let’s check:</p>
+<pre class="r"><code>glance(reg1)</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.452         0.450  3.02      267. 3.37e-44     1  -822. 1650. 1661.
+## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<pre class="r"><code>glance(reg2)</code></pre>
+<pre><code>## # A tibble: 1 × 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.452         0.450  3.02      267. 3.37e-44     1  -822. 1650. 1661.
+## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<p>The R-squared values from the two regressions are <em>identical</em>! Surprised? Now’s your last chance to think it through on your own before I give my solution.</p>
+</div>
+<div id="solution" class="section level2">
+<h2>Solution</h2>
+<p>Suppose we wanted to choose <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> to minimize <span class="math inline">\(\sum_{i=1}^n (Y_i - \alpha_0 - \alpha_1 \widehat{Y}_i)^2\)</span> where <span class="math inline">\(\widehat{Y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 X_i\)</span>. This is equivalent to minimizing
+<span class="math display">\[
+\sum_{i=1}^n \left[Y_i - (\alpha_0 + \alpha_1 \widehat{\beta}_0) - (\alpha_1\widehat{\beta}_1)X_i\right]^2.
+\]</span>
+By construction <span class="math inline">\(\widehat{\beta}_0\)</span> and <span class="math inline">\(\widehat{\beta}_1\)</span> minimize <span class="math inline">\(\sum_{i=1}^n (Y_i - \beta_0 -  \beta_1 X_i)^2\)</span>, so unless <span class="math inline">\(\widehat{\alpha_0} = 0\)</span> and <span class="math inline">\(\widehat{\alpha_1} = 1\)</span> we’d have a contradiction!</p>
+<p>Similar reasoning explains why the R-squared values for the two regressions are the same. The R-squared of a regression equals <span class="math inline">\(1 - \text{SS}_{\text{residual}} / \text{SS}_{\text{total}}\)</span>
+<span class="math display">\[
+\text{SS}_{\text{total}} = \sum_{i=1}^n (Y_i - \bar{Y})^2,\quad
+\text{SS}_{\text{residual}} = \sum_{i=1}^n (Y_i - \widehat{Y}_i)^2
+\]</span>
+The total sum of squares is the same for both regressions because they have the same outcome variable. The residual sum of squares is the same because <span class="math inline">\(\widehat{\alpha}_0 = 0\)</span> and <span class="math inline">\(\widehat{\alpha}_1 = 1\)</span> together imply that both regressions have the same fitted values.</p>
+<p>Here I focused on the case of a simple linear regression, one with a single predictor variable, but the same basic idea holds in general.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>In case you don’t know what handspan is: stretch out your dominant hand, and measure from the tip of your thumb to the tip of your pinky finger. This is your handspan. I collected this dataset from many years of <a href="https://ditraglia.com/Econ103Public">Econ 103</a> classes at UPenn.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
