@@ -1,0 +1,271 @@
+---
+title: Two FWL Theorems for the Price of One
+author: Francis J. DiTraglia
+date: '2025-08-14'
+slug: two-fwl-theorems-for-the-price-of-one
+categories: [econometrics]
+tags: [FWL, regression]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-08-14T13:52:41-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+The result that I prefer to call [Yule's Rule](https://www.econometrics.blog/post/how-to-do-regression-adjustment/#fnref2), more commonly known as the "Frisch-Waugh-Lovell (FWL) theorem", shows how to calculate the regression slope coefficient for **one predictor** by carrying out additional "auxiliary" regressions that adjust for **all other predictors**.
+You've probably encountered this result if you've studied introductory econometrics. 
+But it may surprise you to learn that there are actually *two* variants of the FWL theorem, each with its pros and cons.
+Today we'll take a look at the less familiar version and then circle back to understand what makes the more familiar one a textbook staple.
+
+
+## Simulation Example 
+
+Let's start with a little simulation.
+First we'll generate 5000 observations of predictors $X$ and $W$ from a joint normal distribution with standard deviations of one, means of zero, and a correlation of 0.5.
+```{r}
+set.seed(1066)
+library(mvtnorm)
+
+# Simulate linear regression with two predictors: X and W
+covariance_matrix <- matrix(
+  c(1, 0.5, 0.5, 1), 
+  nrow = 2
+)
+
+n_sims <- 5000
+
+x_w <- rmvnorm(
+  n = n_sims,  
+  mean = c(0, 0), 
+  sigma = covariance_matrix
+)
+
+x <- x_w[, 1]
+w <- x_w[, 2]
+```
+Next we'll simulate the outcome variable $Y$ where the true coefficient on $X$ is one and the true coefficient on $W$ is -1, adding standard normal errors.
+```{r}
+y <- 0.5 + x - w + rnorm(n_sims)
+```
+Now we'll run the "auxiliary regressions". The first one regresses $X$ on $W$ and saves the residuals. Call these residuals `x_tilde`.
+```{r}
+# Residuals from regression of X on W
+x_tilde <- lm(x ~ w) |> 
+  residuals()
+```
+The next one regresses $Y$ on $W$ and saves the residuals. Call these residuals `y_tilde`. 
+```{r}
+# Residuals from regression of Y on W
+y_tilde <- lm(y ~ w) |>
+  residuals()
+```
+To make the code that follows a little simpler, I'll also create a helper function that runs a linear regression and returns the coefficients after stripping away any variable names.
+```{r}
+get_coef <- function(formula) {
+  formula |>  
+    lm() |> 
+    coef() |> 
+    unname() 
+}
+```
+Now we're ready to compare some regressions! 
+The "long regression" is a standard linear regression of $Y$ on $X$ and $W$.
+The "FWL Standard" is a regression of `y_tilde` on `x_tilde`.
+In other words, it regresses the residuals of $Y$ on the residuals of $X$. 
+The FWL as it is usually encountered in textbooks implies that we should recover the same coefficient on $X$ in "Long Regression" and in "FWL Standard", and indeed the simulation bears this out.
+```{r}
+c(
+  "Long Regression" = get_coef(y ~ x + w)[2],
+  "FWL Standard" = get_coef(y_tilde ~ x_tilde - 1)[1], 
+  "FWL Alternative" = get_coef(y ~ x_tilde)[2]
+)
+```
+But now take a look at "FWL" alternative: this is a regression of $Y$ on `x_tilde`.
+Compared to the standard FWL approach, this version *does not* residualize $Y$ with respect to $W$.
+But it still gives us *exactly* the same coefficient on $X$ as the other two regressions.
+That leaves us with two unanswered questions:
+
+1. Why does the "alternative" FWL approach work?
+2. *Given* that the alternative approach works, why does anyone ever teach the "standard" version?
+
+In the rest of this post we'll answer both questions using simple algebra and the properties of linear regression. 
+There are lots of deep ideas here, but there's no need to bring out the big matrix algebra guns to explain them. 
+
+
+## A Bit of Notation 
+
+First we need a bit of notation.
+I find it a bit simpler to work with population linear regressions rather than sample regressions, but the ideas are the same either way.
+So if you prefer to put "hats" on everything and work with sums rather than expectations and covariances, be my guest!
+
+First we'll define the "Long Regression" as a [population linear regression](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/) of $Y$ on $X$ and $W$, namely 
+$$
+Y = \beta_0 + \beta_X X + \beta_W W + U, \quad \mathbb{E}(U) = \text{Cov}(X,U) = \text{Cov}(W,U)=0.
+$$
+Next I'll define two additional population linear regressions: first the regression of $X$ on $W$ 
+$$
+X = \gamma_0 + \gamma_W W + \tilde{X}, \quad \mathbb{E}(\tilde{X}) = \text{Cov}(W,\tilde{X})=0
+$$
+and second the regression of $Y$ on $W$ 
+$$
+Y = \delta_0 + \delta_W W + \tilde{Y}, \quad \mathbb{E}(\tilde{Y}) = \text{Cov}(W,\tilde{Y})=0.
+$$
+I've already linked to a post making this point, but it bears repeating: all of the properties of the error terms $U$, $\tilde{X}$ and $\tilde{Y}$ that I've stated here hold *by construction*.
+They are not assumptions; they are merely [what defines an error term](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/) in a population linear regression.
+
+
+## Why does the "alternative" FWL approach work?
+
+As mentioned in the discussion of our simulation experiment from above, the standard FWL theorem says that a regression of $\tilde{Y}$ on $\tilde{X}$ with no intercept gives us $\beta_X$, while the *alternative* version says that a regression of $Y$ on $\tilde{X}$ with an intercept also gives us $\beta_X$. 
+It is the second claim that we'll prove now.^[Fear not: we'll return to the first claim soon!]
+
+The alternative FWL theorem claims that $\beta_X = \text{Cov}(Y,\tilde{X})/\text{Var}(\tilde{X})$.
+Since $\tilde{X}$ is uncorrelated with $W$ by construction, we can [expand the numerator](https://github.com/fditraglia/random-variables-cheatsheet/blob/main/random-variables-cheatsheet.pdf) as follows:
+$$
+\text{Cov}(Y,\tilde{X}) = \text{Cov}(\beta_0 + \beta_X X + \beta_W W + U, \tilde{X}) = \beta_X \text{Cov}(X,\tilde{X}) + \text{Cov}(U,\tilde{X}).
+$$
+But since $\tilde{X} = (X - \gamma_0 - \gamma_W W)$ we also have
+$$
+\text{Cov}(U, \tilde{X}) = \text{Cov}(U, X - \gamma_0 - \gamma_W W) = \text{Cov}(U,X) - \gamma_W \text{Cov}(U,W) = 0
+$$
+since $X$ and $W$ are uncorrelated with $U$ by construction.
+So to prove our original claim it suffices to show that $\text{Cov}(X,\tilde{X}) = \text{Var}(\tilde{X})$. 
+To see why this holds, first write
+$$
+\text{Cov}(X, \tilde{X}) = \text{Cov}(X, X - \gamma_0 - \gamma_W W) = \text{Var}(X) - \gamma_W \text{Cov}(X,W). 
+$$
+using $\text{Cov}(X,X) = \text{Var}(X)$.
+Next, expand $\text{Var}(\tilde{X})$ as follows:
+$$
+\text{Var}(\tilde{X}) = \text{Var}(X - \gamma_0 - \gamma_W W) = \text{Var}(X) + \gamma_W^2 \text{Var}(W) - 2 \gamma_W \text{Cov}(X,W).
+$$
+and then subtract $\text{Cov}(X,\tilde{X})$ from $\text{Var}(\tilde{X})$:
+$$
+\text{Var}(\tilde{X}) - \text{Cov}(X,\tilde{X}) = \gamma_W \left[ \gamma_W \text{Var}(W) - \text{Cov}(X,W) \right].
+$$
+This shows that $\text{Var}(\tilde{X})$ and $\text{Cov}(X,\tilde{X})$ are equal if and only if $\gamma_W \text{Var}(W) = \text{Cov}(X,W)$.
+But since $\gamma_W$ is the coefficient from the regression of $X$ on $W$, we already know that $\gamma_W = \text{Cov}(X,W)/\text{Var}(W)$! 
+With a bit of algebra using the properties of covariance and the definition of a population linear regression, we've shown that the alternative FWL theorem holds.
+
+
+## What's different about the "usual" FWL theorem?
+
+At this point you may be wondering why anyone teaches the "usual" version of the FWL theorem at all.
+If that extra short regression of $Y$ on $W$ isn't needed to learn $\beta_X$, why bother?
+
+To answer this question, we'll start by re-writing the long regression two different ways.
+First, we'll substitute $X = \gamma_0 + \gamma_W W + \tilde{X}$ into the long regression and re-arrange, yielding
+$$
+Y = (\beta_0 + \beta_X \gamma_0) + \beta_X \tilde{X} + (\beta_W + \beta_X \gamma_W) W +  U.
+$$
+Next we'll substitute $Y = \delta_0 + \delta_W W + \tilde{Y}$ on the left-hand side of the preceding equation and rearrange to isolate $\tilde{Y}$.
+This leaves us with 
+$$
+\tilde{Y} = (\beta_0 + \beta_X \gamma_0 - \delta_0) + \beta_X \tilde{X} + (\beta_W + \beta_X \gamma_W - \delta_W) W + U.
+$$
+Now we have two expressions, each with $\beta_X \tilde{X}$ as one of the terms on the right-hand side and $U$ as another.
+Notice that both expressions have an intercept and a term in which $W$ is multiplied by a constant.
+What's more, the intercepts are closely related across the two equations, as are the $W$ coefficients.
+I'm now going to make a bold assertion: the intercept and $W$ coefficient in the second expression, the $\tilde{Y}$ one, are **both equal to zero**
+$$
+\beta_0 + \beta_X \gamma_0 - \delta_0 = 0, \quad \text{and} \quad \beta_W + \beta_X \gamma_W - \delta_W = 0.
+$$
+Perhaps you don't believe me, but just for the moment *suppose that I'm correct*.
+In this case it would immediately follow that 
+$$
+\beta_0 + \beta_X \gamma_0 = \delta_0, \quad \text{and} \quad \beta_W + \beta_X \gamma_W = \delta_W
+$$
+leaving us with two simple linear regressions, namely
+$$
+\begin{align*}
+Y &= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
+\tilde{Y} &= \beta_X \tilde{X} + U.
+\end{align*}
+$$
+We're tantalizingly close to unraveling the mystery of why the "usual" FWL theorem is so popular.
+But first we need to verify my bold claim from the previous paragraph.
+To do so, we'll fall back on our old friend: the *omitted variable bias formula*, also known as the regression anatomy formula:
+$$
+\begin{aligned}
+\delta_W &\equiv \frac{\text{Cov}(Y,W)}{\text{Var}(W)} = \frac{\text{Cov}(\beta_0 + \beta_X X + \beta_W W + U, W)}{\text{Var}(W)} = \frac{\beta_W \text{Var}(W) + \beta_X \text{Cov}(X,W)}{\text{Var}(W)}\\
+&= \beta_W + \beta_X \frac{\text{Cov}(X,W)}{\text{Var}(W)} = \beta_W + \beta_X \gamma_W.
+\end{aligned}
+$$
+Thus, $\beta_W + \beta_X \gamma_W - \delta_W = 0$ as claimed.
+One down, one more to go.
+By definition, $\delta_0 = \mathbb{E}(Y) - \delta_W \mathbb{E}(W)$.
+Substituting the long regression for $Y$, we have
+$$
+\begin{aligned}
+\delta_0 &= \mathbb{E}(\beta_0 + \beta_X X + \beta_W W + U) - \delta_W \mathbb{E}(W)\\
+&= \beta_0 + \beta_X \mathbb{E}(X) + (\beta_W - \delta_W) \mathbb{E}(W)
+\end{aligned}
+$$
+by the linearity of expectation and the fact that $\mathbb{E}(U) = 0$ by construction.
+Now, we're *trying to show* that $\delta_0 = \beta_0 + \beta_X \gamma_0$.
+Substituting for $\gamma_0$ in this expression gives 
+$$
+\beta_0 + \beta_X \gamma_0 = \beta_0 + \beta_X [\mathbb{E}(X) - \gamma_W \mathbb{E}(W)] = \beta_0 + \beta_X \mathbb{E}(X) - \beta_X \gamma_W \mathbb{E}(W).
+$$
+Inspecting our work so far, we see that the two alternative expressions for $\delta_0$ will be equal precisely when $\beta_X \gamma_W = \delta_W - \beta_W$.
+But re-arranging this gives $\delta_W = \beta_W + \beta_X \gamma_W$, which we already proved above using the omitted variables bias formula! 
+
+
+## Taking Stock
+
+That was a lot of algebra, so let's spend some time thinking about the results.
+We showed that
+$$
+\begin{align*}
+Y &= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
+\tilde{Y} &= \beta_X \tilde{X} + U.
+\end{align*}
+$$
+Now, if you'll permit me, I'd like to re-write that first equality as
+$$
+Y = \delta_0 + \beta_X \tilde{X} + V, \quad \text{where } V \equiv \beta_W W + U.
+$$
+Since $\tilde{X}$ is uncorrelated with $U$, as explained above, and since $\mathbb{E}(U) = 0$ by construction, it follows that $\tilde{Y} = \beta_X \tilde{X} + U$ is a *bona fide* population linear regression model.
+If we regress $\tilde{Y}$ on $\tilde{X}$ the slope coefficient will be $\beta_X$ and the error term will be $U$.
+This regression corresponds to the *standard* FWL theorem.
+Notice that it has an intercept of *zero* and an error term that is *identical* to that of the long regression.
+We can verify this using our simulation experiment from above as follows:
+```{r}
+# Standard FWL has same residuals as long regression
+u_hat <- resid(lm(y ~ x + w))
+u_tilde <- resid(lm(y_tilde ~ x_tilde - 1))
+all.equal(u_hat, u_tilde)
+
+# Standard FWL has an intercept of zero (to machine precision!)
+coef(lm(y_tilde ~ x_tilde))[1] # fit with intercept; check it's (numerically) 0
+```
+
+
+So what about $Y = \delta_0 + \beta_X \tilde{X} + V$?
+This is the regression that corresponds to the *alternative* FWL theorem.
+Since $V = \beta_W W + U$ and $\tilde{X}$ is uncorrelated with both $U$ and $W$, this too is a population regression.
+But unless $\beta_W = 0$, it has a *different error term*. 
+In other words, $V \neq U$.
+Moreover, this regression *includes an intercept* that is not in general zero.
+Again we can verify this using our simulation example from above:
+```{r}
+# Alternative FWL has different residuals than long regression
+v_hat <- resid(lm(y ~ x_tilde))
+all.equal(u_hat, v_hat)
+
+# Alternative FWL has a non-zero intercept
+coef(lm(y ~ x_tilde))[1]
+```
+
+## The Punchline
+
+If your goal is *merely* to learn $\beta_X$, then either version of the FWL theorem will do the trick and the alternative version is *simpler* because it only involves one auxiliary regression instead of two.
+But if you want to ensure that you end up with the same *error term* as in the original long regression, then you need to use the *standard* version of the FWL theorem. 
+This is crucial for the purposes of *inference* because the properties of the error term determine the standard errors of your estimates.
+

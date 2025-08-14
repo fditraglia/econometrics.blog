@@ -1,0 +1,257 @@
+---
+title: Two FWL Theorems for the Price of One
+author: Francis J. DiTraglia
+date: '2025-08-14'
+slug: two-fwl-theorems-for-the-price-of-one
+categories: [econometrics]
+tags: [FWL, regression]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-08-14T13:52:41-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>The result that I prefer to call <a href="https://www.econometrics.blog/post/how-to-do-regression-adjustment/#fnref2">Yule’s Rule</a>, more commonly known as the “Frisch-Waugh-Lovell (FWL) theorem”, shows how to calculate the regression slope coefficient for <strong>one predictor</strong> by carrying out additional “auxiliary” regressions that adjust for <strong>all other predictors</strong>.
+You’ve probably encountered this result if you’ve studied introductory econometrics.
+But it may surprise you to learn that there are actually <em>two</em> variants of the FWL theorem, each with its pros and cons.
+Today we’ll take a look at the less familiar version and then circle back to understand what makes the more familiar one a textbook staple.</p>
+<div id="simulation-example" class="section level2">
+<h2>Simulation Example</h2>
+<p>Let’s start with a little simulation.
+First we’ll generate 5000 observations of predictors <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span> from a joint normal distribution with standard deviations of one, means of zero, and a correlation of 0.5.</p>
+<pre class="r"><code>set.seed(1066)
+library(mvtnorm)
+
+# Simulate linear regression with two predictors: X and W
+covariance_matrix &lt;- matrix(
+  c(1, 0.5, 0.5, 1), 
+  nrow = 2
+)
+
+n_sims &lt;- 5000
+
+x_w &lt;- rmvnorm(
+  n = n_sims,  
+  mean = c(0, 0), 
+  sigma = covariance_matrix
+)
+
+x &lt;- x_w[, 1]
+w &lt;- x_w[, 2]</code></pre>
+<p>Next we’ll simulate the outcome variable <span class="math inline">\(Y\)</span> where the true coefficient on <span class="math inline">\(X\)</span> is one and the true coefficient on <span class="math inline">\(W\)</span> is -1, adding standard normal errors.</p>
+<pre class="r"><code>y &lt;- 0.5 + x - w + rnorm(n_sims)</code></pre>
+<p>Now we’ll run the “auxiliary regressions”. The first one regresses <span class="math inline">\(X\)</span> on <span class="math inline">\(W\)</span> and saves the residuals. Call these residuals <code>x_tilde</code>.</p>
+<pre class="r"><code># Residuals from regression of X on W
+x_tilde &lt;- lm(x ~ w) |&gt; 
+  residuals()</code></pre>
+<p>The next one regresses <span class="math inline">\(Y\)</span> on <span class="math inline">\(W\)</span> and saves the residuals. Call these residuals <code>y_tilde</code>.</p>
+<pre class="r"><code># Residuals from regression of Y on W
+y_tilde &lt;- lm(y ~ w) |&gt;
+  residuals()</code></pre>
+<p>To make the code that follows a little simpler, I’ll also create a helper function that runs a linear regression and returns the coefficients after stripping away any variable names.</p>
+<pre class="r"><code>get_coef &lt;- function(formula) {
+  formula |&gt;  
+    lm() |&gt; 
+    coef() |&gt; 
+    unname() 
+}</code></pre>
+<p>Now we’re ready to compare some regressions!
+The “long regression” is a standard linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span>.
+The “FWL Standard” is a regression of <code>y_tilde</code> on <code>x_tilde</code>.
+In other words, it regresses the residuals of <span class="math inline">\(Y\)</span> on the residuals of <span class="math inline">\(X\)</span>.
+The FWL as it is usually encountered in textbooks implies that we should recover the same coefficient on <span class="math inline">\(X\)</span> in “Long Regression” and in “FWL Standard”, and indeed the simulation bears this out.</p>
+<pre class="r"><code>c(
+  &quot;Long Regression&quot; = get_coef(y ~ x + w)[2],
+  &quot;FWL Standard&quot; = get_coef(y_tilde ~ x_tilde - 1)[1], 
+  &quot;FWL Alternative&quot; = get_coef(y ~ x_tilde)[2]
+)</code></pre>
+<pre><code>## Long Regression    FWL Standard FWL Alternative 
+##       0.9937046       0.9937046       0.9937046</code></pre>
+<p>But now take a look at “FWL” alternative: this is a regression of <span class="math inline">\(Y\)</span> on <code>x_tilde</code>.
+Compared to the standard FWL approach, this version <em>does not</em> residualize <span class="math inline">\(Y\)</span> with respect to <span class="math inline">\(W\)</span>.
+But it still gives us <em>exactly</em> the same coefficient on <span class="math inline">\(X\)</span> as the other two regressions.
+That leaves us with two unanswered questions:</p>
+<ol style="list-style-type: decimal">
+<li>Why does the “alternative” FWL approach work?</li>
+<li><em>Given</em> that the alternative approach works, why does anyone ever teach the “standard” version?</li>
+</ol>
+<p>In the rest of this post we’ll answer both questions using simple algebra and the properties of linear regression.
+There are lots of deep ideas here, but there’s no need to bring out the big matrix algebra guns to explain them.</p>
+</div>
+<div id="a-bit-of-notation" class="section level2">
+<h2>A Bit of Notation</h2>
+<p>First we need a bit of notation.
+I find it a bit simpler to work with population linear regressions rather than sample regressions, but the ideas are the same either way.
+So if you prefer to put “hats” on everything and work with sums rather than expectations and covariances, be my guest!</p>
+<p>First we’ll define the “Long Regression” as a <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">population linear regression</a> of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span>, namely
+<span class="math display">\[
+Y = \beta_0 + \beta_X X + \beta_W W + U, \quad \mathbb{E}(U) = \text{Cov}(X,U) = \text{Cov}(W,U)=0.
+\]</span>
+Next I’ll define two additional population linear regressions: first the regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(W\)</span>
+<span class="math display">\[
+X = \gamma_0 + \gamma_W W + \tilde{X}, \quad \mathbb{E}(\tilde{X}) = \text{Cov}(W,\tilde{X})=0
+\]</span>
+and second the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(W\)</span>
+<span class="math display">\[
+Y = \delta_0 + \delta_W W + \tilde{Y}, \quad \mathbb{E}(\tilde{Y}) = \text{Cov}(W,\tilde{Y})=0.
+\]</span>
+I’ve already linked to a post making this point, but it bears repeating: all of the properties of the error terms <span class="math inline">\(U\)</span>, <span class="math inline">\(\tilde{X}\)</span> and <span class="math inline">\(\tilde{Y}\)</span> that I’ve stated here hold <em>by construction</em>.
+They are not assumptions; they are merely <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">what defines an error term</a> in a population linear regression.</p>
+</div>
+<div id="why-does-the-alternative-fwl-approach-work" class="section level2">
+<h2>Why does the “alternative” FWL approach work?</h2>
+<p>As mentioned in the discussion of our simulation experiment from above, the standard FWL theorem says that a regression of <span class="math inline">\(\tilde{Y}\)</span> on <span class="math inline">\(\tilde{X}\)</span> with no intercept gives us <span class="math inline">\(\beta_X\)</span>, while the <em>alternative</em> version says that a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span> with an intercept also gives us <span class="math inline">\(\beta_X\)</span>.
+It is the second claim that we’ll prove now.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>The alternative FWL theorem claims that <span class="math inline">\(\beta_X = \text{Cov}(Y,\tilde{X})/\text{Var}(\tilde{X})\)</span>.
+Since <span class="math inline">\(\tilde{X}\)</span> is uncorrelated with <span class="math inline">\(W\)</span> by construction, we can <a href="https://github.com/fditraglia/random-variables-cheatsheet/blob/main/random-variables-cheatsheet.pdf">expand the numerator</a> as follows:
+<span class="math display">\[
+\text{Cov}(Y,\tilde{X}) = \text{Cov}(\beta_0 + \beta_X X + \beta_W W + U, \tilde{X}) = \beta_X \text{Cov}(X,\tilde{X}) + \text{Cov}(U,\tilde{X}).
+\]</span>
+But since <span class="math inline">\(\tilde{X} = (X - \gamma_0 - \gamma_W W)\)</span> we also have
+<span class="math display">\[
+\text{Cov}(U, \tilde{X}) = \text{Cov}(U, X - \gamma_0 - \gamma_W W) = \text{Cov}(U,X) - \gamma_W \text{Cov}(U,W) = 0
+\]</span>
+since <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span> are uncorrelated with <span class="math inline">\(U\)</span> by construction.
+So to prove our original claim it suffices to show that <span class="math inline">\(\text{Cov}(X,\tilde{X}) = \text{Var}(\tilde{X})\)</span>.
+To see why this holds, first write
+<span class="math display">\[
+\text{Cov}(X, \tilde{X}) = \text{Cov}(X, X - \gamma_0 - \gamma_W W) = \text{Var}(X) - \gamma_W \text{Cov}(X,W).
+\]</span>
+using <span class="math inline">\(\text{Cov}(X,X) = \text{Var}(X)\)</span>.
+Next, expand <span class="math inline">\(\text{Var}(\tilde{X})\)</span> as follows:
+<span class="math display">\[
+\text{Var}(\tilde{X}) = \text{Var}(X - \gamma_0 - \gamma_W W) = \text{Var}(X) + \gamma_W^2 \text{Var}(W) - 2 \gamma_W \text{Cov}(X,W).
+\]</span>
+and then subtract <span class="math inline">\(\text{Cov}(X,\tilde{X})\)</span> from <span class="math inline">\(\text{Var}(\tilde{X})\)</span>:
+<span class="math display">\[
+\text{Var}(\tilde{X}) - \text{Cov}(X,\tilde{X}) = \gamma_W \left[ \gamma_W \text{Var}(W) - \text{Cov}(X,W) \right].
+\]</span>
+This shows that <span class="math inline">\(\text{Var}(\tilde{X})\)</span> and <span class="math inline">\(\text{Cov}(X,\tilde{X})\)</span> are equal if and only if <span class="math inline">\(\gamma_W \text{Var}(W) = \text{Cov}(X,W)\)</span>.
+But since <span class="math inline">\(\gamma_W\)</span> is the coefficient from the regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(W\)</span>, we already know that <span class="math inline">\(\gamma_W = \text{Cov}(X,W)/\text{Var}(W)\)</span>!
+With a bit of algebra using the properties of covariance and the definition of a population linear regression, we’ve shown that the alternative FWL theorem holds.</p>
+</div>
+<div id="whats-different-about-the-usual-fwl-theorem" class="section level2">
+<h2>What’s different about the “usual” FWL theorem?</h2>
+<p>At this point you may be wondering why anyone teaches the “usual” version of the FWL theorem at all.
+If that extra short regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(W\)</span> isn’t needed to learn <span class="math inline">\(\beta_X\)</span>, why bother?</p>
+<p>To answer this question, we’ll start by re-writing the long regression two different ways.
+First, we’ll substitute <span class="math inline">\(X = \gamma_0 + \gamma_W W + \tilde{X}\)</span> into the long regression and re-arrange, yielding
+<span class="math display">\[
+Y = (\beta_0 + \beta_X \gamma_0) + \beta_X \tilde{X} + (\beta_W + \beta_X \gamma_W) W +  U.
+\]</span>
+Next we’ll substitute <span class="math inline">\(Y = \delta_0 + \delta_W W + \tilde{Y}\)</span> on the left-hand side of the preceding equation and rearrange to isolate <span class="math inline">\(\tilde{Y}\)</span>.
+This leaves us with
+<span class="math display">\[
+\tilde{Y} = (\beta_0 + \beta_X \gamma_0 - \delta_0) + \beta_X \tilde{X} + (\beta_W + \beta_X \gamma_W - \delta_W) W + U.
+\]</span>
+Now we have two expressions, each with <span class="math inline">\(\beta_X \tilde{X}\)</span> as one of the terms on the right-hand side and <span class="math inline">\(U\)</span> as another.
+Notice that both expressions have an intercept and a term in which <span class="math inline">\(W\)</span> is multiplied by a constant.
+What’s more, the intercepts are closely related across the two equations, as are the <span class="math inline">\(W\)</span> coefficients.
+I’m now going to make a bold assertion: the intercept and <span class="math inline">\(W\)</span> coefficient in the second expression, the <span class="math inline">\(\tilde{Y}\)</span> one, are <strong>both equal to zero</strong>
+<span class="math display">\[
+\beta_0 + \beta_X \gamma_0 - \delta_0 = 0, \quad \text{and} \quad \beta_W + \beta_X \gamma_W - \delta_W = 0.
+\]</span>
+Perhaps you don’t believe me, but just for the moment <em>suppose that I’m correct</em>.
+In this case it would immediately follow that
+<span class="math display">\[
+\beta_0 + \beta_X \gamma_0 = \delta_0, \quad \text{and} \quad \beta_W + \beta_X \gamma_W = \delta_W
+\]</span>
+leaving us with two simple linear regressions, namely
+<span class="math display">\[
+\begin{align*}
+Y &amp;= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
+\tilde{Y} &amp;= \beta_X \tilde{X} + U.
+\end{align*}
+\]</span>
+We’re tantalizingly close to unraveling the mystery of why the “usual” FWL theorem is so popular.
+But first we need to verify my bold claim from the previous paragraph.
+To do so, we’ll fall back on our old friend: the <em>omitted variable bias formula</em>, also known as the regression anatomy formula:
+<span class="math display">\[
+\begin{aligned}
+\delta_W &amp;\equiv \frac{\text{Cov}(Y,W)}{\text{Var}(W)} = \frac{\text{Cov}(\beta_0 + \beta_X X + \beta_W W + U, W)}{\text{Var}(W)} = \frac{\beta_W \text{Var}(W) + \beta_X \text{Cov}(X,W)}{\text{Var}(W)}\\
+&amp;= \beta_W + \beta_X \frac{\text{Cov}(X,W)}{\text{Var}(W)} = \beta_W + \beta_X \gamma_W.
+\end{aligned}
+\]</span>
+Thus, <span class="math inline">\(\beta_W + \beta_X \gamma_W - \delta_W = 0\)</span> as claimed.
+One down, one more to go.
+By definition, <span class="math inline">\(\delta_0 = \mathbb{E}(Y) - \delta_W \mathbb{E}(W)\)</span>.
+Substituting the long regression for <span class="math inline">\(Y\)</span>, we have
+<span class="math display">\[
+\begin{aligned}
+\delta_0 &amp;= \mathbb{E}(\beta_0 + \beta_X X + \beta_W W + U) - \delta_W \mathbb{E}(W)\\
+&amp;= \beta_0 + \beta_X \mathbb{E}(X) + (\beta_W - \delta_W) \mathbb{E}(W)
+\end{aligned}
+\]</span>
+by the linearity of expectation and the fact that <span class="math inline">\(\mathbb{E}(U) = 0\)</span> by construction.
+Now, we’re <em>trying to show</em> that <span class="math inline">\(\delta_0 = \beta_0 + \beta_X \gamma_0\)</span>.
+Substituting for <span class="math inline">\(\gamma_0\)</span> in this expression gives
+<span class="math display">\[
+\beta_0 + \beta_X \gamma_0 = \beta_0 + \beta_X [\mathbb{E}(X) - \gamma_W \mathbb{E}(W)] = \beta_0 + \beta_X \mathbb{E}(X) - \beta_X \gamma_W \mathbb{E}(W).
+\]</span>
+Inspecting our work so far, we see that the two alternative expressions for <span class="math inline">\(\delta_0\)</span> will be equal precisely when <span class="math inline">\(\beta_X \gamma_W = \delta_W - \beta_W\)</span>.
+But re-arranging this gives <span class="math inline">\(\delta_W = \beta_W + \beta_X \gamma_W\)</span>, which we already proved above using the omitted variables bias formula!</p>
+</div>
+<div id="taking-stock" class="section level2">
+<h2>Taking Stock</h2>
+<p>That was a lot of algebra, so let’s spend some time thinking about the results.
+We showed that
+<span class="math display">\[
+\begin{align*}
+Y &amp;= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
+\tilde{Y} &amp;= \beta_X \tilde{X} + U.
+\end{align*}
+\]</span>
+Now, if you’ll permit me, I’d like to re-write that first equality as
+<span class="math display">\[
+Y = \delta_0 + \beta_X \tilde{X} + V, \quad \text{where } V \equiv \beta_W W + U.
+\]</span>
+Since <span class="math inline">\(\tilde{X}\)</span> is uncorrelated with <span class="math inline">\(U\)</span>, as explained above, and since <span class="math inline">\(\mathbb{E}(U) = 0\)</span> by construction, it follows that <span class="math inline">\(\tilde{Y} = \beta_X \tilde{X} + U\)</span> is a <em>bona fide</em> population linear regression model.
+If we regress <span class="math inline">\(\tilde{Y}\)</span> on <span class="math inline">\(\tilde{X}\)</span> the slope coefficient will be <span class="math inline">\(\beta_X\)</span> and the error term will be <span class="math inline">\(U\)</span>.
+This regression corresponds to the <em>standard</em> FWL theorem.
+Notice that it has an intercept of <em>zero</em> and an error term that is <em>identical</em> to that of the long regression.
+We can verify this using our simulation experiment from above as follows:</p>
+<pre class="r"><code># Standard FWL has same residuals as long regression
+u_hat &lt;- resid(lm(y ~ x + w))
+u_tilde &lt;- resid(lm(y_tilde ~ x_tilde - 1))
+all.equal(u_hat, u_tilde)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># Standard FWL has an intercept of zero (to machine precision!)
+coef(lm(y_tilde ~ x_tilde))[1] # fit with intercept; check it&#39;s (numerically) 0</code></pre>
+<pre><code>##  (Intercept) 
+## 6.260601e-18</code></pre>
+<p>So what about <span class="math inline">\(Y = \delta_0 + \beta_X \tilde{X} + V\)</span>?
+This is the regression that corresponds to the <em>alternative</em> FWL theorem.
+Since <span class="math inline">\(V = \beta_W W + U\)</span> and <span class="math inline">\(\tilde{X}\)</span> is uncorrelated with both <span class="math inline">\(U\)</span> and <span class="math inline">\(W\)</span>, this too is a population regression.
+But unless <span class="math inline">\(\beta_W = 0\)</span>, it has a <em>different error term</em>.
+In other words, <span class="math inline">\(V \neq U\)</span>.
+Moreover, this regression <em>includes an intercept</em> that is not in general zero.
+Again we can verify this using our simulation example from above:</p>
+<pre class="r"><code># Alternative FWL has different residuals than long regression
+v_hat &lt;- resid(lm(y ~ x_tilde))
+all.equal(u_hat, v_hat)</code></pre>
+<pre><code>## [1] &quot;Mean relative difference: 0.4905107&quot;</code></pre>
+<pre class="r"><code># Alternative FWL has a non-zero intercept
+coef(lm(y ~ x_tilde))[1]</code></pre>
+<pre><code>## (Intercept) 
+##   0.4878453</code></pre>
+</div>
+<div id="the-punchline" class="section level2">
+<h2>The Punchline</h2>
+<p>If your goal is <em>merely</em> to learn <span class="math inline">\(\beta_X\)</span>, then either version of the FWL theorem will do the trick and the alternative version is <em>simpler</em> because it only involves one auxiliary regression instead of two.
+But if you want to ensure that you end up with the same <em>error term</em> as in the original long regression, then you need to use the <em>standard</em> version of the FWL theorem.
+This is crucial for the purposes of <em>inference</em> because the properties of the error term determine the standard errors of your estimates.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Fear not: we’ll return to the first claim soon!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
