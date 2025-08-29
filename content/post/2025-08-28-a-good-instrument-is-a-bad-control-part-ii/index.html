@@ -1,0 +1,252 @@
+---
+title: 'A Good Instrument is a Bad Control: Part II'
+author: Francis J. DiTraglia
+date: '2025-08-28'
+slug: a-good-instrument-is-a-bad-control-part-ii
+categories: [econometrics, causal inference]
+tags: [bad control, instrumental variables]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-08-28T19:49:11-05:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+
+
+<p>At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called “Bad Control”.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+A lively discussion of bad controls ensued, during which I offered one of my favorite examples: <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/">a good instrument is a bad control</a>.
+To summarize that earlier post: including a valid instrumental variable as a <em>control</em> variable can only amplify the bias on the coefficient for our endogenous regressor of interest.
+When used as a control, the instrument “soaks up” the good (exogenous) variation in the endogenous regressor, leaving behind only the bad (endogenous) variation.
+This is the opposite of what happens in an instrumental variables regression, where we use the instrument to <em>extract</em> only the good variation in the endogenous regressor.
+More generally, a “bad control” is a covariate that we <em>shouldn’t adjust for</em> when using a <a href="https://www.econometrics.blog/post/how-to-do-regression-adjustment/">selection-on-observables</a> approach to causal inference.</p>
+<p>Upon hearing my IV example, my colleague immediately asked “but what about the coefficient on the <em>instrument</em> itself?”
+This is a great question and one I hadn’t thought about before.
+Today I’ll give you my answer.</p>
+<p>This post is a sequel, so you may find it helpful to glance at my <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/">earlier post</a> before reading further.
+At the very end of the post I’ll rely on a few basic ideas about directed acyclic graphs (DAGs).
+If this material is unfamiliar, you may find my <a href="https://www.treatment-effects.com/basics/">treatment effects slides</a> helpful.
+With these caveats, I’ll do my best to keep this post relatively self-contained.</p>
+<div id="recap-of-part-i" class="section level2">
+<h2>Recap of Part I</h2>
+<p>Suppose that <span class="math inline">\(X\)</span> is our endogenous regressor of interest in the linear causal model <span class="math inline">\(Y = \alpha + \beta X + U\)</span> where <span class="math inline">\(\text{Cov}(X,U) \neq 0\)</span> but <span class="math inline">\(\text{Cov}(Z,U) = 0\)</span>, and where <span class="math inline">\(Z\)</span> is an instrumental variable that is correlated with <span class="math inline">\(X\)</span>.
+Now consider the population linear regression of <span class="math inline">\(Y\)</span> on both <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span>, namely
+<span class="math display">\[
+Y = \gamma_0 + \gamma_X X + \gamma_Z Z + \eta
+\]</span>
+where the error term <span class="math inline">\(\eta\)</span> satisfies <span class="math inline">\(\text{Cov}(X,\eta) = \text{Cov}(Z,\eta) = \mathbb{E}(\eta) = 0\)</span> <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>.
+Further define the population linear regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>, namely
+<span class="math display">\[
+X = \pi_0 + \pi_Z Z + V
+\]</span>
+where the error term <span class="math inline">\(V\)</span> satisfies <span class="math inline">\(\text{Cov}(Z,V) = \mathbb{E}(V) = 0\)</span> <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>.
+Finally, define the population linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> as
+<span class="math display">\[
+Y = \delta_0 + \delta_X X + \epsilon, \quad \text{Cov}(X,\epsilon) = \mathbb{E}(\epsilon) = 0.
+\]</span>
+Using this notation, the result from <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/">my earlier post</a> can be written as
+<span class="math display">\[
+\delta_X = \beta + \frac{\text{Cov}(X,U)}{\text{Var}(X)}, \quad \text{and} \quad \gamma_X = \beta + \frac{\text{Cov}(X,U)}{\text{Var}(V)}.
+\]</span>
+To understand what this tells us, notice that, using the “first-stage” regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>, we can write
+<span class="math display">\[
+\text{Var}(V) \equiv \text{Var}(X - \pi_0 - \pi_Z Z) = \text{Var}(X) - \pi_Z^2 \text{Var}(Z).
+\]</span>
+This shows that whenever <span class="math inline">\(Z\)</span> is a relevant instrument <span class="math inline">\((\pi_Z \neq 0)\)</span>, we must have <span class="math inline">\(\text{Var}(V) &lt; \text{Var}(X)\)</span>.
+It follows that <span class="math inline">\(\gamma_X\)</span> is <em>more biased</em> than <span class="math inline">\(\delta_X\)</span>: adding <span class="math inline">\(Z\)</span> as a control regressor only makes our estimate of the effect of <span class="math inline">\(X\)</span> <em>worse</em>!<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+</div>
+<div id="what-about-gamma_z" class="section level2">
+<h2>What about <span class="math inline">\(\gamma_Z\)</span>?</h2>
+<p>So if <span class="math inline">\(Z\)</span> soaks up the <em>good variation</em> in <span class="math inline">\(X\)</span>, what about the coefficient <span class="math inline">\(\gamma_Z\)</span> on the instrument <span class="math inline">\(Z\)</span>?
+Perhaps this coefficient contains some useful information about the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>?
+To find out, we’ll use the <a href="https://www.econometrics.blog/post/two-fwl-theorems-for-the-price-of-one/">FWL Theorem</a> as follows:
+<span class="math display">\[
+\gamma_Z = \frac{\text{Cov}(Y,\tilde{Z})}{\text{Var}(\tilde{Z})}
+\]</span>
+where <span class="math inline">\(Z = \lambda_0 + \lambda_X X + \tilde{Z}\)</span> is the population linear regression of <span class="math inline">\(Z\)</span> on <span class="math inline">\(X\)</span>.
+This is the <em>reverse</em> of the first-stage regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span> described above.
+Here the error term <span class="math inline">\(\tilde{Z}\)</span> satisfies <span class="math inline">\(\mathbb{E}(\tilde{Z}) = \text{Cov}(\tilde{Z}, X) = 0\)</span> <a href="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>.
+Substituting the causal model gives
+<span class="math display">\[
+\text{Cov}(Y, \tilde{Z}) = \text{Cov}(\alpha + \beta X + U, \tilde{Z}) = \beta \text{Cov}(X,\tilde{Z}) + \text{Cov}(U,\tilde{Z}) = \text{Cov}(U, \tilde{Z})
+\]</span>
+since <span class="math inline">\(\text{Cov}(X,\tilde{Z}) = 0\)</span> by construction.
+Now, substituting the definition of <span class="math inline">\(\tilde{Z}\)</span>,
+<span class="math display">\[
+\text{Cov}(U, \tilde{Z}) = \text{Cov}(U, Z - \lambda_0 - \lambda_X X) = \text{Cov}(U,Z) - \lambda_X \text{Cov}(U,X) = -\lambda_X \text{Cov}(X,U)
+\]</span>
+since <span class="math inline">\(\text{Cov}(U,Z) = 0\)</span> by assumption.
+We can already see that <span class="math inline">\(\gamma_Z\)</span> is <em>not going to help us</em> learn about <span class="math inline">\(\beta\)</span>.
+First of all, the term containing <span class="math inline">\(\beta\)</span> vanished; second of all, the term that remained is polluted by the endogeneity of <span class="math inline">\(X\)</span>, namely <span class="math inline">\(\text{Cov}(X,U)\)</span>.</p>
+<p>Still, let’s see if we can get a clean expression for <span class="math inline">\(\gamma_Z\)</span>.
+So far we have calculated the numerator of the FWL expression, showing that <span class="math inline">\(\text{Cov}(Y,\tilde{Z}) = -\lambda_X \text{Cov}(X,U)\)</span>.
+The next step is to calculate <span class="math inline">\(\text{Var}(\tilde{Z})\)</span>:
+<span class="math display">\[
+\text{Var}(\tilde{Z}) = \text{Var}(Z - \lambda_0 - \lambda_X X) = \text{Var}(Z) + \lambda_X^2 \text{Var}(X) - 2\lambda_X \text{Cov}(X,Z).
+\]</span>
+Since <span class="math inline">\(\lambda_X \equiv \text{Cov}(X,Z)/\text{Var}(X)\)</span>, our expression for <span class="math inline">\(\text{Var}(\tilde{Z})\)</span> simplifies to
+<span class="math display">\[
+\text{Var}(\tilde{Z}) = \text{Var}(Z) - \lambda_X \text{Cov}(X,Z)
+\]</span>
+so we have discovered that:
+<span class="math display">\[
+\gamma_Z = \frac{-\lambda_X \text{Cov}(X,U)}{\text{Var}(Z) - \lambda_X \text{Cov}(X,Z)}.
+\]</span></p>
+<p>Call me old-fashioned, but I <em>really</em> don’t like having <span class="math inline">\(\lambda_X\)</span> in that expression.
+I’d feel much happier if we could find a way to re-write this in terms of the more familiar IV first-stage coefficient <span class="math inline">\(\pi_Z\)</span>.
+Let’s give it a try!
+Let’s use my favorite trick of <em>multiplying by one</em>:
+<span class="math display">\[
+\lambda_X \equiv \frac{\text{Cov}(X,Z)}{\text{Var}(X)} = \frac{\text{Cov}(X,Z)}{\text{Var}(X)} \cdot \frac{\text{Var}(Z)}{\text{Var}(Z)} = \pi_Z \cdot \frac{\text{Var}(Z)}{\text{Var}(X)}.
+\]</span>
+Substituting for <span class="math inline">\(\lambda_X\)</span> gives
+<span class="math display">\[
+\gamma_Z = \frac{-\pi_Z \frac{\text{Var}(Z)}{\text{Var}(X)} \text{Cov}(X,U)}{\text{Var}(Z) - \pi_Z \frac{\text{Var}(Z)}{\text{Var}(X)} \text{Cov}(X,Z)} = \frac{-\pi_Z \text{Cov}(X,U)}{\text{Var}(X) - \pi_Z^2 \text{Var}(Z)}.
+\]</span>
+We can simplify this even further by substituting <span class="math inline">\(\text{Var}(V) = \text{Var}(X) - \pi_Z^2 \text{Var}(Z)\)</span> from above to obtain
+<span class="math display">\[
+\gamma_Z = -\pi_Z \frac{\text{Cov}(X,U)}{\text{Var}(V)}.
+\]</span>
+And now we recognize something from above: <span class="math inline">\(\text{Cov}(X,U)/\text{Var}(V)\)</span> was the <em>bias</em> of <span class="math inline">\(\gamma_X\)</span> relative to the true causal effect <span class="math inline">\(\beta\)</span>!
+This means we can also write <span class="math inline">\(\gamma_Z = -\pi_Z (\gamma_X - \beta)\)</span>.</p>
+</div>
+<div id="a-little-simulation" class="section level2">
+<h2>A Little Simulation</h2>
+<p>We seem to be doing an awful lot of algebra on this blog lately.
+To make sure that we haven’t made any silly mistakes, let’s check our work using a little simulation experiment taken from my <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/#a-simulation-example">earlier post</a>.
+Spoiler alert: everything checks out!</p>
+<pre class="r"><code>set.seed(1234)
+n &lt;- 1e5
+
+# Simulate instrument (z)
+z &lt;- rnorm(n)
+
+# Simulate error terms (u, v)
+library(mvtnorm)
+Rho &lt;- matrix(c(1, 0.5, 
+                0.5, 1), 2, 2, byrow = TRUE)
+errors &lt;- rmvnorm(n, sigma = Rho)
+
+# Simulate linear causal model
+u &lt;- errors[, 1]
+v &lt;- errors[, 2]
+x &lt;- 0.5 + 0.8 * z + v
+y &lt;- -0.3 + x + u
+
+# Regression of y on x and z
+gamma &lt;- lm(y ~ x + z) |&gt; 
+  coefficients()
+
+gamma</code></pre>
+<pre><code>## (Intercept)           x           z 
+##  -0.5471213   1.5018705  -0.3981116</code></pre>
+<pre class="r"><code># First-stage regression of x on z
+pi &lt;- lm(x ~ z) |&gt; 
+  coefficients()
+
+pi</code></pre>
+<pre><code>## (Intercept)           z 
+##   0.5020338   0.7963889</code></pre>
+<pre class="r"><code># Compare two different expressions for gamma_Z to the estimate itself
+c(gamma_z = unname(gamma[3]),
+  version1 = unname(-0.8 * cov(x, u) / var(v)),
+  version2 = unname(-pi[2] * (gamma[2] - 1))
+)</code></pre>
+<pre><code>##    gamma_z   version1   version2 
+## -0.3981116 -0.4024918 -0.3996841</code></pre>
+</div>
+<div id="making-sense-of-this-result" class="section level2">
+<h2>Making Sense of This Result</h2>
+<p>So far all we’ve done is horrible, tedious algebra and a little simulation to check that it’s correct.
+But in fact there’s some very interesting intuition for the results we’ve obtained, intuition that is <em>deeply connected</em> to the idea of a bad control in a directed acyclic graph (DAG).</p>
+<p>In the model we’ve described above, <span class="math inline">\(Z\)</span> has a causal effect on <span class="math inline">\(Y\)</span>.
+This is because <span class="math inline">\(Z\)</span> causes <span class="math inline">\(X\)</span> which in turn causes <span class="math inline">\(Y\)</span>.
+Because <span class="math inline">\(Z\)</span> is an instrument, its <em>only</em> effect on <span class="math inline">\(Y\)</span> goes through <span class="math inline">\(X\)</span>.
+The unobserved confounder <span class="math inline">\(U\)</span> is a common cause of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> but is unrelated to <span class="math inline">\(Z\)</span>.
+Even if you’re not familiar with DAGs, you will probably find this diagram relatively intuitive:</p>
+<pre class="r"><code>library(ggdag)
+library(ggplot2)
+
+iv_dag &lt;- dagify(
+  Y ~ X + U,
+  X ~ Z + U,
+  coords = list(
+    x = c(Z = 1, X = 3, U = 4, Y = 5),
+    y = c(Z = 1, X = 1, U = 2, Y = 1)
+  )
+)
+
+iv_dag |&gt;
+  ggdag() +
+  theme_dag()</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<p>In the figure, an arrow from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> means that <span class="math inline">\(A\)</span> is a cause of <span class="math inline">\(B\)</span>.
+A causal path, is a sequence of arrows that “obeys one-way signs” and leads from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span>.
+Because there is a directed path from <span class="math inline">\(Z\)</span> to <span class="math inline">\(Y\)</span>, we say that <span class="math inline">\(Z\)</span> is a cause of <span class="math inline">\(Y\)</span>.
+To see this using our regression equations from above, substitute the IV first-stage into the linear causal model to obtain
+<span class="math display">\[
+\begin{align*}
+Y &amp;= \alpha + \beta X + U = \alpha + \beta (\pi_0 + \pi_Z Z + V) + U\\
+&amp;= (\alpha + \beta \pi_0) + \beta \pi_Z Z + (\beta V + U).
+\end{align*}
+\]</span>
+This gives us a linear equation with <span class="math inline">\(Y\)</span> on the left-hand side and <span class="math inline">\(Z\)</span> <em>alone</em> on the right-hand side.
+This is called the “reduced-form” regression.
+Since <span class="math inline">\(\text{Cov}(Z,U)=0\)</span> by assumption and <span class="math inline">\(\text{Cov}(Z,V) = 0\)</span> by construction, the reduced-form is a <em>bona fide</em> population linear regression.
+That means that regressing <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> will indeed give us a slope that equals <span class="math inline">\(\pi_Z \times \beta\)</span>.
+To see why the slope is a product, recall that <span class="math inline">\(\pi_Z\)</span> is the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(X\)</span>, the <span class="math inline">\(Z\rightarrow X\)</span> arrow in the diagram, while <span class="math inline">\(\beta\)</span> is the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>, the <span class="math inline">\(X \rightarrow Y\)</span> arrow in the diagram.
+Because the only way <span class="math inline">\(Z\)</span> can influence <span class="math inline">\(Y\)</span> is through <span class="math inline">\(X\)</span>, it makes sense that the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span> is the <em>product</em> of these two effects.</p>
+<p>So now we see that the reduced-form coefficient <span class="math inline">\(\pi_Z \beta\)</span> is indeed a causal effect.
+How does this relate to <span class="math inline">\(\gamma_Z\)</span>?
+Remember that <span class="math inline">\(\gamma_Z\)</span> was the coefficient on <span class="math inline">\(Z\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> and <span class="math inline">\(X\)</span>, in other words a regression that <em>adjusted</em> for <span class="math inline">\(X\)</span>.
+So is adjusting for <span class="math inline">\(X\)</span> the right call? Absolutely not!
+There are no back-door paths between <span class="math inline">\(Z\)</span> and <span class="math inline">\(Y\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+This means that we <em>don’t have to adjust</em> for anything to learn the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>.
+In fact adjusting for <span class="math inline">\(X\)</span> is a mistake for <em>two different reasons</em>.</p>
+<p>First, <span class="math inline">\(X\)</span> is a mediator on the path <span class="math inline">\(Z \rightarrow X \rightarrow Y\)</span>.
+If there were no confounding, i.e. if <span class="math inline">\(\text{Cov}(X,U) = 0\)</span> so there is no <span class="math inline">\(U\rightarrow X\)</span> arrow, adjusting for <span class="math inline">\(X\)</span> would <em>block</em> the only causal path from <span class="math inline">\(Z\)</span> to <span class="math inline">\(Y\)</span>.
+We can see this in our equations from above.
+Suppose that <span class="math inline">\(\text{Cov}(X,U) = 0\)</span>.
+Then we have <span class="math inline">\(\gamma_X = \beta\)</span> but <span class="math inline">\(\gamma_Z = 0\)</span>!
+There was a dead giveaway in our derivation: the formula for <span class="math inline">\(\gamma_Z\)</span> doesn’t depend on <span class="math inline">\(\beta\)</span> at all.</p>
+<p>Second, because there <em>is</em> confounding, adjusting for <span class="math inline">\(X\)</span> creates a spurious association between <span class="math inline">\(Z\)</span> and <span class="math inline">\(Y\)</span> through the back-door path <span class="math inline">\(Z \rightarrow X \leftarrow U \rightarrow Y\)</span>.
+Because <span class="math inline">\(X\)</span> is a collider on the path <span class="math inline">\(Z \rightarrow X \leftarrow U \rightarrow Y\)</span>, this path starts out <em>closed</em>.
+Adjusting for <span class="math inline">\(X\)</span> <em>opens</em> this back-door path, creating a spurious association between <span class="math inline">\(Z\)</span> and <span class="math inline">\(Y\)</span>.
+To see why this is the case, suppose that <span class="math inline">\(\beta = 0\)</span>.
+In this case there is <em>no causal effect</em> of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> and hence no causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>.
+But if <span class="math inline">\(\text{Cov}(X,U) \neq 0\)</span>, then we have <span class="math inline">\(\gamma_Z \neq 0\)</span>!</p>
+<p>So if you want to learn the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>, it’s not just that <span class="math inline">\(X\)</span> is a <strong>bad control</strong>; it’s a doubly bad control!
+Without adjusting for <span class="math inline">\(X\)</span>, everything is fine: the reduced-form regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> gives us exactly what we’re after.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+</div>
+<div id="epilogue" class="section level2">
+<h2>Epilogue</h2>
+<p>When I showed this post to another colleague he asked me whether there is any way to learn about <span class="math inline">\(\beta\)</span> by <em>combining</em> <span class="math inline">\(\gamma_Z\)</span> and <span class="math inline">\(\gamma_X\)</span>.
+The answer is no: the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> alone doesn’t contain enough information.
+Since
+<span class="math display">\[
+\gamma_Z = -\pi_Z \frac{\text{Cov}(X,U)}{\text{Var}(V)} \quad \text{and} \quad \gamma_X = \beta + \frac{\text{Cov}(X,U)}{\text{Var}(V)}
+\]</span>
+we can rearrange to obtain the following expression for <span class="math inline">\(\beta\)</span>:
+<span class="math display">\[
+\beta = \gamma_X + \frac{\gamma_Z}{\pi_Z}
+\]</span>
+which we can verify in our little simulation example as follows:</p>
+<pre class="r"><code>gamma[2] + gamma[3]/pi[2]</code></pre>
+<pre><code>##        x 
+## 1.001975</code></pre>
+<p>Thus, in order to solve for <span class="math inline">\(\beta\)</span>, we need to run the first-stage regression to learn <span class="math inline">\(\pi_Z\)</span>.</p>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I have a very rich inner life.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The right way to learn <span class="math inline">\(\beta\)</span> by regressing <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and “something else” is the control function approach described in <a href="https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/">this post</a>. Rather than adding <span class="math inline">\(Z\)</span>, we add <span class="math inline">\(V = X - \pi_0 - \pi_Z Z\)</span> as a control.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The rest of this post relies on some DAG basics. If anything here is unfamiliar, check out my <a href="https://www.treatment-effects.com/basics/">treatment effects slides</a>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Here I assume that we’re interested in the <span class="math inline">\(Z\rightarrow Y\)</span> causal effect. To obtain the <span class="math inline">\(X\rightarrow Y\)</span> effect we would need to use an instrumental variables regression.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
