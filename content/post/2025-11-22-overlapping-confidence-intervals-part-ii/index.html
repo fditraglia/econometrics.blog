@@ -1,0 +1,147 @@
+---
+title: 'Overlapping Confidence Intervals: Part II'
+author: Francis J. DiTraglia
+date: '2025-11-22'
+slug: overlapping-confidence-intervals-part-ii
+categories: [statistics]
+tags: [confidence interval]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2025-11-22T13:40:26-06:00'
+featured: false
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: false
+projects: []
+---
+
+
+
+<p>In my earlier post on <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Overlapping Confidence Intervals</a> I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means constructed using independent samples.
+To recap: if the individual confidence intervals for groups A and B <em>do not</em> overlap, there must be a statistically significant difference between the population means for the two groups.
+In other words, the interval for the difference of means will not include zero.
+If the individual intervals <em>do overlap</em>, on the other hand, anything goes.
+The interval for the difference of means may or may not include zero.
+Indeed, it’s even possible for the individual intervals for both A and B to include zero while the interval for their difference does not!</p>
+<p>In <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Part I</a> we found a way to rephrase our statistical problem about overlapping confidence intervals as a familiar geometry problem involving <em>right triangles</em>.
+We then solved this geometry problem using the Pythagorean Theorem and Triangle Inequality.
+To build the connection between confidence intervals and right triangles, however, we assumed that our two estimators were <em>uncorrelated</em>.
+Unfortunately this assumption fails in many interesting real-world applications.
+Today we’ll ask what happens to our earlier conclusions about overlapping intervals if we allow for correlation.</p>
+<div id="a-word-about-notation" class="section level2">
+<h2>A Word About Notation</h2>
+<p>While I phrased my first post about overlapping intervals in terms of sample and population means for two groups, the idea is general.
+Nothing substantive changes if we replace the parameters <span class="math inline">\((\mu_A, \mu_B)\)</span> with <span class="math inline">\((\alpha, \beta)\)</span>, the estimators <span class="math inline">\((\bar{A}, \bar{B})\)</span> with <span class="math inline">\((\hat{\alpha}, \hat{\beta})\)</span>, and the standard errors <span class="math inline">\(\left(\text{SE}(\bar{A}), \text{SE}(\bar{B})\right)\)</span> with <span class="math inline">\(\left(\text{SE}(\hat{\alpha}), \text{SE}(\hat{\beta})\right)\)</span>.
+As long as the two estimators are uncorrelated and (approximately) normally distributed, the results from <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Part I</a> apply to the individual intervals for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> versus the interval for the difference <span class="math inline">\(\alpha-\beta\)</span>.
+Today we will ask what happens when the estimators are potentially <em>correlated</em>.
+To make it clear that our results are general, I’ll use the more agnostic <span class="math inline">\((\alpha,\beta)\)</span> notation throughout.</p>
+</div>
+<div id="a-motivating-example" class="section level2">
+<h2>A Motivating Example</h2>
+<p>Consider a randomized controlled trial with <em>two active treatments</em>.
+In our paper on <a href="https://ditraglia.com/pdf/pawn-paper.pdf">pawn lending</a>, for example, my co-authors and I compare default rates between borrowers assigned to the <em>status quo</em> pawn contract (control), a new <em>structured</em> contract (Treatment A), and a <em>choice arm</em> (Treatment B) in which they were free to choose whichever contract they preferred.
+To learn the causal effect of the structured contract, we compare the mean default rates of borrowers who received Treatment A against the corresponding rate in the control group.
+Call this difference of means <span class="math inline">\(\hat{\alpha}\)</span>.
+Similarly, to learn the effect of choice, we make the analogous comparison between Treatment B and the control group.
+Call this difference of means <span class="math inline">\(\hat{\beta}\)</span>.
+Now suppose you’re reading a paper that reports both of these estimators and their standard errors.
+To find out which treatment is more effective, you need to compare <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span>, but these estimators <em>must</em> be correlated because they both involve the control group average:
+<span class="math display">\[
+\begin{align*}
+\hat{\alpha} &amp;= \text{(Treatment A mean)} - \text{(Control Group mean)}\\
+\hat{\beta} &amp;= \text{(Treatment B mean)} - \text{(Control Group mean)}.
+\end{align*}
+\]</span>
+Granted, if you had access to the raw data, you could easily solve this problem without worrying about the correlation.
+In the difference <span class="math inline">\(\hat{\alpha} - \hat{\beta}\)</span>, the control group mean cancels out
+<span class="math display">\[
+\hat{\alpha} - \hat{\beta} = \text{(Treatment A mean)} - \text{(Treatment B mean)}.
+\]</span>
+So if we <em>had</em> the raw data for treatments A and B we’d be back to a familiar independent samples comparison of means, as in <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Part I</a>.
+But if you’re reading a paper that only reports <span class="math inline">\((\hat{\alpha}, \hat{\beta})\)</span> and their standard errors, you <em>cannot</em> directly calculate the standard error for the difference.
+The common variation from the control group mean is baked into the way both <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> are computed, even though this variation is <em>irrelevant</em> for <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span>.</p>
+</div>
+<div id="allowing-correlation" class="section level2">
+<h2>Allowing Correlation</h2>
+<p>So how do we compute <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span> if the two estimators are correlated?
+Recall that the <em>standard error</em> is the standard deviation of that estimator’s sampling distribution, and a standard deviation is merely the square root of the corresponding variance.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Using the <a href="https://www.econometrics.blog/post/random-variables-cheatsheet/">properties of variance and covariance</a>,
+<span class="math display">\[
+\text{Var}(\hat{\alpha} - \hat{\beta}) = \text{Var}(\hat{\alpha}) + \text{Var}(\hat{\beta}) - 2\text{Cov}(\hat{\alpha}, \hat{\beta}).
+\]</span>
+Defining <span class="math inline">\(\rho \equiv \text{Corr}(\hat{\alpha},\hat{\beta})\)</span>, it follows that
+<span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
+\]</span>
+If <span class="math inline">\(\rho = 0\)</span> this reduces to our formula from <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Part I</a>:
+<span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2\)</span> so we can equate the LHS with the length of the hypotenuse of a right triangle whose legs have lengths <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span>.
+If <span class="math inline">\(\rho \neq 0\)</span>, however, this connection to the Pythagorean Theorem no longer holds.
+Nevertheless, there are <em>still triangles</em> hiding in this standard error formula!
+To reveal them, we need a more general theorem about triangles.</p>
+</div>
+<div id="the-law-of-cosines" class="section level1">
+<h1>The Law of Cosines</h1>
+<p>Consider a triangle whose sides have lengths <span class="math inline">\(a,b\)</span> and <span class="math inline">\(c\)</span>.
+Let <span class="math inline">\(\theta\)</span> be the angle between the sides whose lengths are <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.
+Then by the <em>Law of Cosines</em><br />
+<span class="math display">\[
+c^2 = a^2 + b^2 - 2\cos(\theta) \cdot ab
+\]</span>
+This equality holds for <em>any triangle</em>.
+For a right triangle whose legs have lengths <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, we have <span class="math inline">\(\theta = 90°\)</span> so the Law of Cosines reduces to the Pythagorean Theorem
+<span class="math display">\[
+c^2 = a^2 + b^2.
+\]</span>
+When <span class="math inline">\(\theta \neq 90°\)</span>, the “correction term” <span class="math inline">\(-2\cos(\theta)\cdot ab\)</span> shows how the length of <span class="math inline">\(c\)</span> differs from that of a right triangle with legs of lengths <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.
+When <span class="math inline">\(\theta &lt; 90°\)</span> the cosine is positive so the correction term <em>shortens</em> <span class="math inline">\(c\)</span>; when <span class="math inline">\(\theta &gt; 90°\)</span> the cosine is negative so the correction term <em>lengthens</em> <span class="math inline">\(c\)</span>.
+Regardless of the angle <span class="math inline">\(\theta\)</span>, however, the Triangle Inequality still holds: <span class="math inline">\(c &lt; a + b\)</span> because the shortest distance between two points is a straight line.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<div id="from-geometry-to-statistics" class="section level2">
+<h2>From Geometry to Statistics</h2>
+<p>The cosine of an angle is always between negative one and one.
+Can you think of anything else that shares this property?
+That’s right: correlation!
+So let’s put the Law of Cosines and our standard error formula from above side-by-side:
+<span class="math display">\[
+\begin{align*}
+c^2 &amp;= a^2 + b^2 - 2\cos(\theta) \cdot ab\\ \\
+\text{SE}(\hat{\alpha} - \hat{\beta})^2 &amp;= \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
+\end{align*}
+\]</span>
+The analogy is <em>perfect</em>.
+We can view <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> as the lengths of two sides of a triangle and <span class="math inline">\(\rho\)</span> as the cosine of the angle between these sides.
+This makes <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span> the length of the third side, indicated in blue in the following diagram.
+When <span class="math inline">\(\rho\)</span> is <em>positive</em>, the standard error of the difference is <em>smaller</em> than it would be under independence; if <span class="math inline">\(\rho\)</span> is <em>negative</em>, the standard error of the difference is <em>larger</em> than it would be under independence.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="1152" /></p>
+</div>
+<div id="the-grand-finale" class="section level2">
+<h2>The Grand Finale</h2>
+<p>Since we’ve equated <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span>, <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> with the sides of a triangle, the Triangle Inequality gives
+<span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta}) &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})
+\]</span>
+assuming that <span class="math inline">\(|\rho| &lt; 1\)</span>.
+And now we’re on familiar ground.
+Let <span class="math inline">\(z\)</span> be the appropriate quantile of a normal distribution, i.e. <span class="math inline">\(z \approx 2\)</span> for a 95% confidence interval.
+Just as we argued in <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Part I</a>, the individual confidence intervals for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> overlap precisely when <span class="math inline">\((\hat{\alpha} - \hat{\beta})/z &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})\)</span> and there is a significant difference between the two parameters when <span class="math inline">\((\hat{\alpha} - \hat{\beta})/z &gt; \text{SE}(\hat{\alpha} - \hat{\beta})\)</span>.
+The condition for overlap <em>and</em> a significant difference is
+<span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta}) &lt; \frac{\hat{\alpha} - \hat{\beta}}{z} &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})
+\]</span>
+which holds by the Triangle Inequality.
+So we’re back to exactly the same situation we were in when <span class="math inline">\(\rho = 0\)</span>!
+As long as <span class="math inline">\(\rho \neq -1, 1\)</span> the same results concerning confidence interval overlap apply when <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span> are correlated as when they are uncorrelated:</p>
+<ol style="list-style-type: decimal">
+<li>Overlap doesn’t tell us <em>anything</em> about whether there is a significant difference, but</li>
+<li>a lack of overlap implies that there <em>must</em> be a significant difference.</li>
+</ol>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Many people, including most econometricians, reserve the term <em>standard error</em> for an <em>estimate</em> of this standard deviation. I prefer to call this estimate the <em>estimated standard error</em>. Clearly my convention is better and everyone should adopt it :)<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Here I assume that this is a <em>genuine triangle</em> rather than three points on the same line.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
