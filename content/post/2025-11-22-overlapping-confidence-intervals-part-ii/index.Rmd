@@ -85,7 +85,7 @@ Nevertheless, there are *still triangles* hiding in this standard error formula!
 To reveal them, we need a more general theorem about triangles.
 
 
-# The Law of Cosines
+## The Law of Cosines
 
 Consider a triangle whose sides have lengths $a,b$ and $c$.
 Let $\theta$ be the angle between the sides whose lengths are $a$ and $b$.
