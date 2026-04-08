@@ -55,7 +55,7 @@ Even without doing any math, we see that knowing $X$ conveys information about $
 
 To streamline our discussion below, it will be helpful to work out a few basic results about $X$ and $Y$. A quick calculation with $p_{XY}$ shows that 
 $$
-\mathbb{E}(XY) \equiv \sum_{\text{all } x} \sum_{\text{all } y}= x y \cdot p_{XY}(x,y) = 0.
+\mathbb{E}(XY) \equiv \sum_{\text{all } x} \sum_{\text{all } y} x y \cdot p_{XY}(x,y) = 0.
 $$ 
 Calculating the marginal pmfs for $X$ we see that
 $$
@@ -63,7 +63,7 @@ p_X(-1) = p_X(0) = p_X(1) = 1/3 \implies \mathbb{E}(X) \equiv \sum_{\text{all } 
 $$
 Similarly, calculating the marginal pmf of $Y$, we obtain
 $$
-p_Y(0) = 2/3,\, p_Y(1) = 1/3 \implies \mathbb{E}(Y) \equiv \sum_{\text{all } y} p_Y(y) = 1/3.
+p_Y(0) = 2/3,\, p_Y(1) = 1/3 \implies \mathbb{E}(Y) \equiv \sum_{\text{all } y} y \cdot p_Y(y) = 1/3.
 $$
 We'll use these results as ingredients below as we explain and relate three key notions of dependence: *correlation*, *conditional mean independence*, and *statistical independence*.
 
@@ -97,7 +97,7 @@ $$
 where $\mu_X \equiv \mathbb{E}(X)$ and $\mu_Y \equiv \mathbb{E}(Y)$. We say that $X$ and $Y$ are **uncorrelated** if $\text{Corr}(X,Y)= 0$.  Unless $X$ and $Y$ are both constants their variances must be positive. This means that the  denominator of our expression for $\text{Corr}(X,Y)$ is likewise positive. 
 It follows that *zero correlation is the same thing as zero covariance*. Correlation is simply covariance *rescaled* so that the units of $X$ and $Y$ cancel out and the result always lies between $-1$ and $1$. 
 
-Correlation and covariance are both measures of *linear dependence*. If $X$ is, on average, above its mean when $Y$ is above its mean, then $\text{Corr}(X,Y)$ and $\text{Cov}(X,Y)$ are both positive. If $X$ is, on average, below its mean when $Y$ is above its mean, then $\text{Corr}(X,Y)$ and $\text{Cov}(X,Y)$ are both negative. If there is, on average, no linear relationship $X$ and $Y$, then both the correlation and covariance between them are zero. Using the "shortcut formula" for covariance, namely 
+Correlation and covariance are both measures of *linear dependence*. If $X$ is, on average, above its mean when $Y$ is above its mean, then $\text{Corr}(X,Y)$ and $\text{Cov}(X,Y)$ are both positive. If $X$ is, on average, below its mean when $Y$ is above its mean, then $\text{Corr}(X,Y)$ and $\text{Cov}(X,Y)$ are both negative. If there is, on average, no linear relationship between $X$ and $Y$, then both the correlation and covariance between them are zero. Using the "shortcut formula" for covariance, namely 
 $$
 \text{Cov}(X,Y) \equiv \mathbb{E}[(X - \mu_X)(Y - \mu_Y)] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y],
 $$
@@ -113,7 +113,7 @@ Rendering this in English rather than mathematics,
 In Example #1 from above, $\mathbb{E}[XY]=0$ and $\mathbb{E}(X)\mathbb{E}(Y) = 0 \times 1/3 = 0$ so $X$ and $Y$ are uncorrelated. Lack of correlation is one possible way in which two random variables can be thought of as "unrelated." But it is a relatively *weak* property. Indeed, $X$ and $Y$ are in fact *highly dependent* in Example #1. For example, if $X=-1$ then we know for sure that $Y=0$. I simply cooked up the numbers to ensure that $\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]$ in spite of this.
 
 ### Example #2: $W$ and $Z$ are uncorrelated.
-Because Example #1 is discrete, it can be a bit tricky to think about what it would mean for a dependence relationship to be *nonlinear*.  Here Example #2 can help.  As mentioned above, there is clearly a relationship between $Z$ and $W$. But this relationship is *nonlinear* in that $Z$ is a *quadratic* function of $X$.
+Because Example #1 is discrete, it can be a bit tricky to think about what it would mean for a dependence relationship to be *nonlinear*.  Here Example #2 can help.  As mentioned above, there is clearly a relationship between $Z$ and $W$. But this relationship is *nonlinear* in that $Z$ is a *quadratic* function of $W$.
 Since $\mathbb{E}(WZ) = 0$ and $\mathbb{E}(W) \times \mathbb{E}(Z) = 0 \times \mathbb{E}(Z) = 0$, we see that $W$ and $Z$ are *uncorrelated*. Another way to see this is by simulating some data with the same properties as Example #2
 ```{r}
 set.seed(1983)
@@ -133,7 +133,7 @@ We say that $Y$ is mean independent of $X$ if $\mathbb{E}(Y|X) = \mathbb{E}(Y)$.
 
 > $Y$ is mean independent of $X$ if the conditional mean of $Y$ given $X$ equals the unconditional mean of $Y$.
 
-Just to make things confusing, this property is sometimes called "conditional mean independence" and sometimes called simply "mean independence." The terms are completely interchangeagle. Reversing the roles of $X$ and $Y$, we say that $X$ is mean independent of $Y$ if the conditional mean of $X$ given $Y$ is the same as the unconditional mean of $X$. 
+Just to make things confusing, this property is sometimes called "conditional mean independence" and sometimes called simply "mean independence." The terms are completely interchangeable. Reversing the roles of $X$ and $Y$, we say that $X$ is mean independent of $Y$ if the conditional mean of $X$ given $Y$ is the same as the unconditional mean of $X$. 
 **Spoiler alert:** it is possible for $X$ to be mean independent of $Y$ while $Y$ is *not* mean independent of $X$.  We'll discuss this further below.
 
 To better understand the concept of mean independence, let's quickly review the difference between an unconditional mean and a conditional mean.  The unconditional mean $\mathbb{E}(Y)$, also known as the "expected value" or "expectation" of $Y$, is a *constant number*.^[Throughout this post, I make the tacit assumption that all means--conditional or unconditional--exist and are finite.] If $Y$ is discrete, this is simply the probability-weighted average of all possible realizations of $Y$, namely
@@ -161,8 +161,8 @@ Therefore,
 Using the table of joint probabilities for Example #1 above, we found that $\mathbb{E}(X) = 0$. To determine whether $X$ is mean independent of $Y$, we need to calculate $\mathbb{E}(X|Y=y)$, which we can accomplish as follows:
 $$
 \begin{aligned}
-\mathbb{E}(X|y=0) &= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=0) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=0)}{\mathbb{P}(Y=0)}\\ \\
-\mathbb{E}(X|y=1) &= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=1) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=1)}{\mathbb{P}(Y=1)}.
+\mathbb{E}(X|Y=0) &= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=0) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=0)}{\mathbb{P}(Y=0)}\\ \\
+\mathbb{E}(X|Y=1) &= \sum_{\text{all } x} x \cdot \mathbb{P}(X=x|Y=1) = \sum_{\text{all } x} x \cdot \frac{\mathbb{P}(X=x,Y=1)}{\mathbb{P}(Y=1)}.
 \end{aligned}
 $$
 Substituting the joint and marginal probabilities from the table above, we find that
@@ -170,7 +170,7 @@ $$
 \mathbb{E}(X|Y=0) = 0, \quad
 \mathbb{E}(X|Y=1) = 0.
 $$
-Thus $\mathbb{E}(X|Y=y)$ simply equals zero, regardless of the realization $y$ of $Y$. Since $\mathbb{E}(X) = 0$ we have shown that $X$ is conditionally mean independent of $X$.
+Thus $\mathbb{E}(X|Y=y)$ simply equals zero, regardless of the realization $y$ of $Y$. Since $\mathbb{E}(X) = 0$ we have shown that $X$ is conditionally mean independent of $Y$.
 
 ### Example #1: $Y$ is *NOT* mean independent of $X$.
 To determine whether $Y$ is mean independent of $X$ we  need to calculate $\mathbb{E}(Y|X)$.
@@ -237,7 +237,7 @@ If learning $Y$ tells us anything at all about $X$, then $X$ and $Y$ are not ind
 
 ### Example #1: $X$ and $Y$ are *NOT* independent.
 
-If I tell you that $X = 0$, then you know for sure that $Y = 0$. Before I told you this, you did not know that $Y$ would equal zero: it's a random variable with support set $\{0,1\}$. Since learning $X$ has the potential to tell you something about $Y$, $X$ and $Y$ are not independent. That was easy! For extra credit, $p_{XY}(-1,0) = 1/3$ but $p_X(-1)p_Y(0) = 1/3 \times 2/3 = 2/9$. Since these are not equal, $p_{XY}\neq p_X p_Y$ so the marginal doesn't equal the product of the joint. We didn't need to check this, but it's reassuring to see that everything works out as it should.
+If I tell you that $X = 0$, then you know for sure that $Y = 0$. Before I told you this, you did not know that $Y$ would equal zero: it's a random variable with support set $\{0,1\}$. Since learning $X$ has the potential to tell you something about $Y$, $X$ and $Y$ are not independent. That was easy! For extra credit, $p_{XY}(-1,0) = 1/3$ but $p_X(-1)p_Y(0) = 1/3 \times 2/3 = 2/9$. Since these are not equal, $p_{XY}\neq p_X p_Y$ so the joint doesn't equal the product of the marginals. We didn't need to check this, but it's reassuring to see that everything works out as it should.
 
 
 ### Example #2: $W$ and $Z$ are *NOT* independent.
@@ -303,7 +303,7 @@ Therefore, if either $X$ is mean independent of $Y$, or $Y$ is mean independent 
 And we're finally done!
 
 ## Summary 
-In this post we shown that that:
+In this post we have shown that:
 
 - Statistical Independence $\implies$ Mean Independence $\implies$ Uncorrelatedness.
 - Uncorrelatedness does not imply mean independence or statistical independence.

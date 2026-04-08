@@ -7,11 +7,6 @@ categories:
 tags: []
 ---
 
-```{r}
-#| label: setup
-#| include: false
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the [first part](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/), I discussed the serious problems with the "textbook" approach, and outlined a simple hack that works amazingly well in practice: the [Agresti-Coull confidence interval](https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550). 
 
@@ -22,7 +17,7 @@ To understand the Wilson interval, we first need to remember a key fact about st
 # Tests and CIs -- Two Sides of the Same Coin
 Suppose that we observe a random sample $X_1, \dots, X_n$ from a normal population with unknown mean $\mu$ and known variance $\sigma^2$. Under these assumptions, the sample mean $\bar{X}_n \equiv \left(\frac{1}{n} \sum_{i=1}^n X_i\right)$ follows a $N(\mu, \sigma^2/n)$ distribution. Centering and standardizing, 
 $$ \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \sim N(0,1).$$
-Now, suppose we want to test $H_0\colon \mu = \mu_0$ against the two-sided alternative $H_1\colon \mu = \mu_0$ at the 5\% significance level. If $\mu = \mu_0$, then the test statistic
+Now, suppose we want to test $H_0\colon \mu = \mu_0$ against the two-sided alternative $H_1\colon \mu \neq \mu_0$ at the 5\% significance level. If $\mu = \mu_0$, then the test statistic
 $$T_n \equiv \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}}$$
 follows a standard normal distribution. If $\mu \neq \mu_0$, then $T_n$ does not follow a standard normal distribution. To carry out the test, we reject $H_0$ if $|T_n|$ is greater than $1.96$, the $(1 - \alpha/2)$ quantile of a standard normal distribution for $\alpha = 0.05$. To put it another way, we *fail to reject* $H_0$ if $|T_n| \leq 1.96$. So for what values of $\mu_0$ will we fail to reject? By the definition of absolute value and the definition of $T_n$ from above, $|T_n| \leq 1.96$ is equivalent to
 $$
@@ -32,9 +27,9 @@ Re-arranging, this in turn is equivalent to
 $$
 \bar{X}_n - 1.96 \times \frac{\sigma}{\sqrt{n}} \leq \mu_0 \leq \bar{X}_n + 1.96 \times \frac{\sigma}{\sqrt{n}}.
 $$
-This tells us that the values of $\mu_0$ we will *fail to reject* are precisely those that lie in the interval $\bar{X} \pm 1.96 \times \sigma/\sqrt{n}$. Does this look familiar? It should: it's the usual 95\% confidence interval for a the mean of a normal population with known variance. The 95\% confidence interval corresponds exactly to the set of values $\mu_0$ that we *fail to reject* at the 5\% level.
+This tells us that the values of $\mu_0$ we will *fail to reject* are precisely those that lie in the interval $\bar{X} \pm 1.96 \times \sigma/\sqrt{n}$. Does this look familiar? It should: it's the usual 95\% confidence interval for the mean of a normal population with known variance. The 95\% confidence interval corresponds exactly to the set of values $\mu_0$ that we *fail to reject* at the 5\% level.
 
-This example is a special case a more general result. If you give me a $(1 - \alpha)\times 100\%$ confidence interval for a parameter $\theta$, I can use it to test $H_0\colon \theta = \theta_0$ against $H_0 \colon \theta \neq \theta_0$. All I have to do is check whether $\theta_0$ lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of $H_0\colon \theta = \theta_0$ with significance level $\alpha$, I can use it to construct a $(1 - \alpha) \times 100\%$ confidence interval for $\theta$. All I have to do is collect the values of $\theta_0$ that are *not rejected*. This procedure is called *inverting a test*.
+This example is a special case a more general result. If you give me a $(1 - \alpha)\times 100\%$ confidence interval for a parameter $\theta$, I can use it to test $H_0\colon \theta = \theta_0$ against $H_1 \colon \theta \neq \theta_0$. All I have to do is check whether $\theta_0$ lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of $H_0\colon \theta = \theta_0$ with significance level $\alpha$, I can use it to construct a $(1 - \alpha) \times 100\%$ confidence interval for $\theta$. All I have to do is collect the values of $\theta_0$ that are *not rejected*. This procedure is called *inverting a test*.
 
 # How to Confuse Your Introductory Statistics Students 
 
@@ -72,7 +67,7 @@ How can we dig our way out of this mess? One idea is to *use a different test*, 
 ```{r}
 abs((p_hat - p0) / SE_hat)
 ```
-which is clearly less than 1.96. Thus we would fail to reject $H_0\colon p = 0.7$ exactly as the Wald confidence interval instructed us above. This procedure is called the *Wald test* for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately [the Wald confidence interval is terrible and you should never use it](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). Because the Wald test is equivalent to checking whether $p_0$ lies inside the Wald confidence interval, it inherits all of the latter's defects. 
+which is clearly less than 1.96. Thus we would fail to reject $H_0\colon p = 0.07$ exactly as the Wald confidence interval instructed us above. This procedure is called the *Wald test* for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately [the Wald confidence interval is terrible and you should never use it](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). Because the Wald test is equivalent to checking whether $p_0$ lies inside the Wald confidence interval, it inherits all of the latter's defects. 
 
 Indeed, compared to the score test, the Wald test is a disaster, as I'll now show. Suppose we carry out a 5\% test. If the null is true, we should reject it 5\% of the time. Because the Wald and Score tests are both based on an approximation provided by the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/), we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5\%. Nevertheless, we'd expect them to at least be *fairly close* to the nominal value of 5\%. The following plot shows the *actual* type I error rates of the score and Wald tests, over a range of values for the true population proportion $p$ with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5\%.^[For the R code used to generate these plots, see the Appendix at the end of this post.]
 
@@ -154,12 +149,12 @@ p_0 = \frac{(2 n\widehat{p} + c^2) \pm \sqrt{4 c^2 n \widehat{p}(1 - \widehat{p}
 $$
 Factoring $2n$ out of the numerator and denominator of the right-hand side and simplifying, we can re-write this as
 $$
-\begin{align*}
+\begin{aligned}
 p_0  &= \frac{1}{2\left(n + \frac{n c^2}{n}\right)}\left\{\left(2n\widehat{p} + \frac{2n c^2}{2n}\right) \pm \sqrt{4 n^2c^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n}\right] + 4n^2c^2\left[\frac{c^2}{4n^2}\right] }\right\} \\ \\
 p_0  &= \frac{1}{2n\left(1 + \frac{ c^2}{n}\right)}\left\{2n\left(\widehat{p} + \frac{c^2}{2n}\right) \pm 2nc\sqrt{ \frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}} \right\}
 \\ \\
 p_0  &= \left( \frac{n}{n + c^2}\right)\left\{\left(\widehat{p} + \frac{c^2}{2n}\right) \pm c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2} }\right\}\\ \\
-\end{align*}
+\end{aligned}
 $$
 using our definition of $\widehat{\text{SE}}$ from above. And there you have it: the right-hand side of the final equality is the $(1 - \alpha)\times 100\%$ Wilson confidence interval for a proportion, where $c = \texttt{qnorm}(1 - \alpha/2)$ is the normal critical value for a two-sided test with significance level $\alpha$, and $\widehat{\text{SE}}^2 = \widehat{p}(1 - \widehat{p})/n$.
 
@@ -218,11 +213,11 @@ You could stop reading here and simply use the code from above to construct the 
 The Wald estimator is centered around $\widehat{p}$, but the Wilson interval is not.
 Manipulating our expression from the previous section, we find that the midpoint of the Wilson interval is
 $$
-\begin{align*}
+\begin{aligned}
 \widetilde{p} &\equiv \left(\frac{n}{n + c^2} \right)\left(\widehat{p} + \frac{c^2}{2n}\right) =  \frac{n \widehat{p} + c^2/2}{n + c^2} \\
 &= \left( \frac{n}{n + c^2}\right)\widehat{p} +  \left( \frac{c^2}{n + c^2}\right) \frac{1}{2}\\
 &= \omega \widehat{p} + (1 - \omega) \frac{1}{2}
-\end{align*}
+\end{aligned}
 $$
 where the weight $\omega \equiv n / (n + c^2)$ is always strictly between zero and one. In other words, the center of the Wilson interval lies *between* $\widehat{p}$ and $1/2$. In effect, $\widetilde{p}$ pulls us *away* from extreme values of $p$ and *towards* the middle of the range of possible values for a population proportion. For a fixed confidence level, the smaller the sample size, the more that we are pulled towards $1/2$. For a fixed sample size, the higher the confidence level, the more that we are pulled towards $1/2$.
 
@@ -232,11 +227,11 @@ $$
 $$
 So what can we say about $\widetilde{\text{SE}}$? It turns out that the value $1/2$ is lurking behind the scenes here as well. The easiest way to see this is by *squaring* $\widehat{\text{SE}}$ to obtain 
 $$
-\begin{align*}
+\begin{aligned}
 \widetilde{\text{SE}}^2 &= \omega^2\left(\widehat{\text{SE}}^2 + \frac{c^2}{4n^2} \right) = \left(\frac{n}{n + c^2}\right)^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}\right]\\
 &= \frac{1}{n + c^2} \left[\frac{n}{n + c^2} \cdot \widehat{p}(1 - \widehat{p}) + \frac{c^2}{n + c^2}\cdot \frac{1}{4}\right]\\
 &= \frac{1}{\widetilde{n}} \left[\omega \widehat{p}(1 - \widehat{p}) + (1 - \omega) \frac{1}{2} \cdot \frac{1}{2}\right]
-\end{align*}
+\end{aligned}
 $$
 defining $\widetilde{n} = n + c^2$. To make sense of this result, recall that $\widehat{\text{SE}}^2$, the quantity that is used to construct the Wald interval, is a ratio of two terms: $\widehat{p}(1 - \widehat{p})$ is the usual estimate of the *population variance* based on iid samples from a Bernoulli distribution and $n$ is the sample size. Similarly, $\widetilde{\text{SE}}^2$ is a ratio of two terms. The first is a *weighted average* of the population variance estimator and $1/4$, the population variance under the assumption that $p = 1/2$. Once again, the Wilson interval "pulls" away from extremes. In this case it pulls away from extreme estimates of the population variance towards the *largest possible* population variance: $1/4$.^[The value of $p$ that maximizes $p(1-p)$ is $p=1/2$ and $(1/2)^2 = 1/4$.] We divide this by the sample size *augmented* by $c^2$, a strictly positive quantity that depends on the confidence level.^[If you know anything about Bayesian statistics, you may be suspicious that there's a connection to be made here. Indeed this whole exercise looks very much like a [dummy observation prior](http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf) in which we artificially augment the sample with "fake data." There is a Bayesian connection here, but the details will have to wait for a future post.]
 
@@ -244,11 +239,11 @@ To make this more concrete, Consider the case of a 95\% Wilson interval. In this
 $$
 \widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
 $$
-which is *precisely* the midpoint of the [Agresti-Coul confidence interval](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). And while
+which is *precisely* the midpoint of the [Agresti-Coullconfidence interval](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). And while
 $$
 \widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
 $$
-is slightly different from the quantity that appears in the Agresti-Coul interval, $\widetilde{p}(1 - \widetilde{p})/\widetilde{n}$, the two expressions give very similar results in practice. The Agresti-Coul interval is nothing more than a rough-and-ready approximation to the 95\% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coul interval with a confidence level that differs from 95\%: just construct the Wilson interval!
+is slightly different from the quantity that appears in the Agresti-Coullinterval, $\widetilde{p}(1 - \widetilde{p})/\widetilde{n}$, the two expressions give very similar results in practice. The Agresti-Coullinterval is nothing more than a rough-and-ready approximation to the 95\% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coullinterval with a confidence level that differs from 95\%: just construct the Wilson interval!
 
 # Comparing the Wald and Wilson Intervals
 
@@ -280,18 +275,18 @@ A population proportion necessarily lies in the interval $[0,1]$, so it would ma
 
 With a bit of algebra we can show that the Wald interval will include negative values whenever $\widehat{p}$ is less than $(1 - \omega) \equiv c^2/(n + c^2)$. Why is this so? The lower confidence limit of the Wald interval is negative if and only if $\widehat{p} < c \times \widehat{\text{SE}}$. Substituting the definition of $\widehat{\text{SE}}$ and re-arranging, this is equivalent to
 $$
-\begin{align}
+\begin{aligned}
 \widehat{p} &< c \sqrt{\widehat{p}(1 - \widehat{p})/n}\\
 n\widehat{p}^2 &< c^2(\widehat{p} - \widehat{p}^2)\\
 0 &> \widehat{p}\left[(n + c^2)\widehat{p} - c^2\right] 
-\end{align}
+\end{aligned}
 $$
 The right-hand side of the preceding inequality is a quadratic function of $\widehat{p}$ that opens upwards. Its roots are $\widehat{p} = 0$ and $\widehat{p} = c^2/(n + c^2) = (1 - \omega)$. Thus, whenever $\widehat{p} < (1 - \omega)$, the Wald interval will include negative values of $p$. A nearly identical argument, exploiting symmetry, shows that the upper confidence limit of the  Wald interval will extend beyond one whenever $\widehat{p} > \omega \equiv n/(n + c^2)$. Putting these two results together, the Wald interval lies within $[0,1]$ if and only if $(1 - \omega) < \widehat{p} < \omega$. This is equivalent to
 $$
-\begin{align}
+\begin{aligned}
 n(1 - \omega) &< \sum_{i=1}^n X_i < n \omega\\
 \left\lceil n\left(\frac{c^2}{n + c^2} \right)\right\rceil &\leq \sum_{i=1}^n X_i \leq \left\lfloor n \left( \frac{n}{n + c^2}\right) \right\rfloor
-\end{align}
+\end{aligned}
 $$
 where $\lceil \cdot \rceil$ is the [ceiling](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions) function and $\lfloor \cdot \rfloor$ is the [floor](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions) function.^[The final inequality follows because $\sum_{i}^n X_i$ can only take on a value in $\{0, 1, ..., n\}$ while $n\omega$ and $n(1 - \omega)$ may not be integers, depending on the values of $n$ and $c^2$.] Using this inequality, we can calculate the minimum and maximum number of successes in $n$ trials for which a 95\% Wald interval will lie inside the range $[0,1]$ as follows:
 ```{r}

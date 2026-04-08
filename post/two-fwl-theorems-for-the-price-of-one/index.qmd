@@ -175,10 +175,10 @@ $$
 $$
 leaving us with two simple linear regressions, namely
 $$
-\begin{align*}
+\begin{aligned}
 Y &= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
 \tilde{Y} &= \beta_X \tilde{X} + U.
-\end{align*}
+\end{aligned}
 $$
 We're tantalizingly close to unraveling the mystery of why the "usual" FWL theorem is so popular.
 But first we need to verify my bold claim from the previous paragraph.
@@ -214,10 +214,10 @@ But re-arranging this gives $\delta_W = \beta_W + \beta_X \gamma_W$, which we al
 That was a lot of algebra, so let's spend some time thinking about the results.
 We showed that
 $$
-\begin{align*}
+\begin{aligned}
 Y &= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
 \tilde{Y} &= \beta_X \tilde{X} + U.
-\end{align*}
+\end{aligned}
 $$
 Now, if you'll permit me, I'd like to re-write that first equality as
 $$

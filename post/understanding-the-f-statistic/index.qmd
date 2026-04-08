@@ -13,7 +13,7 @@ In the simplest case, it can be written as
 $$F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)}$$
 where $SSR_r$ is the *restricted* sum of squared residuals, $SSR_{u}$ is the *unrestricted* sum of squared residuals, $q$ is the number of restrictions, and $(n - k - 1)$ is the degrees of freedom of the unrestricted model.^[Specifically, the "simplest case" refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity.] 
 
-In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add the a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the $F$ statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even *obvious*. 
+In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add to a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the $F$ statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even *obvious*. 
 
 This is not a post about asymptotic theory, and it is not a post about heteroskedasticity. I will not prove that $F$ follows an $F$-distribution, and I will blithely assume that we inhabit the idealized textbook realm in which all errors are homoskedastic. I will also dodge the question of whether you should even be carrying out an F-test in the first place.^[See [F-Tests, R-squared, and Other Distractions](http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf) for an insightful critique.] This is a post about understanding what the $F$-statistic measures and why it takes the form that it does.   
 
@@ -33,9 +33,9 @@ To keep this example as simple as possible, I'll drop the missing observations.^
 midterms <- na.omit(midterms)
 ```
 
-Let's call student \#4 Natalie: she scored 88% on the first midterm but missed the second. Suppose we wanted to predict how well Natalie *would have done* on the second midterm had she taken it. There are many ways that we could try to make this prediction. One possibility would be to ignore Natalie's score on the first midterm, and predict that she would have scored `r round(mean(midterms$Midterm2), 1)` on the second: the average score among all students who took this exam. Another possibility would be to fit a linear regression to the scores of all students who took *both* exams and use this to project Natalie's score on midterm two based on her score on midterm one. If scores on the two exams are correlated, option two seems like a better idea: Natalie outperformed the class average on midterm one by `r 88 - round(mean(midterms$Midterm1), 1)` or roughly `r round((88  - mean(midterms$Midterm1)) / sd(midterms$Midterm1), 2)` standard deviations. It seems reasonable to account for this when predicting her second on the second exam.
+Let's call student \#4 Natalie: she scored 88% on the first midterm but missed the second. Suppose we wanted to predict how well Natalie *would have done* on the second midterm had she taken it. There are many ways that we could try to make this prediction. One possibility would be to ignore Natalie's score on the first midterm, and predict that she would have scored `r round(mean(midterms$Midterm2), 1)` on the second: the average score among all students who took this exam. Another possibility would be to fit a linear regression to the scores of all students who took *both* exams and use this to project Natalie's score on midterm two based on her score on midterm one. If scores on the two exams are correlated, option two seems like a better idea: Natalie outperformed the class average on midterm one by `r 88 - round(mean(midterms$Midterm1), 1)` or roughly `r round((88  - mean(midterms$Midterm1)) / sd(midterms$Midterm1), 2)` standard deviations. It seems reasonable to account for this when predicting her score on the second exam.
 
-In fact both of these these prediction rules can be viewed as special cases of linear regression. Let $x_i$ denote student $i$'s score on midterm one and $y_i$ denote her score on midterm two. The sample mean $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$ solves the optimization problem
+In fact both of these prediction rules can be viewed as special cases of linear regression. Let $x_i$ denote student $i$'s score on midterm one and $y_i$ denote her score on midterm two. The sample mean $\bar{y} = \frac{1}{n} \sum_{i=1}^n y_i$ solves the optimization problem
 $$
 \min_a \sum_{i=1}^n (y_i - a)^2
 $$
@@ -134,7 +134,7 @@ A residual is a vertical deviation, i.e. a distance along the $y$-axis.
 This means that it has the same units as the $y$-variable.
 If $y$ is measured in inches, so are the residuals; if $y$ is measured in kilometers, so are the residuals.
 Because the SSR is a sum of squared residuals, it has the same units as $y^2$. 
-If $y$ is measured in inches, the SSR is measured in square inches; if $y^2$ is measured in kilometers, the SSR is measured in square kilometers.
+If $y$ is measured in inches, the SSR is measured in square inches; if $y$ is measured in kilometers, the SSR is measured in square kilometers.
 Changing the units of $y$ changes the units of the SSR.
 For example, an SSR of one becomes an SSR of *one million* if we change the units of $y$ from kilometers to meters.
 Accordingly, a comparison of `SSR_r` to `SSR_u` is meaningless unless we account for the units of $y$. 
@@ -180,7 +180,7 @@ Now suppose that we observe a random sample of `r nrow(midterms)` students from 
 How much information do the observed exam scores for *these students* provide about the relationship between midterm scores that we *in the population*?^[It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief.]
 
 The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population.
-We can see this in the expression for the standard error of the sample mean: $\text{SE}(\bar{X}) = \sigma_x^2/\sqrt{n}$.
+We can see this in the expression for the standard error of the sample mean: $\text{SE}(\bar{X}) = \sigma_x/\sqrt{n}$.
 The larger the sample size, the smaller the standard error, all else equal.
 Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic.
 The same reasoning applies to the F-statistic above.
@@ -294,13 +294,13 @@ The first factor measures how much larger the sum of squared residuals becomes i
 ## Appendix: Code
 I used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:
 ```{r}
-#| label: SSRplot
+#| label: SSRplot-code
 #| eval: false
 #| message: false
 ```
 and the following code to generate the data contained in `sim_data`
 ```{r}
-#| label: simStudy
+#| label: simStudy-code
 #| eval: false
 #| message: false
 ```

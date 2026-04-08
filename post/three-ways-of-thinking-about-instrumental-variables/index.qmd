@@ -50,10 +50,10 @@ $$
 $$
 What's more, $\text{Cov}(Z,V) = 0$ *by construction* since:
 $$
-\begin{align*}
+\begin{aligned}
 \text{Cov}(Z,V) &= \text{Cov}(Z, X - \delta - \pi Z) = \text{Cov}(Z,X) - \pi \text{Var}(Z)\\
 &= \text{Cov}(Z,X) - \frac{\text{Cov}(X,Z)}{\text{Var}(Z)} \text{Var}(Z) = 0. 
-\end{align*}
+\end{aligned}
 $$
 And since $Z$ is uncorrelated with $U$, so is $\tilde{X}$:
 $$
@@ -61,20 +61,20 @@ $$
 $$
 So now we have a variable $\tilde{X}$ that is a good predictor of $X$ but is uncorrelated with $U$. In essence, we've used $Z$ to "clean out" the endogeneity from $X$ and we did this using a **first stage** regression of $X$ on $Z$. **Two-stage least squares** (TSLS) combines this with a **second stage** regression of $Y$ on $\tilde{X}$ to recover $\beta$. To see why this works, substitute $\tilde{X} +V$ for $X$ in the causal model, yielding 
 $$
-\begin{align*}
+\begin{aligned}
 Y &= \alpha + \beta X + U = \alpha + \beta (\tilde{X} + V) + U\\
 &= \alpha + \beta \tilde{X} + (\beta V + U)\\
 &= \alpha + \beta \tilde{X} + \tilde{U}
-\end{align*}
+\end{aligned}
 $$
 where we define $\tilde{U} \equiv \beta V + U$. Finally, since
 $$
-\begin{align*}
+\begin{aligned}
 \text{Cov}(\tilde{X}, \tilde{U}) &= \text{Cov}(\tilde{X}, \beta V + U)\\
 &= \beta\text{Cov}(\tilde{X}, V) + \text{Cov}(\tilde{X}, U)\\
 &= \beta\text{Cov}(\delta + \pi Z , V) + 0 \\
 &= \beta\pi\text{Cov}(Z, V) = 0
-\end{align*}
+\end{aligned}
 $$
 a regression of $Y$ on $\tilde{X}$ recovers the causal effect $\beta$ of $X$ on $Y$.
 
@@ -104,20 +104,20 @@ Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
 $$
 By construction $\text{Cov}(V, \epsilon) = 0$. And since $X = \delta + \pi Z + V$, it follows that
 $$
-\begin{align*}
+\begin{aligned}
 \text{Cov}(X,\epsilon) &= \text{Cov}(\delta + \pi Z + V, \epsilon)\\
 &= \pi \text{Cov}(Z,\epsilon) + \text{Cov}(V, \epsilon) \\
 &= \pi \text{Cov}(Z, U - \lambda V) + 0\\
 &= \pi \left[ \text{Cov}(Z,U) - \lambda \text{Cov}(Z,V)\right] = 0.
-\end{align*}
+\end{aligned}
 $$
 Therefore, *if only we could observe $V$*, a regression of $Y$ on $X$ that controls for $V$ would allow us to recover the causal effect of interest, namely $\beta$. Such a regression would also give us $\lambda$. To see why this is interesting, notice that
 $$
-\begin{align*}
-\text{Cov}(X,U) &= \text{Cov}(\gamma + \pi Z + V, U) = \pi\text{Cov}(Z,U) + \text{Cov}(V,U)\\
+\begin{aligned}
+\text{Cov}(X,U) &= \text{Cov}(\delta + \pi Z + V, U) = \pi\text{Cov}(Z,U) + \text{Cov}(V,U)\\
 &= 0 + \text{Cov}(V, \lambda V + \epsilon) \\
 &= \lambda \text{Var}(V).
-\end{align*}
+\end{aligned}
 $$
 Since $\text{Var}(V) > 0$, $\lambda$ tell us the **direction of endogeneity** in $X$. If $\lambda >0$ then $X$ is positively correlated with $U$, if $\lambda < 0$ then $X$ is negatively correlated with $U$, and if $\lambda = 0$ then $X$ is exogenous. If $U$ is ability and ability has a positive effect on years of schooling, for example, then $\lambda$ will be positive.
 

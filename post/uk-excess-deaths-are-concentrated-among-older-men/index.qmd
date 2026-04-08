@@ -46,7 +46,7 @@ df_prev5 |>
   bind_rows(df_2020) |>
   filter(week <= week_2020) |>
   ggplot(aes(x=week, y = deaths, col =year)) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_errorbar(aes(ymin=deaths - 2 * se, ymax=deaths + 2 * se), width=.2, colour="black")+
   facet_grid(vars(age), vars(gender), scale="free") +
   scale_color_brewer(palette = "Set1",
@@ -102,7 +102,7 @@ For example, male deaths in the 45-64 age group were `r get_excess_prop('Men', '
 
 You can replicate the plot from above by running this R code: 
 ```{r}
-#| label: plot
+#| label: plot-code
 #| eval: false
 #| message: false
 ```

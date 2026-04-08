@@ -9,7 +9,7 @@ tags:
 - covid
 ---
 
-To get a better idea of the impact of Covid19 in the UK, Dan Mead and put together an R package [rcovidUK](https://github.com/fditraglia/rcovidUK) with weekly deaths in England and Wales, taken from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) (ONS), allowing us to produce a plot of total deaths by region in 2020:
+To get a better idea of the impact of Covid19 in the UK, Dan Mead and I put together an R package [rcovidUK](https://github.com/fditraglia/rcovidUK) with weekly deaths in England and Wales, taken from the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) (ONS), allowing us to produce a plot of total deaths by region in 2020:
 ```{r}
 #| label: plot
 #| message: false
@@ -47,7 +47,7 @@ df_prev5 |>
   geom_errorbar(aes(ymin=deaths - 2 * se, 
                     ymax = deaths + 2 * se),
                 width=.2, colour="black") + 
-  geom_line(size = 1) + 
+  geom_line(linewidth = 1) + 
   facet_wrap(~reg_nm, ncol = 2) +
   scale_color_brewer(palette = "Set1",
                      labels = c("Avg Past 5 Yrs", "2020")) +
@@ -64,7 +64,7 @@ For each point on the red curve, we have added simple error bars: $\pm 2 \times 
 The blue curve depicts weekly deaths in 2020.
 From week 12 or 13, depending on region, we see a dramatic uptick in deaths across England and Wales, well outside the two standard error bars. R source code for this plot follows below.
 ```{r}
-#| label: plot
+#| label: plot-code
 #| eval: false
 #| message: false
 ```

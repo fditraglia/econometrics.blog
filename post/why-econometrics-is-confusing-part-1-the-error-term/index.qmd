@@ -31,14 +31,14 @@ By the linearity of expectation, it follows that
 $$
 \mathbb{E}[U] = \mathbb{E}[Y - \alpha - \beta X] = \mathbb{E}[Y] - (\mathbb{E}[Y] - \beta \mathbb{E}[X]) - \beta \mathbb{E}[X] = 0
 $$
-and similarly, although with a bit more algebra^[Surprised that $\mathbb{E}[X(Y - \mathbb{E}[Y])]] = \text{Cov}(X,Y)$ and $\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)$? These are great homework problems! Work through the algebra using the definitions of variance and covariance.]
+and similarly, although with a bit more algebra^[Surprised that $\mathbb{E}[X(Y - \mathbb{E}[Y])] = \text{Cov}(X,Y)$ and $\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)$? These are great homework problems! Work through the algebra using the definitions of variance and covariance.]
 $$
-\begin{align}
+\begin{aligned}
 \mathbb{E}[XU] &= \mathbb{E}[X(Y - \alpha - \beta X)] \\
 &= \mathbb{E}[X(Y - \left\{\mathbb{E}(Y) - \beta \mathbb{E}(X)\right\} - \beta X)]\\
 &= \mathbb{E}[X\left\{Y - \mathbb{E}(Y) \right\}] -  \beta \mathbb{E}[X\left\{X - \mathbb{E}(X)\right\} ]\\
 &= \text{Cov}(X,Y) - \beta \text{Var}(X) = 0.
-\end{align}
+\end{aligned}
 $$
 
 ## Conditional Mean Function
@@ -55,7 +55,7 @@ by the linearity of conditional expectation and the fact that $\mathbb{E}(Y|X)$ 
 
 ## Causal Model
 
-Both interpretations of $Y = \alpha + \beta X + U$ from above are purely predictive; they say nothing about whether $X$ *causes* $Y$. To indicate that a linear model is mean to be causal, it is traditional to write something like "suppose that $Y = \alpha + \beta X + U$ where $X$ may be endogenous." Often "may be endogenous" is replaced by "where $X$ may be correlated with $U$." What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of "$=$" beyond all reason. Here's my suggested improvement:
+Both interpretations of $Y = \alpha + \beta X + U$ from above are purely predictive; they say nothing about whether $X$ *causes* $Y$. To indicate that a linear model is meant to be causal, it is traditional to write something like "suppose that $Y = \alpha + \beta X + U$ where $X$ may be endogenous." Often "may be endogenous" is replaced by "where $X$ may be correlated with $U$." What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of "$=$" beyond all reason. Here's my suggested improvement:
 
 > Consider the causal model $Y \leftarrow (\alpha + \beta X + U)$ where $U$ is unobserved and $(X,U)$ may be dependent.
 
