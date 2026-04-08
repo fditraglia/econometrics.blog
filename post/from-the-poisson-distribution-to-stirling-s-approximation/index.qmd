@@ -56,7 +56,7 @@ The log of the Poisson pmf is simply
 $$
 \log p(x) = -\mu + x \log(\mu) - \log(x!).
 $$
-R even has a convenient, built-in function for evaluating the natrual log of a factorial: `lfactorial()`.
+R even has a convenient, built-in function for evaluating the natural log of a factorial: `lfactorial()`.
 Now we can compute the log of our desired probability as follows:
 ```{r}
 -171 + 171 * log(171) - lfactorial(171)
@@ -66,7 +66,7 @@ To obtain the probability, simply exponentiate:
 exp(-171 + 171 * log(171) - lfactorial(171))
 ```
 
-Of course this just passes the buck to `lfactorial()`. So how does this mysterious function work? The bad news is that I'm not going to tell you; the good news is that I'm going to show you something *even better*, namely [Stirling's approximation](https://en.wikipedia.org/wiki/Stirling%27s_approximation): a way to understand now $n!$ behaves *qualitatively* that turns out to give a pretty darned good approximation to `lfactorial()`.
+Of course this just passes the buck to `lfactorial()`. So how does this mysterious function work? The bad news is that I'm not going to tell you; the good news is that I'm going to show you something *even better*, namely [Stirling's approximation](https://en.wikipedia.org/wiki/Stirling%27s_approximation): a way to understand how $n!$ behaves *qualitatively* that turns out to give a pretty darned good approximation to `lfactorial()`.
 This may seem like an odd topic for a blog devoted to econometrics and statistics, so allow me to offer a few words of justification.
 First, computations involving $n!$ come up all the time in applied work.
 Second, it can be extremely helpful for certain theoretical arguments to have good approximations to $n!$ for large values of $n$.
@@ -79,7 +79,7 @@ This explains the bell-shaped curve that we plotted above.
 To obtain this result, we'll use the central limit theorem.
 But there is one fact that you will need to take on faith if you don't already know it: if $X_1 \sim \text{Poisson}(\mu_1)$ is independent of $X_2 \sim \text{Poisson}(\mu_2)$ then $X_1 + X_2 \sim \text{Poisson}(\mu_1 + \mu_2)$.
 Proceeding [by induction](https://en.wikipedia.org/wiki/Mathematical_induction) we can view a Poisson(171) random variable as the sum of 171 independent Poisson(1) random variables.
-More generally, we can view a Poisson RV with rate parameter $n$ as the num of $n$ iid Poisson(1) random variables.
+More generally, we can view a Poisson RV with rate parameter $n$ as the sum of $n$ iid Poisson(1) random variables.
 By the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/), it follows that
 $$
 \sqrt{n}(\bar{X}_n - 1) \rightarrow_d \text{N}(0,1)
@@ -120,7 +120,7 @@ $$
 \log(n!) \sim n \log(n) - n + \frac{1}{2} \log(2 \pi n)
 $$
 as $n \rightarrow \infty$. In other words, the ratio of the LHS and RHS tends to one in the large $n$ limit.
-Perhaps surprisingly, this approximately is extremely accurate even for fairly small values of $n$, as we can see by comparing it against `lfactorial()`.
+Perhaps surprisingly, this approximation is extremely accurate even for fairly small values of $n$, as we can see by comparing it against `lfactorial()`.
 ```{r}
 #| message: false
 stirling1 <- function(n) n * log(n) - n
