@@ -9,7 +9,7 @@ tags: []
 ---
 
 
-Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training numerical analysis and computer science.
+Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training in numerical analysis and computer science.
 This means that we often learn things *the hard way*: by making boneheaded mistakes and spending hours browsing [stackoverflow](https://stackoverflow.com/) to try to figure out what went wrong. 
 In preparation for my upcoming course on [Empirical Research Methods](https://empirical-methods.com)^[Content coming soon!] I've started trying to collect and organize the various nuggets of computational wisdom that I've picked up over the years. This post is the first of several that I plan to write on that theme.
 Its origin is an enigmatic bug that I detected in a seemingly trivial line of my R code involving `rep()`. 
@@ -21,7 +21,7 @@ For no particular reason, let's use the R function `rep()` to print out the stri
 ```{r}
 rep("econometrics.blog", times = 4)
 ```
-Since 0.2 multiplied by 20 equals 4, it comes no surprise that replacing `times = 4` with `times = 0.2 * 20` gives the same result: 
+Since 0.2 multiplied by 20 equals 4, it comes as no surprise that replacing `times = 4` with `times = 0.2 * 20` gives the same result: 
 ```{r}
 rep("econometrics.blog", times = 0.2 * 20)
 ```
@@ -49,7 +49,7 @@ typeof(y)
 and the length of a vector is always an integer
 ```{r}
 n <- length(y)
-typeof(y)
+typeof(n)
 ```
 but nearly every other numeric value you encounter in R will be stored as a double, i.e. a double precision [floating point number](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html):
 ```{r}

@@ -8,7 +8,7 @@ categories:
 tags: []
 ---
 
-If you study enough econometrics or statistics, you'll eventually hear someone mention "Stein's Paradox" or the ["James-Stein Estimator"](https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator). You've probably learned in your introductory econometrics course that ordinary least squares (OLS) is the [best linear unbiased estimator](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations "linear" and "unbiased" are crucial here. If we remove them, it's possible to do better--maybe even *much better*--than OLS.^[If I ruled the universe, the Gauss-Markov Theorem be demoted to much less exalted status in econometrics teaching!] Stein's paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by [Charles Stein](https://en.wikipedia.org/wiki/Charles_M._Stein) in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity. 
+If you study enough econometrics or statistics, you'll eventually hear someone mention "Stein's Paradox" or the ["James-Stein Estimator"](https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator). You've probably learned in your introductory econometrics course that ordinary least squares (OLS) is the [best linear unbiased estimator](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations "linear" and "unbiased" are crucial here. If we remove them, it's possible to do better--maybe even *much better*--than OLS.^[If I ruled the universe, the Gauss-Markov Theorem would be demoted to much less exalted status in econometrics teaching!] Stein's paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by [Charles Stein](https://en.wikipedia.org/wiki/Charles_M._Stein) in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity. 
 
 The supposed [paradox](https://youtu.be/XXhJKzI1u48?si=cS--uLd09_JnAXdr) is most simply stated by considering a special case of linear regression--that of estimating multiple unknown means. [Efron & Morris (1977)](https://www.jstor.org/stable/24954030) introduce the basic idea as follows:
 
@@ -16,9 +16,9 @@ The supposed [paradox](https://youtu.be/XXhJKzI1u48?si=cS--uLd09_JnAXdr) is most
 
 I first encountered Stein's Paradox in an offhand remark by my PhD supervisor. I dutifully looked it up in an attempt to better understand the point he had been making, but lacked sufficient understanding of decision theory at the time to see what the fuss was all about. The second time I encountered it, after I knew a bit more, it seemed astounding: almost like magic. I decided to include the topic in my [Econ 722](https://ditraglia.com/econ722) course at Penn, but struggled to make it accessible to my students. A big problem, in my view, is that the proof--see [lecture 1](https://ditraglia.com/econ722/slides/econ722slides.pdf) or [section 7.3](https://ditraglia.com/econ722/main.pdf)--is ultimately a bit of a let-down: algebra, followed by repeated integration by parts, and then a fact about the existence of moments for an [inverse-chi-squared random variable](https://en.wikipedia.org/wiki/Inverse-chi-squared_distribution). It seems like a sterile technical exercise when in fact that result itself is deep, surprising, and important. As if a benign deity were keen on making my point for me, the wikipedia article on the [James-Stein Estimator](https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator) is flagged as "may be too technical for readers to understand" at the time of this writing!
 
-After six months of pondering, this post is my attempt to explain the James-Stein Estimator in a way that is accessible to a broad audience. The assumed background is minimal: just an introductory course probability and statistics. I'll show how we can arrive at something that is *very nearly* the James-Stein estimator by following some very simple and natural intuition. After you understand my "not quite James-Stein" estimator, it's a short step to the real thing. So the "let-down" proof I mentioned before becomes merely a technical justification for a slight modification of a formula that is already intuitively compelling. As far as possible, I've tried to keep this post self-contained by introducing, or at least reviewing, key background material as we go along. The cost of this approach, unfortunately, is that the post is pretty long! I hope you'll soldier on the the end and that you'll find the payoff worth your time and effort.
+After six months of pondering, this post is my attempt to explain the James-Stein Estimator in a way that is accessible to a broad audience. The assumed background is minimal: just an introductory course in probability and statistics. I'll show how we can arrive at something that is *very nearly* the James-Stein estimator by following some very simple and natural intuition. After you understand my "not quite James-Stein" estimator, it's a short step to the real thing. So the "let-down" proof I mentioned before becomes merely a technical justification for a slight modification of a formula that is already intuitively compelling. As far as possible, I've tried to keep this post self-contained by introducing, or at least reviewing, key background material as we go along. The cost of this approach, unfortunately, is that the post is pretty long! I hope you'll soldier on to the end and that you'll find the payoff worth your time and effort.
 
-As far as I know, the precise way that I motivate the James-Stein estimator in this post is new, but there are are many other papers that aim to make sense of the supposed paradox in an intuitive way. In keeping with my injunction that you should always consider [reading something else instead](https://www.econometrics.blog/post/how-to-read-an-econometrics-paper/), here are a few references that you may find helpful. [Efron & Morris (1977)](https://www.jstor.org/stable/24954030) is a classic article aimed at the general reader without a background in statistics. [Stigler (1988)](https://projecteuclid.org/journals/statistical-science/volume-5/issue-1/The-1988-Neyman-Memorial-Lecture--A-Galtonian-Perspective-on/10.1214/ss/1177012274.full) is a more technical but still accessible discussion of the topic while [Casella (1985)](https://www.jstor.org/stable/2682801) is a very readable paper that discusses the James-Stein estimator in the context of empirical Bayes. A less well-known paper that I found helpful is [Ijiri & Leitch (1980)](https://www.jstor.org/stable/2490394), who consider the James-Stein estimator in a real-world setting, namely "Audit Sampling" in accounting. They discuss several interesting practical and philosophical issues including the distinction between "composite" and "individual" risk that I'll pick up on below. 
+As far as I know, the precise way that I motivate the James-Stein estimator in this post is new, but there are many other papers that aim to make sense of the supposed paradox in an intuitive way. In keeping with my injunction that you should always consider [reading something else instead](https://www.econometrics.blog/post/how-to-read-an-econometrics-paper/), here are a few references that you may find helpful. [Efron & Morris (1977)](https://www.jstor.org/stable/24954030) is a classic article aimed at the general reader without a background in statistics. [Stigler (1988)](https://projecteuclid.org/journals/statistical-science/volume-5/issue-1/The-1988-Neyman-Memorial-Lecture--A-Galtonian-Perspective-on/10.1214/ss/1177012274.full) is a more technical but still accessible discussion of the topic while [Casella (1985)](https://www.jstor.org/stable/2682801) is a very readable paper that discusses the James-Stein estimator in the context of empirical Bayes. A less well-known paper that I found helpful is [Ijiri & Leitch (1980)](https://www.jstor.org/stable/2490394), who consider the James-Stein estimator in a real-world setting, namely "Audit Sampling" in accounting. They discuss several interesting practical and philosophical issues including the distinction between "composite" and "individual" risk that I'll pick up on below. 
 
 
 ## Warm-up Exercise 
@@ -58,12 +58,8 @@ add_darts <- function(darts, mytitle = '') {
   title(main = paste0(mytitle, "\nMSE= ", round(mse, 2)))
 }
 
-# Ensure a graphics device is open
-if (!dev.cur()) dev.new()
-
 # Set up the 2x2 grid of plots with specified parameters
-op <- par()
-par(mfrow = c(2, 2), mar=c(3,3,2,1), mgp=c(2,.7,0), tck= -.01, oma = c(0,0,0,0))
+op <- par(mfrow = c(2, 2), mar=c(3,3,2,1), mgp=c(2,.7,0), tck= -.01, oma = c(0,0,0,0))
 
 set.seed(54321)
 n <- 30
@@ -96,11 +92,11 @@ $$
 for $0 \leq \lambda \leq 1$. The constant $(1 - \lambda)$ is called the "shrinkage factor" and controls how the ML estimator gets pulled towards zero.^[In Bayesian terms, we could view this "shrinkage" idea as calculating the posterior mean of $\mu$ conditional on our data $X$ under a normal prior. In this case $\lambda$ would equal $\tau/(1 + \tau)$ where $\tau$ is the *prior precision*, i.e. the reciprocal of the prior variance. But for this post we'll mainly stick to the Frequentist perspective.]
 We get a different estimator for every value of $\lambda$. If $\lambda = 0$ then we get the ML estimator back. If $\lambda = 1$ then we get a very silly estimator that ignores the data and simply reports zero no matter what! So let's see how the MSE depends on our choice of $\lambda$. Substituting the definition of $\hat{\mu}(\lambda)$ into the formulas for bias and variance gives:
 $$
-\begin{align*}
+\begin{aligned}
 \text{Bias}[\hat{\mu}(\lambda)]&= \mathbb{E}[(1 - \lambda)\hat{\mu}_\text{ML}] - \mu = (1 - \lambda)\mathbb{E}[\hat{\mu}_\text{ML}] - \mu = (1 - \lambda)\mu - \mu = -\lambda\mu\\ \\
 \text{Var}[\hat{\mu}(\lambda)]&= \text{Var}[(1 - \lambda)\hat{\mu}_\text{ML}] = (1 - \lambda)^2\text{Var}[\hat{\mu}_\text{ML}] = (1 - \lambda)^2\\ \\
 \text{MSE}[\hat{\mu}(\lambda)]&= \text{Var}[\hat{\mu}(\lambda)] + \text{Bias}[\hat{\mu}(\lambda)]^2 = (1 - \lambda)^2 + \lambda^2\mu^2
-\end{align*}
+\end{aligned}
 $$
 Unless $\lambda = 0$, the shrinkage estimator is *biased*. And while the MSE of the ML estimator is always one, regardless of the true value of $\mu$, the MSE of the shrinkage estimator *depends on the unknown parameter* $\mu$. 
 
@@ -136,27 +132,27 @@ It's time for some algebra. If you're tempted to skip this *please don't*: this 
 
 As seen from the plot above, the MSE of our shrinkage estimator (the solid lines) is lower than that of the ML estimator (the dashed line) provided that our chosen value of $\lambda$ isn't too large relative to the true value of $\mu$. With a bit of algebra, we can work out *precisely* how large $\lambda$ can be to make shrinkage worthwhile. Since $\text{MSE}[\hat{\mu}_\text{ML}]= 1$, by expanding and simplifying the expression for $\text{MSE}[\hat{\mu}(\lambda)]$ we see that $\text{MSE}[\hat{\mu}(\lambda)] < \text{MSE}[\hat{\mu}_\text{ML}]$ if and only if
 $$
-\begin{align*}
+\begin{aligned}
 (1 - \lambda)^2 + \lambda^2\mu^2 &< 1 \\
 1 - 2\lambda + \lambda^2 + \lambda^2\mu^2 &< 1 \\
 \lambda^2 (1 + \mu^2) -2 \lambda &< 0 \\
 \lambda [\lambda (1 + \mu^2) - 2] &< 0.
-\end{align*}
+\end{aligned}
 $$
 Since $\lambda \geq 0$, the final inequality can only hold if the factor inside the square brackets is negative, i.e. 
 $$
-\begin{align*}
+\begin{aligned}
 \lambda (1 + \mu^2) - 2 &< 0 \\
 \lambda &< \frac{2}{1 + \mu^2}.
-\end{align*}
+\end{aligned}
 $$
 This shows that any choice of $\lambda$ between $0$ and $2 / (1 + \mu^2)$ will give us a shrinkage estimator with an MSE less than one. To check our algebra, we can change the inequality to an equality and solve for $\mu$ to obtain the boundary of the region where shrinkage is better than ML: 
 $$
-\begin{align*}
+\begin{aligned}
 \lambda (1 + \mu^2) - 2 &= 0 \\
 1 + \mu^2 &= 2/\lambda \\
 \mu &= \pm \sqrt{2/\lambda - 1}.
-\end{align*}
+\end{aligned}
 $$
 Adding these boundaries to a simplified version of our previous plot with only $\lambda = 0.3$ we see that everything works out correctly: the dashed red lines intersect the blue curve at the points where the MSE of the shrinkage estimator equals that of the ML estimator.  
 ```{r}
@@ -174,22 +170,22 @@ abline(v = c(sqrt(2/lambda - 1), -sqrt(2/lambda - 1)), lty = 3, lwd = 2,
 
 But there's still more to learn! Suppose we wanted to take things *one step further* and find the *optimal* value of $\lambda$ for any given value of $\mu$. In other words, suppose we wanted the value of $\lambda$ that *minimizes* the MSE of our shrinkage estimator given a particular assumed value for $\mu$. Since $\text{MSE}[\hat{\mu}(\lambda)]$ is a quadratic function of $\lambda$, as shown above, this turns out to be a fairly straightforward calculation. Differentiating,
 $$
-\begin{align*}
+\begin{aligned}
 \frac{d}{d\lambda}\text{MSE}[\hat{\mu}(\lambda)] &= \frac{d}{d\lambda}[(1 - \lambda)^2 + \lambda^2 \mu^2] \\
 &= -2(1 - \lambda) + 2\lambda \mu^2 \\ 
 &= 2 [\lambda (1 + \mu^2) - 1]\\ \\
 \frac{d^2}{d\lambda^2}\text{MSE}[\hat{\mu}(\lambda)] &= 2(1 + \mu^2) > 0
-\end{align*}
+\end{aligned}
 $$
 so there is a unique global minimum at $\lambda^* \equiv 1/(1 + \mu^2)$. This gives the *optimal* shrinkage factor in the sense that it minimizes the MSE of the shrinkage estimator. Substituting $\lambda^*$ into the expression for $\text{MSE}[\hat{\mu}(\lambda)]$ gives:
 $$
-\begin{align*}
+\begin{aligned}
 \text{MSE}[\hat{\mu}(\lambda^*)] &= \left(1 - \frac{1}{1 + \mu^2} \right)^2 + \left(\frac{1}{1 + \mu^2}\right)^2 \mu^2  \\
 &= \left( \frac{\mu^2}{1 + \mu^2}\right)^2 + \left(\frac{1}{1 + \mu^2}\right)^2 \mu^2 \\
 &= \left( \frac{1}{1 + \mu^2}\right)^2 (\mu^4 + \mu^2) \\
 &= \left( \frac{1}{1 + \mu^2}\right)^2 \mu^2(1 + \mu^2) \\
 &= \frac{\mu^2}{1 + \mu^2} < 1.
-\end{align*}
+\end{aligned}
 $$
 
 ## Stein's Paradox 
@@ -237,7 +233,7 @@ The estimator that does the trick is the so-called "James-Stein Estimator" (JS),
 $$
 \hat{\mu}^{(j)}_\text{JS} = \left(1 - \frac{p - 2}{\sum_{k=1}^p X_k^2}\right)X_j.
 $$
-This this estimator dominates the ML estimator when $p \geq 3$ in that  
+This estimator dominates the ML estimator when $p \geq 3$ in that  
 $$
 \sum_{j=1}^p \text{MSE}\left[\hat{\mu}^{(j)}_\text{JS}\right] \leq \sum_{j=1}^p \text{MSE}\left[\hat{\mu}^{(j)}_\text{ML}\right]= p
 $$
@@ -247,9 +243,9 @@ $$
 $$
 The shrinkage factor in the James-Stein estimator depends on the number of means we're estimating, $p$, along with the *overall* sum of the squared observations. All else equal, the more parameters we need to estimate, the more we shrink each of them towards zero. And the farther the observations are from zero *overall*, the less we shrink *each of them* towards zero.
 
-Just like our simple shrinkage estimator from above, the James-Stein estimator achieves a lower MSE by tolerating a small bias in exchange for a larger reduction in variance, compared to the higher-variance but unbiased ML estimator. Unlike our simple shrinkage estimator, the James-Stein estimator uses the *data* to determine the shrinkage factor. And as long as $p\leq 3$ it is always *at least as good* as the ML estimator and sometimes *much better*. The **paradox** is that this seems impossible: how can information from *all* of the observations be useful when they come from *different* distributions with no obvious connection? 
+Just like our simple shrinkage estimator from above, the James-Stein estimator achieves a lower MSE by tolerating a small bias in exchange for a larger reduction in variance, compared to the higher-variance but unbiased ML estimator. Unlike our simple shrinkage estimator, the James-Stein estimator uses the *data* to determine the shrinkage factor. And as long as $p \geq 3$ it is always *at least as good* as the ML estimator and sometimes *much better*. The **paradox** is that this seems impossible: how can information from *all* of the observations be useful when they come from *different* distributions with no obvious connection? 
 
-The rest of this post will *not* prove that the James-Stein estimator dominates the ML estimator. Instead it will try to convince you that there is some *very good intuition* for why the formula for the James-Stein estimator. By the end, I hope you'll feel that, far from seeming paradoxical, using *all* of the observations to determine the shrinkage factor for one particular $\mu_j$ makes perfect sense. 
+The rest of this post will *not* prove that the James-Stein estimator dominates the ML estimator. Instead it will try to convince you that there is some *very good intuition* for why the formula for the James-Stein estimator takes the form it does. By the end, I hope you'll feel that, far from seeming paradoxical, using *all* of the observations to determine the shrinkage factor for one particular $\mu_j$ makes perfect sense. 
 
 ## Where does the James-Stein Estimator Come From? 
 
@@ -259,7 +255,7 @@ The rest of this post will *not* prove that the James-Stein estimator dominates 
 
 To start the ball rolling, let's [assume a can-opener](https://en.wikipedia.org/wiki/Assume_a_can_opener): suppose that we don't know any of the *individual* means $\mu_j$ but for some strange reason a benevolent deity has told us the value of their sum of squares: 
 $$
-c^2 \equiv \sum_{j=1}^p \mu_j^2 \equiv c^2.
+c^2 \equiv \sum_{j=1}^p \mu_j^2.
 $$
 It turns out that this is enough information to construct a shrinkage estimator that *always* has a lower composite MSE than the ML estimator. Let's see why this is the case. If $p = 1$, then telling you $c^2$ is the same as telling you $\mu^2$. Granted, knowledge of $\mu^2$ isn't as informative as knowledge of $\mu$. For example, if I told you that $\mu^2 = 9$ you couldn't tell whether $\mu = 3$ or $\mu = -3$. But, as we showed above, the optimal shrinkage estimator when $p=1$ sets $\lambda^* = 1/(1 + \mu^2)$ and yields an MSE of $\mu^2/(1 + \mu^2) < 1$. Since $\lambda^*$ only depends on $\mu$ through $\mu^2$, we've *already shown* that knowledge of $c^2$ allows us to construct a shrinkage estimator that dominates the ML estimator when $p = 1$.
 
@@ -320,28 +316,28 @@ $$
 $$
 for some $\lambda$ between zero and one. The composite MSE of this estimator is just the sum of the MSE of each *individual* component, so we can re-use our algebra from above to obtain 
 $$
-\begin{align*}
+\begin{aligned}
 \text{MSE}[\hat{\mu}_1(\lambda)] + \text{MSE}[\hat{\mu}_2(\lambda)] &= [(1 - \lambda)^2 + \lambda^2\mu_1^2] + [(1 - \lambda)^2 + \lambda^2\mu_2^2] \\
 &= 2(1 - \lambda)^2 + \lambda^2(\mu_1^2 + \mu_2^2) \\
 &= 2(1 - \lambda)^2 + \lambda^2c^2.
-\end{align*}
+\end{aligned}
 $$
 Notice that the composite MSE only depends on $(\mu_1, \mu_2)$ through their sum of squares, $c^2$. Differentiating with respect to $\lambda$, just as we did above in the $p=1$ case,
 $$
-\begin{align*}
+\begin{aligned}
 \frac{d}{d\lambda}\left[2(1 - \lambda)^2 + \lambda^2c^2\right] &= -4(1 - \lambda) + 2\lambda c^2 \\
 &= 2 \left[\lambda (2 + c^2) - 2\right]\\ \\
 \frac{d^2}{d\lambda^2}\left[2(1 - \lambda)^2 + \lambda^2c^2\right] &= 2(2 + c^2) > 0 
-\end{align*}
+\end{aligned}
 $$
 so there is a unique global minimum at $\lambda^* = 2/(2 + c^2)$. Substituting this value of $\lambda$ into the expression for the composite MSE, a few lines of algebra give 
 $$
-\begin{align*}
+\begin{aligned}
 \text{MSE}[\hat{\mu}_1(\lambda^*)] + \text{MSE}[\hat{\mu}_2(\lambda^*)] &= 2\left(1 - \frac{2}{2 + c^2}\right)^2 + \left(\frac{2}{2 + c^2}\right)^2c^2 \\
 &= 2\left(\frac{c^2}{2 + c^2}\right).
-\end{align*}
+\end{aligned}
 $$
-Since $c^2/(2 + c^2) < 1$ for all $c^2 > 0$, the optimal shrinkage estimator *always* has a composite MSE lower less than $2$, the composite MSE of the ML estimator. Strictly speaking this estimator is **infeasible** since we don't know $c^2$. But it's a crucial step on our journal to make the leap from applying shrinkage to an estimator for a *single* unknown mean, to using the same idea for *more than one* uknown mean.
+Since $c^2/(2 + c^2) < 1$ for all $c^2 > 0$, the optimal shrinkage estimator *always* has a composite MSE less than $2$, the composite MSE of the ML estimator. Strictly speaking this estimator is **infeasible** since we don't know $c^2$. But it's a crucial step on our journey to make the leap from applying shrinkage to an estimator for a *single* unknown mean, to using the same idea for *more than one* unknown mean.
 
 
 ### A Simulation Experiment for $p = 2$

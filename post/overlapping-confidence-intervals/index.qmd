@@ -47,11 +47,11 @@ Similarly, we can construct a confidence interval for the difference in means $\
 $$
 (\bar{A} - \bar{B}) \pm 2 \times \text{SE}(\bar{A} - \bar{B}).
 $$
-More generally, to construct an approximate $(1 - \alpha) \times 100%$ confidence interval, we would replace the 2 above with the appropriate quantile of a standard normal distribution.^[Granted, 2 is *slightly* larger than $\texttt{qnorm}(0.975)$, but do you really want to multiply by 1.96 in your head?] Below I'll call this quantile $z$ for short.
+More generally, to construct an approximate $(1 - \alpha) \times 100\%$ confidence interval, we would replace the 2 above with the appropriate quantile of a standard normal distribution.^[Granted, 2 is *slightly* larger than $\texttt{qnorm}(0.975)$, but do you really want to multiply by 1.96 in your head?] Below I'll call this quantile $z$ for short.
 
 ## When is the difference significant?
 
-The difference between $\mu_A$ and $\mu_B$ is statistically significant at the $\alpha \times 100%$ level if the confidence interval for $\Delta$ does not include zero, i.e. if $|\bar{A} - \bar{B}| > z \cdot \text{SE}(\bar{A} - \bar{B})$.
+The difference between $\mu_A$ and $\mu_B$ is statistically significant at the $\alpha \times 100\%$ level if the confidence interval for $\Delta$ does not include zero, i.e. if $|\bar{A} - \bar{B}| > z \cdot \text{SE}(\bar{A} - \bar{B})$.
 But working with absolute values will quickly become tedious, so without loss of generality, let's assume $\bar{A} \geq \bar{B}$. If this doesn't hold, we can always relabel the two groups so it does hold. Then the condition for a significant difference becomes 
 $$(\bar{A} - \bar{B})/z > \text{SE}(\bar{A} - \bar{B}).$$
 

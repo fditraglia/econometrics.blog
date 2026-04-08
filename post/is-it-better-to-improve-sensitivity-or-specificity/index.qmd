@@ -16,7 +16,7 @@ tags:
 Here's a slightly unusual exercise on the topic of Bayes' Theorem for those of you teaching or studying introductory probability. Imagine that you're developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test's [sensitivity or its specificity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity). If your goal is to maximize the [positive predictive value (PPV)](https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values) of your test, i.e.\ the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?
 
 ## An Open Invitation
-If you're still hungry for more Bayes' Theorem after reading this post, then why not join the *Summer of Bayes 2024* online reading group? If you'd like to be added to the mailing list, just send an email to `bayes [at] user.sent.as`. Recordings of past sessions along with slides and other materials are available to group members via the Summer of Bayes discussion board. And now back your regularly-scheduled blog content...
+If you're still hungry for more Bayes' Theorem after reading this post, then why not join the *Summer of Bayes 2024* online reading group? If you'd like to be added to the mailing list, just send an email to `bayes [at] user.sent.as`. Recordings of past sessions along with slides and other materials are available to group members via the Summer of Bayes discussion board. And now back to your regularly-scheduled blog content...
 
 ## Odds aren't so odd!
 
@@ -40,7 +40,7 @@ P(B | +) &= \frac{P(+|B)P(B)}{P(+)} = \frac{P(+|B)P(B)}{P(+|B)P(B) + P(+|B^C)P(B
 &= \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.02 \times 0.99} \approx 0.32.
 \end{aligned}
 $$
-But what if I asked you how the result would change if only one in a thousand women had breast cancer? What if I changed the [sensitivity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity) of the test from 95\% to 99\% or the [specificity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity) from 98% to 95\%? If you're anything like me, you would struggle to do these calculations in your head. +hat's because $P(B|+)$ is a *highly non-linear* function of $P(B)$, $P(+|B)$, and $P(+|B^C)$.
+But what if I asked you how the result would change if only one in a thousand women had breast cancer? What if I changed the [sensitivity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity) of the test from 95\% to 99\% or the [specificity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity) from 98% to 95\%? If you're anything like me, you would struggle to do these calculations in your head. That's because $P(B|+)$ is a *highly non-linear* function of $P(B)$, $P(+|B)$, and $P(+|B^C)$.
 
 In contrast, working with odds makes this problem a snap. The key point is that $P(B|+)$ and $P(B^C|+)$ have the same denominator, namely $P(+)$:
 $$
@@ -98,7 +98,7 @@ Now for the punchline: the ratio of the derivative with respect to specificity d
 \[
 \frac{\partial \log(\text{Posterior Odds})/\partial \text{Specificity}}{\partial \log(\text{Posterior Odds})/\partial \text{Sensitivity}} = \frac{1/(1 - \text{Specificity})}{1/\text{Sensitivity}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}}
 \]
-and this is *precisely the likelihood ratio* from the odds form of Bayes Theorem! Hence, **whenever the likelihood ratio is greater than one we'd prefer to increase the test's specificity; whenever it's less than one we'd prefer to increase the sensitivity.** If the likelihood ratio is equal to one, then it doesn't matter which we choose.
+and this is *precisely the likelihood ratio* from the odds form of Bayes' Theorem! Hence, **whenever the likelihood ratio is greater than one we'd prefer to increase the test's specificity; whenever it's less than one we'd prefer to increase the sensitivity.** If the likelihood ratio is equal to one, then it doesn't matter which we choose.
 
 Case closed, right? Well not quite. We can say a bit more by thinking about what it *means* for the likelihood ratio to be greater than or less than one. Examining the odds form of Bayes' Theorem from above, we see that a likelihood ratio less than one means that our posterior probability that a person is sick *falls* when she tests positive. In other words, this corresponds to a test that is *worse than useless*: it's actually *misleading*. In contrast, a likelihood ratio greater than one means that the test is *informative*: a positive test result increases our belief that the person is sick. Any real-world diagnostic test will have a likelihood ratio greater than one. Indeed, if we *had* such an actively mis-leading test, we could easily convert it into an informative one by simply reversing the test's outcome: if someone tests positive, we tell them they're negative, and vice versa. This reversal would result in a likelihood ratio greater than one. Therefore, in all cases--whether we start with an informative test or reverse a misleading one--**we should prefer to increase the test's specificity**.
 

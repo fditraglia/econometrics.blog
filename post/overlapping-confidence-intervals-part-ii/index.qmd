@@ -43,10 +43,10 @@ Call this difference of means $\hat{\beta}$.
 Now suppose you're reading a paper that reports both of these estimators and their standard errors.
 To find out which treatment is more effective, you need to compare $\hat{\alpha}$ and $\hat{\beta}$, but these estimators *must* be correlated because they both involve the control group average:
 $$
-\begin{align*}
+\begin{aligned}
 \hat{\alpha} &= \text{(Treatment A mean)} - \text{(Control Group mean)}\\
 \hat{\beta} &= \text{(Treatment B mean)} - \text{(Control Group mean)}.
-\end{align*}
+\end{aligned}
 $$
 Granted, if you had access to the raw data, you could easily solve this problem without worrying about the correlation.
 In the difference $\hat{\alpha} - \hat{\beta}$, the control group mean cancels out
@@ -100,10 +100,10 @@ Can you think of anything else that shares this property?
 That's right: correlation!
 So let's put the Law of Cosines and our standard error formula from above side-by-side:
 $$
-\begin{align*}
+\begin{aligned}
 c^2 &= a^2 + b^2 - 2\cos(\theta) \cdot ab\\ \\
 \text{SE}(\hat{\alpha} - \hat{\beta})^2 &= \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
-\end{align*}
+\end{aligned}
 $$
 The analogy is *perfect*.
 We can view $\text{SE}(\hat{\alpha})$ and $\text{SE}(\hat{\beta})$ as the lengths of two sides of a triangle and $\rho$ as the cosine of the angle between these sides.

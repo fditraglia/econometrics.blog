@@ -117,7 +117,7 @@ $$
 \mathbb{E}(Y_0|X) &= \alpha_0 + X'\beta_0 + \mathbb{E}(U_0|X) = \alpha_0 + X'\beta_0\\
 \end{aligned}
 $$
-and similarly $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X'\beta_0$. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an *expectation*, identifying it only requires assumptions about *conditional means*.^[You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it's important to be clear about which assumptions are actually *used* in a given derivation, and here we only rely on conditional mean independence.] The second statement is even easier to correct than the first: we need only add a single word:
+and similarly $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X'\beta_1$. While this example is admittedly a bit peculiar, the point is more general: because the average treatment effect is an *expectation*, identifying it only requires assumptions about *conditional means*.^[You might object that in the real world it is difficult to think of settings in which conditional mean independence is plausible but full independence does not. This is a fair point. Nevertheless, it's important to be clear about which assumptions are actually *used* in a given derivation, and here we only rely on conditional mean independence.] The second statement is even easier to correct than the first: we need only add a single word:
 
 > Selection on observables requires the treatment $D$ and potential outcomes $(Y_0,Y_1)$ to be conditionally *mean* independent given covariates $X$.
 

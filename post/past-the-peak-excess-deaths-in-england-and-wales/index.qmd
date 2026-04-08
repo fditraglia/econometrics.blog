@@ -44,7 +44,7 @@ df_prev5 |>
   filter(week<=week_2020) |>
   ggplot(aes(x=week, y = deaths, col = year, group = reg_id)) +
   geom_errorbar(aes(ymin=deaths - 2 * se, ymax=deaths + 2 * se), width=.2, colour="black")+
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   facet_wrap(~reg_nm, ncol = 2) +
   scale_color_brewer(palette = "Set1",
                      labels = c("Av. Past 5 Years", "2020")) +
@@ -66,7 +66,7 @@ We had hoped to include data from Scotland in this update, but it turns out that
 
 If you'd like to replicate our plots, the R code is as follows:
 ```{r}
-#| label: plot
+#| label: plot-code
 #| eval: false
 #| message: false
 ```

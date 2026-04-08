@@ -13,9 +13,9 @@ But how do we know if someone is employed?
 Typically we ask them, perhaps as part of a large, nationally representative survey such as the [CPS](https://www.census.gov/programs-surveys/cps.html).
 Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate [(Poterba & Summers, 1986)](https://www.jstor.org/stable/1914301).
 Administrative errors creep into even the most carefully-administered surveys.
-But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199) Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
+But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199). Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
 
-In my [previous post](https://www.econometrics.blog/post/beyond-classical-measurement-error/) I showed that classical measurement error an outcome variable is basically innocuous.
+In my [previous post](https://www.econometrics.blog/post/beyond-classical-measurement-error/) I showed that classical measurement error in an outcome variable is basically innocuous.
 But I also showed that measurement error in a binary random variable *cannot* be classical.
 In this post, I'll explore the consequences of this fact when we want to learn $\mathbb{P}(Y^*=1|X)$ but only observe $Y$ and $X$, not the true outcome variable $Y^*$.
 To keep things concrete, I will assume throughout that $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ where $F$ is a strictly increasing, differentiable function. This covers all the usual suspects: [logit, probit](https://expl.ai/ZULFNLF), and the [linear probability model](https://expl.ai/XSLDYZE).^[For more details of these models, see my [lecture notes](https://www.economictricks.com/limdep-notes.pdf).] 
@@ -134,8 +134,8 @@ In this case we can say precisely how measurement error in the outcome affects w
 Suppose that the mis-classification probabilities are *fixed*, i.e. that
 $$
 \begin{aligned}
-\alpha_0(X) &\equiv \mathbb{P}(Y=1|Y^*=0|X) = \mathbb{P}(Y=1|Y^*=0)\equiv \alpha_0 \\
-\alpha_1(X) &\equiv \mathbb{P}(Y=0|Y^*=1|X) = \mathbb{P}(Y=0|Y^*=1)\equiv \alpha_1.
+\alpha_0(X) &\equiv \mathbb{P}(Y=1|Y^*=0, X) = \mathbb{P}(Y=1|Y^*=0)\equiv \alpha_0 \\
+\alpha_1(X) &\equiv \mathbb{P}(Y=0|Y^*=1, X) = \mathbb{P}(Y=0|Y^*=1)\equiv \alpha_1.
 \end{aligned}
 $$
 This is a fairly strong assumption. 
@@ -148,10 +148,10 @@ $$
 $$
 Defining $f$ as the derivative of $F$, this means that the *observed* partial effect of a continuous covariate $X_j$ with respect to $Y$ is
 $$
-\begin{align*}
+\begin{aligned}
 \frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) &= \frac{\partial}{\partial X_j} \left[ \alpha_0 + F(X'\beta)(1 - \alpha_0 - \alpha_1)\right]\\
 &= f(X'\beta)\beta_j (1 - \alpha_0 - \alpha_1)
-\end{align*}
+\end{aligned}
 $$
 whereas the *true* partial effect, with respect to $Y^*$, is
 $$
@@ -164,7 +164,7 @@ For this reason, it's traditional to assume that $\alpha_0 + \alpha_1 < 1$. In t
 $$
 0 < \frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) \leq \frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X).
 $$
-So in this special case, *non-classical* measurement error in a binary outcome variable has the same effect as *classical* measurement in a continuous *regressor*: attenuation bias.
+So in this special case, *non-classical* measurement error in a binary outcome variable has the same effect as *classical* measurement error in a continuous *regressor*: attenuation bias.
 
 ## Observational Equivalence and $(\alpha_0 + \alpha_1)$
 
@@ -224,7 +224,7 @@ Therefore, if $\mathbb{E}[XX']$ is invertible,
 $$
 \beta = \mathbb{E}[XX']^{-1}\mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
 $$
-Since $\mathbb{P}(Y=1|X)$ depends only on the observed data $(Y,X)$, this function is point identified. Since $F$ is assumed to be a known function, it follows that $\beta$ is point identified whenever $\mathbb{E}[XX']$ is invertible and $(\alpha_0, \alpha_1)$ are known.^[We also need $\alpha_0 + \alpha_1$ to avoid division by zero!] So if we can find a way to point identify $\alpha_0$ and $\alpha_1$, we will immediately identify $\beta$.
+Since $\mathbb{P}(Y=1|X)$ depends only on the observed data $(Y,X)$, this function is point identified. Since $F$ is assumed to be a known function, it follows that $\beta$ is point identified whenever $\mathbb{E}[XX']$ is invertible and $(\alpha_0, \alpha_1)$ are known.^[We also need $\alpha_0 + \alpha_1 \neq 1$ to avoid division by zero!] So if we can find a way to point identify $\alpha_0$ and $\alpha_1$, we will immediately identify $\beta$.
 
 Easier said than done! How can we possibly learn $\alpha_0$ and $\alpha_1$ without auxiliary data? Nonlinearity is the key. If $F$ is a cumulative distribution function, then $\lim_{t\rightarrow \infty} F(t) = 1$ and $\lim_{t\rightarrow -\infty} F(t) = 0$. Now suppose that $X$ contains at least one covariate, call it $V$, that is continuous and has "large support," i.e. takes on values in a very wide range. Without loss of generality, suppose that the coefficient $\beta_v$ on $V$ is positive. (If it's negative, then apply the following argument to $-V$ instead.) For $V$ large and *positive* $X'\beta$ is large and positive so that $F(X'\beta)$ is close to one.
 In this case 

@@ -39,26 +39,26 @@ We reject when $\sqrt{n} \bar{X}_{n}>z_{1-\alpha}$ where $z_{1-\alpha}$ is the $
 Let's calculate the *power* of this test: the probability of rejecting the null hypothesis *given that it is false*.
 We find that
 $$
-\begin{eqnarray*}
-  \mbox{Power}(T_{n}) &=& P\left(\sqrt{n} \bar{X}_{n}>z_{1-\alpha}\right) = P\left(Z + \mu\sqrt{n} >z_{1-\alpha}\right)\\
-  &=&P\left(Z >z_{1-\alpha} - \mu\sqrt{n}\right) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right)
-  \end{eqnarray*}
+\begin{aligned}
+  \mbox{Power}(T_{n}) &= P\left(\sqrt{n} \bar{X}_{n}>z_{1-\alpha}\right) = P\left(Z + \mu\sqrt{n} >z_{1-\alpha}\right)\\
+  &=P\left(Z >z_{1-\alpha} - \mu\sqrt{n}\right) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right)
+  \end{aligned}
 $$
 where $Z$ is a standard normal random variable and $\Phi$ is the standard normal CDF. 
 
 Now suppose we decided to do something completely crazy: throw away half our sample. 
-Let $\bar{X}_{n/2}$ denote the sample mean based on observations $1, 2, \dots, \lfloor N/2 \rfloor$ *only*, where $\lfloor x \rfloor$ denotes the [floor function](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions), i.e. the greatest integer less than or equal to $x$.^[If you don't like this, ignore it and pretend that $n$ is an even number!]
+Let $\bar{X}_{n/2}$ denote the sample mean based on observations $1, 2, \dots, \lfloor n/2 \rfloor$ *only*, where $\lfloor x \rfloor$ denotes the [floor function](https://en.wikipedia.org/wiki/Floor_and_ceiling_functions), i.e. the greatest integer less than or equal to $x$.^[If you don't like this, ignore it and pretend that $n$ is an even number!]
 We can still construct a perfectly valid test with size $\alpha$ as follows. 
 Define
 $$
 T_{n/2} = \sqrt{\lfloor n/2 \rfloor } \bar{X}_{n/2} \sim N\left(\mu \sqrt{\lfloor n/2 \rfloor }, 1\right)
 $$
-and reject if $\sqrt{n} \bar{X}_n > z_{1-\alpha}$.
+and reject if $T_{n/2} > z_{1-\alpha}$.
 But there's an obvious problem here: there *must* be a cost for throwing away perfectly good data. 
 Indeed, if we calculate the power for this crazy test, we'll find that it's *strictly lower* than that of the sensible test based on the full sample. 
 In particular,
 $$\mbox{Power}(T_{n/2}) = 1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right)$$
-using the same argument as above with $\lfloor N/2 \rfloor$ in place of $n$.
+using the same argument as above with $\lfloor n/2 \rfloor$ in place of $n$.
 Unsurprisingly, it turns out to be a bad idea to throw away half of your data!
 
 Now, for an example this simple we'd never resort to asymptotics, but suppose we did. 
@@ -67,10 +67,10 @@ The asymptotic size in this example is the same as the finite-sample size since 
 But what about the power? 
 We have,
 $$
-\begin{eqnarray*}
-  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right) \right] = 1\\
-  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right) \right] = 1
-  \end{eqnarray*}
+\begin{aligned}
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &= \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{n}\right) \right] = 1\\
+  \lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &= \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \mu\sqrt{\lfloor n/2 \rfloor }\right) \right] = 1
+  \end{aligned}
 $$
 In other words, both of these tests are *consistent*: as the sample size goes to infinity, the power goes to one. 
 Think about this for a moment: we know that for *any* fixed sample size a test based on the full sample is *strictly more powerful* but in the limit this difference disappears. 
@@ -88,17 +88,17 @@ Rather than evaluating our tests against a *fixed* alternative $\mu$, suppose we
 In other words, our alternative becomes $H_{1,n} \colon \mu = \delta / \sqrt{n}$ where, for this one-sided test, $\delta > 0$. 
 If we substitute $\delta/\sqrt{n}$ for $\mu$ and take the limit as $n\rightarrow \infty$, we find
 $$
-\begin{eqnarray*}
-\lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{n}\right) \right]\\
-&=& 1 - \Phi\left(z_{1-\alpha} - \delta \right)
-\end{eqnarray*}
+\begin{aligned}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n}) &= \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{n}\right) \right]\\
+&= 1 - \Phi\left(z_{1-\alpha} - \delta \right)
+\end{aligned}
 $$
 and similarly
 $$
-\begin{eqnarray*}
-\lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &=& \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{\lfloor n/2 \rfloor }\right) \right]\\
-&=& 1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{2}} \right)
-\end{eqnarray*}
+\begin{aligned}
+\lim_{n\rightarrow \infty} \mbox{Power}(T_{n/2}) &= \lim_{n\rightarrow \infty}\left[1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{n}}\sqrt{\lfloor n/2 \rfloor }\right) \right]\\
+&= 1 - \Phi\left(z_{1-\alpha} - \frac{\delta}{\sqrt{2}} \right)
+\end{aligned}
 $$
 Wow! Our problem has disappeared! 
 The asymptotic power of the two tests now differs in essentially the same way as the finite sample power. 
