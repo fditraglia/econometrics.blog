@@ -22,15 +22,15 @@ $$
 $$
 
 # An Obvious Objection to the Wald Interval
-Suppose we want to estimate the proportion of Trump voters in Berkeley California. We decide carry out a poll of 25 randomly-sampled Berkeley residents and find that none of them voted for Trump. Then $\widehat{p} = 0$ and the Wald confidence interval is
+Suppose we want to estimate the proportion of Trump voters in Berkeley California. We decide to carry out a poll of 25 randomly-sampled Berkeley residents and find that none of them voted for Trump. Then $\widehat{p} = 0$ and the Wald confidence interval is
 $$
 0 \pm 1.96 \times \sqrt{0 \times (1 - 0) / 25}
 $$
-in other words $[0, 0]$. Clearly this is absurd: unless there are literally *zero* Trump voters in Berkeley, we can be *certain* that this interval does not contain the true population parameter. A similar problem would emerge if we instead tried to estimate the proportion of Biden voters in the Berkeley: if $\widehat{p} = 1$ then our confidence interval would be $[1,1]$. This too is absurd. More broadly, the Wald confidence interval is extremely poorly behaved in situations where $p$ is close to zero or one. You may have encountered a suggestion that $np(1-p)$ should be at least 5 for the Wald interval to perform well. There's something to this advice, as we'll see below, but it's not sufficient. More to the point: we don't *know* $p$ in practice so there is no way to apply this rule! 
+in other words $[0, 0]$. Clearly this is absurd: unless there are literally *zero* Trump voters in Berkeley, we can be *certain* that this interval does not contain the true population parameter. A similar problem would emerge if we instead tried to estimate the proportion of Biden voters in Berkeley: if $\widehat{p} = 1$ then our confidence interval would be $[1,1]$. This too is absurd. More broadly, the Wald confidence interval is extremely poorly behaved in situations where $p$ is close to zero or one. You may have encountered a suggestion that $np(1-p)$ should be at least 5 for the Wald interval to perform well. There's something to this advice, as we'll see below, but it's not sufficient. More to the point: we don't *know* $p$ in practice so there is no way to apply this rule! 
 
 
 # The Agresti-Coull Interval
-Here's a quick and dirty fix that is suprisingly effective. Simply add four "fake" observations to the dataset: two zeros (failures) and two ones (successes). The 95% Agresti-Coull confidence interval is constructed in exactly the same way as 95% Wald interval only using this "artificially augmented" dataset rather than the original one. In other words, if the sample size is $n$ and the sample proportion is $\widehat{p}$, then Agresti-Coull interval is constructed from $\widetilde{n} = n + 4$ and 
+Here's a quick and dirty fix that is surprisingly effective. Simply add four "fake" observations to the dataset: two zeros (failures) and two ones (successes). The 95% Agresti-Coull confidence interval is constructed in exactly the same way as 95% Wald interval only using this "artificially augmented" dataset rather than the original one. In other words, if the sample size is $n$ and the sample proportion is $\widehat{p}$, then Agresti-Coull interval is constructed from $\widetilde{n} = n + 4$ and 
 $$
 \widetilde{p} \equiv \frac{n \widehat{p} + 2}{n + 4} = \frac{\left(\sum_{i=1}^n X_i\right) + 0 + 0 + 1 + 1}{n + 4}
 $$
@@ -112,11 +112,10 @@ plot_n_comparison <- function(n_seq, p) {
 # p       true population proportion
 #-----------------------------------------------------------------------------
 # Example:
-#   my_p_seq <- seq(0.02, 0.98, 0.0001)
-#   plot_p_comparison(my_p_seq, n = 25)
+#   plot_n_comparison(n_seq = 25:100, p = 0.2)
 #-----------------------------------------------------------------------------
-  wald <- sapply(n_seq, function(n) get_Wald_coverage(p, n))
-  AC <- sapply(n_seq, function(n) get_AC_coverage(p, n))
+  wald <- sapply(n_seq, \(n) get_Wald_coverage(p, n))
+  AC <- sapply(n_seq, \(n) get_AC_coverage(p, n))
   cover_min <- min(min(wald), min(AC))
   cover_max <- max(max(wald), max(AC))
   limits <- c(cover_min, 1)
@@ -142,10 +141,10 @@ plot_p_comparison <- function(p_seq, n) {
 # n       sample size
 #-----------------------------------------------------------------------------
 # Example:
-#   plot_n_comparison(n_seq = 25:100, p = 0.2)
+#   plot_p_comparison(my_p_seq, n = 25)
 #-----------------------------------------------------------------------------
-  wald <- sapply(p_seq, function(p) get_Wald_coverage(p, n))
-  AC <- sapply(p_seq, function(p) get_AC_coverage(p, n))
+  wald <- sapply(p_seq, \(p) get_Wald_coverage(p, n))
+  AC <- sapply(p_seq, \(p) get_AC_coverage(p, n))
   cover_min <- min(min(wald), min(AC))
   limits <- c(cover_min, 1)
   par(mfrow = c(1, 2))
@@ -183,7 +182,7 @@ plot_p_comparison(my_p_seq, n = 50)
 plot_p_comparison(my_p_seq, n = 100)
 ```
 
-So what do we make of the rule of thumb that the Wald interval will perform well if $np(1-p)>5$? Indeed, values of $p$ that are close to zero or one present the biggest problems for this confidence interval. But like many traditional statistical rules of thumb, this one leaves much to be desired. Suppose that $n = 1270$ and $p = 0.005$. In this case $np(1-p)$ equals `r round(0.005 * 0.995 * 1270,1)` but the coverage probability of the Wald interval is an unsatisfying `r round(get_Wald_coverage(0.005, 1279),3)` compared to `r round(get_AC_coverage(0.005, 1279),3)` for the Agresti-Coull interval.
+So what do we make of the rule of thumb that the Wald interval will perform well if $np(1-p)>5$? Indeed, values of $p$ that are close to zero or one present the biggest problems for this confidence interval. But like many traditional statistical rules of thumb, this one leaves much to be desired. Suppose that $n = 1270$ and $p = 0.005$. In this case $np(1-p)$ equals `r round(0.005 * 0.995 * 1270,1)` but the coverage probability of the Wald interval is an unsatisfying `r round(get_Wald_coverage(0.005, 1270),3)` compared to `r round(get_AC_coverage(0.005, 1270),3)` for the Agresti-Coull interval.
 
 Because the central limit theorem is an asymptotic result, one that holds as $n$ approaches infinity, we might hope that at least the performance of the Wald interval improves as the sample size grows. Alas, this is not always the case. The following plot compares the coverage of Wald and Agresti-Coull confidence intervals for $p = 0.005$ as $n$ increases from 200 to 2000. Note the pronounced "sawtooth" pattern in the Wald confidence interval. It improves steadily as the sample size grows only to jump precipitously downward, before beginning a steady upward climb followed by another jump. In contrast, the performance of the Agresti-Coull interval is fairly steady. While a bit less dramatic, a similar qualitative pattern holds for $p=0.2$ as $n$ increases from 25 to 100.
 

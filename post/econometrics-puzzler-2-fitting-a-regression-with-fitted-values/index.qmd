@@ -6,12 +6,6 @@ categories: []
 tags: []
 ---
 
-```{r}
-#| label: setup
-#| include: false
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 
 Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a *second* regression of the outcome variable on the fitted values, what will I get? For extra credit: how will the R-squared from the second regression compare to that from the first regression?
 
@@ -59,7 +53,7 @@ Suppose we wanted to choose $\alpha_0$ and $\alpha_1$ to minimize $\sum_{i=1}^n 
 $$
 \sum_{i=1}^n \left[Y_i - (\alpha_0 + \alpha_1 \widehat{\beta}_0) - (\alpha_1\widehat{\beta}_1)X_i\right]^2.
 $$
-By construction $\widehat{\beta}_0$ and $\widehat{\beta}_1$ minimize $\sum_{i=1}^n (Y_i - \beta_0 -  \beta_1 X_i)^2$, so unless $\widehat{\alpha_0} = 0$ and $\widehat{\alpha_1} = 1$ we'd have a contradiction! 
+By construction $\widehat{\beta}_0$ and $\widehat{\beta}_1$ minimize $\sum_{i=1}^n (Y_i - \beta_0 -  \beta_1 X_i)^2$, so unless $\widehat{\alpha}_0 = 0$ and $\widehat{\alpha}_1 = 1$ we'd have a contradiction! 
 
 
 Similar reasoning explains why the R-squared values for the two regressions are the same. The R-squared of a regression equals $1 - \text{SS}_{\text{residual}} / \text{SS}_{\text{total}}$ 

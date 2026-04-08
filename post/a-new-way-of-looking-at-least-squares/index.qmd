@@ -34,7 +34,7 @@ coef(lm(height ~ handspan, dat))
 # Where does the regression line come from?
 If you've taken an introductory statistics or econometrics course, you most likely learned that the least squares regression line $\widehat{\alpha} + \widehat{\beta} x$ minimizes the *sum of squared vertical deviations* by solving the optimization problem 
 $$
-\max_{\alpha, \beta} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2.
+\min_{\alpha, \beta} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2.
 $$
 You probably also learned that the solution is given by 
 $$
@@ -100,7 +100,7 @@ For example, applying `make_pairs()` to the vector `c(1, 2, 3, 4, 5)` gives
 ```{r}
 make_pairs(1:5)
 ```
-Notice that I've `make_pairs()` is constructed such that *order doesn't matter*: we don't distinguish between $(4,5)$ and $(5,4)$, for example. This makes sense for our example: Alice and Bob denotes the same pair of students as Bob and Alice.
+Notice that `make_pairs()` is constructed such that *order doesn't matter*: we don't distinguish between $(4,5)$ and $(5,4)$, for example. This makes sense for our example: Alice and Bob denotes the same pair of students as Bob and Alice.
 
 To generate all possible pairs of students from `dat`, we apply `make_pairs()` to `dat$handspan` and `dat$height` *separately* and then combine the result into a single dataframe: 
 ```{r}
@@ -173,7 +173,7 @@ The 25th percentile of handspan is `r quantile(dat$handspan, 0.25)` while the 75
 boxplot(height ~ handspan, dat, subset = handspan %in% c(20, 23))
 ```
 
-Now there's much less overlap in the distributions of height. This accords with the predictions of the linear regression from above: for two students whose handspan differs by 3cm, we would predict a difference of `r round(3 * coef(lm(height ~ handspan, dat))[2], 1)` inches in height. This difference is big enough to discern in spite of the variation in height for students with the same handspan. If we were to choose one student with a handspan of 20cm and another with a handspan of 23cm, it's fairly unlikely that the slope between these lines would be negative.
+Now there's much less overlap in the distributions of height. This accords with the predictions of the linear regression from above: for two students whose handspan differs by 3cm, we would predict a difference of `r round(3 * coef(lm(height ~ handspan, dat))[2], 1)` inches in height. This difference is big enough to discern in spite of the variation in height for students with the same handspan. If we were to choose one student with a handspan of 20cm and another with a handspan of 23cm, it's fairly unlikely that the slope between these points would be negative.
 
 So where does this leave us? Above we saw that forming a pair of students with the *same* handspan does not allow us to calculate a slope. Now we've seen that the slope for a pair of students with a very *similar* handspan can give a misleading impression about the overall relationship. This turns out to be the key to our puzzle from above. The ordinary least squares slope estimate *does* equal an average of the slopes for each pair of students, but this average gives more weight to pairs with a larger difference in handspan. As I'll derive in my next post: 
 $$

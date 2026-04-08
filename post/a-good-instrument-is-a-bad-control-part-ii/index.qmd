@@ -188,14 +188,14 @@ iv_dag |>
 ```
 
 In the figure, an arrow from $A$ to $B$ means that $A$ is a cause of $B$.
-A causal path, is a sequence of arrows that "obeys one-way signs" and leads from $A$ to $B$. 
+A causal path is a sequence of arrows that "obeys one-way signs" and leads from $A$ to $B$. 
 Because there is a directed path from $Z$ to $Y$, we say that $Z$ is a cause of $Y$.
 To see this using our regression equations from above, substitute the IV first-stage into the linear causal model to obtain
 $$
-\begin{align*}
+\begin{aligned}
 Y &= \alpha + \beta X + U = \alpha + \beta (\pi_0 + \pi_Z Z + V) + U\\
 &= (\alpha + \beta \pi_0) + \beta \pi_Z Z + (\beta V + U).
-\end{align*}
+\end{aligned}
 $$
 This gives us a linear equation with $Y$ on the left-hand side and $Z$ *alone* on the right-hand side. 
 This is called the "reduced-form" regression.

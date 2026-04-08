@@ -79,7 +79,7 @@ Classical measurement error in the outcome variable doesn't introduce a bias.
 
 # Solution to the Pop Quiz
 
-Now that we've refreshed our memories about classical measurement error, let's a take a look at my pop quiz question from above:
+Now that we've refreshed our memories about classical measurement error, let's take a look at my pop quiz question from above:
 
 > If $D^*$ and $D$ are binary random variables and $D$ is a noisy measure of $D^*$, is it possible for the measurement error $W \equiv D - D^*$ to be *classical*? Explain why or why not. 
 
@@ -90,7 +90,7 @@ If $D^* = 1$ then $D = 1 + W$.
 To ensure that $D$ takes on a value in $\{0, 1\}$, this means that $W$ must be either $0$ or $-1$.
 If instead $D^* = 0$, then $D = W$, so $W$ must be either $0$ or $1$.
 Hence, unless $W$ always equals zero, in which case there's no measurement error, $W$ must always be *negatively correlated* with $D^*$.
-In other words, measurement error in a a binary variable can never be classical.
+In other words, measurement error in a binary variable can never be classical.
 The same basic logic applies whenever $X$ and $X^*$ are bounded: to ensure that $X$ stays within its bounds, any measurement error must be correlated with $X^*$. 
 
 # Non-Differential Measurement Error

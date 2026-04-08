@@ -6,12 +6,6 @@ categories: []
 tags: []
 ---
 
-```{r}
-#| label: setup
-#| include: false
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 
 Welcome to the first installment of the *Econometrics Puzzler*, a new series of shorter posts that will test and strengthen your econometric intuition. Here's the format: I'll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you'll find them both challenging and enlightening. Today we'll revisit everyone's favorite example: Angrist & Krueger's 1991 paper on the returns to education.^[I'm sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.]
 
@@ -26,7 +20,7 @@ So here's the question: **to get the best possible predictions of wage from the 
 
 The Angrist & Krueger (1991) dataset is available from Michal Kolesár's [`ManyIV` R package](https://github.com/kolesarm/ManyIV?tab=readme-ov-file).^[You can install this package using the [`remotes`](https://cran.r-project.org/web/packages/remotes/index.html) package, which is a convenient way to install packages from GitHub.]
 Here I'll restrict attention to people born in the first or fourth quarter of the year.
-Instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:
+The instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:
 
 ```{r}
 #| message: false
@@ -79,7 +73,7 @@ dat_test <- dat_test |>
          iv_pred = iv_coefs[1] + iv_coefs[2] * x) 
 ```
 
-Of course we actually *do* know the wages of everyone in `dat_test`; this is the column `y`. So we can now compare our predictions against the truth.^[It's crucial that we used one dataset to *estimate* our models and a *different* one to evaluate their predictive performance to avoid a problem called "overfitting". This issue calls for a post of it's own, but if you want a preview check out this blog post on [Goodhart's law](https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html).] A common measure of predictive quality is mean squared error (MSE), the average squared difference between the truth and our predictions. Because it squares the difference between the truth and our prediction, MSE penalizes larger errors more than smaller ones. While there are other ways to measure prediction error, MSE is a common choice and one that will play a key role in the rest of this post. And the winner is ... **OLS**! Because it has a lower MSE, the predictions from the OLS model are, on average, closer to the true wages than the predictions from the IV model:
+Of course we actually *do* know the wages of everyone in `dat_test`; this is the column `y`. So we can now compare our predictions against the truth.^[It's crucial that we used one dataset to *estimate* our models and a *different* one to evaluate their predictive performance to avoid a problem called "overfitting". This issue calls for a post of its own, but if you want a preview check out this blog post on [Goodhart's law](https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html).] A common measure of predictive quality is mean squared error (MSE), the average squared difference between the truth and our predictions. Because it squares the difference between the truth and our prediction, MSE penalizes larger errors more than smaller ones. While there are other ways to measure prediction error, MSE is a common choice and one that will play a key role in the rest of this post. And the winner is ... **OLS**! Because it has a lower MSE, the predictions from the OLS model are, on average, closer to the true wages than the predictions from the IV model:
 ```{r}
 dat_test |> 
   summarize(ols_mse = mean((y - ols_pred)^2),
