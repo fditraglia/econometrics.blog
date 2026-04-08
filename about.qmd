@@ -1,0 +1,6 @@
+---
+title: "About"
+comments: false
+---
+
+This is an academic blog about econometrics and statistics by [Francis J. DiTraglia](https://www.ditraglia.com), Associate Professor of Economics at the University of Oxford.

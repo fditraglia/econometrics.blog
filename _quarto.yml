@@ -1,0 +1,38 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - about.qmd
+    - post/
+
+website:
+  title: "econometrics.blog"
+  site-url: https://www.econometrics.blog
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+    right:
+      - icon: github
+        href: https://github.com/fditraglia
+      - icon: rss
+        href: index.xml
+  comments:
+    utterances:
+      repo: fditraglia/econometrics.blog-comments
+      issue-term: pathname
+      theme: github-light
+
+format:
+  html:
+    theme:
+      - cosmo
+      - custom.scss
+    toc: true
+    code-fold: false
+    highlight-style: github
+
+freeze: true
