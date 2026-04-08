@@ -11,9 +11,9 @@ execute:
 ---
 
 
-By the end of a typical introductory econometrics course students have become accustomed to the idea of "controlling" for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter *regression adjustment*, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a "good control" that will help us learn the causal effect of interest or a "bad control" that will only make things worse.^[See [this post](https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/) for a prototypical example of a "bad control" and the second half of my [slides](https://www.treatment-effects.com/02-selection-on-observables.pdf) for some general discussion of "bad controls." These [alternative slides](https://ditraglia.com/erm/15-selection-on-observables.pdf) from my [core ERM](https://ditraglia.com/erm/) course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.] Another, and the topic of today's post, is how to actually *implement* regression adjustment after we've decided which covariates to adjust for.
+By the end of a typical introductory econometrics course students have become accustomed to the idea of "controlling" for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter *regression adjustment*, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a "good control" that will help us learn the causal effect of interest or a "bad control" that will only make things worse.^[See [this post](/post/a-good-instrument-is-a-bad-control/) for a prototypical example of a "bad control" and the second half of my [slides](https://www.treatment-effects.com/02-selection-on-observables.pdf) for some general discussion of "bad controls." These [alternative slides](https://ditraglia.com/erm/15-selection-on-observables.pdf) from my [core ERM](https://ditraglia.com/erm/) course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.] Another, and the topic of today's post, is how to actually *implement* regression adjustment after we've decided which covariates to adjust for.
 
-The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you're a bit rusty on these points, you might find it helpful to glance at the first half of my [lecture slides](https://www.treatment-effects.com/02-selection-on-observables.pdf) along with this series of [short videos](https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&si=zqxf9LmexMh0cL2E). If you're still hungry for more after this, you might also enjoy this [earlier post](https://www.econometrics.blog/post/misunderstanding-selection-on-observables/) from [econometrics.blog](https://econometrics.blog) on common misunderstandings about the selection-on-observables assumption. 
+The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you're a bit rusty on these points, you might find it helpful to glance at the first half of my [lecture slides](https://www.treatment-effects.com/02-selection-on-observables.pdf) along with this series of [short videos](https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&si=zqxf9LmexMh0cL2E). If you're still hungry for more after this, you might also enjoy this [earlier post](/post/misunderstanding-selection-on-observables/) from [econometrics.blog](https://econometrics.blog) on common misunderstandings about the selection-on-observables assumption. 
 
 ## A Quick Review
 
@@ -110,7 +110,7 @@ Wait a minute, you may be ready to object, when researchers claim to be "adjusti
 $$
 Y = \alpha_0 + \alpha_1 D + \alpha_2 X + V
 $$
-where $V$ is the population linear regression error term so that, [by construction](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/), $\mathbb{E}(V) = \mathbb{E}(XV) = 0$. Notice that I've called the coefficients in this regression $\alpha$ rather than $\beta$. That's because they will *not in general coincide* with the conditional mean function from above, namely $\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX$. In particular, the regression of $Y$ on $D$ and $X$ without an interaction will *only* coincide with the true conditional mean function if $\beta_3 = 0$. 
+where $V$ is the population linear regression error term so that, [by construction](/post/why-econometrics-is-confusing-part-1-the-error-term/), $\mathbb{E}(V) = \mathbb{E}(XV) = 0$. Notice that I've called the coefficients in this regression $\alpha$ rather than $\beta$. That's because they will *not in general coincide* with the conditional mean function from above, namely $\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX$. In particular, the regression of $Y$ on $D$ and $X$ without an interaction will *only* coincide with the true conditional mean function if $\beta_3 = 0$. 
 
 So what, if anything, can we say about $\alpha_1$ in relation to the ATE? By [Yule's Rule](https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem)^[Call it "Frisch-Waugh-Lovell" if you must, but I will continue trying to [make fetch happen](https://arxiv.org/abs/2307.00369).] we have
 $$
@@ -225,7 +225,7 @@ ATE
 
 ### Computing the ATE the Easy Way
 
-And now the easy way, using the two regressions described above^[If you're rusty on R's formula syntax, you may find my [cheat sheet](https://www.econometrics.blog/post/the-r-formula-cheatsheet/) helpful.]
+And now the easy way, using the two regressions described above^[If you're rusty on R's formula syntax, you may find my [cheat sheet](/post/the-r-formula-cheatsheet/) helpful.]
 ```{r}
 # Construct Xtilde = X - mean(X) 
 dat <- dat |> 
@@ -336,7 +336,7 @@ We're very nearly finished. All that remains is to simplify the numerator. To do
 $$
 Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
 $$
-where $U \equiv Y - \mathbb{E}(Y|D, X)$ satisfies $\mathbb{E}(U|D,X) = 0$ [by construction](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/). This allows us to write
+where $U \equiv Y - \mathbb{E}(Y|D, X)$ satisfies $\mathbb{E}(U|D,X) = 0$ [by construction](/post/why-econometrics-is-confusing-part-1-the-error-term/). This allows us to write
 $$
 \begin{aligned}
 \text{Cov}(Y, D|X) &= \text{Cov}(\beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U, D|X)\\
@@ -352,7 +352,7 @@ $$
 &= \mathbb{E}_{D|X}[D\mathbb{E}(U|D,X)] - \mathbb{E}(D|X) \mathbb{E}_{D|X}[\mathbb{E}(U|D,X)]
 \end{aligned}
 $$
-and, again, $\mathbb{E}(U|D,X) = 0$ [by construction](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/). So we're left with 
+and, again, $\mathbb{E}(U|D,X) = 0$ [by construction](/post/why-econometrics-is-confusing-part-1-the-error-term/). So we're left with 
 $$
 \alpha_1 = \frac{\mathbb{E}[\text{Cov}(Y, D|X)]}{\mathbb{E}[\text{Var}(D|X)]} = \frac{\mathbb{E}[\text{Var}(D|X)(\beta_1 + \beta_3 X)]}{\mathbb{E}[\text{Var}(D|X)]}.
 $$

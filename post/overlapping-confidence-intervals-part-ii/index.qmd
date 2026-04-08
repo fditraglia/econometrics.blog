@@ -8,14 +8,14 @@ tags:
 - confidence interval
 ---
 
-In my earlier post on [Overlapping Confidence Intervals](https://www.econometrics.blog/post/overlapping-confidence-intervals/) I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means constructed using independent samples.
+In my earlier post on [Overlapping Confidence Intervals](/post/overlapping-confidence-intervals/) I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means constructed using independent samples.
 To recap: if the individual confidence intervals for groups A and B *do not* overlap, there must be a statistically significant difference between the population means for the two groups. 
 In other words, the interval for the difference of means will not include zero.
 If the individual intervals *do overlap*, on the other hand, anything goes.
 The interval for the difference of means may or may not include zero.
 Indeed, it's even possible for the individual intervals for both A and B to include zero while the interval for their difference does not!
 
-In [Part I](https://www.econometrics.blog/post/overlapping-confidence-intervals/) we found a way to rephrase our statistical problem about overlapping confidence intervals as a familiar geometry problem involving *right triangles*.
+In [Part I](/post/overlapping-confidence-intervals/) we found a way to rephrase our statistical problem about overlapping confidence intervals as a familiar geometry problem involving *right triangles*.
 We then solved this geometry problem using the Pythagorean Theorem and Triangle Inequality. 
 To build the connection between confidence intervals and right triangles, however, we assumed that our two estimators were *uncorrelated*.
 Unfortunately this assumption fails in many interesting real-world applications.
@@ -26,7 +26,7 @@ Today we'll ask what happens to our earlier conclusions about overlapping interv
 
 While I phrased my first post about overlapping intervals in terms of sample and population means for two groups, the idea is general.
 Nothing substantive changes if we replace the parameters $(\mu_A, \mu_B)$ with $(\alpha, \beta)$, the estimators $(\bar{A}, \bar{B})$ with $(\hat{\alpha}, \hat{\beta})$, and the standard errors $\left(\text{SE}(\bar{A}), \text{SE}(\bar{B})\right)$ with $\left(\text{SE}(\hat{\alpha}), \text{SE}(\hat{\beta})\right)$. 
-As long as the two estimators are uncorrelated and (approximately) normally distributed, the results from [Part I](https://www.econometrics.blog/post/overlapping-confidence-intervals/) apply to the individual intervals for $\alpha$ and $\beta$ versus the interval for the difference $\alpha-\beta$. 
+As long as the two estimators are uncorrelated and (approximately) normally distributed, the results from [Part I](/post/overlapping-confidence-intervals/) apply to the individual intervals for $\alpha$ and $\beta$ versus the interval for the difference $\alpha-\beta$. 
 Today we will ask what happens when the estimators are potentially *correlated*.
 To make it clear that our results are general, I'll use the more agnostic $(\alpha,\beta)$ notation throughout.
 
@@ -53,7 +53,7 @@ In the difference $\hat{\alpha} - \hat{\beta}$, the control group mean cancels o
 $$
 \hat{\alpha} - \hat{\beta} = \text{(Treatment A mean)} - \text{(Treatment B mean)}.
 $$
-So if we *had* the raw data for treatments A and B we'd be back to a familiar independent samples comparison of means, as in [Part I](https://www.econometrics.blog/post/overlapping-confidence-intervals/).
+So if we *had* the raw data for treatments A and B we'd be back to a familiar independent samples comparison of means, as in [Part I](/post/overlapping-confidence-intervals/).
 But if you're reading a paper that only reports $(\hat{\alpha}, \hat{\beta})$ and their standard errors, you *cannot* directly calculate the standard error for the difference.
 The common variation from the control group mean is baked into the way both $\text{SE}(\hat{\alpha})$ and $\text{SE}(\hat{\beta})$ are computed, even though this variation is *irrelevant* for $\text{SE}(\hat{\alpha} - \hat{\beta})$.
 
@@ -61,7 +61,7 @@ The common variation from the control group mean is baked into the way both $\te
 
 So how do we compute $\text{SE}(\hat{\alpha} - \hat{\beta})$ if the two estimators are correlated?
 Recall that the *standard error* is the standard deviation of that estimator's sampling distribution, and a standard deviation is merely the square root of the corresponding variance.^[Many people, including most econometricians, reserve the term *standard error* for an *estimate* of this standard deviation. I prefer to call this estimate the *estimated standard error*. Clearly my convention is better and everyone should adopt it :)]
-Using the [properties of variance and covariance](https://www.econometrics.blog/post/random-variables-cheatsheet/),
+Using the [properties of variance and covariance](/post/random-variables-cheatsheet/),
 $$
 \text{Var}(\hat{\alpha} - \hat{\beta}) = \text{Var}(\hat{\alpha}) + \text{Var}(\hat{\beta}) - 2\text{Cov}(\hat{\alpha}, \hat{\beta}).
 $$
@@ -69,7 +69,7 @@ Defining $\rho \equiv \text{Corr}(\hat{\alpha},\hat{\beta})$, it follows that
 $$
 \text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
 $$
-If $\rho = 0$ this reduces to our formula from [Part I](https://www.econometrics.blog/post/overlapping-confidence-intervals/):
+If $\rho = 0$ this reduces to our formula from [Part I](/post/overlapping-confidence-intervals/):
 $\text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2$ so we can equate the LHS with the length of the hypotenuse of a right triangle whose legs have lengths $\text{SE}(\hat{\alpha})$ and $\text{SE}(\hat{\beta})$.
 If $\rho \neq 0$, however, this connection to the Pythagorean Theorem no longer holds.
 Nevertheless, there are *still triangles* hiding in this standard error formula!
@@ -216,7 +216,7 @@ $$
 assuming that $|\rho| < 1$.
 And now we're on familiar ground.
 Let $z$ be the appropriate quantile of a normal distribution, i.e.\ $z \approx 2$ for a 95\% confidence interval.
-Just as we argued in [Part I](https://www.econometrics.blog/post/overlapping-confidence-intervals/), the individual confidence intervals for $\alpha$ and $\beta$ overlap precisely when $(\hat{\alpha} - \hat{\beta})/z < \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})$ and there is a significant difference between the two parameters when $(\hat{\alpha} - \hat{\beta})/z > \text{SE}(\hat{\alpha} - \hat{\beta})$.
+Just as we argued in [Part I](/post/overlapping-confidence-intervals/), the individual confidence intervals for $\alpha$ and $\beta$ overlap precisely when $(\hat{\alpha} - \hat{\beta})/z < \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})$ and there is a significant difference between the two parameters when $(\hat{\alpha} - \hat{\beta})/z > \text{SE}(\hat{\alpha} - \hat{\beta})$.
 The condition for overlap *and* a significant difference is
 $$
 \text{SE}(\hat{\alpha} - \hat{\beta}) < \frac{\hat{\alpha} - \hat{\beta}}{z} < \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})

@@ -10,7 +10,7 @@ tags:
 ---
 
 
-The result that I prefer to call [Yule's Rule](https://www.econometrics.blog/post/how-to-do-regression-adjustment/#fnref2), more commonly known as the "Frisch-Waugh-Lovell (FWL) theorem", shows how to calculate the regression slope coefficient for **one predictor** by carrying out additional "auxiliary" regressions that adjust for **all other predictors**.
+The result that I prefer to call [Yule's Rule](/post/how-to-do-regression-adjustment/#fnref2), more commonly known as the "Frisch-Waugh-Lovell (FWL) theorem", shows how to calculate the regression slope coefficient for **one predictor** by carrying out additional "auxiliary" regressions that adjust for **all other predictors**.
 You've probably encountered this result if you've studied introductory econometrics. 
 But it may surprise you to learn that there are actually *two* variants of the FWL theorem, each with its pros and cons.
 Today we'll take a look at the less familiar version and then circle back to understand what makes the more familiar one a textbook staple.
@@ -96,7 +96,7 @@ First we need a bit of notation.
 I find it a bit simpler to work with population linear regressions rather than sample regressions, but the ideas are the same either way.
 So if you prefer to put "hats" on everything and work with sums rather than expectations and covariances, be my guest!
 
-First we'll define the "Long Regression" as a [population linear regression](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/) of $Y$ on $X$ and $W$, namely 
+First we'll define the "Long Regression" as a [population linear regression](/post/why-econometrics-is-confusing-part-1-the-error-term/) of $Y$ on $X$ and $W$, namely 
 $$
 Y = \beta_0 + \beta_X X + \beta_W W + U, \quad \mathbb{E}(U) = \text{Cov}(X,U) = \text{Cov}(W,U)=0.
 $$
@@ -109,7 +109,7 @@ $$
 Y = \delta_0 + \delta_W W + \tilde{Y}, \quad \mathbb{E}(\tilde{Y}) = \text{Cov}(W,\tilde{Y})=0.
 $$
 I've already linked to a post making this point, but it bears repeating: all of the properties of the error terms $U$, $\tilde{X}$ and $\tilde{Y}$ that I've stated here hold *by construction*.
-They are not assumptions; they are merely [what defines an error term](https://www.econometrics.blog/post/why-econometrics-is-confusing-part-1-the-error-term/) in a population linear regression.
+They are not assumptions; they are merely [what defines an error term](/post/why-econometrics-is-confusing-part-1-the-error-term/) in a population linear regression.
 
 
 ## Why does the "alternative" FWL approach work?

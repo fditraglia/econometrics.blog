@@ -8,7 +8,7 @@ tags: []
 ---
 
 
-This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the [first part](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/), I discussed the serious problems with the "textbook" approach, and outlined a simple hack that works amazingly well in practice: the [Agresti-Coull confidence interval](https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550). 
+This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the [first part](/post/don-t-use-the-textbook-ci-for-a-proportion/), I discussed the serious problems with the "textbook" approach, and outlined a simple hack that works amazingly well in practice: the [Agresti-Coull confidence interval](https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550). 
 
 Somewhat unsatisfyingly, my earlier post gave no indication of where the Agresti-Coull interval comes from, how to construct it when you want a confidence level *other than* 95%, and why it works. In this post I'll fill in some of the gaps by discussing *yet another* confidence interval for a proportion: the *Wilson interval*, so-called because it first appeared in [Wilson (1927)](https://www.tandfonline.com/doi/abs/10.1080/01621459.1927.10502953?journalCode=uasa20). While it's not usually taught in introductory courses, it easily could be. Not only does the Wilson interval perform extremely well in practice, it packs a powerful pedagogical punch by illustrating the idea of "inverting a hypothesis test." Spoiler alert: the Agresti-Coull interval is a rough-and-ready approximation to the Wilson interval.
 
@@ -42,7 +42,7 @@ $$
 \text{SE}_0 \equiv \sqrt{\frac{p_0(1 - p_0)}{n}} \quad \text{versus} \quad
 \widehat{\text{SE}} \equiv \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}}.
 $$
-Following the advice of our introductory textbook, we test $H_0\colon p = p_0$ against $H_1\colon p \neq p_0$ at the $5\%$ level by checking whether $|(\widehat{p} - p_0) / \text{SE}_0|$ exceeds $1.96$. This is called the *score test* for a proportion. Again following the advice of our introductory textbook, we report $\widehat{p} \pm 1.96 \times \widehat{\text{SE}}$ as our 95\% confidence interval for $p$. As you may recall from my [earlier post](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/), this is the so-called *Wald confidence interval* for $p$. Because the two standard error formulas in general disagree, the relationship between tests and confidence intervals breaks down.
+Following the advice of our introductory textbook, we test $H_0\colon p = p_0$ against $H_1\colon p \neq p_0$ at the $5\%$ level by checking whether $|(\widehat{p} - p_0) / \text{SE}_0|$ exceeds $1.96$. This is called the *score test* for a proportion. Again following the advice of our introductory textbook, we report $\widehat{p} \pm 1.96 \times \widehat{\text{SE}}$ as our 95\% confidence interval for $p$. As you may recall from my [earlier post](/post/don-t-use-the-textbook-ci-for-a-proportion/), this is the so-called *Wald confidence interval* for $p$. Because the two standard error formulas in general disagree, the relationship between tests and confidence intervals breaks down.
 
 To make this more concrete, let's plug in some numbers. Suppose that $n = 25$ and our observed sample contains 5 ones and 20 zeros. Then $\widehat{p} = 0.2$ and we can calculate $\widehat{\text{SE}}$ and the Wald confidence interval as follows
 ```{r}
@@ -67,9 +67,9 @@ How can we dig our way out of this mess? One idea is to *use a different test*, 
 ```{r}
 abs((p_hat - p0) / SE_hat)
 ```
-which is clearly less than 1.96. Thus we would fail to reject $H_0\colon p = 0.07$ exactly as the Wald confidence interval instructed us above. This procedure is called the *Wald test* for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately [the Wald confidence interval is terrible and you should never use it](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). Because the Wald test is equivalent to checking whether $p_0$ lies inside the Wald confidence interval, it inherits all of the latter's defects. 
+which is clearly less than 1.96. Thus we would fail to reject $H_0\colon p = 0.07$ exactly as the Wald confidence interval instructed us above. This procedure is called the *Wald test* for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately [the Wald confidence interval is terrible and you should never use it](/post/don-t-use-the-textbook-ci-for-a-proportion/). Because the Wald test is equivalent to checking whether $p_0$ lies inside the Wald confidence interval, it inherits all of the latter's defects. 
 
-Indeed, compared to the score test, the Wald test is a disaster, as I'll now show. Suppose we carry out a 5\% test. If the null is true, we should reject it 5\% of the time. Because the Wald and Score tests are both based on an approximation provided by the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/), we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5\%. Nevertheless, we'd expect them to at least be *fairly close* to the nominal value of 5\%. The following plot shows the *actual* type I error rates of the score and Wald tests, over a range of values for the true population proportion $p$ with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5\%.^[For the R code used to generate these plots, see the Appendix at the end of this post.]
+Indeed, compared to the score test, the Wald test is a disaster, as I'll now show. Suppose we carry out a 5\% test. If the null is true, we should reject it 5\% of the time. Because the Wald and Score tests are both based on an approximation provided by the [central limit theorem](/post/thirty-isn-t-the-magic-number/), we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5\%. Nevertheless, we'd expect them to at least be *fairly close* to the nominal value of 5\%. The following plot shows the *actual* type I error rates of the score and Wald tests, over a range of values for the true population proportion $p$ with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5\%.^[For the R code used to generate these plots, see the Appendix at the end of this post.]
 
 ```{r}
 #| label: codeAppendix
@@ -239,7 +239,7 @@ To make this more concrete, Consider the case of a 95\% Wilson interval. In this
 $$
 \widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
 $$
-which is *precisely* the midpoint of the [Agresti-Coullconfidence interval](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). And while
+which is *precisely* the midpoint of the [Agresti-Coull confidence interval](/post/don-t-use-the-textbook-ci-for-a-proportion/). And while
 $$
 \widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
 $$
@@ -336,7 +336,7 @@ Now, if we introduce the change of variables $\widehat{q} \equiv 1 - \widehat{p}
 
 
 # More to Come on Inference for a Proportion!
-This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore *yet another* approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical "trinity" of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and [never use the Wald confidence interval for a proportion](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/). 
+This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore *yet another* approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical "trinity" of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and [never use the Wald confidence interval for a proportion](/post/don-t-use-the-textbook-ci-for-a-proportion/). 
 
 
 

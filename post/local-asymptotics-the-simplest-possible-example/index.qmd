@@ -20,7 +20,7 @@ The answer to both questions is a resounding *NO*.
 Like all asymptotics, what I will call *local asymptotics* are nothing more than a thought experiment that we set up for mathematical convenience.
 Ideally we would derive finite sample results for every problem of interest, but this is rarely possible in practice.
 For this reason we turn to asymptotic results, such as the central limit theorem.
-Sometimes this works out OK, and sometimes it's a [disaster](https://www.econometrics.blog/post/don-t-use-the-textbook-ci-for-a-proportion/).
+Sometimes this works out OK, and sometimes it's a [disaster](/post/don-t-use-the-textbook-ci-for-a-proportion/).
 The goal of local asymptotics is to derive results that *more closely approximate* the finite sample behavior that we can understand from simple examples, in the hope that this will lead to better approximations in more complicated problems.
 In this post, I'll illustrate the usefulness of local asymptotics in the simplest example I could think of: a one-sided test for the mean of a normal distribution with known variance.
 No advanced statistics or econometrics are used below, so even if you found the preceding paragraph off-putting give the rest a go: you may be pleasantly surprised!

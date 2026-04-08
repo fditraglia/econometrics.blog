@@ -49,7 +49,7 @@ In words, the endogeneity of $X$ is *precisely the same thing* as the covariance
 
 Here's a helpful way of thinking about this.
 If $Z$ is exogenous then our regression of $X$ on $Z$ *partitions* the overall variation in $X$ into two components: the "good" (exogenous) variation $\pi_1 Z$ is uncorrelated with $U$, while the "bad" (endogenous) variation $V$ is correlated with $U$.
-The logic of two-stage least squares is that regressing $Y$ on the "good" variation, $\pi_1 Z$ allows us to recover $\beta$, the causal effect of interest.^[See [this blog post](https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/) for more discussion.]
+The logic of two-stage least squares is that regressing $Y$ on the "good" variation, $\pi_1 Z$ allows us to recover $\beta$, the causal effect of interest.^[See [this blog post](/post/three-ways-of-thinking-about-instrumental-variables/) for more discussion.]
 
 # A Simulation Example
 
@@ -175,7 +175,7 @@ I hope you found the derivations from above convincing.
 But even so, you may be wondering if there's an intuitive explanation for this phenomenon.
 I am pleased to inform you that the answer is yes!
 
-In an [earlier post](https://www.econometrics.blog/post/three-ways-of-thinking-about-instrumental-variables/) I described the **control function** approach to instrumental variables regression.
+In an [earlier post](/post/three-ways-of-thinking-about-instrumental-variables/) I described the **control function** approach to instrumental variables regression.
 That post showed that the coefficient on $X$ in a regression of $Y$ on $X$ and $V$ gives the *correct* causal effect. 
 We don't know $V$, but we can estimate it by regressing $X$ on $Z$ and saving the residuals.
 The logic of multiple regression shows that including $V$ as a control regressor "soaks up" the portion of $X$ that is explained by $V$.

@@ -47,7 +47,7 @@ The problem in this case is that both the numerator and denominator of the fract
 ```{r}
 c(numerator = exp(-171) * 171^171, denominator = factorial(171))
 ```
-As I discussed in an [earlier post](https://www.econometrics.blog/post/street-fighting-numerical-analysis-part-1/), computers can only store a finite number of distinct numeric values.
+As I discussed in an [earlier post](/post/street-fighting-numerical-analysis-part-1/), computers can only store a finite number of distinct numeric values.
 It's not literally true that `factorial(171)` equals $\infty$.
 What's really going on here is that `factorial(171)` is *such a large number* that it can't be stored as a [floating-point number](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html).
 In this case there's a very simple fix.
@@ -70,7 +70,7 @@ Of course this just passes the buck to `lfactorial()`. So how does this mysterio
 This may seem like an odd topic for a blog devoted to econometrics and statistics, so allow me to offer a few words of justification.
 First, computations involving $n!$ come up all the time in applied work.
 Second, it can be extremely helpful for certain theoretical arguments to have good approximations to $n!$ for large values of $n$.
-Finally, and most importantly from my perspective, the heuristic argument I'll use below relies on none other than the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/).
+Finally, and most importantly from my perspective, the heuristic argument I'll use below relies on none other than the [central limit theorem](/post/thirty-isn-t-the-magic-number/).
 So even if you've seen a more traditional proof of Stirling's approximation, I hope you'll enjoy this alternative approach.^[I first came across this argument from the late David MacKay's fantastic book [Information Theory, Inference, and Learning Algorithms](http://www.inference.org.uk/mackay/itila/book.html). His book on [sustainable energy](http://www.withouthotair.com/), while a bit out-of-date at this point, is also spectacularly good.]
 
 ## Stirling's Approximation
@@ -80,7 +80,7 @@ To obtain this result, we'll use the central limit theorem.
 But there is one fact that you will need to take on faith if you don't already know it: if $X_1 \sim \text{Poisson}(\mu_1)$ is independent of $X_2 \sim \text{Poisson}(\mu_2)$ then $X_1 + X_2 \sim \text{Poisson}(\mu_1 + \mu_2)$.
 Proceeding [by induction](https://en.wikipedia.org/wiki/Mathematical_induction) we can view a Poisson(171) random variable as the sum of 171 independent Poisson(1) random variables.
 More generally, we can view a Poisson RV with rate parameter $n$ as the sum of $n$ iid Poisson(1) random variables.
-By the [central limit theorem](https://www.econometrics.blog/post/thirty-isn-t-the-magic-number/), it follows that
+By the [central limit theorem](/post/thirty-isn-t-the-magic-number/), it follows that
 $$
 \sqrt{n}(\bar{X}_n - 1) \rightarrow_d \text{N}(0,1)
 $$

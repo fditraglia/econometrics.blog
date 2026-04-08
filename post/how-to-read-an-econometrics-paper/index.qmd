@@ -78,7 +78,7 @@ Asymptotics are a crucial tool in econometrics but remember that it is *finite s
 
 > strictly speaking, most asymptotic results that are currently available are logically useless. This is because most asymptotic results are limit results, rather than approximations consisting of an approximating formula plus an accurate error bound ... This is why there is good asymptotics and bad asymptotics and why two types of asymptotics sometimes lead to conflicting claims ... Because it may be theoretically very hard to ascertain that approximation errors are small, one often takes recourse to simulation studies 
 
-For an example of "good" versus "bad" asymptotics applied to power analysis, see [this post](https://www.econometrics.blog/post/local-asymptotics-the-simplest-possible-example/). 
+For an example of "good" versus "bad" asymptotics applied to power analysis, see [this post](/post/local-asymptotics-the-simplest-possible-example/). 
 
 
 <!--

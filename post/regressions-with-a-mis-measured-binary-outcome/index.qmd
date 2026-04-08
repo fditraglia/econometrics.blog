@@ -15,7 +15,7 @@ Researchers who study labor market dynamics have long known, however, that obser
 Administrative errors creep into even the most carefully-administered surveys.
 But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199). Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
 
-In my [previous post](https://www.econometrics.blog/post/beyond-classical-measurement-error/) I showed that classical measurement error in an outcome variable is basically innocuous.
+In my [previous post](/post/beyond-classical-measurement-error/) I showed that classical measurement error in an outcome variable is basically innocuous.
 But I also showed that measurement error in a binary random variable *cannot* be classical.
 In this post, I'll explore the consequences of this fact when we want to learn $\mathbb{P}(Y^*=1|X)$ but only observe $Y$ and $X$, not the true outcome variable $Y^*$.
 To keep things concrete, I will assume throughout that $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ where $F$ is a strictly increasing, differentiable function. This covers all the usual suspects: [logit, probit](https://expl.ai/ZULFNLF), and the [linear probability model](https://expl.ai/XSLDYZE).^[For more details of these models, see my [lecture notes](https://www.economictricks.com/limdep-notes.pdf).] 
