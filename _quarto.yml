@@ -35,4 +35,4 @@ format:
     code-fold: false
     highlight-style: github
 
-freeze: true
+freeze: auto

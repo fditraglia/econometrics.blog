@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -1d /Users/francisditraglia/econometrics.blog/content/post/20*)",
+      "Bash(curl -s \"https://quarto.org/docs/reference/projects/websites.html\")",
+      "Bash(curl -s \"https://quarto.org/docs/websites/website-listings.html\")",
+      "Bash(curl -s \"https://quarto.org/docs/reference/formats/html.html\")",
+      "Bash(curl -s \"https://quarto.org/docs/interactive/ojs/data-sources.html\")",
+      "WebSearch",
+      "Bash(quarto --version)",
+      "Bash(quarto render:*)",
+      "Bash(git:*)"
+    ]
+  }
+}
