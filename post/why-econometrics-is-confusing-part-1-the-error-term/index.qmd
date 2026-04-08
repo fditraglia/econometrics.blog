@@ -3,10 +3,11 @@ title: 'Why Econometrics is Confusing Part 1: The Error Term'
 author: Francis J. DiTraglia
 date: '2022-07-24'
 categories:
-- regression
+- econometrics
 - teaching
 tags:
-- rants
+- regression
+- prediction vs. causation
 ---
 
 "Suppose that $Y = \alpha + \beta X + U$." A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be stamped out completely. Without further clarification, this sentence could mean any number of different things. Even with clarification, it is a source of endless confusion for beginning students. What is $U$ exactly? What is the meaning of "$=$" in this context? We can do better. Here are a few suggestions. 

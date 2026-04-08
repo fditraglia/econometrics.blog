@@ -3,8 +3,9 @@ title: Don't Use the Textbook CI for a Proportion
 author: Francis J. DiTraglia
 date: '2021-10-04'
 categories:
-- Statistics
-tags: []
+- statistics
+tags:
+- confidence interval
 ---
 
 In a [previous post](/post/thirty-isn-t-the-magic-number/) I showed an example in which the "textbook" confidence interval for a proportion performs poorly despite a fairly large sample size. My aim in that post was to convince you that the oft-repeated advice concerning $n > 30$ and the central limit theorem is worthless. Today I'd like to convince you of something even more subversive: the textbook confidence interval for a proportion is absolutely terrible and you should never use it or teach it under any circumstances. Fortunately there's a simple fix. For a 95% interval, simply add four "fake" observations to your dataset, two successes and two failures, and then follow the textbook recipe for this "artificially augmented" dataset.

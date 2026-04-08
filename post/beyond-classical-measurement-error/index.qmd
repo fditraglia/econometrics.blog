@@ -4,7 +4,8 @@ author: Francis J. DiTraglia
 date: '2021-08-23'
 categories:
 - measurement error
-tags: []
+tags:
+- bias-variance tradeoff
 ---
 
 Pop Quiz: If $D^*$ and $D$ are binary random variables and $D$ is a noisy measure of $D^*$, is it possible for the measurement error $W \equiv D - D^*$ to be *classical*? Explain why or why not. (Answer below)

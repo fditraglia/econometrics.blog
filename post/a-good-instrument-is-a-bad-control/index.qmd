@@ -4,11 +4,10 @@ author: Francis J. DiTraglia
 date: '2023-06-29'
 categories:
 - econometrics
-- R
-- IV
-- control function
-- TSLS
-tags: []
+- causal inference
+tags:
+- instrumental variables
+- FWL
 ---
 
 Here's a puzzle for you.

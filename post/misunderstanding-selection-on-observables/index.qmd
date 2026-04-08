@@ -3,8 +3,10 @@ title: (Mis)understanding Selection on Observables
 author: Francis J. DiTraglia
 date: '2021-08-08'
 categories:
+- causal inference
+tags:
 - treatment effects
-tags: []
+- mean independence
 ---
 
 

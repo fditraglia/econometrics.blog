@@ -4,9 +4,8 @@ author: Francis J. DiTraglia
 date: '2023-01-01'
 categories:
 - econometrics
+- teaching
 tags:
-- dependence
-- correlation
 - mean independence
 ---
 

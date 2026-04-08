@@ -3,9 +3,9 @@ title: A New Way of Looking at Least Squares
 author: Francis J. DiTraglia
 date: '2022-03-14'
 categories:
-- statistics
+- econometrics
+tags:
 - regression
-tags: []
 ---
 
 Have you got a ruler handy? Fantastic! Then hold out your right hand, extend your thumb and little finger as far as they'll go, and measure the distance in centimeters, rounding to the nearest half centimeter. This is your *handspan*. Mine is around 23.5 centimeters, but is that big, small, or merely average?^[If you play the piano, this may help: I can play parallel 10ths but only just.] Fortunately for you, I've asked hundreds of introductory statistics students to measure their handspans over the years and (with their consent) posted the resulting data on my website:

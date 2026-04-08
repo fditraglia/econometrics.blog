@@ -2,8 +2,11 @@
 title: "From the Poisson Distribution to Stirling's Approximation"
 author: Francis J. DiTraglia
 date: '2022-11-18'
-categories: [computing, R, probability]
-tags: [CLT, Poisson]
+categories:
+- statistics
+- computing
+tags:
+- CLT
 ---
 
 The [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution) is the most famous probability model for *counts*, non-negative integer values. Many real-world phenomena are well approximated by this distribution, including the [number of German bombs](https://www.jstor.org/stable/41138751) that landed in 1/4km grid squares in south London during WWII.

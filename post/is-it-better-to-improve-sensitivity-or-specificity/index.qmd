@@ -3,14 +3,9 @@ title: Is it better to improve sensitivity or specificity?
 author: Francis J. DiTraglia
 date: '2024-07-25'
 categories:
-- probability
+- statistics
 - teaching
-tags:
-- Bayes
-- sensitivity
-- specificity
-- probability
-- teaching
+tags: []
 ---
 
 Here's a slightly unusual exercise on the topic of Bayes' Theorem for those of you teaching or studying introductory probability. Imagine that you're developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test's [sensitivity or its specificity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity). If your goal is to maximize the [positive predictive value (PPV)](https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values) of your test, i.e.\ the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?

@@ -3,8 +3,7 @@ title: UK Excess Deaths by Age Group and Sex
 author: Francis J. DiTraglia
 date: '2020-05-13'
 categories:
-- covid
-- R
+- applied
 tags:
 - covid
 ---

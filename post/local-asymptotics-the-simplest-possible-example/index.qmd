@@ -6,7 +6,6 @@ categories:
 - econometrics
 tags:
 - asymptotics
-- power
 ---
 
 If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to *change with sample size*. 

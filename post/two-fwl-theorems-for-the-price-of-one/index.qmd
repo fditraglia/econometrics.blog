@@ -5,8 +5,8 @@ date: '2025-08-14'
 categories:
 - econometrics
 tags:
-- FWL
 - regression
+- FWL
 ---
 
 

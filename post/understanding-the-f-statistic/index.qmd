@@ -3,8 +3,10 @@ title: Understanding the F Statistic
 author: Francis J. DiTraglia
 date: '2021-08-15'
 categories:
-- introductory econometrics
-tags: []
+- econometrics
+- teaching
+tags:
+- regression
 ---
 
 

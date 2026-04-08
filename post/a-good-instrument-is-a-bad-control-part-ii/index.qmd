@@ -6,8 +6,8 @@ categories:
 - econometrics
 - causal inference
 tags:
-- bad control
 - instrumental variables
+- FWL
 ---
 
 At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called "Bad Control".^[I have a very rich inner life.] 

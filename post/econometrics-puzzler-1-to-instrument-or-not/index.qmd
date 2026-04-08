@@ -2,8 +2,13 @@
 title: 'Econometrics Puzzler #1: To Instrument or Not?'
 author: Francis J. DiTraglia
 date: '2025-07-13'
-categories: []
-tags: []
+categories:
+- econometrics
+- causal inference
+tags:
+- instrumental variables
+- prediction vs. causation
+- bias-variance tradeoff
 ---
 
 

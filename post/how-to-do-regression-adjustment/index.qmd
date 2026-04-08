@@ -2,12 +2,14 @@
 title: How to Do Regression Adjustment
 author: Francis J. DiTraglia
 date: '2024-08-02'
-categories:
-- treatment effects
-tags: []
 execute:
   message: false
   warning: false
+categories:
+- causal inference
+tags:
+- treatment effects
+- prediction vs. causation
 ---
 
 

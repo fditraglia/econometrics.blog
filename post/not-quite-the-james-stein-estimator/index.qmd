@@ -3,9 +3,10 @@ title: Not Quite the James-Stein Estimator
 author: Francis J. DiTraglia
 date: '2024-08-10'
 categories:
+- statistics
+tags:
 - shrinkage
-- decision theory
-tags: []
+- bias-variance tradeoff
 ---
 
 If you study enough econometrics or statistics, you'll eventually hear someone mention "Stein's Paradox" or the ["James-Stein Estimator"](https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator). You've probably learned in your introductory econometrics course that ordinary least squares (OLS) is the [best linear unbiased estimator](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations "linear" and "unbiased" are crucial here. If we remove them, it's possible to do better--maybe even *much better*--than OLS.^[If I ruled the universe, the Gauss-Markov Theorem would be demoted to much less exalted status in econometrics teaching!] Stein's paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by [Charles Stein](https://en.wikipedia.org/wiki/Charles_M._Stein) in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity. 

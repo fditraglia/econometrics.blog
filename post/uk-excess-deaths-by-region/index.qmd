@@ -3,8 +3,7 @@ title: Excess Deaths in England and Wales
 author: Francis J. DiTraglia
 date: '2020-05-04'
 categories:
-- covid
-- R
+- applied
 tags:
 - covid
 ---

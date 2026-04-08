@@ -2,7 +2,8 @@
 title: The Return of econometrics.blog!
 author: Francis J. DiTraglia
 date: '2024-07-14'
-categories: []
+categories:
+- meta
 tags: []
 ---
 

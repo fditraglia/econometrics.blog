@@ -3,8 +3,10 @@ title: Lessons from the Oxford Vaccination Survey
 author: Francis J. DiTraglia
 date: '2021-12-31'
 categories:
-- Statistics
-tags: []
+- statistics
+- applied
+tags:
+- covid
 ---
 
 Back in November a colleague pointed me to a website describing the recent [COVID-19 Student Vaccination Survey](https://www.ox.ac.uk/coronavirus/students/vaccination-survey) carried out by my employer, the University of Oxford. At the time I briefly tweeted my concerns at the University:

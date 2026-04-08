@@ -3,8 +3,7 @@ title: The R Formula Cheatsheet
 author: Francis J. DiTraglia
 date: '2023-04-19'
 categories:
-- statistics
-- R
+- computing
 tags: []
 ---
 

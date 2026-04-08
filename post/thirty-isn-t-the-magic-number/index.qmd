@@ -3,10 +3,11 @@ title: Thirty isn't the magic number
 author: Francis J. DiTraglia
 date: '2021-05-08'
 categories:
-- Statistics
-- R
+- statistics
+- teaching
 tags:
 - CLT
+- asymptotics
 ---
 
 The simplest version of the central limit theorem (CLT) says that if $X_1, \dots, X_n$ are iid random variables with mean $\mu$ and finite variance $\sigma^2$

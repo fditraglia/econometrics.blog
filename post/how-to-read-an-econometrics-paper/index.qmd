@@ -3,8 +3,7 @@ title: How to Read an Econometrics Paper
 author: Francis J. DiTraglia
 date: '2024-07-20'
 categories:
-- econometrics
-- research skills
+- teaching
 tags: []
 ---
 
