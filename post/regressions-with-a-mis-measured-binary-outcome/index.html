@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Francis J. DiTraglia">
+<meta name="dcterms.date" content="2021-08-30">
+
+<title>Regressions with a Mis-measured, Binary Outcome – econometrics.blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-09bcd2438ddda8166a810b4ec224e0a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">econometrics.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fditraglia"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#whats-the-problem" id="toc-whats-the-problem" class="nav-link active" data-scroll-target="#whats-the-problem">What’s the problem?</a></li>
+  <li><a href="#what-happens-if-we-ignore-the-problem" id="toc-what-happens-if-we-ignore-the-problem" class="nav-link" data-scroll-target="#what-happens-if-we-ignore-the-problem">What happens if we ignore the problem?</a>
+  <ul class="collapse">
+  <li><a href="#a-special-case-fixed-mis-classification" id="toc-a-special-case-fixed-mis-classification" class="nav-link" data-scroll-target="#a-special-case-fixed-mis-classification">A Special Case: Fixed Mis-classification</a></li>
+  <li><a href="#observational-equivalence-and-alpha_0-alpha_1" id="toc-observational-equivalence-and-alpha_0-alpha_1" class="nav-link" data-scroll-target="#observational-equivalence-and-alpha_0-alpha_1">Observational Equivalence and <span class="math inline">\((\alpha_0 + \alpha_1)\)</span></a></li>
+  </ul></li>
+  <li><a href="#some-solutions" id="toc-some-solutions" class="nav-link" data-scroll-target="#some-solutions">Some Solutions</a>
+  <ul class="collapse">
+  <li><a href="#method-1-auxiliary-data" id="toc-method-1-auxiliary-data" class="nav-link" data-scroll-target="#method-1-auxiliary-data">Method 1: Auxiliary Data</a></li>
+  <li><a href="#method-2-nonlinearity-of-f" id="toc-method-2-nonlinearity-of-f" class="nav-link" data-scroll-target="#method-2-nonlinearity-of-f">Method 2: Nonlinearity of <span class="math inline">\(F\)</span></a></li>
+  </ul></li>
+  <li><a href="#coming-attractions" id="toc-coming-attractions" class="nav-link" data-scroll-target="#coming-attractions">Coming Attractions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Regressions with a Mis-measured, Binary Outcome</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">measurement error</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Francis J. DiTraglia </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 30, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Many outcomes of interest in economics are binary. For example, we may want to learn how employment status <span class="math inline">\(Y^*\)</span> varies with demographics <span class="math inline">\(X\)</span>, where <span class="math inline">\(Y^*=1\)</span> means “employed” and <span class="math inline">\(Y^*=0\)</span> means unemployed or not in the labor force. But how do we know if someone is employed? Typically we ask them, perhaps as part of a large, nationally representative survey such as the <a href="https://www.census.gov/programs-surveys/cps.html">CPS</a>. Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate <a href="https://www.jstor.org/stable/1914301">(Poterba &amp; Summers, 1986)</a>. Administrative errors creep into even the most carefully-administered surveys. But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years <a href="https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199">(Meyer et al.&nbsp;2015)</a>. Instead of true employment status <span class="math inline">\(Y^*\)</span> researchers only observe a noisy measure <span class="math inline">\(Y\in \{0, 1\}\)</span>.</p>
+<p>In my <a href="../../post/beyond-classical-measurement-error/">previous post</a> I showed that classical measurement error in an outcome variable is basically innocuous. But I also showed that measurement error in a binary random variable <em>cannot</em> be classical. In this post, I’ll explore the consequences of this fact when we want to learn <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> but only observe <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>, not the true outcome variable <span class="math inline">\(Y^*\)</span>. To keep things concrete, I will assume throughout that <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X'\beta)\)</span> where <span class="math inline">\(F\)</span> is a strictly increasing, differentiable function. This covers all the usual suspects: <a href="https://expl.ai/ZULFNLF">logit, probit</a>, and the <a href="https://expl.ai/XSLDYZE">linear probability model</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The parameter <span class="math inline">\(\beta\)</span> may have a causal interpretation or may simply have a predictive one. Either way, the question I’ll focus on here is whether, and if so how, <span class="math inline">\(\beta\)</span> can be identified in the presence of measurement error. For simplicity I will assume throughout that that the covariates <span class="math inline">\(X\)</span> are measured without error.</p>
+<section id="whats-the-problem" class="level1">
+<h1>What’s the problem?</h1>
+<p>Why does observing <span class="math inline">\(Y\)</span> rather than <span class="math inline">\(Y^*\)</span> present a problem? To answer this question, we need to derive the relationship between <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>. Since <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> are both binary, <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{P}(Y=1|X)\)</span> and similarly <span class="math display">\[
+\mathbb{E}(Y^*|X) = \mathbb{P}(Y^*=1|X) = F(X'\beta).
+\]</span> Now define the measurement error <span class="math inline">\(W\)</span> as <span class="math inline">\(W = Y - Y^*\)</span> so we can write <span class="math inline">\(Y = Y^* + W\)</span>. By the linearity of expectation, <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;= \mathbb{E}(Y|X)\\
+&amp;= \mathbb{E}(Y^* + W|X) = \mathbb{E}(Y^*|X) + \mathbb{E}(W|X)\\
+&amp;= \mathbb{P}(Y^*=1|X) + \mathbb{E}(W|X)
+\end{aligned}
+\]</span> so we see that if <span class="math inline">\(\mathbb{E}(W|X)=0\)</span> then <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> will coincide. Unfortunately <span class="math inline">\(\mathbb{E}(W|X)\)</span> in general <em>cannot</em> be zero. This means that learning <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> will not tell us what we want to know: <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>.</p>
+<p>To see why <span class="math inline">\(\mathbb{E}(W|X) \neq 0\)</span>, first define the <em>mis-classification probabilities</em> <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span> <span class="math display">\[
+\begin{aligned}
+\alpha_0(X) &amp;\equiv P(Y=1|Y^*=0,X)\\
+\alpha_1(X) &amp;\equiv P(Y=0|Y^*=1,X).
+\end{aligned}
+\]</span> The subscripts on <span class="math inline">\(\alpha\)</span> refer to the value of <span class="math inline">\(Y^*\)</span> on which we condition: <span class="math inline">\(\alpha_0(\cdot)\)</span> conditions on <span class="math inline">\(Y^*=0\)</span> while <span class="math inline">\(\alpha_1(\cdot)\)</span> conditions on <span class="math inline">\(Y^*=1\)</span>. You can interpret the mis-classification probabilities by analogy to null hypothesis testing: <span class="math inline">\(\alpha_0(X)\)</span> is effectively the type I error rate as a function of <span class="math inline">\(X\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> is the type II error rate as a function of <span class="math inline">\(X\)</span>.</p>
+<p>To keep things fully general for the moment, we allow the mis-classification probabilities to depend on <span class="math inline">\(X\)</span>. Perhaps a young male worker with five years of experience is more likely to make an erroneous self-report in the CPS than and older female worker with more experience, for example.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Since <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> are both binary, <span class="math inline">\(W \in \{-1, 0, 1\}\)</span> and we calculate <span class="math inline">\(\mathbb{E}(W|X)\)</span> as follows: <span class="math display">\[
+\begin{aligned}
+\mathbb{E}(W|X) &amp;= -1 \times \mathbb{P}(W=-1|X) + 0 \times \mathbb{P}(W=0|X) + 1 \times \mathbb{P}(W=1|X) \\
+&amp;= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X).
+\end{aligned}
+\]</span> Now consider the event <span class="math inline">\(\{W = -1\}\)</span>. The only way that this could occur is if <span class="math inline">\(Y = 0\)</span> and <span class="math inline">\(Y^* = 1\)</span>. Accordingly, <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(W = -1|X) &amp;= \mathbb{P}(Y = 0, Y^* = 1|X)\\
+&amp;= \mathbb{P}(Y=0|Y^*=1,X)\mathbb{P}(Y^*=1|X) \\
+&amp;= \alpha_1(X) F(X'\beta).
+\end{aligned}
+\]</span> Similarly, the only way that <span class="math inline">\(\{W=1\}\)</span> can occur is if <span class="math inline">\(Y=1\)</span> and <span class="math inline">\(Y^*=0\)</span> so that <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(W = 1|X) &amp;= \mathbb{P}(Y = 1, Y^* = 0|X)\\
+&amp;= \mathbb{P}(Y=1|Y^*=0,X) \mathbb{P}(Y^*=0|X)\\
+&amp;= \alpha_0(X) \left[1 - F(X'\beta)\right].
+\end{aligned}
+\]</span> <!--The event $\{W =0\}$ can occur in two mutually exclusive ways: $\{Y=0,Y^*=0\}$ and $\{Y=1,Y^*=1\}$.
+Thus
+$$
+\begin{aligned}
+\mathbb{P}(W = 0|X) &= \mathbb{P}(Y = 0, Y^* = 0|X) + \mathbb{P}(Y=1, Y^*=1|X)\\
+&= \mathbb{P}(Y=0|Y^*=0,X)\mathbb{P}(Y^*=0|X) + \mathbb{P}(Y=1|Y^*=1,X)\mathbb{P}(Y^*=1|X)\\
+&=\left[ 1 - \alpha_0(X)\right] \left[1 - F(X'\beta) \right] + [1 - \alpha_1(X)] F(X'\beta)
+\end{aligned}
+$$--> Therefore, <span class="math display">\[
+\begin{aligned}
+\mathbb{E}(W|X) &amp;= \mathbb{P}(W=1|X) - \mathbb{P}(W=-1|X) \\
+&amp;=  \alpha_0(X)\left[1 - F(X'\beta) \right] -\alpha_1(X) F(X'\beta).
+\end{aligned}
+\]</span> So how could <span class="math inline">\(\mathbb{E}(W|X) = 0\)</span>? Re-arranging the preceding to solve for <span class="math inline">\(F(X'\beta)\)</span>, <span class="math display">\[
+\mathbb{E}(W|X) = 0 \iff F(X'\beta) = \frac{\alpha_0(X)}{\alpha_0(X) + \alpha_1(X)}.
+\]</span> This shows that that <span class="math inline">\(\mathbb{E}(W|X)\)</span> can only be zero in an <em>extremely peculiar</em> case where <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span> depend on <span class="math inline">\(X\)</span> in just the right way. If the mis-classification probabilities are constants that do not depend on <span class="math inline">\(X\)</span>, we would require <span class="math inline">\(F(X'\beta) = \alpha_0/(\alpha_0 + \alpha_1)\)</span>. This is only possible if all the elements of <span class="math inline">\(\beta\)</span> besides the intercept are zero. Since <span class="math inline">\(\mathbb{E}(W|X)\)</span> will not in general equal zero, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> will not in general equal <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span>.</p>
+</section>
+<section id="what-happens-if-we-ignore-the-problem" class="level1">
+<h1>What happens if we ignore the problem?</h1>
+<p>Substituting our expression for <span class="math inline">\(\mathbb{E}(W|X)\)</span> and factoring the result, <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;=  \mathbb{P}(Y^*=1|X) + E(W|X) \\
+&amp;=  F(X'\beta) + \alpha_0(X)\left[1 - F(X'\beta) \right] -\alpha_1(X) F(X'\beta)\\
+&amp;= \alpha_0(X) + F(X'\beta) [1 - \alpha_0(X) - \alpha_1(X)].
+\end{aligned}
+\]</span></p>
+<p>Because we observe <span class="math inline">\((Y, X)\)</span>, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> is <em>identified</em>. With enough data, we can learn this conditional probability as a function of <span class="math inline">\(X\)</span> as accurately as we wish. The problem is that <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> drive a wedge between what we can observe, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span>, and what we’re trying to learn <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X'\beta)\)</span>. Without knowing more about the functions <span class="math inline">\(\alpha_0(\cdot)\)</span> and <span class="math inline">\(\alpha_1(\cdot)\)</span> we can’t say much about how <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> will differ. Because they are <em>probabilities</em>, <span class="math display">\[
+0\leq \alpha_0(X) \leq 1, \quad 0\leq \alpha_1(X) \leq 1.
+\]</span> But because they are conditional probabilities that condition on <em>different events</em>, <span class="math inline">\(\{Y^*=0, X=x\}\)</span> versus <span class="math inline">\(\{Y^*=1, X=x\}\)</span>, the sum <span class="math inline">\(\alpha_0(x) + \alpha_1(x)\)</span> could be greater than one. This means that <span class="math inline">\(1 - \alpha_0(X) - \alpha_1(X)\)</span> could be <em>negative</em>, at least for certain values of <span class="math inline">\(X\)</span>. It’s common in practice, however, to assume that <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> for all possible values that the covariates <span class="math inline">\(X\)</span> could take on. To understand this assumption, and the problem more generally, it’s helpful to consider a simple special case in which the mis-classification probabilities do not depend on <span class="math inline">\(X\)</span>. In this case we can say precisely how measurement error in the outcome affects what we can learn about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y^*\)</span> and make clear why <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> is usually a reasonable assumption.</p>
+<section id="a-special-case-fixed-mis-classification" class="level2">
+<h2 class="anchored" data-anchor-id="a-special-case-fixed-mis-classification">A Special Case: Fixed Mis-classification</h2>
+<p>Suppose that the mis-classification probabilities are <em>fixed</em>, i.e.&nbsp;that <span class="math display">\[
+\begin{aligned}
+\alpha_0(X) &amp;\equiv \mathbb{P}(Y=1|Y^*=0, X) = \mathbb{P}(Y=1|Y^*=0)\equiv \alpha_0 \\
+\alpha_1(X) &amp;\equiv \mathbb{P}(Y=0|Y^*=1, X) = \mathbb{P}(Y=0|Y^*=1)\equiv \alpha_1.
+\end{aligned}
+\]</span> This is a fairly strong assumption. It says that both self-reporting and administrative errors occur at the same rate for <em>everyone</em>, regardless of their observed characteristics. In this case, our expression for <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> from above becomes <span class="math display">\[
+\begin{aligned}
+\mathbb{P}(Y=1|X) &amp;= \alpha_0 + F(X'\beta) (1 - \alpha_0 - \alpha_1).
+\end{aligned}
+\]</span> Defining <span class="math inline">\(f\)</span> as the derivative of <span class="math inline">\(F\)</span>, this means that the <em>observed</em> partial effect of a continuous covariate <span class="math inline">\(X_j\)</span> with respect to <span class="math inline">\(Y\)</span> is <span class="math display">\[
+\begin{aligned}
+\frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) &amp;= \frac{\partial}{\partial X_j} \left[ \alpha_0 + F(X'\beta)(1 - \alpha_0 - \alpha_1)\right]\\
+&amp;= f(X'\beta)\beta_j (1 - \alpha_0 - \alpha_1)
+\end{aligned}
+\]</span> whereas the <em>true</em> partial effect, with respect to <span class="math inline">\(Y^*\)</span>, is <span class="math display">\[
+\frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X) = \frac{\partial}{\partial X_j} F(X'\beta) = f(X'\beta) \beta_j.
+\]</span> If <span class="math inline">\((\alpha_0 + \alpha_1) &gt; 1\)</span> then <span class="math inline">\((1 - \alpha_0 - \alpha_1)\)</span> will be <em>negative</em>. This means that the measurement error problem is so severe that all of the observed partial effects have the wrong sign. A bit of tedious algebra shows that <span class="math inline">\(Y\)</span> and <span class="math inline">\(Y^*\)</span> must be negatively correlated in this case: <span class="math inline">\(Y\)</span> is such a noisy measure of <span class="math inline">\(Y^*\)</span> that when <span class="math inline">\(Y=1\)</span> we’re better off predicting that <span class="math inline">\(Y^*=0\)</span>. For this reason, it’s traditional to assume that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span>. In this case <span class="math inline">\(0 &lt; (1 - \alpha_0 - \alpha_1) \leq 1\)</span> so the observed partial effects are <em>attenuated</em> versions of the true partial effects, in that <span class="math display">\[
+0 &lt; \frac{\partial}{\partial X_j} \mathbb{P}(Y=1|X) \leq \frac{\partial}{\partial X_j} \mathbb{P}(Y^*=1|X).
+\]</span> So in this special case, <em>non-classical</em> measurement error in a binary outcome variable has the same effect as <em>classical</em> measurement error in a continuous <em>regressor</em>: attenuation bias.</p>
+</section>
+<section id="observational-equivalence-and-alpha_0-alpha_1" class="level2">
+<h2 class="anchored" data-anchor-id="observational-equivalence-and-alpha_0-alpha_1">Observational Equivalence and <span class="math inline">\((\alpha_0 + \alpha_1)\)</span></h2>
+<p>You may be wondering: do we really <em>need</em> the assumption <span class="math inline">\(\alpha_0 + \alpha_1&lt;1\)</span> or is it merely convenient? Couldn’t the observed <em>data</em> tell us whether <span class="math inline">\(\alpha_0 + \alpha_1\)</span> is less than one or greater than one? The answer turns out to be no, and it’s easy to show why if <span class="math inline">\(F(t) = 1 - F(-t)\)</span> as in the probit, logit, and the linear probability models. Suppose that this condition on <span class="math inline">\(F\)</span> holds. Then we can write <span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta)\\
+  &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) \left[ 1 - F\big(X'(-\beta)\big)\right]\\
+  &amp;= \left(\alpha_0 + 1 - \alpha_0 - \alpha_1\right) - (1 - \alpha_0 - \alpha_1) F\big(X'(-\beta)\big)\\
+  &amp;= (1 - \alpha_1) + \left[ \alpha_0 - (1 - \alpha_1) \right] F\big(X' (-\beta)\big)\\
+  &amp;= (1 - \alpha_1) + \left[1 - (1 - \alpha_1) - (1 - \alpha_0) \right] F\big(X' (-\beta)\big).
+\end{aligned}
+\]</span> Defining <span class="math inline">\(\widetilde{\alpha}_0 \equiv (1 - \alpha_1)\)</span>, <span class="math inline">\(\widetilde{\alpha}_1 \equiv (1 - \alpha_0)\)</span>, and <span class="math inline">\(\widetilde{\beta} \equiv -\beta\)</span>, we have established that <span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X) &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta)\\
+  &amp;= \widetilde{\alpha}_0 + \left( 1 - \widetilde{\alpha}_0 - \widetilde{\alpha}_1 \right) F\big(X'\widetilde{\beta}\big).
+\end{aligned}
+\]</span> Since <span class="math inline">\(Y\)</span> is binary, <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> tells us everything that there is to know about the distribution of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span>. The preceding pair of equalities shows that the observed conditional distribution <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> could just as well have arisen from <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X'\widetilde{\beta})\)</span> with mis-classification probabilities <span class="math inline">\((\widetilde{\alpha}_0, \widetilde{\alpha}_1)\)</span> as it could from <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X'\beta)\)</span> with mis-classification probabilities <span class="math inline">\((\alpha_0, \alpha_1)\)</span>. From observations of <span class="math inline">\((Y, X)\)</span> alone there is no way to tell these possibilities apart: we say that they are <em>observationally equivalent</em>. Notice that if <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> then <span class="math inline">\(\widetilde{\alpha}_0 + \widetilde{\alpha}_1 &gt; 1\)</span> and vice-versa. This shows that the only way to point identify <span class="math inline">\(\beta\)</span> is to assume either that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> or the reverse inequality.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For the reasons discussed above, it usually makes sense to choose <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span>.</p>
+</section>
+</section>
+<section id="some-solutions" class="level1">
+<h1>Some Solutions</h1>
+<p>So what is an applied researcher to do? If we could somehow learn the mis-classification probabilities, we could use them to “adjust” <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> and identify <span class="math inline">\(\mathbb{P}(Y^*=1|X) = F(X'\beta)\)</span> as follows: <span class="math display">\[
+F(X'\beta) = \frac{\mathbb{P}(Y=1|X) - \alpha_0(X)}{1 - \alpha_0(X) - \alpha_1(X)}.
+\]</span> Broadly speaking there are two ways learn the mis-classification probabilities. The first approach estimates <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> using a <em>second</em> dataset. The second approach uses a single dataset and exploits non-linearity in the function <span class="math inline">\(F\)</span> instead. For the remainder of this discussion I will assume that <span class="math inline">\(\alpha_0(X) + \alpha_1(X) &lt; 1\)</span> or <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> if the mis-classification probabilities are fixed.</p>
+<section id="method-1-auxiliary-data" class="level2">
+<h2 class="anchored" data-anchor-id="method-1-auxiliary-data">Method 1: Auxiliary Data</h2>
+<p>Let’s start by making life simple: assume <em>fixed</em> mis-classification. Now suppose that we observe two random samples from the <em>same</em> population. In the first, we observe pairs <span class="math inline">\((Y_i,X_i)\)</span> for <span class="math inline">\(i = 1, ..., n\)</span> and in the second we observe pairs <span class="math inline">\((Y_j, Y^*_j)\)</span> for <span class="math inline">\(j = 1, ..., m\)</span>. Notice that neither dataset contains observations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y^*\)</span> for the same individual. Using the <span class="math inline">\((Y_i,X_i)\)</span> observations we can estimate <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span>, and using the <span class="math inline">\((Y_j, Y^*_j)\)</span> observations we can estimate <span class="math display">\[
+\alpha_0 = \mathbb{P}(Y=1|Y^*=0), \quad \alpha_1 = \mathbb{P}(Y=0|Y^*=1).
+\]</span> This gives us everything we need to determine <span class="math inline">\(F(X'\beta)\)</span> as a function of <span class="math inline">\(X\)</span> and hence <span class="math inline">\(\beta\)</span>. The observations of <span class="math inline">\((Y_i, Y^*_i)\)</span> are called an <em>auxiliary dataset</em>. In theory, auxiliary data provide a simple and general solution to measurement error problems of all stripes. Suppose, for example, that we were uncomfortable with the assumption of fixed mis-classification. If we observed an auxiliary dataset of <em>triples</em> <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> then we could directly estimate <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span>. Of course, we if we observed <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> for a random sample drawn from the population of interest we could estimate <span class="math inline">\(\mathbb{P}(Y^*=1|X)\)</span> <em>directly</em> without the need to account for measurement error! And here lies the fundamental tension of the auxiliary data approach: if we had sufficiently rich auxiliary data we wouldn’t really have a measurement error problem in the first place. More typically, we either observe <span class="math inline">\((Y_j, Y_j^*, X_j)\)</span> for a <em>different</em> population, or only observe a subset of these variables for our population of interest. Either way we need to rely on modeling assumptions to bridge the gap. For example, fixed mis-classification and an auxiliary dataset of <span class="math inline">\((Y^*_j, Y_j)\)</span> suffice to solve the measurement error problem but only if <span class="math inline">\(\alpha_0(X)\)</span> and <span class="math inline">\(\alpha_1(X)\)</span> do not in fact depend on <span class="math inline">\(X\)</span>.</p>
+</section>
+<section id="method-2-nonlinearity-of-f" class="level2">
+<h2 class="anchored" data-anchor-id="method-2-nonlinearity-of-f">Method 2: Nonlinearity of <span class="math inline">\(F\)</span></h2>
+<p>The auxiliary data approach is very general in principle but relies on information that we simply may not have in practice: a second dataset from the same population. An alternative approach uses only one dataset, <span class="math inline">\((Y_i, X_i)\)</span> for <span class="math inline">\(i = 1, ..., n\)</span>, and instead exploits the <em>shape</em> of the function <span class="math inline">\(F\)</span>. This second approach is a bit less general but doesn’t require any outside sources of information.</p>
+<p>To begin, suppose that the mis-classification probabilities are <em>fixed</em> and that <span class="math inline">\(F\)</span> is a <em>known function</em>, e.g.&nbsp;the standard logistic CDF. Suppose further that <span class="math inline">\(F\)</span> is strictly increasing and hence invertible. Then, applying <span class="math inline">\(F^{-1}\)</span> to both sides of our expression for <span class="math inline">\(F(X'\beta)\)</span> from above, <span class="math display">\[
+X'\beta = F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]
+\]</span> and thus, pre-multiplying both sides by <span class="math inline">\(X\)</span> and taking expectations, <span class="math display">\[
+\mathbb{E}[XX']\beta = \mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+\]</span> Therefore, if <span class="math inline">\(\mathbb{E}[XX']\)</span> is invertible, <span class="math display">\[
+\beta = \mathbb{E}[XX']^{-1}\mathbb{E}\left\{X F^{-1} \left[\frac{\mathbb{P}(Y = 1|X) - \alpha_0}{1 - \alpha_0 - \alpha_1}\right]\right\}.
+\]</span> Since <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> depends only on the observed data <span class="math inline">\((Y,X)\)</span>, this function is point identified. Since <span class="math inline">\(F\)</span> is assumed to be a known function, it follows that <span class="math inline">\(\beta\)</span> is point identified whenever <span class="math inline">\(\mathbb{E}[XX']\)</span> is invertible and <span class="math inline">\((\alpha_0, \alpha_1)\)</span> are known.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> So if we can find a way to point identify <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span>, we will immediately identify <span class="math inline">\(\beta\)</span>.</p>
+<p>Easier said than done! How can we possibly learn <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> without auxiliary data? Nonlinearity is the key. If <span class="math inline">\(F\)</span> is a cumulative distribution function, then <span class="math inline">\(\lim_{t\rightarrow \infty} F(t) = 1\)</span> and <span class="math inline">\(\lim_{t\rightarrow -\infty} F(t) = 0\)</span>. Now suppose that <span class="math inline">\(X\)</span> contains at least one covariate, call it <span class="math inline">\(V\)</span>, that is continuous and has “large support,” i.e.&nbsp;takes on values in a very wide range. Without loss of generality, suppose that the coefficient <span class="math inline">\(\beta_v\)</span> on <span class="math inline">\(V\)</span> is positive. (If it’s negative, then apply the following argument to <span class="math inline">\(-V\)</span> instead.) For <span class="math inline">\(V\)</span> large and <em>positive</em> <span class="math inline">\(X'\beta\)</span> is large and positive so that <span class="math inline">\(F(X'\beta)\)</span> is close to one. In this case <span class="math display">\[
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta) &amp;\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 1 \\
+&amp;= (1 - \alpha_1).
+\end{aligned}
+\]</span> For <span class="math inline">\(V\)</span> large and <em>negative</em>, on the other hand, <span class="math inline">\(X'\beta\)</span> is large and negative, <span class="math inline">\(F(X'\beta)\)</span> is close to zero, and <span class="math display">\[
+\begin{aligned}
+\alpha_0 + (1 - \alpha_0 - \alpha_1) F(X'\beta) &amp;\approx \alpha_0 + (1 - \alpha_0 - \alpha_1) \times 0\\
+&amp;= \alpha_0.
+\end{aligned}
+\]</span> Intuitively, by examining values of <span class="math inline">\(X_i\)</span> for which <span class="math inline">\(F(X_i'\beta)\)</span> is close to one we can learn <span class="math inline">\((1 - \alpha_1)\)</span> and by examining values for which <span class="math inline">\(F(X_i'\beta)\)</span> is close to zero we can identify <span class="math inline">\(\alpha_0\)</span>.</p>
+<p>You may object that the preceding identification argument sounds suspiciously circular: doesn’t this idea at least implicitly require us to know <span class="math inline">\(\beta\)</span>? Fortunately the answer is no. We only need to know the <em>signs</em> of <span class="math inline">\(\beta\)</span>. Under the assumption that <span class="math inline">\(\alpha_0 + \alpha_1 &lt; 1\)</span> these are the same as the signs of the observed partial effects <span class="math inline">\(\partial \mathbb{P}(Y=1|X) /\partial \beta_j\)</span>. An example may help. Suppose <span class="math inline">\(Y=1\)</span> means “graduated from college.” Under fixed misclassification, we would learn <span class="math inline">\(\alpha_0\)</span> from the observations of <span class="math inline">\((Y_i, X_i)\)</span> for people who almost certainly <em>didn’t</em> graduate from college, based on their covariates, and <span class="math inline">\((1 - \alpha_1)\)</span> from observations of <span class="math inline">\((Y_i, X_i)\)</span> for people who almost certainly <em>did</em>. By first estimating <span class="math inline">\(\mathbb{P}(Y=1|X)\)</span> we learn <em>attenuated</em> versions of the true partial effects <span class="math inline">\(F(X'\beta) \beta_j\)</span>. In other words, we learn how <em>reported</em> education varies with <span class="math inline">\(X\)</span>. But this information suffices to show us how to make <span class="math inline">\(F(X'\beta)\)</span> close to zero or one.</p>
+<p>The preceding argument <em>crucially relies</em> on the assumption that <span class="math inline">\(F\)</span> is nonlinear. To see why, consider the linear probability model <span class="math inline">\(F(X'\beta) = X'\beta\)</span> and let <span class="math inline">\(X' = (1, X_1')\)</span> and <span class="math inline">\(\beta' = (\beta_0, \beta_1')\)</span>. Then, <span class="math display">\[
+\begin{aligned}
+  \mathbb{P}(Y=1|X)
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right) F(X'\beta)\\
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(X'\beta) \\
+  &amp;= \alpha_0 + \left(1 - \alpha_0 - \alpha_1\right)(\beta_0 + X_1' \beta_1) \\
+  &amp;= \alpha_0 + (1 - \alpha_0 - \alpha_1) \beta_0 + X_1' (1 - \alpha_0 - \alpha_1) \beta_1.
+\end{aligned}
+\]</span> Now, defining <span class="math inline">\(\widetilde{\beta}_0 \equiv \alpha_0 + (1 - \alpha_0 - \alpha_1)\beta_0\)</span>, <span class="math inline">\(\widetilde{\beta}_1 = (1 - \alpha_0 - \alpha_1) \beta_1\)</span>, and <span class="math inline">\(\widetilde{\beta}' = (\widetilde{\beta}_0, \widetilde{\beta}_1')\)</span> we have <span class="math display">\[
+\mathbb{P}(Y=1|X) = \alpha_0 + (1 - \alpha_0 - \alpha_1) X'\beta  = X'\widetilde{\beta}.
+\]</span> This shows that a linear probability model with coefficient vector <span class="math inline">\(\beta\)</span> and mis-classification probabilities <span class="math inline">\((\alpha_0, \alpha_1)\)</span> is <em>observationally equivalent</em> to a linear probability model with <em>no mis-classification</em> and coefficient <span class="math inline">\(\widetilde{\beta}\)</span>. To put it another way: there is no way to tell whether mis-classification is present or absent in a linear model. Doing so requires <em>non-linearity</em>.</p>
+<p>So how can we use these results in practice? If <span class="math inline">\((\alpha_0, \alpha_1, \beta)\)</span> are identified and <span class="math inline">\(F\)</span> is assumed known, we can proceed via garden-variety maximum likelihood estimation. The log-likelihood function is only slightly more complicated than in the standard binary outcome setting, in particular: <span class="math display">\[
+\begin{aligned}
+  \ell_n(\alpha_0, \alpha_1, \beta) &amp;= \frac{1}{n} \sum_{i=1}^n \log\left\{ \mathbb{P}(Y_i=1|X)^{\mathbb{1}(Y_i=1)}\mathbb{P}(Y_i=0|X_i)^{\mathbb{1}(Y_i=0)} \right\} \\
+  &amp;= \frac{1}{n} \sum_{i=1}^n Y_i \log\left\{  \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\} + (1 - Y_i) \log\left\{ 1 - \alpha_0 - (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\}.
+\end{aligned}
+\]</span> If <span class="math inline">\(F\)</span> is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor <span class="math inline">\(V\)</span> with “large support” allows us to identify the mis-classification probabilities, and hence <span class="math inline">\(F\)</span>. Indeed, we can even allow <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> to depend covariates, as long as they don’t depend on <span class="math inline">\(V\)</span> itself. For more details on the “identification by nonlinearity” approach, see <a href="https://www.sciencedirect.com/science/article/pii/S0304407698000153">Hausman et al.&nbsp;(1998)</a> and <a href="https://www.cambridge.org/core/journals/econometric-theory/article/identification-of-the-binary-choice-model-with-misclassification/8FD094D628B0053032FF25DAAD2E1621">Lewbel (2000)</a>.</p>
+</section>
+</section>
+<section id="coming-attractions" class="level1">
+<h1>Coming Attractions</h1>
+<p>That’s more than enough about measurement error for now! When I return to this topic in a few weeks time, I’ll consider the problem of a mis-measured binary <em>regressor</em>. In my next installment, however, I’ll put measurement error to one side and revisit a classic problem from introductory statistics: constructing a confidence interval for a population proportion. Sometimes the easiest things turn out to be much harder than they first appear.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For more details of these models, see my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Below we’ll examine a simpler special case in which <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> are <em>fixed</em> probabilities that do not depend on <span class="math inline">\(X\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Alternatively, you could say that the only way to identify <span class="math inline">\((\alpha_0, \alpha_1)\)</span> is by making an assumption about the sign of one component of <span class="math inline">\(\beta\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We also need <span class="math inline">\(\alpha_0 + \alpha_1 \neq 1\)</span> to avoid division by zero!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.econometrics\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
+
+
+
+
+</body></html>

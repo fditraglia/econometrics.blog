@@ -1,0 +1,43 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/post/chris-sims-rip/index.html",
+      "/post/overlapping-confidence-intervals-part-ii/index.html",
+      "/post/overlapping-confidence-intervals/index.html",
+      "/post/a-good-instrument-is-a-bad-control-part-ii/index.html",
+      "/post/two-fwl-theorems-for-the-price-of-one/index.html",
+      "/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html",
+      "/post/econometrics-puzzler-1-to-instrument-or-not/index.html",
+      "/post/not-quite-the-james-stein-estimator/index.html",
+      "/post/how-to-do-regression-adjustment/index.html",
+      "/post/is-it-better-to-improve-sensitivity-or-specificity/index.html",
+      "/post/how-to-read-an-econometrics-paper/index.html",
+      "/post/sims-and-uhlig-1991-replication/index.html",
+      "/post/the-return-of-econometrics-blog/index.html",
+      "/post/a-good-instrument-is-a-bad-control/index.html",
+      "/post/the-r-formula-cheatsheet/index.html",
+      "/post/random-variables-cheatsheet/index.html",
+      "/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html",
+      "/post/from-the-poisson-distribution-to-stirling-s-approximation/index.html",
+      "/post/local-asymptotics-the-simplest-possible-example/index.html",
+      "/post/three-ways-of-thinking-about-instrumental-variables/index.html",
+      "/post/why-econometrics-is-confusing-part-1-the-error-term/index.html",
+      "/post/a-new-way-of-looking-at-least-squares/index.html",
+      "/post/the-wilson-confidence-interval-for-a-proportion/index.html",
+      "/post/lessons-from-the-oxford-vaccination-survey/index.html",
+      "/post/street-fighting-numerical-analysis-part-1/index.html",
+      "/post/don-t-use-the-textbook-ci-for-a-proportion/index.html",
+      "/post/regressions-with-a-mis-measured-binary-outcome/index.html",
+      "/post/beyond-classical-measurement-error/index.html",
+      "/post/understanding-the-f-statistic/index.html",
+      "/post/misunderstanding-selection-on-observables/index.html",
+      "/post/untangling-cause-and-effect-without-experiments/index.html",
+      "/post/thirty-isn-t-the-magic-number/index.html",
+      "/post/econometricians-anonymous/index.html",
+      "/post/uk-excess-deaths-are-concentrated-among-older-men/index.html",
+      "/post/past-the-peak-excess-deaths-in-england-and-wales/index.html",
+      "/post/uk-excess-deaths-by-region/index.html"
+    ]
+  }
+]

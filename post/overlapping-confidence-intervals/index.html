@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Francis J. DiTraglia">
+<meta name="dcterms.date" content="2025-11-15">
+
+<title>Overlapping Confidence Intervals – econometrics.blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-09bcd2438ddda8166a810b4ec224e0a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">econometrics.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fditraglia"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setting-the-stage" id="toc-setting-the-stage" class="nav-link active" data-scroll-target="#setting-the-stage">Setting the Stage</a>
+  <ul class="collapse">
+  <li><a href="#intervals-for-a-b-and-their-difference." id="toc-intervals-for-a-b-and-their-difference." class="nav-link" data-scroll-target="#intervals-for-a-b-and-their-difference.">Intervals for A, B and their difference.</a></li>
+  <li><a href="#when-is-the-difference-significant" id="toc-when-is-the-difference-significant" class="nav-link" data-scroll-target="#when-is-the-difference-significant">When is the difference significant?</a></li>
+  <li><a href="#when-do-the-intervals-overlap" id="toc-when-do-the-intervals-overlap" class="nav-link" data-scroll-target="#when-do-the-intervals-overlap">When do the intervals overlap?</a></li>
+  </ul></li>
+  <li><a href="#case-i-overlapping-intervals-for-a-and-b" id="toc-case-i-overlapping-intervals-for-a-and-b" class="nav-link" data-scroll-target="#case-i-overlapping-intervals-for-a-and-b">Case I: Overlapping Intervals for A and B</a>
+  <ul class="collapse">
+  <li><a href="#formalizing-the-question" id="toc-formalizing-the-question" class="nav-link" data-scroll-target="#formalizing-the-question">Formalizing the Question</a></li>
+  <li><a href="#lets-talk-about-triangles" id="toc-lets-talk-about-triangles" class="nav-link" data-scroll-target="#lets-talk-about-triangles">Let’s talk about triangles!</a>
+  <ul class="collapse">
+  <li><a href="#the-pythagorean-theorem" id="toc-the-pythagorean-theorem" class="nav-link" data-scroll-target="#the-pythagorean-theorem">1: The Pythagorean Theorem</a></li>
+  <li><a href="#the-triangle-inequality" id="toc-the-triangle-inequality" class="nav-link" data-scroll-target="#the-triangle-inequality">2: The Triangle Inequality</a></li>
+  </ul></li>
+  <li><a href="#the-solution" id="toc-the-solution" class="nav-link" data-scroll-target="#the-solution">The Solution</a></li>
+  </ul></li>
+  <li><a href="#case-ii-intervals-for-a-and-b-that-dont-overlap" id="toc-case-ii-intervals-for-a-and-b-that-dont-overlap" class="nav-link" data-scroll-target="#case-ii-intervals-for-a-and-b-that-dont-overlap">Case II: Intervals for A and B that Don’t Overlap</a></li>
+  <li><a href="#in-summary" id="toc-in-summary" class="nav-link" data-scroll-target="#in-summary">In Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Overlapping Confidence Intervals</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">statistics</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Francis J. DiTraglia </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 15, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Perhaps you’ve seen a claim like this in an applied paper: “the estimated effect for Group A is statistically significant, but the estimated effect for Group B is not; this treatment helps As but not Bs.” But this reasoning is <em>flawed</em>.</p>
+<p>To see why, consider the following example from <a href="https://sites.stat.columbia.edu/gelman/research/published/signif4.pdf">Gelman &amp; Stern</a>. We have data from two independent samples: Group A and Group B. For Group A our estimated effect is 25 with a standard error of 10, yielding an approximate 95% confidence interval of <span class="math inline">\(25 \pm 20\)</span> or <span class="math inline">\((5, 45)\)</span>. This interval does not include zero, so the effect for Group A is statistically significant at the 5% level. For Group B our estimated effect is 10 with a standard error of 10, yielding a confidence interval of <span class="math inline">\(10 \pm 20\)</span> or <span class="math inline">\((-10, 30)\)</span>. This interval <em>does</em> include zero, so the effect for Group B is not statistically significant at the 5% level. But there is no statistically significant difference between the groups: the difference of means is <span class="math inline">\(25 - 10 = 15\)</span> but the standard error for the difference is <span class="math inline">\(\sqrt{10^2 + 10^2} = \sqrt{200} \approx 14.14\)</span>. Thus, the 95% confidence interval for the difference is <span class="math inline">\(15 \pm 28\)</span> or <span class="math inline">\((-13, 43)\)</span>, which comfortably includes zero.</p>
+<p>To quote the title of the aforementioned paper: <strong>The Difference Between “Significant” and “Not Significant” is not Itself Statistically Significant.</strong> Meditate on this lesson and repeat it ten times before going to bed every night.</p>
+<p>After you’ve done this, I have a puzzle for you to ponder. In our example from above, the intervals for A and B <em>overlap</em> and the difference is <em>not significant</em>. Is this a general rule? In other words, does overlap in the two intervals imply no significant difference between the groups? While we’re at it, what about the opposite case? If the two intervals <em>do not</em> overlap, does that mean that there <em>is</em> a significant difference between the groups?</p>
+<section id="setting-the-stage" class="level1">
+<h1>Setting the Stage</h1>
+<section id="intervals-for-a-b-and-their-difference." class="level2">
+<h2 class="anchored" data-anchor-id="intervals-for-a-b-and-their-difference.">Intervals for A, B and their difference.</h2>
+<p>Let <span class="math inline">\(\bar{A}\)</span> be our estimator of the population mean <span class="math inline">\(\mu_A\)</span> for Group A, and let <span class="math inline">\(\text{SE}(\bar{A})\)</span> be its standard error. Similarly, let <span class="math inline">\(\bar{B}\)</span> be our estimator of the population mean <span class="math inline">\(\mu_B\)</span> for Group B, with standard error <span class="math inline">\(\text{SE}(\bar{B})\)</span>. If the samples we used to construct <span class="math inline">\(\bar{A}\)</span> and <span class="math inline">\(\bar{B}\)</span> are independent, then <span class="math inline">\(\text{Cov}(\bar{A}, \bar{B}) = 0\)</span> and <span class="math display">\[\text{SE}(\bar{A} - \bar{B}) = \sqrt{\text{SE}(\bar{A})^2 + \text{SE}(\bar{B})^2}\]</span> as in the example from above. If <span class="math inline">\(\bar{A}\)</span> and <span class="math inline">\(\bar{B}\)</span> are approximately normally distributed, say by appealing to the central limit theorem, then we can construct 95% confidence intervals for <span class="math inline">\(\mu_A\)</span>, <span class="math inline">\(\mu_B\)</span> as follows <span class="math display">\[\mu_A \colon \quad \bar{A} \pm 2 \times \text{SE}(\bar{A}), \quad \quad \mu_B\colon \quad \bar{B} \pm 2 \times \text{SE}(\bar{B}).\]</span> Similarly, we can construct a confidence interval for the difference in means <span class="math inline">\(\mu_A - \mu_B\)</span>, namely <span class="math display">\[
+(\bar{A} - \bar{B}) \pm 2 \times \text{SE}(\bar{A} - \bar{B}).
+\]</span> More generally, to construct an approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval, we would replace the 2 above with the appropriate quantile of a standard normal distribution.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Below I’ll call this quantile <span class="math inline">\(z\)</span> for short.</p>
+</section>
+<section id="when-is-the-difference-significant" class="level2">
+<h2 class="anchored" data-anchor-id="when-is-the-difference-significant">When is the difference significant?</h2>
+<p>The difference between <span class="math inline">\(\mu_A\)</span> and <span class="math inline">\(\mu_B\)</span> is statistically significant at the <span class="math inline">\(\alpha \times 100\%\)</span> level if the confidence interval for <span class="math inline">\(\Delta\)</span> does not include zero, i.e.&nbsp;if <span class="math inline">\(|\bar{A} - \bar{B}| &gt; z \cdot \text{SE}(\bar{A} - \bar{B})\)</span>. But working with absolute values will quickly become tedious, so without loss of generality, let’s assume <span class="math inline">\(\bar{A} \geq \bar{B}\)</span>. If this doesn’t hold, we can always relabel the two groups so it does hold. Then the condition for a significant difference becomes <span class="math display">\[(\bar{A} - \bar{B})/z &gt; \text{SE}(\bar{A} - \bar{B}).\]</span></p>
+</section>
+<section id="when-do-the-intervals-overlap" class="level2">
+<h2 class="anchored" data-anchor-id="when-do-the-intervals-overlap">When do the intervals overlap?</h2>
+<p>Again, without loss of generality, we can assume that <span class="math inline">\(\bar{A}\geq \bar{B}\)</span>. Now think about what it would mean for the two confidence intervals to overlap. The center of the interval for <span class="math inline">\(\mu_A\)</span> is to the right of the center of the interval for <span class="math inline">\(\mu_B\)</span> since <span class="math inline">\(\bar{A} \geq \bar{B}\)</span>. So for the two intervals to overlap, the <em>lower confidence limit</em> of the <span class="math inline">\(\mu_A\)</span> interval must be to the left of the <em>upper confidence limit</em> of the <span class="math inline">\(\mu_B\)</span> interval. This figure illustrates the logic using <span class="math inline">\(z = 2\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the figure, we see that the two intervals overlap if <span class="math display">\[\bar{A} - 2 \cdot \text{SE}(\bar{A}) &lt; \bar{B} + 2 \cdot \text{SE}(\bar{B})\]</span> Rearranging, and using the generic quantile <span class="math inline">\(z\)</span>, this becomes <span class="math display">\[(\bar{A} - \bar{B})/z &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B}).\]</span></p>
+</section>
+</section>
+<section id="case-i-overlapping-intervals-for-a-and-b" class="level1">
+<h1>Case I: Overlapping Intervals for A and B</h1>
+<section id="formalizing-the-question" class="level2">
+<h2 class="anchored" data-anchor-id="formalizing-the-question">Formalizing the Question</h2>
+<p>Can the confidence intervals for A and B overlap despite there being a significant difference of means between the two groups? Using the results from above, this question is equivalent to asking whether it’s possible for both of these inequalities to hold at the same time:</p>
+<ol type="1">
+<li>Overlapping CIs: <span class="math inline">\((\bar{A} - \bar{B})/z &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B})\)</span></li>
+<li>Significant Difference: <span class="math inline">\((\bar{A} - \bar{B})/z &gt; \text{SE}(\bar{A} - \bar{B})\)</span></li>
+</ol>
+<p>So the question becomes: can we find values of <span class="math inline">\(\bar{A}\)</span>, <span class="math inline">\(\bar{B}\)</span>, <span class="math inline">\(\text{SE}(\bar{A})\)</span>, and <span class="math inline">\(\text{SE}(\bar{B})\)</span> such that <span class="math display">\[\text{SE}(\bar{A} - \bar{B}) &lt; \frac{\bar{A} - \bar{B}}{z} &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B})?\]</span></p>
+</section>
+<section id="lets-talk-about-triangles" class="level2">
+<h2 class="anchored" data-anchor-id="lets-talk-about-triangles">Let’s talk about triangles!</h2>
+<p>For just a moment, forget that we’re talking about statistics and cast your mind back to <em>high school geometry</em>. There are two facts I’d like you to recall:</p>
+<section id="the-pythagorean-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="the-pythagorean-theorem">1: The Pythagorean Theorem</h3>
+<p>If <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are the lengths of the legs of a right triangle, then the length <span class="math inline">\(c\)</span> of the hypotenuse satisfies <span class="math inline">\(c = \sqrt{a^2 + b^2}\)</span>.</p>
+</section>
+<section id="the-triangle-inequality" class="level3">
+<h3 class="anchored" data-anchor-id="the-triangle-inequality">2: The Triangle Inequality</h3>
+<p>For <em>any triangle</em> with sides <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(c\)</span>, we have <span class="math inline">\(c \leq a + b\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>So how do these two facts help us? Consider a right triangle whose legs have lengths <span class="math inline">\(\text{SE}(\bar{A})\)</span> and <span class="math inline">\(\text{SE}(\bar{B})\)</span>. By the Pythagorean Theorem, the hypotenuse of this triangle has length <span class="math display">\[\sqrt{\text{SE}(\bar{A})^2 + \text{SE}(\bar{B})^2} = \text{SE}(\bar{A} - \bar{B}) \]</span> and by the triangle inequality, we have: <span class="math display">\[\text{SE}(\bar{A} - \bar{B}) &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B}).\]</span> We can read this inequality from the following figure: travelling along the dashed red path covers a distance of <span class="math inline">\(\text{SE}(\bar{A}) + \text{SE}(\bar{B})\)</span>, while travelling along the solid blue path the shorter distance of <span class="math inline">\(\text{SE}(\bar{A} - \bar{B})\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-solution" class="level2">
+<h2 class="anchored" data-anchor-id="the-solution">The Solution</h2>
+<p>The question we set out to answer is whether we can find values that satisfy the inequality: <span class="math display">\[\text{SE}(\bar{A} - \bar{B}) &lt; \frac{\bar{A} - \bar{B}}{z} &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B}).\]</span> Since the right-hand side is <em>always</em> strictly larger than the left-hand side, the answer is <em>yes</em>. Let’s try it out using a simple example. Suppose that <span class="math inline">\(\text{SE}(\bar{A}) = \text{SE}(\bar{B}) = 10\)</span> as in the example from above, and consider a 95% confidence interval so that <span class="math inline">\(z \approx 2\)</span>. Then the inequality becomes <span class="math display">\[
+20 \sqrt{2} &lt; \bar{A} - \bar{B} &lt; 40.
+\]</span> Since <span class="math inline">\(20 \sqrt{2} \approx 28.28\)</span> we have a whole range of values for <span class="math inline">\(\bar{A} - \bar{B}\)</span> that will do the trick. For example, <span class="math inline">\(\bar{A}-\bar{B} = 30\)</span> will do the trick. So if <span class="math inline">\(\text{SE}(\bar{A}) = \text{SE}(\bar{B}) = 10\)</span>, <span class="math inline">\(\bar{A} = 40\)</span> and <span class="math inline">\(\bar{B} = 10\)</span>, the 95% CIs for A and B overlap but there <em>is</em> a significant difference between the two groups. This is the opposite of Gelman &amp; Stern’s example.</p>
+<p>Our inequality from above depends only the difference between <span class="math inline">\(\bar{A}\)</span> and <span class="math inline">\(\bar{B}\)</span>, not on the individual value of each sample mean. So if we keep the same standard errors as before but set <span class="math inline">\(\bar{A} = 15\)</span> and <span class="math inline">\(\bar{B} = -15\)</span>, so the difference of means remains 30, we obtain the same result: overlapping intervals with a significant difference between the two groups. Notice anything interesting about this example? The interval for A is <span class="math inline">\((-5,35)\)</span> while the interval for B is <span class="math inline">\((-35, 5)\)</span>. So <em>both intervals include zero</em> but there is <em>still</em> a significant difference between them! If all we know is that two intervals overlap, we can’t say <em>anything</em> about the significance of the difference.</p>
+</section>
+</section>
+<section id="case-ii-intervals-for-a-and-b-that-dont-overlap" class="level1">
+<h1>Case II: Intervals for A and B that Don’t Overlap</h1>
+<p>Now for the easy one. Since <span class="math display">\[(\bar{A} - \bar{B})/z &lt; \text{SE}(\bar{A}) + \text{SE}(\bar{B}).\]</span> holds if and only if the intervals overlap, we merely reverse the inequality to get a condition for intervals that <em>do not overlap</em>, namely <span class="math display">\[(\bar{A} - \bar{B})/z &gt; \text{SE}(\bar{A}) + \text{SE}(\bar{B}).\]</span> Appending what we learned above from our right triangle diagram gives <span class="math display">\[(\bar{A} - \bar{B})/z &gt; \text{SE}(\bar{A}) + \text{SE}(\bar{B})&gt; \text{SE}(\bar{A} - \bar{B}).\]</span> So if the intervals <em>do not</em> overlap, then <span class="math inline">\((\bar{A} - \bar{B})/z\)</span> must be <em>greater than</em> <span class="math inline">\(\text{SE}(\bar{A} - \bar{B})\)</span>, which is precisely the condition for a significant difference between the two groups.</p>
+</section>
+<section id="in-summary" class="level1">
+<h1>In Summary</h1>
+<p>In an independent samples problem where the two individual confidence intervals overlap, there <em>may or may not</em> be a significant difference between the groups. Even if the two intervals both contain zero, there <em>could still</em> be a significant difference between them. If the two intervals <em>do not overlap</em> then we can conclude that there <em>is</em> a significant difference. But if you only take one lesson away from this post it should be this one: the difference between significant and not significant is not itself significant. If you want to carry out inference for a difference, you need to construct the standard error for that difference.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Granted, 2 is <em>slightly</em> larger than <span class="math inline">\(\texttt{qnorm}(0.975)\)</span>, but do you really want to multiply by 1.96 in your head?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The triangle inequality just says that “the shortest distance between two points in a Euclidean plane is a straight line.” If we’re working with a genuine triangle, then the vertices <em>cannot</em> lie on the same line. So traveling from <span class="math inline">\(x\)</span> to <span class="math inline">\(z\)</span> via <span class="math inline">\(y\)</span> always covers a greater distance than going straight from <span class="math inline">\(x\)</span> to <span class="math inline">\(z\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.econometrics\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
+
+
+
+
+</body></html>

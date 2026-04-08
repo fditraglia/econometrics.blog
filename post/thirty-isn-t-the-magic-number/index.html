@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Francis J. DiTraglia">
+<meta name="dcterms.date" content="2021-05-08">
+
+<title>Thirty isn’t the magic number – econometrics.blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-09bcd2438ddda8166a810b4ec224e0a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">econometrics.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fditraglia"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-sample-size-of-thirty-isnt-necessary." id="toc-a-sample-size-of-thirty-isnt-necessary." class="nav-link active" data-scroll-target="#a-sample-size-of-thirty-isnt-necessary.">A sample size of thirty isn’t necessary.</a>
+  <ul class="collapse">
+  <li><a href="#the-empirical-cdf" id="toc-the-empirical-cdf" class="nav-link" data-scroll-target="#the-empirical-cdf">The Empirical CDF</a></li>
+  <li><a href="#quantile-quantile-plots" id="toc-quantile-quantile-plots" class="nav-link" data-scroll-target="#quantile-quantile-plots">Quantile-Quantile Plots</a></li>
+  </ul></li>
+  <li><a href="#a-sample-size-of-thirty-isnt-sufficient." id="toc-a-sample-size-of-thirty-isnt-sufficient." class="nav-link" data-scroll-target="#a-sample-size-of-thirty-isnt-sufficient.">A sample size of thirty isn’t sufficient.</a></li>
+  <li><a href="#epilogue" id="toc-epilogue" class="nav-link" data-scroll-target="#epilogue">Epilogue</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Thirty isn’t the magic number</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">statistics</div>
+    <div class="quarto-category">teaching</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Francis J. DiTraglia </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 8, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The simplest version of the central limit theorem (CLT) says that if <span class="math inline">\(X_1, \dots, X_n\)</span> are iid random variables with mean <span class="math inline">\(\mu\)</span> and finite variance <span class="math inline">\(\sigma^2\)</span></p>
+<p><span class="math display">\[
+\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \rightarrow_d N(0,1)
+\]</span> where <span class="math inline">\(\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i\)</span>. In other words, if <span class="math inline">\(n\)</span> is sufficiently large, the sample mean is <em>approximately</em> normally distributed with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>, regardless of the distribution of <span class="math inline">\(X_1, \dots, X_n\)</span>. This is a pretty impressive result! It is so impressive, in fact, that students encountering it for the first time are usually a little wary. I’m typically asked “but how large is <em>sufficiently large</em>?” or “how do we know when the CLT will provide a good approximation?” My answer is disappointing: without some additional information about the distribution from which <span class="math inline">\(X_1, \dots, X_n\)</span> were drawn, we simply <em>can’t say</em> how large a sample is large enough for the CLT to work well. At this point, someone invariably volunteers “but in my high school statistics course, we learned that <span class="math inline">\(n = 30\)</span> is big enough for the CLT to hold!”</p>
+<p>I’ve always been surprised by the prevalence of the <span class="math inline">\(n \geq 30\)</span> dictum. It even appears in Charles Wheelan’s <em>Naked Statistics</em>, an otherwise excellent book that I assign as summer reading for our incoming economics undergraduates: “as a rule of thumb, the sample size must be at least 30 for the central limit theorem to hold true.” In this post I’d like to set the record straight: <span class="math inline">\(n\geq 30\)</span> is neither necessary <em>nor</em> sufficient for the CLT to provide a good approximation, as we’ll see by examining two simple examples. Along the way, we’ll learn about two useful tools for visualizing and comparing distributions: the empirical cdf, and quantile-quantile plots.</p>
+<section id="a-sample-size-of-thirty-isnt-necessary." class="level2">
+<h2 class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-necessary.">A sample size of thirty isn’t necessary.</h2>
+<p>We’ll start by showing that the CLT can work extremely well even when <span class="math inline">\(n\)</span> is much smaller than <span class="math inline">\(30\)</span> and the random variables that we average are far from normally distributed themselves. Along the way we’ll learn about the <em>empirical CDF</em> and <em>quantile-quantile</em> plots, two extremely useful tools for comparing probability distributions.</p>
+<p>Informally speaking, a Uniform<span class="math inline">\((0,1)\)</span> random variable is equally likely to take on any continuous value in the range <span class="math inline">\([0,1]\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Here’s a histogram of 1000 random draws from this distribution:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed to get the same draws I did</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">runif</span>(<span class="dv">1000</span>), <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">'Histogram of 1000 Uniform(0,1) Draws'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This distribution clearly isn’t normal! Indeed, its probability density function is <span class="math inline">\(f(x) = 1\)</span> for <span class="math inline">\(x \in [0,1]\)</span>. This is a flat line rather than a bell curve. But if we <em>average</em> even a relatively small number of Uniform<span class="math inline">\((0,1)\)</span> draws, the result will be <em>extremely close</em> to normality. To see that this is true, we’ll carry out a simulation in which we draw <span class="math inline">\(n\)</span> Uniform<span class="math inline">\((0,1)\)</span> RVs, calculate their sample mean, and store the result. Repeating this a large number of times allows us to approximate the sampling distribution of <span class="math inline">\(\bar{X}_n\)</span>. I’ll start by writing a function <code>get_unif_sim</code> that takes a single argument <code>n</code>. This function returns the sample mean of <code>n</code> Uniform<span class="math inline">\((0,1)\)</span> draws:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get_unif_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  sims <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(sims)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(xbar)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next I’ll use the <code>replicate</code> function to call <code>get_unif_sim</code> a large number of times, <code>nreps</code>, and store the results as a vector called <code>xbar_sims</code>. Here I’ll take <span class="math inline">\(n = 10\)</span> standard uniform draws, blatantly violating the <span class="math inline">\(n \geq 30\)</span> rule-of-thumb:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>nreps <span class="ot">&lt;-</span> <span class="fl">1e5</span> <span class="co"># scientific notation for 100,000 </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>xbar_sims <span class="ot">&lt;-</span> <span class="fu">replicate</span>(nreps, <span class="fu">get_unif_sim</span>(<span class="dv">10</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(xbar_sims, <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">'Sampling Dist. of Sample Mean of 10 Uniform(0,1) Draws'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A beautiful bell curve! This certainly looks normal, but histograms can be tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we’ll instead compare <em>distribution functions</em> and <em>quantiles</em>.</p>
+<section id="the-empirical-cdf" class="level3">
+<h3 class="anchored" data-anchor-id="the-empirical-cdf">The Empirical CDF</h3>
+<!--To find out what the CLT implies in this example, we first need to know the mean and variance of $X_i$. If $X \sim U(0,1)$, then
+$$
+\mathbb{E}[X] = \int_{-\infty}^{\infty} x f(x)\, dx = \int_0^1 x \cdot 1 \,dx = \left. \frac{x^2}{2} \right|_0^1 = \frac{1}{2}
+$$
+which makes perfect sense given the symmetry of the Uniform$(0,1)$ density about $x = 1/2$. The quickest way to calculate $\text{Var}(X)$ is to begin by calculating $\mathbb{E}[X^2]$ 
+$$
+\mathbb{E}[X^2] = \int_{0}^{1} x^2\, dx = \left. \frac{x^3}{3} \right|_0^1 = \frac{1}{3}
+$$
+and then use the "shortcut rule" as follows:
+$$
+\text{Var}(X) = \mathbb{E}[X^2] - \mathbb{E}[X]^2 = \frac{1}{3} - \left(\frac{1}{2}\right)^2 = \frac{1}{12}.
+$$-->
+<p>If <span class="math inline">\(X \sim\)</span> Uniform<span class="math inline">\((0,1)\)</span>, then <span class="math inline">\(\mathbb{E}(X) = 1/2\)</span> and <span class="math inline">\(\text{Var}(X) = 1/12\)</span>, which follows from <span class="math inline">\(\mathbb{E}[X^2]=1/3\)</span> and the definition of variance.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> For <span class="math inline">\(n = 10\)</span>, <span class="math display">\[
+\frac{\sigma}{\sqrt{n}} = \frac{1}{\sqrt{12}} \cdot \frac{1}{\sqrt{10}} = \frac{1}{\sqrt{120}}
+\]</span> so if the CLT provides a good approximation in this example, we should find that <span class="math display">\[
+\frac{\bar{X}_n - 1/2}{1/\sqrt{120}} = \sqrt{120} (\bar{X}_n - 1/2) \approx N(0,1)
+\]</span> in the sense that that the <em>cumulative distribution function</em> (CDF) of <span class="math inline">\(\sqrt{120} (\bar{X}_n - 1/2)\)</span>, call it <span class="math inline">\(F\)</span>, is approximately equal to the standard normal CDF <code>pnorm()</code>. An obvious way to see if this holds is to plot <span class="math inline">\(F\)</span> against <code>pnorm()</code> and see how they compare. From now on, we’ll be working with the z-scores of <code>xbar_sims</code> rather than the raw simulation values themselves, so we’ll start by constructing them, subtracting the population mean and dividing by the population standard deviation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> (xbar_sims <span class="sc">-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">120</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We haven’t worked out an expression for the function <span class="math inline">\(F\)</span>, but we can approximate it using our simulation draws <code>xbar_sims</code>. We do this by calculating the <em>empirical CDF</em> of our centered and standardized simulation draws <code>z</code>. Recall that if <span class="math inline">\(Z\)</span> is a random variable, its CDF <span class="math inline">\(F\)</span> is defined as <span class="math inline">\(F(t) = \mathbb{P}(Z \leq t)\)</span>. Given a large number of observed random draws <span class="math inline">\(z_1, \dots, z_J\)</span> from the distribution of <span class="math inline">\(Z\)</span>, we can approximate <span class="math inline">\(\mathbb{P}(Z \leq t)\)</span> by calculating the fraction of observed draws less than or equal to <span class="math inline">\(t\)</span>. In other words <span class="math display">\[
+\mathbb{P}(Z \leq t) \approx \frac{1}{J}\sum_{j=1}^J \mathbf{1}\{z_j \leq t\}
+\]</span> where <span class="math inline">\(\mathbf{1}\{z_j \leq t \}\)</span> is the <em>indicator function</em>: it equals one if <span class="math inline">\(z_j\)</span> is less than or equal to the threshold <span class="math inline">\(t\)</span> and zero otherwise. The sample average on the right-hand side of the preceding expression is called the <em>empirical CDF</em>. It uses empirical data–in this case our simulation draws <span class="math inline">\(z_j\)</span>–to approximate the unknown CDF. By increasing the number of random draws <span class="math inline">\(J\)</span> that we use, we can make this approximation as accurate as we like.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For example, we don’t know the exact value of <span class="math inline">\(F(0)\)</span>, the probability that <span class="math inline">\(Z \leq 0\)</span>. But using our simulated values <code>z</code> from above, we can approximate it as</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z <span class="sc">&lt;=</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.49993</code></pre>
+</div>
+</div>
+<p>and if we wanted the probability that <span class="math inline">\(Z \leq 2\)</span>, we could approximate this as</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z <span class="sc">&lt;=</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.97797</code></pre>
+</div>
+</div>
+<p>So far so good: these values agree with <code>pnorm(0)</code>, which equals 0.5, and <code>pnorm(2)</code>, which is approximately 0.9772. But we’ve only looked at two values of <span class="math inline">\(t\)</span>. While we could continue trying additional values one at a time, it’s much faster to use R’s built-in function for computing an empirical cdf, <code>ecdf()</code>. First we pass our simulated z-scores <code>z</code> into <code>ecdf()</code> function to calculate the empirical CDF and plot the result. Next we overlay some points from the standard normal CDF, <code>pnorm</code> in blue for comparison:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">120</span>) <span class="sc">*</span> (xbar_sims <span class="sc">-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">ecdf</span>(z), <span class="at">xlab =</span> <span class="st">'t'</span>, <span class="at">ylab =</span> <span class="st">'F(t)'</span>, <span class="at">main =</span> <span class="st">'F(t) versus pnorm(t)'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tseq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">by =</span> <span class="fl">0.2</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(tseq, <span class="fu">pnorm</span>(tseq), <span class="at">col =</span> <span class="st">'blue'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The fit is almost perfect, despite <span class="math inline">\(n=10\)</span> being far below 30. This kind of plot is much more informative than the histogram from above, but it can still be a bit difficult to read. When constructing confidence intervals or calculating p-values it is probabilities in the tails of the distribution that matter most, i.e.&nbsp;values of <span class="math inline">\(t\)</span> that are far from zero in the plot. Ideally, we’d like a plot that makes any discrepancies in the tails <em>jump out</em> at us. That is precisely what we’ll construct next.</p>
+</section>
+<section id="quantile-quantile-plots" class="level3">
+<h3 class="anchored" data-anchor-id="quantile-quantile-plots">Quantile-Quantile Plots</h3>
+<p>So far we’ve seen that the histogram of <code>xbar_sims</code> is bell-shaped, and that the empirical CDF of <code>sqrt(120) * (xbar_sims - 0.5)</code> is well-approximated by the standard normal CDF <code>pnorm()</code>. If you’re still not convinced that the CLT <em>can</em> work perfectly well with <span class="math inline">\(n = 10\)</span>, the final plot that we’ll make should dispel any remaining doubts. <!--If $Z$ is a continuous random variable with CDF $F$, its *quantile function* is given by $Q(p) = F^{-1}(p)$. In words $Q(p)$ is the threshold $t$ such that $\mathbb{P}(Z \leq t) = p$, i.e.\ the *inverse function* of the CDF.^[Defining a quantile function for discrete random variables requires a bit more care.] For example, here I have plotted the standard normal quantile function `qnorm` alongside the corresponding CDF `pnorm`
+
+::: {.cell}
+
+```{.r .cell-code}
+par(mfrow = c(1, 2))
+curve(qnorm(x), 0, 1, n = 1001)
+curve(pnorm(x), -3, 3, n = 1001)
+```
+
+::: {.cell-output-display}
+![](index_files/figure-html/unnamed-chunk-8-1.png){width=672}
+:::
+
+```{.r .cell-code}
+par(mfrow = c(1, 1))
+```
+:::
+
+--> As its name suggests, a quantile-quantile plot compares the quantiles of two probability distributions. But rather than comparing two quantile functions plotted against <span class="math inline">\(p\)</span>, it compares the quantiles of two distributions <em>plotted against each other</em>. This is a bit confusing the first time you encounter it, so we’ll take things step-by-step.</p>
+<p>If our simulated z-scores from above are well-approximated by a standard normal distribution, then their median should be close to that of a standard normal random variable, i.e.&nbsp;zero. This is indeed the case:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0001169817</code></pre>
+</div>
+</div>
+<p>But it’s not just the medians that should be close to each other: <em>all</em> the quantiles should be. So now let’s look at the 25th-percentile and 75th-percentile as well. Rather than computing them one-by-one, we can generate them in a single batch by first setting up a vector <code>p</code> of probabilities and using <code>rbind</code> to print the results in a convenient format</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">normal =</span> <span class="fu">qnorm</span>(p), <span class="at">simulation =</span>  <span class="fu">quantile</span>(z, <span class="at">probs =</span> p))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  25%          50%       75%
+normal     -0.6744898 0.0000000000 0.6744898
+simulation -0.6779843 0.0001169817 0.6791994</code></pre>
+</div>
+</div>
+<p>This looks good as well. If we want to compare quantiles over a finer grid of values for <code>p</code>, it’s more convenient to make a plot rather than a table. Suppose that we treat the values <code>qnorm</code> as an <span class="math inline">\(x\)</span>-coordinate and the quantiles of <code>z</code> as a <span class="math inline">\(y\)</span>-coordinate. If the CLT is giving us a good approximation, then we should have <span class="math inline">\(x \approx y\)</span> and all of the points should fall near the 45-degree line. This is indeed what we observe:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.05</span>, <span class="at">to =</span> <span class="fl">0.95</span>, <span class="at">by =</span> <span class="fl">0.05</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(p)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">quantile</span>(z, <span class="at">probs =</span> p)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">xlab =</span> <span class="st">'std. normal quantiles'</span>, <span class="at">ylab =</span> <span class="st">'quantiles of z'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># plot the 45-degree line</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The plot that we have just made is called a <em>normal quantile-quantile plot</em>. It is constructed as follows:</p>
+<ol type="1">
+<li>Set up a vector <code>p</code> of probabilities.</li>
+<li>Calculate the corresponding quantiles of a standard normal RV, <code>qnorm(p)</code>. Call these <span class="math inline">\(x\)</span>.</li>
+<li>Calculate the corresponding quantiles of your data, <code>quantile(your_data_here, probs = p)</code>. Call them <span class="math inline">\(y\)</span>.</li>
+<li>Plot <span class="math inline">\(y\)</span> against <span class="math inline">\(x\)</span>.</li>
+</ol>
+<p>If the points all fall on a line, then the quantiles of the observed data agree with those of <em>some</em> normal distribution, although perhaps not a standard normal. If we standardize the data before making such a plot, as we did to construct <code>z</code> above, the relevant line will be the 45-degree line. If not, it will be a different line but the interpretation remains the same. The easiest way to make a normal quantile-quantile plot in R is by using the function <code>qqnorm</code> followed by <code>qqline</code>. We could do this either using the centered and standardized simulation draws <code>z</code> or the original draws <code>xbar_sims</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(z, <span class="at">ylab =</span> <span class="st">'Quantiles of z'</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(z)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(xbar_sims, <span class="at">ylab =</span> <span class="st">'Quantiles of xbar_sims'</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(xbar_sims)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The only difference between these two plots is the scale of the <span class="math inline">\(y\)</span>-axis. The plot that uses the original simulation draws <code>xbar_sims</code> has a <span class="math inline">\(y\)</span>-axis that runs between <span class="math inline">\(0.1\)</span> and <span class="math inline">\(0.9\)</span> because the sample average of <span class="math inline">\(\text{Uniform}(0,1)\)</span> random variables must lie within the interval <span class="math inline">\([0,1]\)</span>. In contrast, the corresponding <span class="math inline">\(z\)</span>-scores lie in the range <span class="math inline">\([-4,4]\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> For <span class="math inline">\(x\)</span>-values between <span class="math inline">\(-3\)</span> and <span class="math inline">\(3\)</span>, we can’t even see the line generated by <code>qqline</code>: the quantiles of our simulation draws are extremely close to those of a normal distribution. Outside of this range, however, we see that the black circles <em>curve away</em> from the line. For values of <span class="math inline">\(x\)</span> around <span class="math inline">\(-4\)</span>, the quantiles of <code>z</code> are above those of a standard normal, i.e.&nbsp;shifted to the right. For values of <span class="math inline">\(x\)</span> around <span class="math inline">\(4\)</span>, the picture is reversed: the quantiles of <code>z</code> are below those of a standard normal, i.e.&nbsp;shifted to the left. This means that <code>z</code> has <em>lighter tails</em> than a standard normal: it is a bit less likely to yield <em>extremely</em> large positive or negative values, for example</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">simulation =</span> <span class="fu">quantile</span>(z, <span class="fl">0.0001</span>), <span class="at">normal =</span> <span class="fu">qnorm</span>(<span class="fl">0.0001</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      simulation    normal
+0.01%  -3.563576 -3.719016</code></pre>
+</div>
+</div>
+<p>This makes perfect sense. A standard normal can take on arbitrarily large values, while the sample mean of ten uniforms is necessarily bounded above by <span class="math inline">\(1\)</span>. So if you want to carry out a <span class="math inline">\(0.01\%\)</span> test (<span class="math inline">\(\alpha = 0.0001\)</span>), the approximation provided by the CLT won’t quite cut it with <span class="math inline">\(n = 10\)</span> in this example. But for any conventional significance level, it’s nearly perfect:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.025</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">normal =</span> <span class="fu">qnorm</span>(p), <span class="at">simulation =</span> <span class="fu">quantile</span>(z, <span class="at">prob =</span> p))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  1%      2.5%        5%       10%
+normal     -2.326348 -1.959964 -1.644854 -1.281552
+simulation -2.302793 -1.958568 -1.654508 -1.290797</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="a-sample-size-of-thirty-isnt-sufficient." class="level2">
+<h2 class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-sufficient.">A sample size of thirty isn’t sufficient.</h2>
+<p>Now suppose that <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(X_1, \dots X_n \sim\)</span> iid Bernoulli<span class="math inline">\((1/60)\)</span>. What is the CDF of <span class="math inline">\(\bar{X}_n\)</span>? Rather than approximating the answer to this question by simulation, as we did in the uniform example from above, we’ll work out the <em>exact</em> result and compare it to the approximation provided by the CLT. If <span class="math inline">\(X_1, \dots, X_n \sim\)</span> iid Bernoulli<span class="math inline">\((p)\)</span>, then by definition the sum <span class="math inline">\(S_n = \sum_{i=1}^n X_i\)</span> follows a Binomial<span class="math inline">\((n,p)\)</span> distribution. The probability mass function and CDF of this distribution are available in R via the <code>dbinom()</code> and <code>pbinom()</code> commands. So what about <span class="math inline">\(\bar{X}_n\)</span>? Notice that <span class="math display">\[
+\mathbb{P}(\bar{X}_n = x) = \mathbb{P}(S_n/n = x) = \mathbb{P}(S_n = nx)
+\]</span> Thus, if <span class="math inline">\(f(s) = \mathbb{P}(S_n = s)\)</span> is the pmf of <span class="math inline">\(S_n\)</span> for <span class="math inline">\(s \in \{0, 1, \dots n\}\)</span>, it follows that <span class="math inline">\(f(nx)\)</span> is the pmf of <span class="math inline">\(\bar{X}_n\)</span> for <span class="math inline">\(x \in \{0, 1/n, 2/n, \dots, 1\}\)</span>. This means that we can use <code>dbinom</code> to plot the <em>exact</em> sampling distribution of <span class="math inline">\(\bar{X}_n\)</span> when <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 1/60\)</span> as follows<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">60</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span><span class="sc">/</span>n)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>P_x_bar <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(n <span class="sc">*</span> x, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, P_x_bar, <span class="at">type =</span> <span class="st">'h'</span>, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>), <span class="at">ylab =</span> <span class="st">'pmf of Xbar'</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'blue'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The result is <em>far</em> from a normal distribution. Not only is it noticeably discrete, it is also seriously asymmetric. Another way to see this is by examining the CDF. If the central limit theorem is working well in this example, we should have <span class="math inline">\(\bar{X}_n \approx N\big(p, p(1 - p)/n\big)\)</span>. Extending the idea from above, we can plot the exact CDF of <span class="math inline">\(\bar{X}_n\)</span> using the binomial CDF <code>pbinom()</code> and compare it to the approximation suggested by the CLT:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.02</span>, <span class="fl">0.08</span>, <span class="at">by =</span> <span class="fl">0.001</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>F_x_bar <span class="ot">&lt;-</span> <span class="fu">pbinom</span>(n <span class="sc">*</span> x, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>F_clt <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(x, p, <span class="fu">sqrt</span>(p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="sc">/</span> n))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, F_x_bar, <span class="at">type =</span> <span class="st">'s'</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'blue'</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(x, F_clt, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'red'</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">'topleft'</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Exact'</span>, <span class="st">'CLT'</span>), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">lty =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The approximation is noticeably poor, but is the problem serious enough to affect any inferences we might hope to draw? Suppose we wanted to construct a 95% confidence interval for <span class="math inline">\(p\)</span>. The textbook approach, based on the CLT, would have us report <span class="math inline">\(\widehat{p} \pm 1.96 \times \sqrt{\widehat{p}(1 - \widehat{p})/n}\)</span> where <span class="math inline">\(\widehat{p}\)</span> is the sample proportion, i.e.&nbsp;<span class="math inline">\(\bar{X}_n\)</span>. Let’s set up a little simulation experiment to see how well this interval performs when <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 1/60\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate 5000 draws for phat</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># with p = 1/60, n = 100</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">54321</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>draw_sim_phat <span class="ot">&lt;-</span> <span class="cf">function</span>(p, n) {</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> p)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  phat <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(phat)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>p_true <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">60</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>sample_size <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>phat_sims <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">5000</span>, <span class="fu">draw_sim_phat</span>(<span class="at">p =</span> p_true, <span class="at">n =</span> sample_size))</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># What fraction of the CIs cover the true value of p?</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>SE <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(phat_sims <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> phat_sims) <span class="sc">/</span> sample_size) </span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">&lt;-</span> phat_sims <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> SE </span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">&lt;-</span> phat_sims <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> SE </span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>coverage_prob <span class="ot">&lt;-</span> <span class="fu">mean</span>((lower <span class="sc">&lt;=</span> p_true) <span class="sc">&amp;</span> (p_true <span class="sc">&lt;=</span> upper))</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>coverage_prob</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.824</code></pre>
+</div>
+</div>
+<p>So only 82% of these supposed 95% confidence intervals actually cover the true value of <span class="math inline">\(p\)</span>! Clearly 100 observations aren’t enough to rely upon the CLT in this example.</p>
+</section>
+<section id="epilogue" class="level2">
+<h2 class="anchored" data-anchor-id="epilogue">Epilogue</h2>
+<p>I hope these examples have convinced you that, in spite of what you may have heard elsewhere, <span class="math inline">\(n\geq 30\)</span> is neither necessary nor sufficient for the CLT to provide an adequate approximation. But some important questions remain. First, what can we do in situations like the second example, where we want to carry out inference for a small proportion? The problem is hardly academic: at the time of this writing, the most recent estimate of coronavirus prevalence in the UK was approximately 0.2%, i.e.&nbsp;nearly ten times <em>smaller</em> than the value I used for <span class="math inline">\(p\)</span> in my second example.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Second, how did the <span class="math inline">\(n\geq 30\)</span> folk wisdom arise? Is there anything that we can say about <span class="math inline">\(n\geq 30\)</span>? Finally, are there any theoretical results that can provide guidance about the quality of the approximation provided by the CLT? These questions will have to wait for a future post!</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>More formally, <span class="math inline">\(U\sim\)</span> Uniform<span class="math inline">\((0,1)\)</span> if and only if <span class="math inline">\(\mathbb{P}(a \leq U \leq b) = (b - a)\)</span> for any <span class="math inline">\(0 \leq a \leq b \leq 1\)</span>. <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If you’re taking introductory probability and statistics, filling in the missing details for these calculations would be an excellent homework problem!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Here we take <span class="math inline">\(J = 100,000\)</span> which is more than enough for the purposes of this exercise.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Recall that we subtracted <span class="math inline">\(1/2\)</span> and multiplied by <span class="math inline">\(\sqrt{120}\approx 11\)</span> to construct <code>z</code> from <code>xbar_sims</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Notice that I “zoomed in” on the most interesting part of the plot by setting <code>xlim = c(0, 0.1)</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Source: <a href="https://www.gov.uk/government/publications/react-1-study-of-coronavirus-transmission-march-2021-final-results/react-1-study-of-coronavirus-transmission-march-2021-final-results">REACT-1 study of coronavirus transmission: March 2021 final results</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.econometrics\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
+
+
+
+
+</body></html>

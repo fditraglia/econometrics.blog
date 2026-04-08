@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Francis J. DiTraglia">
+<meta name="dcterms.date" content="2025-11-22">
+
+<title>Overlapping Confidence Intervals: Part II – econometrics.blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-09bcd2438ddda8166a810b4ec224e0a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">econometrics.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fditraglia"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-word-about-notation" id="toc-a-word-about-notation" class="nav-link active" data-scroll-target="#a-word-about-notation">A Word About Notation</a></li>
+  <li><a href="#a-motivating-example" id="toc-a-motivating-example" class="nav-link" data-scroll-target="#a-motivating-example">A Motivating Example</a></li>
+  <li><a href="#allowing-correlation" id="toc-allowing-correlation" class="nav-link" data-scroll-target="#allowing-correlation">Allowing Correlation</a></li>
+  <li><a href="#the-law-of-cosines" id="toc-the-law-of-cosines" class="nav-link" data-scroll-target="#the-law-of-cosines">The Law of Cosines</a></li>
+  <li><a href="#from-geometry-to-statistics" id="toc-from-geometry-to-statistics" class="nav-link" data-scroll-target="#from-geometry-to-statistics">From Geometry to Statistics</a></li>
+  <li><a href="#the-grand-finale" id="toc-the-grand-finale" class="nav-link" data-scroll-target="#the-grand-finale">The Grand Finale</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Overlapping Confidence Intervals: Part II</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">statistics</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Francis J. DiTraglia </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 22, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In my earlier post on <a href="../../post/overlapping-confidence-intervals/">Overlapping Confidence Intervals</a> I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means constructed using independent samples. To recap: if the individual confidence intervals for groups A and B <em>do not</em> overlap, there must be a statistically significant difference between the population means for the two groups. In other words, the interval for the difference of means will not include zero. If the individual intervals <em>do overlap</em>, on the other hand, anything goes. The interval for the difference of means may or may not include zero. Indeed, it’s even possible for the individual intervals for both A and B to include zero while the interval for their difference does not!</p>
+<p>In <a href="../../post/overlapping-confidence-intervals/">Part I</a> we found a way to rephrase our statistical problem about overlapping confidence intervals as a familiar geometry problem involving <em>right triangles</em>. We then solved this geometry problem using the Pythagorean Theorem and Triangle Inequality. To build the connection between confidence intervals and right triangles, however, we assumed that our two estimators were <em>uncorrelated</em>. Unfortunately this assumption fails in many interesting real-world applications. Today we’ll ask what happens to our earlier conclusions about overlapping intervals if we allow for correlation.</p>
+<section id="a-word-about-notation" class="level2">
+<h2 class="anchored" data-anchor-id="a-word-about-notation">A Word About Notation</h2>
+<p>While I phrased my first post about overlapping intervals in terms of sample and population means for two groups, the idea is general. Nothing substantive changes if we replace the parameters <span class="math inline">\((\mu_A, \mu_B)\)</span> with <span class="math inline">\((\alpha, \beta)\)</span>, the estimators <span class="math inline">\((\bar{A}, \bar{B})\)</span> with <span class="math inline">\((\hat{\alpha}, \hat{\beta})\)</span>, and the standard errors <span class="math inline">\(\left(\text{SE}(\bar{A}), \text{SE}(\bar{B})\right)\)</span> with <span class="math inline">\(\left(\text{SE}(\hat{\alpha}), \text{SE}(\hat{\beta})\right)\)</span>. As long as the two estimators are uncorrelated and (approximately) normally distributed, the results from <a href="../../post/overlapping-confidence-intervals/">Part I</a> apply to the individual intervals for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> versus the interval for the difference <span class="math inline">\(\alpha-\beta\)</span>. Today we will ask what happens when the estimators are potentially <em>correlated</em>. To make it clear that our results are general, I’ll use the more agnostic <span class="math inline">\((\alpha,\beta)\)</span> notation throughout.</p>
+</section>
+<section id="a-motivating-example" class="level2">
+<h2 class="anchored" data-anchor-id="a-motivating-example">A Motivating Example</h2>
+<p>Consider a randomized controlled trial with <em>two active treatments</em>. In our paper on <a href="https://ditraglia.com/pdf/pawn-paper.pdf">pawn lending</a>, for example, my co-authors and I compare default rates between borrowers assigned to the <em>status quo</em> pawn contract (control), a new <em>structured</em> contract (Treatment A), and a <em>choice arm</em> (Treatment B) in which they were free to choose whichever contract they preferred. To learn the causal effect of the structured contract, we compare the mean default rates of borrowers who received Treatment A against the corresponding rate in the control group. Call this difference of means <span class="math inline">\(\hat{\alpha}\)</span>. Similarly, to learn the effect of choice, we make the analogous comparison between Treatment B and the control group. Call this difference of means <span class="math inline">\(\hat{\beta}\)</span>. Now suppose you’re reading a paper that reports both of these estimators and their standard errors. To find out which treatment is more effective, you need to compare <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span>, but these estimators <em>must</em> be correlated because they both involve the control group average: <span class="math display">\[
+\begin{aligned}
+\hat{\alpha} &amp;= \text{(Treatment A mean)} - \text{(Control Group mean)}\\
+\hat{\beta} &amp;= \text{(Treatment B mean)} - \text{(Control Group mean)}.
+\end{aligned}
+\]</span> Granted, if you had access to the raw data, you could easily solve this problem without worrying about the correlation. In the difference <span class="math inline">\(\hat{\alpha} - \hat{\beta}\)</span>, the control group mean cancels out <span class="math display">\[
+\hat{\alpha} - \hat{\beta} = \text{(Treatment A mean)} - \text{(Treatment B mean)}.
+\]</span> So if we <em>had</em> the raw data for treatments A and B we’d be back to a familiar independent samples comparison of means, as in <a href="../../post/overlapping-confidence-intervals/">Part I</a>. But if you’re reading a paper that only reports <span class="math inline">\((\hat{\alpha}, \hat{\beta})\)</span> and their standard errors, you <em>cannot</em> directly calculate the standard error for the difference. The common variation from the control group mean is baked into the way both <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> are computed, even though this variation is <em>irrelevant</em> for <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span>.</p>
+</section>
+<section id="allowing-correlation" class="level2">
+<h2 class="anchored" data-anchor-id="allowing-correlation">Allowing Correlation</h2>
+<p>So how do we compute <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span> if the two estimators are correlated? Recall that the <em>standard error</em> is the standard deviation of that estimator’s sampling distribution, and a standard deviation is merely the square root of the corresponding variance.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Using the <a href="../../post/random-variables-cheatsheet/">properties of variance and covariance</a>, <span class="math display">\[
+\text{Var}(\hat{\alpha} - \hat{\beta}) = \text{Var}(\hat{\alpha}) + \text{Var}(\hat{\beta}) - 2\text{Cov}(\hat{\alpha}, \hat{\beta}).
+\]</span> Defining <span class="math inline">\(\rho \equiv \text{Corr}(\hat{\alpha},\hat{\beta})\)</span>, it follows that <span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
+\]</span> If <span class="math inline">\(\rho = 0\)</span> this reduces to our formula from <a href="../../post/overlapping-confidence-intervals/">Part I</a>: <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})^2 = \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2\)</span> so we can equate the LHS with the length of the hypotenuse of a right triangle whose legs have lengths <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span>. If <span class="math inline">\(\rho \neq 0\)</span>, however, this connection to the Pythagorean Theorem no longer holds. Nevertheless, there are <em>still triangles</em> hiding in this standard error formula! To reveal them, we need a more general theorem about triangles.</p>
+</section>
+<section id="the-law-of-cosines" class="level2">
+<h2 class="anchored" data-anchor-id="the-law-of-cosines">The Law of Cosines</h2>
+<p>Consider a triangle whose sides have lengths <span class="math inline">\(a,b\)</span> and <span class="math inline">\(c\)</span>. Let <span class="math inline">\(\theta\)</span> be the angle between the sides whose lengths are <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. Then by the <em>Law of Cosines</em><br>
+<span class="math display">\[
+c^2 = a^2 + b^2 - 2\cos(\theta) \cdot ab
+\]</span> This equality holds for <em>any triangle</em>. For a right triangle whose legs have lengths <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, we have <span class="math inline">\(\theta = 90°\)</span> so the Law of Cosines reduces to the Pythagorean Theorem <span class="math display">\[
+c^2 = a^2 + b^2.
+\]</span> When <span class="math inline">\(\theta \neq 90°\)</span>, the “correction term” <span class="math inline">\(-2\cos(\theta)\cdot ab\)</span> shows how the length of <span class="math inline">\(c\)</span> differs from that of a right triangle with legs of lengths <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. When <span class="math inline">\(\theta &lt; 90°\)</span> the cosine is positive so the correction term <em>shortens</em> <span class="math inline">\(c\)</span>; when <span class="math inline">\(\theta &gt; 90°\)</span> the cosine is negative so the correction term <em>lengthens</em> <span class="math inline">\(c\)</span>. Regardless of the angle <span class="math inline">\(\theta\)</span>, however, the Triangle Inequality still holds: <span class="math inline">\(c &lt; a + b\)</span> because the shortest distance between two points is a straight line.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</section>
+<section id="from-geometry-to-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="from-geometry-to-statistics">From Geometry to Statistics</h2>
+<p>The cosine of an angle is always between negative one and one. Can you think of anything else that shares this property? That’s right: correlation! So let’s put the Law of Cosines and our standard error formula from above side-by-side: <span class="math display">\[
+\begin{aligned}
+c^2 &amp;= a^2 + b^2 - 2\cos(\theta) \cdot ab\\ \\
+\text{SE}(\hat{\alpha} - \hat{\beta})^2 &amp;= \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
+\end{aligned}
+\]</span> The analogy is <em>perfect</em>. We can view <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> as the lengths of two sides of a triangle and <span class="math inline">\(\rho\)</span> as the cosine of the angle between these sides. This makes <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span> the length of the third side, indicated in blue in the following diagram. When <span class="math inline">\(\rho\)</span> is <em>positive</em>, the standard error of the difference is <em>smaller</em> than it would be under independence; if <span class="math inline">\(\rho\)</span> is <em>negative</em>, the standard error of the difference is <em>larger</em> than it would be under independence.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-grand-finale" class="level2">
+<h2 class="anchored" data-anchor-id="the-grand-finale">The Grand Finale</h2>
+<p>Since we’ve equated <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span>, <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> with the sides of a triangle, the Triangle Inequality gives <span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta}) &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})
+\]</span> assuming that <span class="math inline">\(|\rho| &lt; 1\)</span>. And now we’re on familiar ground. Let <span class="math inline">\(z\)</span> be the appropriate quantile of a normal distribution, i.e.&nbsp;<span class="math inline">\(z \approx 2\)</span> for a 95% confidence interval. Just as we argued in <a href="../../post/overlapping-confidence-intervals/">Part I</a>, the individual confidence intervals for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> overlap precisely when <span class="math inline">\((\hat{\alpha} - \hat{\beta})/z &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})\)</span> and there is a significant difference between the two parameters when <span class="math inline">\((\hat{\alpha} - \hat{\beta})/z &gt; \text{SE}(\hat{\alpha} - \hat{\beta})\)</span>. The condition for overlap <em>and</em> a significant difference is <span class="math display">\[
+\text{SE}(\hat{\alpha} - \hat{\beta}) &lt; \frac{\hat{\alpha} - \hat{\beta}}{z} &lt; \text{SE}(\hat{\alpha}) + \text{SE}(\hat{\beta})
+\]</span> which holds by the Triangle Inequality. So we’re back to exactly the same situation we were in when <span class="math inline">\(\rho = 0\)</span>! As long as <span class="math inline">\(\rho \neq -1, 1\)</span> the same results concerning confidence interval overlap apply when <span class="math inline">\(\hat{\alpha}\)</span> and <span class="math inline">\(\hat{\beta}\)</span> are correlated as when they are uncorrelated:</p>
+<ol type="1">
+<li>Overlap doesn’t tell us <em>anything</em> about whether there is a significant difference, but</li>
+<li>a lack of overlap implies that there <em>must</em> be a significant difference.</li>
+</ol>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Many people, including most econometricians, reserve the term <em>standard error</em> for an <em>estimate</em> of this standard deviation. I prefer to call this estimate the <em>estimated standard error</em>. Clearly my convention is better and everyone should adopt it :)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Here I assume that this is a <em>genuine triangle</em> rather than three points on the same line.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.econometrics\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
+
+
+
+
+</body></html>

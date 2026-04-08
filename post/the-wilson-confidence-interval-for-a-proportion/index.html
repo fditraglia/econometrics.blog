@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Francis J. DiTraglia">
+<meta name="dcterms.date" content="2022-02-05">
+
+<title>The Wilson Confidence Interval for a Proportion – econometrics.blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-09bcd2438ddda8166a810b4ec224e0a2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">econometrics.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about/index.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fditraglia"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tests-and-cis-two-sides-of-the-same-coin" id="toc-tests-and-cis-two-sides-of-the-same-coin" class="nav-link active" data-scroll-target="#tests-and-cis-two-sides-of-the-same-coin">Tests and CIs – Two Sides of the Same Coin</a></li>
+  <li><a href="#how-to-confuse-your-introductory-statistics-students" id="toc-how-to-confuse-your-introductory-statistics-students" class="nav-link" data-scroll-target="#how-to-confuse-your-introductory-statistics-students">How to Confuse Your Introductory Statistics Students</a></li>
+  <li><a href="#should-we-teach-the-wald-test-instead" id="toc-should-we-teach-the-wald-test-instead" class="nav-link" data-scroll-target="#should-we-teach-the-wald-test-instead">Should we teach the Wald test instead?</a></li>
+  <li><a href="#inverting-the-score-test" id="toc-inverting-the-score-test" class="nav-link" data-scroll-target="#inverting-the-score-test">Inverting the Score Test</a></li>
+  <li><a href="#understanding-the-wilson-interval" id="toc-understanding-the-wilson-interval" class="nav-link" data-scroll-target="#understanding-the-wilson-interval">Understanding the Wilson Interval</a></li>
+  <li><a href="#comparing-the-wald-and-wilson-intervals" id="toc-comparing-the-wald-and-wilson-intervals" class="nav-link" data-scroll-target="#comparing-the-wald-and-wilson-intervals">Comparing the Wald and Wilson Intervals</a>
+  <ul class="collapse">
+  <li><a href="#wald-can-collapse-to-a-single-point-wilson-cant" id="toc-wald-can-collapse-to-a-single-point-wilson-cant" class="nav-link" data-scroll-target="#wald-can-collapse-to-a-single-point-wilson-cant">Wald Can Collapse to a Single Point; Wilson Can’t</a></li>
+  <li><a href="#wald-can-include-impossible-values-wilson-cant" id="toc-wald-can-include-impossible-values-wilson-cant" class="nav-link" data-scroll-target="#wald-can-include-impossible-values-wilson-cant">Wald Can Include Impossible Values; Wilson Can’t</a></li>
+  </ul></li>
+  <li><a href="#more-to-come-on-inference-for-a-proportion" id="toc-more-to-come-on-inference-for-a-proportion" class="nav-link" data-scroll-target="#more-to-come-on-inference-for-a-proportion">More to Come on Inference for a Proportion!</a></li>
+  <li><a href="#appendix-r-code" id="toc-appendix-r-code" class="nav-link" data-scroll-target="#appendix-r-code">Appendix: R Code</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Wilson Confidence Interval for a Proportion</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">statistics</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Francis J. DiTraglia </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 5, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">first part</a>, I discussed the serious problems with the “textbook” approach, and outlined a simple hack that works amazingly well in practice: the <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550">Agresti-Coull confidence interval</a>.</p>
+<p>Somewhat unsatisfyingly, my earlier post gave no indication of where the Agresti-Coull interval comes from, how to construct it when you want a confidence level <em>other than</em> 95%, and why it works. In this post I’ll fill in some of the gaps by discussing <em>yet another</em> confidence interval for a proportion: the <em>Wilson interval</em>, so-called because it first appeared in <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1927.10502953?journalCode=uasa20">Wilson (1927)</a>. While it’s not usually taught in introductory courses, it easily could be. Not only does the Wilson interval perform extremely well in practice, it packs a powerful pedagogical punch by illustrating the idea of “inverting a hypothesis test.” Spoiler alert: the Agresti-Coull interval is a rough-and-ready approximation to the Wilson interval.</p>
+<p>To understand the Wilson interval, we first need to remember a key fact about statistical inference: hypothesis testing and confidence intervals are two sides of the same coin. We can use a test to create a confidence interval, and vice-versa. In case you’re feeling a bit rusty on this point, let me begin by refreshing your memory with the simplest possible example. If this is old hat to you, skip ahead to the next section.</p>
+<section id="tests-and-cis-two-sides-of-the-same-coin" class="level1">
+<h1>Tests and CIs – Two Sides of the Same Coin</h1>
+<p>Suppose that we observe a random sample <span class="math inline">\(X_1, \dots, X_n\)</span> from a normal population with unknown mean <span class="math inline">\(\mu\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. Under these assumptions, the sample mean <span class="math inline">\(\bar{X}_n \equiv \left(\frac{1}{n} \sum_{i=1}^n X_i\right)\)</span> follows a <span class="math inline">\(N(\mu, \sigma^2/n)\)</span> distribution. Centering and standardizing, <span class="math display">\[ \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \sim N(0,1).\]</span> Now, suppose we want to test <span class="math inline">\(H_0\colon \mu = \mu_0\)</span> against the two-sided alternative <span class="math inline">\(H_1\colon \mu \neq \mu_0\)</span> at the 5% significance level. If <span class="math inline">\(\mu = \mu_0\)</span>, then the test statistic <span class="math display">\[T_n \equiv \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}}\]</span> follows a standard normal distribution. If <span class="math inline">\(\mu \neq \mu_0\)</span>, then <span class="math inline">\(T_n\)</span> does not follow a standard normal distribution. To carry out the test, we reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n|\)</span> is greater than <span class="math inline">\(1.96\)</span>, the <span class="math inline">\((1 - \alpha/2)\)</span> quantile of a standard normal distribution for <span class="math inline">\(\alpha = 0.05\)</span>. To put it another way, we <em>fail to reject</em> <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n| \leq 1.96\)</span>. So for what values of <span class="math inline">\(\mu_0\)</span> will we fail to reject? By the definition of absolute value and the definition of <span class="math inline">\(T_n\)</span> from above, <span class="math inline">\(|T_n| \leq 1.96\)</span> is equivalent to <span class="math display">\[
+- 1.96 \leq \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}} \leq 1.96.
+\]</span> Re-arranging, this in turn is equivalent to <span class="math display">\[
+\bar{X}_n - 1.96 \times \frac{\sigma}{\sqrt{n}} \leq \mu_0 \leq \bar{X}_n + 1.96 \times \frac{\sigma}{\sqrt{n}}.
+\]</span> This tells us that the values of <span class="math inline">\(\mu_0\)</span> we will <em>fail to reject</em> are precisely those that lie in the interval <span class="math inline">\(\bar{X} \pm 1.96 \times \sigma/\sqrt{n}\)</span>. Does this look familiar? It should: it’s the usual 95% confidence interval for the mean of a normal population with known variance. The 95% confidence interval corresponds exactly to the set of values <span class="math inline">\(\mu_0\)</span> that we <em>fail to reject</em> at the 5% level.</p>
+<p>This example is a special case a more general result. If you give me a <span class="math inline">\((1 - \alpha)\times 100\%\)</span> confidence interval for a parameter <span class="math inline">\(\theta\)</span>, I can use it to test <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> against <span class="math inline">\(H_1 \colon \theta \neq \theta_0\)</span>. All I have to do is check whether <span class="math inline">\(\theta_0\)</span> lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> with significance level <span class="math inline">\(\alpha\)</span>, I can use it to construct a <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(\theta\)</span>. All I have to do is collect the values of <span class="math inline">\(\theta_0\)</span> that are <em>not rejected</em>. This procedure is called <em>inverting a test</em>.</p>
+</section>
+<section id="how-to-confuse-your-introductory-statistics-students" class="level1">
+<h1>How to Confuse Your Introductory Statistics Students</h1>
+<p>Around the same time as we teach students the duality between testing and confidence intervals–you can use a confidence interval to carry out a test or a test to construct a confidence interval–we throw a wrench into the works. The most commonly-presented test for a population proportion <span class="math inline">\(p\)</span> does <em>not</em> coincide with the most commonly-presented confidence interval for <span class="math inline">\(p\)</span>. To quote from page 355 of <a href="https://imai.fas.harvard.edu/">Kosuke Imai’s</a> fantastic textbook <a href="https://press.princeton.edu/books/hardcover/9780691167039/quantitative-social-science">Quantitative Social Science: An Introduction</a></p>
+<blockquote class="blockquote">
+<p>the standard error used for confidence intervals is different from the standard error used for hypothesis testing. This is because the latter standard error is derived under the null hypothesis … whereas the standard error for confidence intervals is computed using the estimated proportion.</p>
+</blockquote>
+<p>Let’s translate this into mathematics. Suppose that <span class="math inline">\(X_1, ..., X_n \sim \text{iid Bernoulli}(p)\)</span> and let <span class="math inline">\(\widehat{p} \equiv (\frac{1}{n} \sum_{i=1}^n X_i)\)</span>. The two standard errors that Imai describes are <span class="math display">\[
+\text{SE}_0 \equiv \sqrt{\frac{p_0(1 - p_0)}{n}} \quad \text{versus} \quad
+\widehat{\text{SE}} \equiv \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n}}.
+\]</span> Following the advice of our introductory textbook, we test <span class="math inline">\(H_0\colon p = p_0\)</span> against <span class="math inline">\(H_1\colon p \neq p_0\)</span> at the <span class="math inline">\(5\%\)</span> level by checking whether <span class="math inline">\(|(\widehat{p} - p_0) / \text{SE}_0|\)</span> exceeds <span class="math inline">\(1.96\)</span>. This is called the <em>score test</em> for a proportion. Again following the advice of our introductory textbook, we report <span class="math inline">\(\widehat{p} \pm 1.96 \times \widehat{\text{SE}}\)</span> as our 95% confidence interval for <span class="math inline">\(p\)</span>. As you may recall from my <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">earlier post</a>, this is the so-called <em>Wald confidence interval</em> for <span class="math inline">\(p\)</span>. Because the two standard error formulas in general disagree, the relationship between tests and confidence intervals breaks down.</p>
+<p>To make this more concrete, let’s plug in some numbers. Suppose that <span class="math inline">\(n = 25\)</span> and our observed sample contains 5 ones and 20 zeros. Then <span class="math inline">\(\widehat{p} = 0.2\)</span> and we can calculate <span class="math inline">\(\widehat{\text{SE}}\)</span> and the Wald confidence interval as follows</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p_hat <span class="ot">&lt;-</span> n1 <span class="sc">/</span> n</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>SE_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>p_hat <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">*</span> SE_hat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04320288 0.35679712</code></pre>
+</div>
+</div>
+<p>The value 0.07 is well within this interval. This suggests that we should <em>fail to reject</em> <span class="math inline">\(H_0\colon p = 0.07\)</span> against the two-sided alternative. But when we compute the score test statistic we obtain a value well above 1.96, so that <span class="math inline">\(H_0\colon p = 0.07\)</span> is soundly rejected:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fl">0.07</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>SE0 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p0) <span class="sc">/</span> n)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abs</span>((p_hat <span class="sc">-</span> p0) <span class="sc">/</span> SE0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.547551</code></pre>
+</div>
+</div>
+<p>The test says reject <span class="math inline">\(H_0\colon p = 0.07\)</span> and the confidence interval says don’t. Upon encountering this example, your students decide that statistics is a tangled mess of contradictions, despair of ever making sense of it, and resign themselves to simply memorizing the requisite formulas for the exam.</p>
+</section>
+<section id="should-we-teach-the-wald-test-instead" class="level1">
+<h1>Should we teach the Wald test instead?</h1>
+<p>How can we dig our way out of this mess? One idea is to <em>use a different test</em>, one that agrees with the Wald confidence interval. If we had used <span class="math inline">\(\widehat{\text{SE}}\)</span> rather than <span class="math inline">\(\text{SE}_0\)</span> to test <span class="math inline">\(H_0\colon p = 0.07\)</span> above, our test statistic would have been</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">abs</span>((p_hat <span class="sc">-</span> p0) <span class="sc">/</span> SE_hat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.625</code></pre>
+</div>
+</div>
+<p>which is clearly less than 1.96. Thus we would fail to reject <span class="math inline">\(H_0\colon p = 0.07\)</span> exactly as the Wald confidence interval instructed us above. This procedure is called the <em>Wald test</em> for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">the Wald confidence interval is terrible and you should never use it</a>. Because the Wald test is equivalent to checking whether <span class="math inline">\(p_0\)</span> lies inside the Wald confidence interval, it inherits all of the latter’s defects.</p>
+<p>Indeed, compared to the score test, the Wald test is a disaster, as I’ll now show. Suppose we carry out a 5% test. If the null is true, we should reject it 5% of the time. Because the Wald and Score tests are both based on an approximation provided by the <a href="../../post/thirty-isn-t-the-magic-number/">central limit theorem</a>, we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5%. Nevertheless, we’d expect them to at least be <em>fairly close</em> to the nominal value of 5%. The following plot shows the <em>actual</em> type I error rates of the score and Wald tests, over a range of values for the true population proportion <span class="math inline">\(p\)</span> with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5%.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The score test isn’t perfect: if <span class="math inline">\(p\)</span> is extremely close to zero or one, its actual type I error rate can be appreciably higher than its nominal type I error rate: as much as 10% compared to 5% when <span class="math inline">\(n = 25\)</span>. But in general, its performance is good. In contrast, the Wald test is absolutely terrible: its nominal type I error rate is systematically higher than 5% even when <span class="math inline">\(n\)</span> is not especially small and <span class="math inline">\(p\)</span> is not especially close to zero or one.</p>
+<p>Granted, teaching the Wald test alongside the Wald interval would reduce confusion in introductory statistics courses. But it would also equip students with lousy tools for real-world inference. There is a better way: rather than teaching the <em>test</em> that corresponds to the Wald interval, we could teach the <em>confidence interval</em> that corresponds to the score test.</p>
+</section>
+<section id="inverting-the-score-test" class="level1">
+<h1>Inverting the Score Test</h1>
+<p>Suppose we collect all values <span class="math inline">\(p_0\)</span> that the score test does <em>not reject</em> at the 5% level. If the score test is working well–if its nominal type I error rate is close to 5%–the resulting set of values <span class="math inline">\(p_0\)</span> will be an approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(p\)</span>. Why is this so? Suppose that <span class="math inline">\(p_0\)</span> is the true population proportion. Then an interval constructed in this way will cover <span class="math inline">\(p_0\)</span> <em>precisely when</em> the score test does not reject <span class="math inline">\(H_0\colon p = p_0\)</span>. This occurs with probability <span class="math inline">\((1 - \alpha)\)</span>. Because the score test is much more accurate than the Wald test, the confidence interval that we obtain by inverting it way will be much more accurate than the Wald interval. This interval is called the <em>score interval</em> or the <em>Wilson interval</em>.</p>
+<p>So let’s do it: let’s <em>invert</em> the score test. Our goal is to find all values <span class="math inline">\(p_0\)</span> such that <span class="math inline">\(|(\widehat{p} - p_0)/\text{SE}_0|\leq c\)</span> where <span class="math inline">\(c\)</span> is the normal critical value for a two-sided test with significance level <span class="math inline">\(\alpha\)</span>. Squaring both sides of the inequality and substituting the definition of <span class="math inline">\(\text{SE}_0\)</span> from above gives <span class="math display">\[
+(\widehat{p} - p_0)^2 \leq c^2 \left[ \frac{p_0(1 - p_0)}{n}\right].
+\]</span> Multiplying both sides of the inequality by <span class="math inline">\(n\)</span>, expanding, and re-arranging leaves us with a quadratic inequality in <span class="math inline">\(p_0\)</span>, namely <span class="math display">\[
+(n + c^2) p_0^2 - (2n\widehat{p} + c^2) p_0 + n\widehat{p}^2 \leq 0.
+\]</span> Remember: we are trying to find the values of <span class="math inline">\(p_0\)</span> that satisfy the inequality. The terms <span class="math inline">\((n + c^2)\)</span> along with <span class="math inline">\((2n\widehat{p})\)</span> and <span class="math inline">\(n\widehat{p}^2\)</span> are <em>constants</em>. Once we choose <span class="math inline">\(\alpha\)</span>, the critical value <span class="math inline">\(c\)</span> is known. Once we observe the data, <span class="math inline">\(n\)</span> and <span class="math inline">\(\widehat{p}\)</span> are known. Since <span class="math inline">\((n + c^2) &gt; 0\)</span>, the left-hand side of the inequality is a parabola in <span class="math inline">\(p_0\)</span> that opens <em>upwards</em>. This means that the values of <span class="math inline">\(p_0\)</span> that satisfy the inequality must lie <em>between</em> the roots of the quadratic equation <span class="math display">\[
+(n + c^2) p_0^2 - (2n\widehat{p} + c^2) p_0 + n\widehat{p}^2 = 0.
+\]</span> By the quadratic formula, these roots are <span class="math display">\[
+p_0 = \frac{(2 n\widehat{p} + c^2) \pm \sqrt{4 c^2 n \widehat{p}(1 - \widehat{p}) + c^4}}{2(n + c^2)}.
+\]</span> Factoring <span class="math inline">\(2n\)</span> out of the numerator and denominator of the right-hand side and simplifying, we can re-write this as <span class="math display">\[
+\begin{aligned}
+p_0  &amp;= \frac{1}{2\left(n + \frac{n c^2}{n}\right)}\left\{\left(2n\widehat{p} + \frac{2n c^2}{2n}\right) \pm \sqrt{4 n^2c^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n}\right] + 4n^2c^2\left[\frac{c^2}{4n^2}\right] }\right\} \\ \\
+p_0  &amp;= \frac{1}{2n\left(1 + \frac{ c^2}{n}\right)}\left\{2n\left(\widehat{p} + \frac{c^2}{2n}\right) \pm 2nc\sqrt{ \frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}} \right\}
+\\ \\
+p_0  &amp;= \left( \frac{n}{n + c^2}\right)\left\{\left(\widehat{p} + \frac{c^2}{2n}\right) \pm c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2} }\right\}\\ \\
+\end{aligned}
+\]</span> using our definition of <span class="math inline">\(\widehat{\text{SE}}\)</span> from above. And there you have it: the right-hand side of the final equality is the <span class="math inline">\((1 - \alpha)\times 100\%\)</span> Wilson confidence interval for a proportion, where <span class="math inline">\(c = \texttt{qnorm}(1 - \alpha/2)\)</span> is the normal critical value for a two-sided test with significance level <span class="math inline">\(\alpha\)</span>, and <span class="math inline">\(\widehat{\text{SE}}^2 = \widehat{p}(1 - \widehat{p})/n\)</span>.</p>
+<p>Compared to the Wald interval, <span class="math inline">\(\widehat{p} \pm c \times \widehat{\text{SE}}\)</span>, the Wilson interval is certainly more complicated. But it is constructed from exactly the same information: the sample proportion <span class="math inline">\(\widehat{p}\)</span>, two-sided critical value <span class="math inline">\(c\)</span> and sample size <span class="math inline">\(n\)</span>. Computing it by hand is tedious, but programming it in R is a snap:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>get_wilson_CI <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">alpha =</span> <span class="fl">0.05</span>) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the Wilson (aka Score) confidence interval for a popn. proportion</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># x        vector of data (zeros and ones)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># alpha    1 - (confidence level)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  p_hat <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  SE_hat_sq <span class="ot">&lt;-</span> p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  crit <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  omega <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">+</span> crit<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  A <span class="ot">&lt;-</span> p_hat <span class="sc">+</span> crit<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> n)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  B <span class="ot">&lt;-</span> crit <span class="sc">*</span> <span class="fu">sqrt</span>(SE_hat_sq <span class="sc">+</span> crit<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="dv">4</span> <span class="sc">*</span> n<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  CI <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'lower'</span> <span class="ot">=</span> omega <span class="sc">*</span> (A <span class="sc">-</span> B), </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">'upper'</span> <span class="ot">=</span> omega <span class="sc">*</span> (A <span class="sc">+</span> B))</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(CI)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Notice that this is only slightly more complicated to implement than the Wald confidence interval:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>get_wald_CI <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">alpha =</span> <span class="fl">0.05</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute the Wald confidence interval for a popn. proportion</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># x        vector of data (zeros and ones)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># alpha    1 - (confidence level)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#-----------------------------------------------------------------------------</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  p_hat <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  SE_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  ME <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">*</span> SE_hat</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  CI <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'lower'</span> <span class="ot">=</span> p_hat <span class="sc">-</span> ME, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>          <span class="st">'upper'</span> <span class="ot">=</span> p_hat <span class="sc">+</span> ME)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(CI)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>With a computer rather than pen and paper there’s very little cost using the more accurate interval. Indeed, the built-in R function <code>prop.test()</code> reports the Wilson confidence interval rather than the Wald interval:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">20</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="fu">sum</span>(x), <span class="fu">length</span>(x), <span class="at">correct =</span> <span class="cn">FALSE</span>) <span class="co"># no continuity correction</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    1-sample proportions test without continuity correction
+
+data:  sum(x) out of length(x), null probability 0.5
+X-squared = 0.2, df = 1, p-value = 0.6547
+alternative hypothesis: true p is not equal to 0.5
+95 percent confidence interval:
+ 0.3420853 0.7418021
+sample estimates:
+   p 
+0.55 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_wilson_CI</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    lower     upper 
+0.3420853 0.7418021 </code></pre>
+</div>
+</div>
+</section>
+<section id="understanding-the-wilson-interval" class="level1">
+<h1>Understanding the Wilson Interval</h1>
+<p>You could stop reading here and simply use the code from above to construct the Wilson interval. But computing is only half the battle: we want to <em>understand</em> our measures of uncertainty. While the Wilson interval may look somewhat strange, there’s actually some very simple intuition behind it. It amounts to a <em>compromise</em> between the sample proportion <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\(1/2\)</span>.</p>
+<p>The Wald estimator is centered around <span class="math inline">\(\widehat{p}\)</span>, but the Wilson interval is not. Manipulating our expression from the previous section, we find that the midpoint of the Wilson interval is <span class="math display">\[
+\begin{aligned}
+\widetilde{p} &amp;\equiv \left(\frac{n}{n + c^2} \right)\left(\widehat{p} + \frac{c^2}{2n}\right) =  \frac{n \widehat{p} + c^2/2}{n + c^2} \\
+&amp;= \left( \frac{n}{n + c^2}\right)\widehat{p} +  \left( \frac{c^2}{n + c^2}\right) \frac{1}{2}\\
+&amp;= \omega \widehat{p} + (1 - \omega) \frac{1}{2}
+\end{aligned}
+\]</span> where the weight <span class="math inline">\(\omega \equiv n / (n + c^2)\)</span> is always strictly between zero and one. In other words, the center of the Wilson interval lies <em>between</em> <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\(1/2\)</span>. In effect, <span class="math inline">\(\widetilde{p}\)</span> pulls us <em>away</em> from extreme values of <span class="math inline">\(p\)</span> and <em>towards</em> the middle of the range of possible values for a population proportion. For a fixed confidence level, the smaller the sample size, the more that we are pulled towards <span class="math inline">\(1/2\)</span>. For a fixed sample size, the higher the confidence level, the more that we are pulled towards <span class="math inline">\(1/2\)</span>.</p>
+<p>Continuing to use the shorthand <span class="math inline">\(\omega \equiv n /(n + c^2)\)</span> and <span class="math inline">\(\widetilde{p} \equiv \omega \widehat{p} + (1 - \omega)/2\)</span>, we can write the Wilson interval as <span class="math display">\[
+\widetilde{p} \pm c \times \widetilde{\text{SE}}, \quad \widetilde{\text{SE}} \equiv \omega \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span> So what can we say about <span class="math inline">\(\widetilde{\text{SE}}\)</span>? It turns out that the value <span class="math inline">\(1/2\)</span> is lurking behind the scenes here as well. The easiest way to see this is by <em>squaring</em> <span class="math inline">\(\widehat{\text{SE}}\)</span> to obtain <span class="math display">\[
+\begin{aligned}
+\widetilde{\text{SE}}^2 &amp;= \omega^2\left(\widehat{\text{SE}}^2 + \frac{c^2}{4n^2} \right) = \left(\frac{n}{n + c^2}\right)^2 \left[\frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}\right]\\
+&amp;= \frac{1}{n + c^2} \left[\frac{n}{n + c^2} \cdot \widehat{p}(1 - \widehat{p}) + \frac{c^2}{n + c^2}\cdot \frac{1}{4}\right]\\
+&amp;= \frac{1}{\widetilde{n}} \left[\omega \widehat{p}(1 - \widehat{p}) + (1 - \omega) \frac{1}{2} \cdot \frac{1}{2}\right]
+\end{aligned}
+\]</span> defining <span class="math inline">\(\widetilde{n} = n + c^2\)</span>. To make sense of this result, recall that <span class="math inline">\(\widehat{\text{SE}}^2\)</span>, the quantity that is used to construct the Wald interval, is a ratio of two terms: <span class="math inline">\(\widehat{p}(1 - \widehat{p})\)</span> is the usual estimate of the <em>population variance</em> based on iid samples from a Bernoulli distribution and <span class="math inline">\(n\)</span> is the sample size. Similarly, <span class="math inline">\(\widetilde{\text{SE}}^2\)</span> is a ratio of two terms. The first is a <em>weighted average</em> of the population variance estimator and <span class="math inline">\(1/4\)</span>, the population variance under the assumption that <span class="math inline">\(p = 1/2\)</span>. Once again, the Wilson interval “pulls” away from extremes. In this case it pulls away from extreme estimates of the population variance towards the <em>largest possible</em> population variance: <span class="math inline">\(1/4\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> We divide this by the sample size <em>augmented</em> by <span class="math inline">\(c^2\)</span>, a strictly positive quantity that depends on the confidence level.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>To make this more concrete, Consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.^[As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%<span class="math inline">\(.] Using this approximation we find that\)</span>$ + = <span class="math display">\[
+which is *precisely* the midpoint of the [Agresti-Coull confidence interval](/post/don-t-use-the-textbook-ci-for-a-proportion/). And while
+\]</span> ^2 $$ is slightly different from the quantity that appears in the Agresti-Coullinterval, <span class="math inline">\(\widetilde{p}(1 - \widetilde{p})/\widetilde{n}\)</span>, the two expressions give very similar results in practice. The Agresti-Coullinterval is nothing more than a rough-and-ready approximation to the 95% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coullinterval with a confidence level that differs from 95%: just construct the Wilson interval!</p>
+</section>
+<section id="comparing-the-wald-and-wilson-intervals" class="level1">
+<h1>Comparing the Wald and Wilson Intervals</h1>
+<p>Another way of understanding the Wilson interval is to ask how it will differ from the Wald interval when computed from the <em>same dataset</em>. In large samples, these two intervals will be quite similar. This is because <span class="math inline">\(\omega \rightarrow 1\)</span> as <span class="math inline">\(n \rightarrow \infty\)</span>. Using the expressions from the preceding section, this implies that <span class="math inline">\(\widehat{p} \approx \widetilde{p}\)</span> and <span class="math inline">\(\widehat{\text{SE}} \approx \widetilde{\text{SE}}\)</span> for very large sample sizes. For smaller values of <span class="math inline">\(n\)</span>, however, the two intervals can differ markedly. To make a long story short, the Wilson interval gives a much more reasonable description of our uncertainty about <span class="math inline">\(p\)</span> for any sample size. Wilson, unlike Wald, is always an <em>interval</em>; it cannot collapse to a single point. Moreover, unlike the Wald interval, the Wilson interval is always bounded below by zero and above by one.</p>
+<section id="wald-can-collapse-to-a-single-point-wilson-cant" class="level2">
+<h2 class="anchored" data-anchor-id="wald-can-collapse-to-a-single-point-wilson-cant">Wald Can Collapse to a Single Point; Wilson Can’t</h2>
+<p>A strange property of the Wald interval is that its width can be zero. Suppose that <span class="math inline">\(\widehat{p} = 0\)</span>, i.e.&nbsp;that we observe zero successes. In this case, regardless of sample size and regardless of confidence level, the Wald interval only contains a single point: zero <span class="math display">\[
+\widehat{p} \pm c \sqrt{\widehat{p}(1 - \widehat{p})/n} = 0 \pm c \times \sqrt{0(1 - 0)/n} = \{0 \}.
+\]</span> This is clearly insane. If we observe zero successes in a sample of ten observations, it is reasonable to suspect that <span class="math inline">\(p\)</span> is small, but ridiculous to conclude that it must be zero. We encounter a similarly absurd conclusion if <span class="math inline">\(\widehat{p} = 1\)</span>. In contrast, the Wilson interval can never collapse to a single point. Using the expression from the preceding section, we see that its width is given by <span class="math display">\[
+2c \left(\frac{n}{n + c^2}\right) \times \sqrt{\frac{\widehat{p}(1 - \widehat{p})}{n} + \frac{c^2}{4n^2}}
+\]</span> The first factor in this product is strictly positive. And even when <span class="math inline">\(\widehat{p}\)</span> equals zero or one, the second factor is also positive: the additive term <span class="math inline">\(c^2/(4n^2)\)</span> inside the square root ensures this. For <span class="math inline">\(\widehat{p}\)</span> equal to zero or one, the width of the Wilson interval becomes <span class="math display">\[
+2c \left(\frac{n}{n + c^2}\right) \times \sqrt{\frac{c^2}{4n^2}} = \left(\frac{c^2}{n + c^2}\right) = (1 - \omega).
+\]</span> Compared to the Wald interval, this is quite reasonable. A sample proportion of zero (or one) conveys much more information when <span class="math inline">\(n\)</span> is large than when <span class="math inline">\(n\)</span> is small. Accordingly, the Wilson interval is shorter for large values of <span class="math inline">\(n\)</span>. Similarly, higher confidence levels should demand wider intervals at a fixed sample size. The Wilson interval, unlike the Wald, retains this property even when <span class="math inline">\(\widehat{p}\)</span> equals zero or one.</p>
+</section>
+<section id="wald-can-include-impossible-values-wilson-cant" class="level2">
+<h2 class="anchored" data-anchor-id="wald-can-include-impossible-values-wilson-cant">Wald Can Include Impossible Values; Wilson Can’t</h2>
+<p>A population proportion necessarily lies in the interval <span class="math inline">\([0,1]\)</span>, so it would make sense that any confidence interval for <span class="math inline">\(p\)</span> should as well. An awkward fact about the Wald interval is that it can extend <em>beyond</em> zero or one. In contrast, the Wilson interval <em>always</em> lies within <span class="math inline">\([0,1]\)</span>. For example, suppose that we observe two successes in a sample of size 10. Then the 95% Wald confidence interval is approximately [-0.05, 0.45] while the corresponding Wilson interval is [0.06, 0.51]. Similarly, if we observe eight successes in ten trials, the 95% Wald interval is approximately [0.55, 1.05] while the Wilson interval is [0.49, 0.94].</p>
+<p>With a bit of algebra we can show that the Wald interval will include negative values whenever <span class="math inline">\(\widehat{p}\)</span> is less than <span class="math inline">\((1 - \omega) \equiv c^2/(n + c^2)\)</span>. Why is this so? The lower confidence limit of the Wald interval is negative if and only if <span class="math inline">\(\widehat{p} &lt; c \times \widehat{\text{SE}}\)</span>. Substituting the definition of <span class="math inline">\(\widehat{\text{SE}}\)</span> and re-arranging, this is equivalent to <span class="math display">\[
+\begin{aligned}
+\widehat{p} &amp;&lt; c \sqrt{\widehat{p}(1 - \widehat{p})/n}\\
+n\widehat{p}^2 &amp;&lt; c^2(\widehat{p} - \widehat{p}^2)\\
+0 &amp;&gt; \widehat{p}\left[(n + c^2)\widehat{p} - c^2\right]
+\end{aligned}
+\]</span> The right-hand side of the preceding inequality is a quadratic function of <span class="math inline">\(\widehat{p}\)</span> that opens upwards. Its roots are <span class="math inline">\(\widehat{p} = 0\)</span> and <span class="math inline">\(\widehat{p} = c^2/(n + c^2) = (1 - \omega)\)</span>. Thus, whenever <span class="math inline">\(\widehat{p} &lt; (1 - \omega)\)</span>, the Wald interval will include negative values of <span class="math inline">\(p\)</span>. A nearly identical argument, exploiting symmetry, shows that the upper confidence limit of the Wald interval will extend beyond one whenever <span class="math inline">\(\widehat{p} &gt; \omega \equiv n/(n + c^2)\)</span>. Putting these two results together, the Wald interval lies within <span class="math inline">\([0,1]\)</span> if and only if <span class="math inline">\((1 - \omega) &lt; \widehat{p} &lt; \omega\)</span>. This is equivalent to <span class="math display">\[
+\begin{aligned}
+n(1 - \omega) &amp;&lt; \sum_{i=1}^n X_i &lt; n \omega\\
+\left\lceil n\left(\frac{c^2}{n + c^2} \right)\right\rceil &amp;\leq \sum_{i=1}^n X_i \leq \left\lfloor n \left( \frac{n}{n + c^2}\right) \right\rfloor
+\end{aligned}
+\]</span> where <span class="math inline">\(\lceil \cdot \rceil\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceiling</a> function and <span class="math inline">\(\lfloor \cdot \rfloor\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> function.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Using this inequality, we can calculate the minimum and maximum number of successes in <span class="math inline">\(n\)</span> trials for which a 95% Wald interval will lie inside the range <span class="math inline">\([0,1]\)</span> as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">20</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>omega <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="st">"n"</span> <span class="ot">=</span> n,  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">"min_success"</span> <span class="ot">=</span> <span class="fu">ceiling</span>(n <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> omega)),  </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">"max_success"</span> <span class="ot">=</span> <span class="fu">floor</span>(n <span class="sc">*</span> omega))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       n min_success max_success
+ [1,] 10           3           7
+ [2,] 11           3           8
+ [3,] 12           3           9
+ [4,] 13           3          10
+ [5,] 14           4          10
+ [6,] 15           4          11
+ [7,] 16           4          12
+ [8,] 17           4          13
+ [9,] 18           4          14
+[10,] 19           4          15
+[11,] 20           4          16</code></pre>
+</div>
+</div>
+<p>This agrees with our calculations for <span class="math inline">\(n = 10\)</span> from above. With a sample size of ten, any number of successes <em>outside</em> the range <span class="math inline">\(\{3, ..., 7\}\)</span> will lead to a 95% Wald interval that extends beyond zero or one. With a sample size of twenty, this range becomes <span class="math inline">\(\{4, ..., 16\}\)</span>.</p>
+<p>Finally, we’ll show that the Wilson interval can <em>never</em> extend beyond zero or one. There’s nothing more than algebra to follow, but there’s a fair bit of it. If you feel that we’ve factorized too many quadratic equations already, you have my express permission to skip ahead. Suppose by way of contradiction that the lower confidence limit of the Wilson confidence interval were negative. The only way this could occur is if <span class="math inline">\(\widetilde{p} - \widetilde{\text{SE}} &lt; 0\)</span>, i.e.&nbsp;if <span class="math display">\[
+\omega\left\{\left(\widehat{p} + \frac{c^2}{2n}\right) - c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2}} \,\,\right\} &lt; 0.
+\]</span> But since <span class="math inline">\(\omega\)</span> is between zero and one, this is equivalent to <span class="math display">\[
+\left(\widehat{p} + \frac{c^2}{2n}\right) &lt; c\sqrt{ \widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span> We will show that this leads to a contradiction, proving that lower confidence limit of the Wilson interval <em>cannot be negative</em>. To begin, factorize each side as follows <span class="math display">\[
+\frac{1}{2n}\left(2n\widehat{p} + c^2\right) &lt; \frac{c}{2n}\sqrt{ 4n^2\widehat{\text{SE}}^2 + c^2}.
+\]</span> Cancelling the common factor of <span class="math inline">\(1/(2n)\)</span> from both sides and squaring, we obtain <span class="math display">\[
+\left(2n\widehat{p} + c^2\right)^2 &lt; c^2\left(4n^2\widehat{\text{SE}}^2 + c^2\right).
+\]</span> Expanding, subtracting <span class="math inline">\(c^4\)</span> from both sides, and dividing through by <span class="math inline">\(4n\)</span> gives <span class="math display">\[
+n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}(1 - \widehat{p}) = \widehat{p}c^2 - c^2 \widehat{p}^2
+\]</span> by the definition of <span class="math inline">\(\widehat{\text{SE}}\)</span>. Subtracting <span class="math inline">\(\widehat{p}c^2\)</span> from both sides and rearranging, this is equivalent to <span class="math inline">\(\widehat{p}^2(n + c^2) &lt; 0\)</span>. Since the left-hand side cannot be negative, we have a contradiction.</p>
+<p>A similar argument shows that the <em>upper</em> confidence limit of the Wilson interval cannot exceed one. Suppose by way of contradiction that it did. This can only occur if <span class="math inline">\(\widetilde{p} + \widetilde{SE} &gt; 1\)</span>, i.e.&nbsp;if <span class="math display">\[
+\left(\widehat{p} + \frac{c^2}{2n}\right) - \frac{1}{\omega} &gt; c \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span> By the definition of <span class="math inline">\(\omega\)</span> from above, the left-hand side of this inequality simplifies to <span class="math display">\[
+-\frac{1}{2n} \left[2n(1 - \widehat{p}) + c^2\right]
+\]</span> so the original inequality is equivalent to <span class="math display">\[
+\frac{1}{2n} \left[2n(1 - \widehat{p}) + c^2\right] &lt; c \sqrt{\widehat{\text{SE}}^2 + \frac{c^2}{4n^2}}.
+\]</span> Now, if we introduce the change of variables <span class="math inline">\(\widehat{q} \equiv 1 - \widehat{p}\)</span>, we obtain <em>exactly</em> the same inequality as we did above when studying the lower confidence limit, only with <span class="math inline">\(\widehat{q}\)</span> in place of <span class="math inline">\(\widehat{p}\)</span>. This is because <span class="math inline">\(\widehat{\text{SE}}^2\)</span> is <em>symmetric</em> in <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\((1 - \widehat{p})\)</span>. Since we’ve reduced our problem to one we’ve already solved, we’re done!</p>
+</section>
+</section>
+<section id="more-to-come-on-inference-for-a-proportion" class="level1">
+<h1>More to Come on Inference for a Proportion!</h1>
+<p>This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore <em>yet another</em> approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical “trinity” of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">never use the Wald confidence interval for a proportion</a>.</p>
+</section>
+<section id="appendix-r-code" class="level1">
+<h1>Appendix: R Code</h1>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>get_test_size <span class="ot">&lt;-</span> <span class="cf">function</span>(p_true, n, test, <span class="at">alpha =</span> <span class="fl">0.05</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the size of a hypothesis test for a population proportion  </span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   p_true    true population proportion</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   n         sample size</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   test      function of p_hat, n, and p_0 that computes test stat </span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   alpha     nominal size of the test</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  p_x <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(x, n, p_true)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  test_stats <span class="ot">&lt;-</span> <span class="fu">test</span>(<span class="at">p_hat =</span> x <span class="sc">/</span> n, <span class="at">sample_size =</span> n, <span class="at">p0 =</span> p_true)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  reject <span class="ot">&lt;-</span> <span class="fu">abs</span>(test_stats) <span class="sc">&gt;</span> <span class="fu">qnorm</span>(<span class="dv">1</span> <span class="sc">-</span> alpha <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(reject <span class="sc">*</span> p_x)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>get_score_test_stat <span class="ot">&lt;-</span> <span class="cf">function</span>(p_hat, sample_size, p0) {</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  SE_0 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p0) <span class="sc">/</span> sample_size)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>((p_hat <span class="sc">-</span> p0) <span class="sc">/</span> SE_0)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>get_wald_test_stat <span class="ot">&lt;-</span> <span class="cf">function</span>(p_hat, sample_size, p0) {</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  SE_hat <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> sample_size)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>((p_hat <span class="sc">-</span> p0) <span class="sc">/</span> SE_hat)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>plot_size <span class="ot">&lt;-</span> <span class="cf">function</span>(n, test, <span class="at">nominal =</span> <span class="fl">0.05</span>, <span class="at">title =</span> <span class="st">''</span>) {</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  p_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.01</span>, <span class="at">to =</span> <span class="fl">0.99</span>, <span class="at">by =</span> <span class="fl">0.001</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  size <span class="ot">&lt;-</span> <span class="fu">sapply</span>(p_seq, <span class="cf">function</span>(p) <span class="fu">get_test_size</span>(p, n, test, nominal))</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(p_seq, size, <span class="at">type =</span> <span class="st">'l'</span>, <span class="at">xlab =</span> <span class="st">'p'</span>, </span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">'Type I Error Rate'</span>, </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> title)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="fl">0.5</span>, <span class="fl">0.98</span> <span class="sc">*</span> <span class="fu">max</span>(size), <span class="fu">bquote</span>(n <span class="sc">==</span> .(n)))</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> nominal, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">'red'</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>plot_size_comparison <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">nominal =</span> <span class="fl">0.05</span>) {</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_size</span>(n, get_score_test_stat, nominal, <span class="at">title =</span> <span class="st">'Score Test'</span>)</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_size</span>(n, get_wald_test_stat, nominal, <span class="at">title =</span> <span class="st">'Wald Test'</span>)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For the R code used to generate these plots, see the Appendix at the end of this post.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.econometrics\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
+
+
+
+
+</body></html>
