@@ -13,7 +13,12 @@ tags:
 In econometrics it's absolutely crucial to keep track of which things are *dependent* and which are *independent*. To make this as confusing as possible for students, a typical introductory econometrics course moves back and forth between different notions of dependence, stopping occasionally to mention that they're not equivalent but never fully explaining why, on the premise that "you've certainly already learned this in your introductory probability and statistics course." I remember finding this extremely frustrating as a student, but only recently managed to translate this frustration into meaningful changes in my own teaching.^[It turns out that teaching well is extremely hard. I am incredibly grateful to those intrepid souls who bravely raise their hand and inform me that no one in the room has any idea what I'm talking about!] Building on some of my recent teaching materials, this post is a field guide to the menagerie--or at least petting zoo--of "dependence" notions that appear regularly in econometrics. We'll examine each property on its own along with the relationships between them, using the simple examples to build your intuition. Since a picture is worth a thousand words, here's one that summarizes the entire post: 
 
 <!-- Note that the following requires the magick and pdftools R packages. These can be installed from cran.-->
-```{tikz, tikz-ex, fig.cap = "Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another.", fig.ext = 'png', echo=FALSE, fig.width=5}
+```{tikz}
+%| label: tikz-ex
+%| fig-cap: "Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another."
+%| fig-ext: png
+%| echo: false
+%| fig-width: 5
 \usetikzlibrary{arrows}
 \begin{tikzpicture}[node distance=3cm, auto,>=latex', thick, scale = 0.5]
 \node (indep) [align=center] {$X,Y$ Independent\\ $f_{XY} = f_X f_Y$};
