@@ -4,5 +4,6 @@
 Thumbs.db
 /_site/
 /.quarto/
+/.claude/
 
 **/*.quarto_ipynb
