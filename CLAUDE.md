@@ -125,7 +125,16 @@ gh run view <run-id> --log-failed   # if a run failed
 
 - **Never edit generated files** in `_site/` — they're ignored and regenerated on render
 - **Always commit `_freeze/`** when it changes — GitHub Actions needs it
-- **Internal links** should use relative paths: `/post/slug-name/`, not absolute URLs
+- **Internal links** should use site-root relative paths, never absolute URLs:
+
+| You want to link to | Markdown |
+|---|---|
+| The homepage | `[text](/)` |
+| The about page | `[text](/about/)` |
+| A specific post | `[text](/post/slug-name/)` |
+| An anchor within a post | `[text](/post/slug-name/#section-heading)` |
+
+  Why relative: survives domain changes, works in local preview, doesn't need updating if the site moves.
 - **Image/asset references** in posts should use relative paths within the post directory
 - **Never delete `.quarto/`** — it's Quarto's local cache, needed for rendering. Gitignored, safe to leave alone.
 - **Never delete `_freeze/`** — the committed cache that lets CI build without R. Only Quarto should modify this directory (via `quarto render`).
