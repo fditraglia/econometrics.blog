@@ -1,0 +1,15 @@
+---
+title: "A Makeover for econometrics.blog"
+author: Francis J. DiTraglia
+date: '2026-04-09'
+categories:
+- meta
+tags: []
+---
+
+Today [econometrics.blog](/) got a long-overdue update from [blogdown](https://yihui.org/blogdown/) to [Quarto](https://quarto.org). Thanks to [Claude Code](https://www.anthropic.com/product/claude-code), the transition was seamless: all existing links are preserved, along with the [Utterances](https://utteranc.es) comment sections.
+
+During the upgrade I also corrected an embarrassingly large number of typos across the site and added privacy-respecting site analytics using [GoatCounter](https://goatcounter.com). To find out whether econometrics has gone viral at long last, check out the [public dashboard](https://econometrics.goatcounter.com). Where possible, references to the econometrics literature now point to a paper's [IDEAS/RePEc](https://ideas.repec.org) entry, where you can find citation information, a link to the journal website, and any freely-available working paper versions.
+
+I hope you enjoy the new look. If you notice anything that's not working properly, please let me know by submitting a [GitHub issue](https://github.com/fditraglia/econometrics.blog/issues). 
+
