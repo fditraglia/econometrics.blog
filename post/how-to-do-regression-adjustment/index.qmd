@@ -114,7 +114,7 @@ Y = \alpha_0 + \alpha_1 D + \alpha_2 X + V
 $$
 where $V$ is the population linear regression error term so that, [by construction](/post/why-econometrics-is-confusing-part-1-the-error-term/), $\mathbb{E}(V) = \mathbb{E}(XV) = 0$. Notice that I've called the coefficients in this regression $\alpha$ rather than $\beta$. That's because they will *not in general coincide* with the conditional mean function from above, namely $\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX$. In particular, the regression of $Y$ on $D$ and $X$ without an interaction will *only* coincide with the true conditional mean function if $\beta_3 = 0$. 
 
-So what, if anything, can we say about $\alpha_1$ in relation to the ATE? By [Yule's Rule](https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem)^[Call it "Frisch-Waugh-Lovell" if you must, but I will continue trying to [make fetch happen](https://arxiv.org/abs/2307.00369).] we have
+So what, if anything, can we say about $\alpha_1$ in relation to the ATE? By [Yule's Rule](https://en.wikipedia.org/wiki/Frisch%E2%80%93Waugh%E2%80%93Lovell_theorem)^[Call it "Frisch-Waugh-Lovell" if you must, but I will continue trying to [make fetch happen](https://ideas.repec.org/p/arx/papers/2307.00369.html).] we have
 $$
 \alpha_1 = \frac{\text{Cov}(Y, \tilde{D})}{\text{Var}(\tilde{D})}, \quad
 D = \gamma_0 + \gamma_1 X + \tilde{D}, \quad \mathbb{E}(\tilde{D}) = \mathbb{E}(X\tilde{D}) = 0
