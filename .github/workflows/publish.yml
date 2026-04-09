@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: quarto-migration
+    branches: master
 
 name: Quarto Publish
 
