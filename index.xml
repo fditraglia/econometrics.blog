@@ -2812,7 +2812,7 @@ Coefficients:
 
 <ol>
 <li id="fn1"><p>See <a href="../../post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.↩︎</p></li>
-<li id="fn2"><p>Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://arxiv.org/abs/2307.00369">make fetch happen</a>.↩︎</p></li>
+<li id="fn2"><p>Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://ideas.repec.org/p/arx/papers/2307.00369.html">make fetch happen</a>.↩︎</p></li>
 <li id="fn3"><p>If you want the standard error of <img src="https://latex.codecogs.com/png.latex?%5Cbeta"> and not just the point estimate, then replace <img src="https://latex.codecogs.com/png.latex?Y"> with the residual from a regression of <img src="https://latex.codecogs.com/png.latex?Y"> on <img src="https://latex.codecogs.com/png.latex?X">.↩︎</p></li>
 <li id="fn4"><p>This is a nice homework exercise to test your understanding of the post!↩︎</p></li>
 <li id="fn5"><p>If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day!↩︎</p></li>
@@ -2971,7 +2971,7 @@ Coefficients:
 
 
 
-<p>As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by <a href="https://ideas.repec.org/a/ecm/emetrp/v59y1991i6p1591-99.html">Sims &amp; Uhlig (1991)</a> contrasting Bayesian and Frequentist inferences for a unit root. In the post I’ll focus on explaining and implementing the authors’ simulation design. In the reading group session (and possibly a future post) we’ll talk more about the paper’s implications for the Bayesian-Frequentist debate and relate it to more recent work by <a href="https://anorets.github.io/papers/covpriors.pdf">Mueller &amp; Norets (2016)</a>. We’ll also be joined by special guest <a href="https://web.sas.upenn.edu/schorf/">Frank Schorfheide</a> who will help guide us through the recent literature on Bayesian approaches to VARs, including <a href="https://doi.org/10.1162/REST_a_00483">Giannone et al (2015)</a> and <a href="https://doi.org/10.1080/01621459.2018.1483826">(2019)</a>. If you’re an Oxford student or staff member, you can sign up for the reading group <a href="https://edstem.org/us/join/6j2hay">here</a>. Otherwise, send me an email and I’ll add you manually.</p>
+<p>As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by <a href="https://ideas.repec.org/a/ecm/emetrp/v59y1991i6p1591-99.html">Sims &amp; Uhlig (1991)</a> contrasting Bayesian and Frequentist inferences for a unit root. In the post I’ll focus on explaining and implementing the authors’ simulation design. In the reading group session (and possibly a future post) we’ll talk more about the paper’s implications for the Bayesian-Frequentist debate and relate it to more recent work by <a href="https://ideas.repec.org/a/taf/jnlasa/v111y2016i515p1233-1241.html">Mueller &amp; Norets (2016)</a>. We’ll also be joined by special guest <a href="https://web.sas.upenn.edu/schorf/">Frank Schorfheide</a> who will help guide us through the recent literature on Bayesian approaches to VARs, including <a href="https://ideas.repec.org/a/tpr/restat/v97y2015i2p436-451.html">Giannone et al (2015)</a> and <a href="https://ideas.repec.org/a/taf/jnlasa/v114y2019i526p565-580.html">(2019)</a>. If you’re an Oxford student or staff member, you can sign up for the reading group <a href="https://edstem.org/us/join/6j2hay">here</a>. Otherwise, send me an email and I’ll add you manually.</p>
 <section id="a-simple-example" class="level2">
 <h2 class="anchored" data-anchor-id="a-simple-example">A Simple Example</h2>
 <p>To set the stage for Sims &amp; Uhlig (1991), consider the following simple example: <img src="https://latex.codecogs.com/png.latex?X_1,%20X_2,%20%5Cdots,%20X_%7B100%7D%20%5Csim%20%5Ctext%7BNormal%7D(%5Cmu,%20%5Csigma%5E2)"> where <img src="https://latex.codecogs.com/png.latex?%5Cmu"> is unknown but <img src="https://latex.codecogs.com/png.latex?%5Csigma"> is known to equal <img src="https://latex.codecogs.com/png.latex?1">. Let <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D%20=%20%5Cfrac%7B1%7D%7B100%7D%20%5Csum_%7Bi=1%7D%5E%7B100%7D%20X_i"> be the sample mean. Then <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D%20%5Cpm%200.2"> is an approximate 95% Frequentist confidence interval for <img src="https://latex.codecogs.com/png.latex?%5Cmu">. In words: among 95% of the possible datasets that we could potentially observe, the interval <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D%20%5Cpm%200.2"> will cover the true, unknown value of <img src="https://latex.codecogs.com/png.latex?%5Cmu">; in the remaining <img src="https://latex.codecogs.com/png.latex?5%5C%25"> of datasets, the interval will not cover <img src="https://latex.codecogs.com/png.latex?%5Cmu">.</p>
@@ -3180,7 +3180,7 @@ font-style: inherit;">toc</span>() <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ~0.6 seconds on my machine</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.365 sec elapsed</code></pre>
+<pre><code>0.368 sec elapsed</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -3226,7 +3226,7 @@ font-style: inherit;">toc</span>() <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ~17 seconds on my machine (1991 was a long time ago!)</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>11.175 sec elapsed</code></pre>
+<pre><code>11.287 sec elapsed</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
