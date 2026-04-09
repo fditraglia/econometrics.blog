@@ -17,7 +17,7 @@ website:
         text: About
     right:
       - icon: github
-        href: https://github.com/fditraglia
+        href: https://github.com/fditraglia/econometrics.blog
       - icon: rss
         href: index.xml
   comments:

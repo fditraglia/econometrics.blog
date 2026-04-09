@@ -3,4 +3,6 @@ title: "About"
 comments: false
 ---
 
-This is an academic blog about econometrics and statistics by [Francis J. DiTraglia](https://www.ditraglia.com), Associate Professor of Economics at the University of Oxford.
+I'm [Francis DiTraglia](https://www.ditraglia.com), an applied econometrician at the University of Oxford. As an undergraduate, I hated both my first statistics course and my first econometrics course. Now I blog about both topics in my free time.
+
+The site uses [Quarto](https://quarto.org), [Utterances](https://utteranc.es) for comments, and [GoatCounter](https://econometrics.goatcounter.com) for cookie-free analytics with a public dashboard.
