@@ -515,7 +515,7 @@
     "href": "about/index.html",
     "title": "About",
     "section": "",
-    "text": "I’m Francis DiTraglia, an applied econometrician at the University of Oxford. As an undergraduate, I hated both my first statistics course and my first econometrics course. Now I blog about both topics in my free time.\nThe site uses Quarto, Utterances for comments, and GoatCounter for cookie-free analytics with a public dashboard."
+    "text": "I’m Frank DiTraglia, an applied econometrician at the University of Oxford. As an undergraduate, I hated both my first statistics course and my first econometrics course. Now I blog about both topics in my free time.\nI built this site using Quarto, with Utterances for comments, and GoatCounter for privacy-respecting analytics. To find out whether econometrics has gone viral at long last, check out the public dashboard."
   },
   {
     "objectID": "index.html",
