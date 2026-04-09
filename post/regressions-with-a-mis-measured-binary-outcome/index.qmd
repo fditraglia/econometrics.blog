@@ -11,9 +11,9 @@ Many outcomes of interest in economics are binary.
 For example, we may want to learn how employment status $Y^*$ varies with demographics $X$, where $Y^*=1$ means "employed" and $Y^*=0$ means unemployed or not in the labor force. 
 But how do we know if someone is employed? 
 Typically we ask them, perhaps as part of a large, nationally representative survey such as the [CPS](https://www.census.gov/programs-surveys/cps.html).
-Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate [(Poterba & Summers, 1986)](https://www.jstor.org/stable/1914301).
+Researchers who study labor market dynamics have long known, however, that observed data on labor market status are often inaccurate [(Poterba & Summers, 1986)](https://ideas.repec.org/a/ecm/emetrp/v54y1986i6p1319-38.html).
 Administrative errors creep into even the most carefully-administered surveys.
-But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://www.aeaweb.org/articles?id=10.1257/jep.29.4.199). Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
+But more importantly, survey respondents do not always tell the truth, whether by mistake or deliberately, and this problem seems to have gotten worse in recent years [(Meyer et al. 2015)](https://ideas.repec.org/a/aea/jecper/v29y2015i4p199-226.html). Instead of true employment status $Y^*$ researchers only observe a noisy measure $Y\in \{0, 1\}$. 
 
 In my [previous post](/post/beyond-classical-measurement-error/) I showed that classical measurement error in an outcome variable is basically innocuous.
 But I also showed that measurement error in a binary random variable *cannot* be classical.
@@ -269,7 +269,7 @@ $$
   &= \frac{1}{n} \sum_{i=1}^n Y_i \log\left\{  \alpha_0 + (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\} + (1 - Y_i) \log\left\{ 1 - \alpha_0 - (1 - \alpha_0 - \alpha_1) F(X_i'\beta) \right\}.
 \end{aligned}
 $$
-If $F$ is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor $V$ with "large support" allows us to identify the mis-classification probabilities, and hence $F$. Indeed, we can even allow $\alpha_0$ and $\alpha_1$ to depend covariates, as long as they don't depend on $V$ itself. For more details on the "identification by nonlinearity" approach, see [Hausman et al. (1998)](https://www.sciencedirect.com/science/article/pii/S0304407698000153) and [Lewbel (2000)](https://www.cambridge.org/core/journals/econometric-theory/article/identification-of-the-binary-choice-model-with-misclassification/8FD094D628B0053032FF25DAAD2E1621).
+If $F$ is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor $V$ with "large support" allows us to identify the mis-classification probabilities, and hence $F$. Indeed, we can even allow $\alpha_0$ and $\alpha_1$ to depend covariates, as long as they don't depend on $V$ itself. For more details on the "identification by nonlinearity" approach, see [Hausman et al. (1998)](https://ideas.repec.org/a/eee/econom/v87y1998i2p239-269.html) and [Lewbel (2000)](https://www.cambridge.org/core/journals/econometric-theory/article/identification-of-the-binary-choice-model-with-misclassification/8FD094D628B0053032FF25DAAD2E1621).
 
 # Coming Attractions
 That's more than enough about measurement error for now! When I return to this topic in a few weeks time, I'll consider the problem of a mis-measured binary *regressor*. In my next installment, however, I'll put measurement error to one side and revisit a classic problem from introductory statistics: constructing a confidence interval for a population proportion. Sometimes the easiest things turn out to be much harder than they first appear. 

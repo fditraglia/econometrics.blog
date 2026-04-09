@@ -9,7 +9,7 @@ tags:
 ---
 
 If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to *change with sample size*. 
-This peculiar notion goes by a variety of names including "Pitman drift," a "sequence of local alternatives," and "local mis-specification," and crops up in a wide range of problems from weak instruments, to model selection, to power analysis.^[I've used this idea in some of my own work on [moment selection](https://doi.org/10.1016/j.jeconom.2016.07.006) and [model selection](https://doi.org/10.1002/jae.2614).]
+This peculiar notion goes by a variety of names including "Pitman drift," a "sequence of local alternatives," and "local mis-specification," and crops up in a wide range of problems from weak instruments, to model selection, to power analysis.^[I've used this idea in my own work on [moment selection](https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html) and, with [Minsu Chang](http://minsuchang.com), on [model selection](https://ideas.repec.org/a/wly/japmet/v33y2018i3p378-397.html).]
 Whatever you choose to call it, the idea of a parameter that changes with sample size is *bizarre*, and I remember spending weeks trying to understand it when I was a graduate student. 
 How could parameters, fixed quantities that we're trying to estimate, possibly know anything about our sample size? 
 
