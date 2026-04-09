@@ -72,8 +72,17 @@ tags:
 ### Edit an existing post
 Same pattern: `quarto preview` → edit → stop → `git add` → commit → push. Prose-only edits don't touch `_freeze/`; code edits do.
 
-### Important: always commit `_freeze/`
-When R code runs during preview or render, results are cached in `_freeze/`. You **must** commit `_freeze/` along with the post — that's what lets GitHub Actions build without needing R installed. The `freeze: auto` setting in `_quarto.yml` means code re-executes only when the source changes.
+### CRITICAL: run `quarto render` before every push
+GitHub Actions has **no R installed**. Builds rely entirely on the committed `_freeze/` cache. If the cache is stale, CI fails with `ERROR: Unable to locate an installed version of R`.
+
+`freeze: auto` invalidates the cache on **any** change to a `.qmd` file, including prose-only edits like fixing a typo or updating a URL. There is no "safe" edit that skips re-rendering.
+
+Workflow for any `.qmd` change:
+1. Edit the `.qmd`
+2. `quarto render` (updates `_freeze/`)
+3. `git add` both the `.qmd` and any changed `_freeze/` files
+4. `git commit && git push`
+5. Verify green check at https://github.com/fditraglia/econometrics.blog/actions
 
 ### R conventions
 Use tidyverse: native pipe `|>`, anonymous functions `\(x)`, dplyr verbs, ggplot2.
@@ -91,6 +100,12 @@ quarto render post/my-post/index.qmd   # render one post
 Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
 
 To monitor: https://github.com/fditraglia/econometrics.blog/actions
+
+Or from the command line:
+```
+gh run list --limit 3 --branch master
+gh run view <run-id> --log-failed   # if a run failed
+```
 
 ## Configuration
 
@@ -112,3 +127,5 @@ To monitor: https://github.com/fditraglia/econometrics.blog/actions
 - **Always commit `_freeze/`** when it changes — GitHub Actions needs it
 - **Internal links** should use relative paths: `/post/slug-name/`, not absolute URLs
 - **Image/asset references** in posts should use relative paths within the post directory
+- **Never delete `.quarto/`** — it's Quarto's local cache, needed for rendering. Gitignored, safe to leave alone.
+- **Never delete `_freeze/`** — the committed cache that lets CI build without R. Only Quarto should modify this directory (via `quarto render`).
