@@ -4,157 +4,111 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **econometrics.blog**, an academic blog focused on econometrics and statistics. The site is built with Hugo using the Wowchemy (formerly Academic) theme and R/blogdown for content creation. Posts are written in R Markdown (.Rmd files) that combine narrative text with executable R code and mathematical notation.
+This is **econometrics.blog**, an academic blog focused on econometrics and statistics. The site is built with **Quarto** and deployed to **GitHub Pages** via GitHub Actions. Posts are written in `.qmd` files that combine narrative text with executable R code and LaTeX math.
 
 **Key Technologies:**
-- Hugo 0.81.0 (static site generator)
-- Wowchemy/Academic theme (Hugo modules)
-- R/blogdown (R package for R Markdown integration)
-- Netlify (hosting and deployment)
-
-## Build and Development Commands
-
-### Building the site
-```bash
-# Build the site for production
-hugo --gc --minify
-
-# Build with future-dated posts (for previews)
-hugo --gc --minify --buildFuture
-
-# Serve the site locally for development
-hugo server
-```
-
-### Working with R/blogdown
-The preferred workflow is to use R/blogdown from within RStudio:
-
-```r
-# Serve the site (R console)
-blogdown::serve_site()
-
-# Stop serving
-blogdown::stop_server()
-
-# Create a new post
-blogdown::new_post(title = "Post Title", ext = ".Rmd")
-
-# Build the site
-blogdown::build_site()
-```
-
-**Important blogdown settings** (configured in `.Rprofile`):
-- `blogdown.hugo.version = "0.81.0"` - Hugo version is locked
-- `blogdown.ext = '.Rmd'` - Default format is R Markdown
-- `blogdown.method = 'html'` - Build .Rmd to .html via Pandoc
-- `blogdown.subdir = 'post'` - Posts go in content/post/
-- `blogdown.knit.on_save = FALSE` - Manual control over knitting
+- Quarto (static site generator)
+- R (for executable code chunks)
+- GitHub Actions (CI/CD)
+- GitHub Pages (hosting)
+- Utterances (GitHub-based comments)
+- GoatCounter (privacy-respecting analytics)
 
 ## Content Architecture
 
 ### Post Structure
-Posts live in `content/post/YYYY-MM-DD-slug-name/` directories. Each post directory contains:
-- `index.Rmd` - Source R Markdown file with YAML frontmatter, text, R code, and LaTeX math
-- `index.html` - Generated HTML output (do not edit directly)
-- Supporting files - images, data files, R objects (.rds files)
+Posts live in `post/slug-name/` directories. Each post directory contains:
+- `index.qmd` — Source file with YAML frontmatter, text, R code, and LaTeX math
+- Supporting files — images, data files, etc.
 
 **Post Frontmatter Format:**
 ```yaml
 ---
-title: Post Title
+title: "Post Title"
 author: Francis J. DiTraglia
 date: 'YYYY-MM-DD'
-slug: slug-name
-categories: [category1, category2]
-tags: []
-subtitle: ''
-summary: ''
+categories:
+- econometrics
+tags:
+- regression
 ---
 ```
 
-### Content Types
-- `/content/post/` - Blog posts (R Markdown with code and math)
-- `/content/home/` - Homepage widget pages
-- `/content/about/` - About page content
-- `/content/admin/` - Admin/CMS content
+### Site Structure
+- `index.qmd` — Homepage (post listing)
+- `about/index.qmd` — About page (URL: `/about/`)
+- `post/` — All blog posts
+- `_quarto.yml` — Site configuration
+- `custom.scss` — Theme customization (currently empty, uses cosmo)
+- `CNAME` — Custom domain (`www.econometrics.blog`)
+- `_freeze/` — Cached code execution results (must be committed)
+- `.github/workflows/publish.yml` — GitHub Actions deployment workflow
 
-### Writing Posts
+### Taxonomy
+- **Categories** (9, lowercase): `econometrics`, `statistics`, `causal inference`, `measurement error`, `time series`, `computing`, `applied`, `teaching`, `meta`
+- **Tags** (follow English conventions — acronyms uppercase `CLT`, proper nouns capitalized `Bayesian`): `instrumental variables`, `regression`, `confidence interval`, `CLT`, `asymptotics`, `treatment effects`, `mean independence`, `prediction vs. causation`, `bias-variance tradeoff`, `FWL`, `covid`, `shrinkage`, `Bayesian`
 
-**Mathematical notation:** Use LaTeX within R Markdown. The site is configured with `math: true` and uses Goldmark with `unsafe: true` for raw HTML/LaTeX rendering.
+## Writing and Editing Posts
 
-**R code chunks:** Standard R Markdown syntax:
-````markdown
-```{r chunk-name}
-# R code here
+### Create a new post
+1. Create directory: `mkdir post/my-new-post`
+2. Create `post/my-new-post/index.qmd` with frontmatter (see format above)
+3. Start live preview: `quarto preview` (auto-reloads as you save)
+4. Write content — R code chunks use standard syntax:
+   ````
+   ```{r}
+   library(tidyverse)
+   ```
+   ````
+5. Mathematical notation: inline `$...$`, display `$$...$$`. Use `\begin{aligned}` not `\begin{align*}` inside `$$...$$`.
+6. When done: stop preview (Ctrl+C), then:
+   ```
+   git add post/my-new-post/ _freeze/
+   git commit -m "New post: my new post"
+   git push
+   ```
+7. GitHub Actions builds and deploys automatically (~1 minute)
+
+### Edit an existing post
+Same pattern: `quarto preview` → edit → stop → `git add` → commit → push. Prose-only edits don't touch `_freeze/`; code edits do.
+
+### Important: always commit `_freeze/`
+When R code runs during preview or render, results are cached in `_freeze/`. You **must** commit `_freeze/` along with the post — that's what lets GitHub Actions build without needing R installed. The `freeze: auto` setting in `_quarto.yml` means code re-executes only when the source changes.
+
+### R conventions
+Use tidyverse: native pipe `|>`, anonymous functions `\(x)`, dplyr verbs, ggplot2.
+
+## Build and Development Commands
+
+### Local preview
 ```
-````
+quarto preview          # live preview with auto-reload
+quarto render           # full render to _site/
+quarto render post/my-post/index.qmd   # render one post
+```
 
-**Images and assets:** Place in the post's directory alongside index.Rmd. Reference with relative paths.
+### Deployment
+Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
+
+To monitor: https://github.com/fditraglia/econometrics.blog/actions
 
 ## Configuration
 
-### Main config files
-- `config.yaml` - Root Hugo configuration (theme, permalinks, taxonomies)
-- `config/_default/params.yaml` - Wowchemy theme parameters (appearance, features, integrations)
-- `config/_default/menus.yaml` - Site navigation menus
-- `config/_default/languages.yaml` - Language/internationalization settings
-- `.Rprofile` - R/blogdown project options
+- `_quarto.yml` — main site config (theme, navbar, comments, analytics, freeze)
+- `post/_metadata.yml` — post-wide defaults (author, freeze)
+- `custom.scss` — theme overrides (empty, inherits cosmo)
+- `.github/workflows/publish.yml` — CI/CD deployment
 
-### Key configuration notes
-- Hugo version: 0.81.0 (locked in both `.Rprofile` and `netlify.toml`)
-- Theme: "starter-academic" via Hugo modules
-- Base URL: https://www.econometrics.blog
-- Comments: Utterances (GitHub-based, repo: fditraglia/econometrics.blog-comments)
-- Math rendering: Enabled with goldmark markdown handler
-- Ignored files: `.ipynb`, `.ipynb_checkpoints`, `.Rmd`, `.Rmarkdown`, `_cache`
+### Key settings
+- Theme: `cosmo` + `custom.scss`
+- Math: KaTeX (Quarto default). Use `\begin{aligned}` inside `$$...$$`, not `\begin{align*}`.
+- Comments: Utterances, repo `fditraglia/econometrics.blog-comments`, `issue-term: pathname`
+- Analytics: GoatCounter at `econometrics.goatcounter.com`
+- `freeze: auto` — code re-runs on source change, cached otherwise
 
-## Deployment
+## Important Notes
 
-The site deploys automatically to Netlify on git push. Configuration in `netlify.toml`:
-- Production build: `hugo --gc --minify -b $URL`
-- Deploy previews: `hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL`
-- Hugo version: Set to 0.81.0 in build environment
-- Publish directory: `public/`
-- Uses netlify-plugin-hugo-cache-resources
-
-## Theme Customization
-
-### Custom layouts and partials
-Located in `layouts/` to override theme defaults:
-- `layouts/partials/custom_head.html` - Custom head content
-- `layouts/partials/custom_js.html` - Custom JavaScript
-- `layouts/partials/site_footer.html` - Footer override
-- `layouts/partials/comments/utterances.html` - Comments integration
-- `layouts/shortcodes/blogdown/postref.html` - Blogdown cross-references
-
-### Static assets
-- `static/media/` - Static images and files served directly
-- `assets/media/` - Asset pipeline images (processed by Hugo)
-
-## Important Workflows
-
-### Creating a new post
-1. Use `blogdown::new_post()` in R or create directory manually
-2. Directory name format: `YYYY-MM-DD-slug-name/`
-3. Create `index.Rmd` with proper frontmatter
-4. Write content with R code chunks and LaTeX math
-5. Knit to HTML (happens automatically with blogdown::serve_site())
-6. Commit both .Rmd and generated .html files
-
-### Editing an existing post
-1. Edit the `index.Rmd` file (not the .html)
-2. Re-knit to regenerate .html
-3. Commit both modified files
-
-### Working with math
-- Inline math: `$...$`
-- Display math: `$$...$$`
-- Math rendering is enabled site-wide via config.yaml
-
-## Development Notes
-
-- The site uses Hugo modules for theme management (not git submodules)
-- R objects can be saved/loaded between posts using .rds files
-- The blogdown.method='html' means posts are rendered to HTML, not Markdown
-- ignoreFiles in config.yaml prevents Hugo from processing .Rmd source files
-- Timeout is set to 600000ms (10 min) for long builds with complex R code
+- **Never edit generated files** in `_site/` — they're ignored and regenerated on render
+- **Always commit `_freeze/`** when it changes — GitHub Actions needs it
+- **Internal links** should use relative paths: `/post/slug-name/`, not absolute URLs
+- **Image/asset references** in posts should use relative paths within the post directory
