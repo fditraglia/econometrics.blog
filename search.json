@@ -515,7 +515,7 @@
     "href": "about/index.html",
     "title": "About",
     "section": "",
-    "text": "This is an academic blog about econometrics and statistics by Francis J. DiTraglia, Associate Professor of Economics at the University of Oxford."
+    "text": "I’m Francis DiTraglia, an applied econometrician at the University of Oxford. As an undergraduate, I hated both my first statistics course and my first econometrics course. Now I blog about both topics in my free time.\nThe site uses Quarto, Utterances for comments, and GoatCounter for cookie-free analytics with a public dashboard."
   },
   {
     "objectID": "index.html",
