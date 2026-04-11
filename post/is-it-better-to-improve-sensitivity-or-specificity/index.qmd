@@ -59,40 +59,40 @@ Repeat after me: **odds are on a multiplicative scale**. This is their key virtu
 ## The Solution
 
 Have I given you enough time to come up with your own solution? Fantastic! In case you hadn't already guessed, that little digression about odds served an important purpose: my solution will use odds rather than probabilities. Our goal is to increase the positive predictive value (PPV) of the test, namely
-\[
+$$
 \text{PPV} \equiv P(\text{Has Disease}|\text{Test Positive}),
-\]
+$$
 by as much as possible, either by improving the test's sensitivity
-\[
-\text{Sensitivity} \equiv P(\text{Test Positive} | \text{Has Disease}) 
-\]
+$$
+\text{Sensitivity} \equiv P(\text{Test Positive} | \text{Has Disease})
+$$
 or its specificity
-\[
+$$
 \text{Specificity} \equiv P(\text{Test Negative} | \text{Doesn't Have Disease}).
-\]
+$$
 To answer this question, we'll start by substituting these definitions into the odds form of Bayes' Theorem introduced above, yielding
-\[
-\text{Posterior Odds} = \frac{\text{PPV}}{1 - \text{PPV}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}} \times \text{Prior Odds}. 
-\]
+$$
+\text{Posterior Odds} = \frac{\text{PPV}}{1 - \text{PPV}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}} \times \text{Prior Odds}.
+$$
 This expression makes it clear that increasing either the sensitivity or specificity of the test increases the posterior odds. And because the PPV is a *strictly increasing* function of the posterior odds, namely
-\[
+$$
 \text{PPV} = \frac{\text{Posterior Odds}}{1 + \text{Posterior Odds}},
-\]
+$$
 this also increases the PPV. So now the question is: which of these two possibilities gives us the most bang for our buck? A natural idea would be to compare the *marginal effect* of increasing sensitivity by a small amount to the marginal effect of increasing specificity by the same amount. We can do this by comparing the *partial derivatives* of the PPV with respect to sensitivity and specificity. But, again, the PPV is an *increasing* function of the posterior odds, so we can simplify our task by comparing the *derivatives* of the posterior odds with respect to sensitivity and specificity. By the chain rule, any claim about the relative magnitudes of these derivatives computed for the odds will also hold for the PPV.
 
 But why stop with the odds? We can simplify our task even further by comparing the *derivatives* of the *logarithm* of the posterior odds with respect to sensitivity and specificity. This is because the logarithm is, again, an *increasing transformation* of the odds. 
 Since
-\[
+$$
 \log(\text{Posterior Odds}) = \log(\text{Sensitivity}) - \log(1 - \text{Specificity})  + \log(\text{Prior Odds}).
-\]
+$$
 our required derivatives are
-\[
+$$
 \frac{\partial \log(\text{Posterior Odds})}{\partial \text{Sensitivity}} = \frac{1}{\text{Sensitivity}} \quad \text{and} \quad \frac{\partial \log(\text{Posterior Odds})}{\partial \text{Specificity}} = \frac{1}{1 - \text{Specificity}}.
-\]
+$$
 Now for the punchline: the ratio of the derivative with respect to specificity divided by that with respect to sensitivity is
-\[
+$$
 \frac{\partial \log(\text{Posterior Odds})/\partial \text{Specificity}}{\partial \log(\text{Posterior Odds})/\partial \text{Sensitivity}} = \frac{1/(1 - \text{Specificity})}{1/\text{Sensitivity}} = \frac{\text{Sensitivity}}{1 - \text{Specificity}}
-\]
+$$
 and this is *precisely the likelihood ratio* from the odds form of Bayes' Theorem! Hence, **whenever the likelihood ratio is greater than one we'd prefer to increase the test's specificity; whenever it's less than one we'd prefer to increase the sensitivity.** If the likelihood ratio is equal to one, then it doesn't matter which we choose.
 
 Case closed, right? Well not quite. We can say a bit more by thinking about what it *means* for the likelihood ratio to be greater than or less than one. Examining the odds form of Bayes' Theorem from above, we see that a likelihood ratio less than one means that our posterior probability that a person is sick *falls* when she tests positive. In other words, this corresponds to a test that is *worse than useless*: it's actually *misleading*. In contrast, a likelihood ratio greater than one means that the test is *informative*: a positive test result increases our belief that the person is sick. Any real-world diagnostic test will have a likelihood ratio greater than one. Indeed, if we *had* such an actively mis-leading test, we could easily convert it into an informative one by simply reversing the test's outcome: if someone tests positive, we tell them they're negative, and vice versa. This reversal would result in a likelihood ratio greater than one. Therefore, in all cases--whether we start with an informative test or reverse a misleading one--**we should prefer to increase the test's specificity**.
