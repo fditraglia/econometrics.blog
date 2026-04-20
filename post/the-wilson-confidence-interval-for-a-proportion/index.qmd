@@ -236,7 +236,7 @@ $$
 $$
 defining $\widetilde{n} = n + c^2$. To make sense of this result, recall that $\widehat{\text{SE}}^2$, the quantity that is used to construct the Wald interval, is a ratio of two terms: $\widehat{p}(1 - \widehat{p})$ is the usual estimate of the *population variance* based on iid samples from a Bernoulli distribution and $n$ is the sample size. Similarly, $\widetilde{\text{SE}}^2$ is a ratio of two terms. The first is a *weighted average* of the population variance estimator and $1/4$, the population variance under the assumption that $p = 1/2$. Once again, the Wilson interval "pulls" away from extremes. In this case it pulls away from extreme estimates of the population variance towards the *largest possible* population variance: $1/4$.^[The value of $p$ that maximizes $p(1-p)$ is $p=1/2$ and $(1/2)^2 = 1/4$.] We divide this by the sample size *augmented* by $c^2$, a strictly positive quantity that depends on the confidence level.^[If you know anything about Bayesian statistics, you may be suspicious that there's a connection to be made here. Indeed this whole exercise looks very much like a [dummy observation prior](http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf) in which we artificially augment the sample with "fake data." There is a Bayesian connection here, but the details will have to wait for a future post.]
 
-To make this more concrete, Consider the case of a 95\% Wilson interval. In this case $c^2 \approx 4$ so that $\omega \approx n / (n + 4)$ and $(1 - \omega) \approx 4/(n+4)$.^[As far as I'm concerned, 1.96 is effectively 2. If you disagree, please replace all instances of "95\%" with "95.45\%$.] Using this approximation we find that
+To make this more concrete, consider the case of a 95\% Wilson interval. In this case $c^2 \approx 4$ so that $\omega \approx n / (n + 4)$ and $(1 - \omega) \approx 4/(n+4)$.^[As far as I'm concerned, 1.96 is effectively 2. If you disagree, please replace all instances of "95\%" with "95.45\%".] Using this approximation we find that
 $$
 \widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
 $$
@@ -244,7 +244,7 @@ which is *precisely* the midpoint of the [Agresti-Coull confidence interval](/po
 $$
 \widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
 $$
-is slightly different from the quantity that appears in the Agresti-Coullinterval, $\widetilde{p}(1 - \widetilde{p})/\widetilde{n}$, the two expressions give very similar results in practice. The Agresti-Coullinterval is nothing more than a rough-and-ready approximation to the 95\% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coullinterval with a confidence level that differs from 95\%: just construct the Wilson interval!
+is slightly different from the quantity that appears in the Agresti-Coull interval, $\widetilde{p}(1 - \widetilde{p})/\widetilde{n}$, the two expressions give very similar results in practice. The Agresti-Coull interval is nothing more than a rough-and-ready approximation to the 95\% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coull interval with a confidence level that differs from 95\%: just construct the Wilson interval!
 
 # Comparing the Wald and Wilson Intervals
 
