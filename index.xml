@@ -10,7 +10,721 @@
 <atom:link href="https://www.econometrics.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.9.37</generator>
-<lastBuildDate>Thu, 09 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 26 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Complex Step Differentiation</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/complex-step-differentiation/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Sometimes we need a good approximation to the derivative <img src="https://latex.codecogs.com/png.latex?f'(x)"> of a real-valued function <img src="https://latex.codecogs.com/png.latex?f"> at some real value <img src="https://latex.codecogs.com/png.latex?x">. So here’s a fun fact that you may not know. If <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is a small positive number and <img src="https://latex.codecogs.com/png.latex?f"> can be evaluated at a complex argument, then <img src="https://latex.codecogs.com/png.latex?%0Af'(x)%20%5Capprox%20%5Cfrac%7B%5Ctext%7BIm%7D%5Bf(x%20+%20%5CDelta%20i)%5D%7D%7B%5CDelta%7D%0A"> where <img src="https://latex.codecogs.com/png.latex?i"> is the imaginary unit and <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BIm%7D(z)"> denotes the imaginary part of a complex number. This unexpected but highly accurate approximation is called <strong>complex step differentiation</strong>. The method dates back to <a href="https://epubs.siam.org/doi/10.1137/0704019">Lyness and Moler (1967)</a>; <a href="https://researchrepository.wvu.edu/faculty_publications/426/">Squire and Trapp (1998)</a> give a concise modern exposition.</p>
+<p>To see why it works, Taylor-expand <img src="https://latex.codecogs.com/png.latex?f(x%20+%20%5CDelta%20i)"> around <img src="https://latex.codecogs.com/png.latex?x"> yielding <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Af(x%20+%20%5CDelta%20i)%20&amp;=%20f(x)%20+%20f'(x)%5C;%20i%5CDelta%20+%20f''(x)%20%5Cfrac%7B(i%5CDelta)%5E2%7D%7B2!%7D%20+%20f'''(x)%20%5Cfrac%7B(i%5CDelta)%5E3%7D%7B3!%7D%20+%20%5Ccdots%5C%5C%0A&amp;=%20%5Cleft%5Bf(x)%20-%20f''(x)%20%5Cfrac%7B%5CDelta%5E2%7D%7B2%7D%5Cright%5D+%20%5Cleft%5Bf'(x)%5C;%20%5CDelta%20-%20f'''(x)%20%5Cfrac%7B%5CDelta%5E3%7D%7B3!%7D%5Cright%5Di%20+%20%5Ccdots%0A%5Cend%7Baligned%7D%0A"> since <img src="https://latex.codecogs.com/png.latex?i%5E2%20=%20-1"> and <img src="https://latex.codecogs.com/png.latex?i%5E3%20=%20-i">. Taking the imaginary part and dividing by <img src="https://latex.codecogs.com/png.latex?%5CDelta">, <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Ctext%7BIm%7D%5Bf(x%20+%20%5CDelta%20i)%5D%7D%7B%5CDelta%7D%20=%20f'(x)%20-%20f'''(x)%20%5Cfrac%7B%5CDelta%5E2%7D%7B3!%7D%20+%20%5Ccdots%0A"> so complex step differentiation approximates <img src="https://latex.codecogs.com/png.latex?f'(x)"> to order <img src="https://latex.codecogs.com/png.latex?O(%5CDelta%5E2)">.</p>
+<p>Sure it’s a cute trick. But why go to the trouble of introducing complex numbers? Complex step differentiation turns out to be much better behaved from a numerical perspective than the simple difference approximation <img src="https://latex.codecogs.com/png.latex?%0Af'(x)%20%5Capprox%20%5Cfrac%7Bf(x%20+%20%5CDelta)%20-%20f(x)%7D%7B%5CDelta%7D%0A"> or the symmetric difference <img src="https://latex.codecogs.com/png.latex?%0Af'(x)%20%5Capprox%20%5Cfrac%7Bf(x%20+%20%5CDelta)%20-%20f(x%20-%20%5CDelta)%7D%7B2%5CDelta%7D.%0A"> In the remainder of this post, I’ll explain why. Before beginning, I’ll start with a brief overview of complex numbers in R. If this material is already familiar to you, skip ahead to the following section.</p>
+<section id="complex-numbers-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="complex-numbers-in-r">Complex Numbers in R</h2>
+<p>R provides basic functionality for working with complex numbers, documented in the helpful <code>?complex</code>. The imaginary unit in R is denoted by <code>1i</code>. Don’t try <code>i</code> by itself because that won’t work:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">i <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this doesn't work</span></span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'i' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>i <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this works</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0+1i</code></pre>
+</div>
+</div>
+<p>To write a complex number, simply use <code>+</code> to separate the real and imaginary parts, e.g.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>i</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3+4i</code></pre>
+</div>
+</div>
+<p>A common error when learning R is to write code with “implied multiplication” e.g.&nbsp;<code>4x</code> (wrong) rather than <code>4 * x</code> (right). But don’t be tempted to try <code>4 * i</code> since, again, <code>i</code> is <em>not</em> the imaginary unit in R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> i <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this doesn't work </span></span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error:
+! object 'i' not found</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>i <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this works</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0+4i</code></pre>
+</div>
+</div>
+<p>To demonstrate R’s basic functionality for working with complex numbers, let’s specify a complex number <img src="https://latex.codecogs.com/png.latex?z"> in Cartesian coordinates: <img src="https://latex.codecogs.com/png.latex?z%20=%203%20+%204i">. The real part is <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BRe%7D(z)%20=%203">, the imaginary part is <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BIm%7D(z)%20=%204">, the modulus is <img src="https://latex.codecogs.com/png.latex?%7Cz%7C%20=%20%5Csqrt%7B3%5E2%20+%204%5E2%7D%20=%205">, and the complex conjugate is <img src="https://latex.codecogs.com/png.latex?%5Cbar%7Bz%7D%20=%203%20-%204i">. All of these operations are available in R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">z <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>i</span>
+<span id="cb11-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Re</span>(z)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Im</span>(z)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Mod</span>(z)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(z) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># same as Mod(z) for a complex number z</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Conj</span>(z)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3-4i</code></pre>
+</div>
+</div>
+<p>All of the basic operations <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>^</code> work on complex numbers and are vectorized</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">w <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>i</span>
+<span id="cb21-2">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0+3i</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6+5i</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -5-15i</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.3-0.9i</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1">z<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -117+44i</code></pre>
+</div>
+</div>
+<p>as are functions such as <code>log()</code>, <code>exp()</code>, <code>sin()</code>, <code>cos()</code>, etc. If you supply them a complex input, they will return a complex output; if you supply them a real input, they will return a real output. This behavior explains a common gotcha: <code>sqrt(-1)</code> doesn’t work because there’s no real number whose square root is <code>-1</code> but <code>sqrt(-1 + 0i)</code> does work:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this doesn't work</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in sqrt(-1): NaNs produced</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NaN</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>i)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this works</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0+1i</code></pre>
+</div>
+</div>
+<p>Another common gotcha is trying to apply functions like <code>max()</code> and <code>min()</code> or operators like <code>&lt;</code> and <code>&gt;</code> to complex numbers. Since <a href="https://en.wikipedia.org/wiki/Ordered_field">complex numbers aren’t ordered</a>, this doesn’t work:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">min</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(z, w))</span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `min()`:
+! invalid 'type' (complex) of argument</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `z &lt; w`:
+! invalid comparison with complex values</code></pre>
+</div>
+</div>
+<p>but testing for equality / non-equality does work:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1">z <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> w</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="complex-step-differentiation-in-action" class="level2">
+<h2 class="anchored" data-anchor-id="complex-step-differentiation-in-action">Complex Step Differentiation in Action</h2>
+<p>Let’s test out complex step differentiation with a simple example. Let <img src="https://latex.codecogs.com/png.latex?f(x)%20=%20x%5E%7B9/2%7D"> and suppose we want to compute <img src="https://latex.codecogs.com/png.latex?f'(1.5)">. This one is easy to compute analytically: <img src="https://latex.codecogs.com/png.latex?%0Af'(x)%20=%20%5Cfrac%7B9%7D%7B2%7D%20x%5E%7B7/2%7D%20%5Cimplies%20f'(1.5)%20=%204.5%20%5Ctimes(1.5)%5E%7B3.5%7D%0A"> so we can check how accurate different numerical approximations turn out to be. Computing the derivative directly gives</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1">direct <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4.5</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> (<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.5</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3.5</span>)</span>
+<span id="cb44-2">direct</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18.60081</code></pre>
+</div>
+</div>
+<p>Now we’ll compare this value against three numerical derivatives: the “simple difference” approach, the “symmetric difference” approach, and the complex step approach.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1">f <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(x) x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4.5</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the function to differentiate</span></span>
+<span id="cb46-2"></span>
+<span id="cb46-3">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.5</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the point where we'll evaluate f'(x)</span></span></code></pre></div></div>
+</div>
+<p>Since R functions are vectorized, we can evaluate the quality of each approximation over many values of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> at once by setting up a vector of progressively smaller positive values:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1">delta <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>)</span>
+<span id="cb47-2"></span>
+<span id="cb47-3">simple <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> delta) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> delta</span>
+<span id="cb47-4"></span>
+<span id="cb47-5">symmetric <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> delta) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> delta)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> delta)</span>
+<span id="cb47-6"></span>
+<span id="cb47-7">complex_step <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Im</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> delta <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>i)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> delta</span></code></pre></div></div>
+</div>
+<p>Now we’ll make two tables: the first containing raw results—the approximate value of <img src="https://latex.codecogs.com/png.latex?f'(x)">—and the second containing the relative error of the approximation in percentage points. When reading the first table, recall from above that direct calculation gives <img src="https://latex.codecogs.com/png.latex?f'(1.5)%20%5Capprox%2018.60081">.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(delta, simple, symmetric, complex_step) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb48-2">  knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">digits =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>)</span></code></pre></div></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">delta</th>
+<th style="text-align: right;">simple</th>
+<th style="text-align: right;">symmetric</th>
+<th style="text-align: right;">complex_step</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1e-01</td>
+<td style="text-align: right;">20.89450</td>
+<td style="text-align: right;">18.72139</td>
+<td style="text-align: right;">18.48027</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-02</td>
+<td style="text-align: right;">18.81903</td>
+<td style="text-align: right;">18.60202</td>
+<td style="text-align: right;">18.59961</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-03</td>
+<td style="text-align: right;">18.62253</td>
+<td style="text-align: right;">18.60082</td>
+<td style="text-align: right;">18.60080</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-04</td>
+<td style="text-align: right;">18.60298</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-05</td>
+<td style="text-align: right;">18.60103</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-06</td>
+<td style="text-align: right;">18.60083</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-07</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-08</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-09</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-10</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-11</td>
+<td style="text-align: right;">18.60077</td>
+<td style="text-align: right;">18.60081</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-12</td>
+<td style="text-align: right;">18.60201</td>
+<td style="text-align: right;">18.60245</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-13</td>
+<td style="text-align: right;">18.58069</td>
+<td style="text-align: right;">18.58513</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-14</td>
+<td style="text-align: right;">18.56293</td>
+<td style="text-align: right;">18.56293</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-15</td>
+<td style="text-align: right;">20.42810</td>
+<td style="text-align: right;">20.42810</td>
+<td style="text-align: right;">18.60081</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1">get_rel_error <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">function</span>(x, truth) <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> truth) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(truth)</span>
+<span id="cb49-2"></span>
+<span id="cb49-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(</span>
+<span id="cb49-4">  delta,</span>
+<span id="cb49-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">simple =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_rel_error</span>(simple, direct),</span>
+<span id="cb49-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">symmetric =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_rel_error</span>(symmetric, direct),</span>
+<span id="cb49-7">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">complex_step =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_rel_error</span>(complex_step, direct)</span>
+<span id="cb49-8">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb49-9">  knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">digits =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">15</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)))</span></code></pre></div></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">delta</th>
+<th style="text-align: right;">simple</th>
+<th style="text-align: right;">symmetric</th>
+<th style="text-align: right;">complex_step</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1e-01</td>
+<td style="text-align: right;">12.3311</td>
+<td style="text-align: right;">0.6483</td>
+<td style="text-align: right;">0.6480</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-02</td>
+<td style="text-align: right;">1.1732</td>
+<td style="text-align: right;">0.0065</td>
+<td style="text-align: right;">0.0065</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-03</td>
+<td style="text-align: right;">0.1167</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">0.0001</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-04</td>
+<td style="text-align: right;">0.0117</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-05</td>
+<td style="text-align: right;">0.0012</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-06</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-07</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-08</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-09</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-10</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-11</td>
+<td style="text-align: right;">0.0003</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-12</td>
+<td style="text-align: right;">0.0064</td>
+<td style="text-align: right;">0.0088</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-13</td>
+<td style="text-align: right;">0.1082</td>
+<td style="text-align: right;">0.0843</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1e-14</td>
+<td style="text-align: right;">0.2037</td>
+<td style="text-align: right;">0.2037</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1e-15</td>
+<td style="text-align: right;">9.8237</td>
+<td style="text-align: right;">9.8237</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The simple difference approach is clearly less accurate than both the symmetric difference and complex step approach, particularly at larger values of <img src="https://latex.codecogs.com/png.latex?%5CDelta">. And while it may seem that there’s not much to choose between these latter two approximations, look carefully at what happens as <img src="https://latex.codecogs.com/png.latex?%5CDelta"> gets smaller. Eventually the relative error of the simple and symmetric difference approaches <strong>starts to increase</strong>! For example, the symmetric difference approximation is better with <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%200.1"> (relative error <img src="https://latex.codecogs.com/png.latex?%3C1%5C%25">) than it is at <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%2010%5E%7B-15%7D"> (relative error <img src="https://latex.codecogs.com/png.latex?%5Capprox%2010%5C%25">).</p>
+<p>How can this be? The derivative is <em>defined</em> as the limit of the simple difference approximation as <img src="https://latex.codecogs.com/png.latex?%5CDelta%20%5Crightarrow%200">. So how can the approximation get <em>worse</em> if <img src="https://latex.codecogs.com/png.latex?%5CDelta"> becomes smaller?</p>
+</section>
+<section id="catastrophic-cancellation" class="level2">
+<h2 class="anchored" data-anchor-id="catastrophic-cancellation">Catastrophic Cancellation</h2>
+<p>The culprit is <a href="https://en.wikipedia.org/wiki/Catastrophic_cancellation">catastrophic cancellation</a>. As explained in an <a href="../../post/street-fighting-numerical-analysis-part-1/">earlier post</a>, computers cannot represent all real numbers exactly. Instead they use <a href="https://ngrok.com/blog/quantization#how-do-computers-store-numbers">floating point numbers</a> as an approximation. So when we compute a difference like <img src="https://latex.codecogs.com/png.latex?f(x%20+%20%5CDelta)%20-%20f(x)"> what we’re <em>really</em> computing is the difference of two approximations. The problem is that even when <img src="https://latex.codecogs.com/png.latex?A"> is a very good approximation to <img src="https://latex.codecogs.com/png.latex?f(x%20+%20%5CDelta)"> and <img src="https://latex.codecogs.com/png.latex?B"> is a very good approximation to <img src="https://latex.codecogs.com/png.latex?f(x)">, the difference <img src="https://latex.codecogs.com/png.latex?A%20-%20B"> may be a <em>poor approximation</em> to <img src="https://latex.codecogs.com/png.latex?f(x%20+%20%5CDelta)%20-%20f(x)">. This is an unfortunate property of subtraction, nicely illustrated in <a href="https://www.johndcook.com/blog/2025/07/20/interest-tech-note/">this post</a> by John D. Cook.</p>
+<p>A double in R is accurate to around 16 decimal places. For small values of <img src="https://latex.codecogs.com/png.latex?%5CDelta">, <img src="https://latex.codecogs.com/png.latex?f(x%20+%20%5CDelta)"> and <img src="https://latex.codecogs.com/png.latex?f(x)"> agree in nearly all of those digits. Subtracting them eliminates the digits that match, leaving behind what is effectively rounding noise. Dividing by <img src="https://latex.codecogs.com/png.latex?%5CDelta"> then magnifies this noise. For example, since <img src="https://latex.codecogs.com/png.latex?f'(x)"> in our example is around <img src="https://latex.codecogs.com/png.latex?18.60081"> when we compute <img src="https://latex.codecogs.com/png.latex?f(x%20+%2010%5E%7B-15%7D)%20-%20f(x)"> we should obtain a result of approximately <img src="https://latex.codecogs.com/png.latex?1.860081%5Ctimes%2010%5E%7B-14%7D"> but instead we get</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sprintf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"%.20f"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-15</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.00000000000002042810"</code></pre>
+</div>
+</div>
+<p>The first couple of digits are in the ballpark, but the remaining ones are just noise.<br>
+The symmetric difference formula has the same problem because it too relies on a subtraction of two approximate values in the numerator:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sprintf</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"%.20f"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-15</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">f</span>(x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-15</span>))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "0.00000000000004085621"</code></pre>
+</div>
+</div>
+<p>Here we’d expect a result of around <img src="https://latex.codecogs.com/png.latex?3.720162%20%5Ctimes%2010%5E%7B-14%7D"> and, again, every digit after the first two is just noise.</p>
+<p>In contrast, complex step differentiation <em>has no subtraction in the numerator</em>. This means that it is not subject to catastrophic cancellation. As <img src="https://latex.codecogs.com/png.latex?%5CDelta"> becomes smaller, the approximation just keeps improving—down to roughly machine precision. The cost is that <img src="https://latex.codecogs.com/png.latex?f"> must be <a href="https://en.wikipedia.org/wiki/Analytic_function">analytic</a> at <img src="https://latex.codecogs.com/png.latex?x"> and evaluable at complex inputs. Most smooth functions you’ll encounter qualify, but those involving <img src="https://latex.codecogs.com/png.latex?%7Cx%7C">, <img src="https://latex.codecogs.com/png.latex?%5Cmax">, <img src="https://latex.codecogs.com/png.latex?%5Cmin">, or indicator functions generally don’t.</p>
+</section>
+<section id="dont-roll-your-own" class="level2">
+<h2 class="anchored" data-anchor-id="dont-roll-your-own">Don’t Roll Your Own</h2>
+<p>In this post I computed the complex step derivative by hand. That’s useful for understanding the method, but it’s a bad idea in practice. Whenever you can, you should rely on high-quality existing libraries to implement numerical methods. Numerical analysis is a deeply complicated subject and we are but lowly econometricians! Fortunately for us, the <code>grad()</code> function from the <code>numDeriv</code> R package implements complex step differentiation as one of its three methods:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(numDeriv)</span>
+<span id="cb54-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grad</span>(f, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.5</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'complex'</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18.60081</code></pre>
+</div>
+</div>
+<p>So the next time you need to differentiate something numerically, remember the value in making things more <em>complex</em> than they need to be!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>computing</category>
+  <guid>https://www.econometrics.blog/post/complex-step-differentiation/</guid>
+  <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>A Makeover for econometrics.blog</title>
   <dc:creator>Francis J. DiTraglia</dc:creator>
@@ -4857,39 +5571,6 @@ font-style: inherit;">3</span>)</span></code></pre></div></div>
   <category>computing</category>
   <guid>https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/</guid>
   <pubDate>Fri, 18 Nov 2022 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Local Asymptotics: The Simplest Possible Example</title>
-  <dc:creator>Francis J. DiTraglia</dc:creator>
-  <link>https://www.econometrics.blog/post/local-asymptotics-the-simplest-possible-example/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to <em>change with sample size</em>. This peculiar notion goes by a variety of names including “Pitman drift,” a “sequence of local alternatives,” and “local mis-specification,” and crops up in a wide range of problems from weak instruments, to model selection, to power analysis.<sup>1</sup> Whatever you choose to call it, the idea of a parameter that changes with sample size is <em>bizarre</em>, and I remember spending weeks trying to understand it when I was a graduate student. How could parameters, fixed quantities that we’re trying to estimate, possibly know anything about our sample size?</p>
-<p>Do we expect parameters to be smaller when we have more data? Do we expect them to be larger when we have less data? The answer to both questions is a resounding <em>NO</em>. Like all asymptotics, what I will call <em>local asymptotics</em> are nothing more than a thought experiment that we set up for mathematical convenience. Ideally we would derive finite sample results for every problem of interest, but this is rarely possible in practice. For this reason we turn to asymptotic results, such as the central limit theorem. Sometimes this works out OK, and sometimes it’s a <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">disaster</a>. The goal of local asymptotics is to derive results that <em>more closely approximate</em> the finite sample behavior that we can understand from simple examples, in the hope that this will lead to better approximations in more complicated problems. In this post, I’ll illustrate the usefulness of local asymptotics in the simplest example I could think of: a one-sided test for the mean of a normal distribution with known variance. No advanced statistics or econometrics are used below, so even if you found the preceding paragraph off-putting give the rest a go: you may be pleasantly surprised!</p>
-<p>Suppose that we observe <img src="https://latex.codecogs.com/png.latex?%0AX_1,%20X_2,%20%5Cdots,%20X_%7Bn%7D%20%5Coverset%7Biid%7D%7B%5Csim%7DN(%5Cmu,%201)%0A"> and want to test <img src="https://latex.codecogs.com/png.latex?H_0%5Ccolon%20%5Cmu%20=%200"> against the one-sided alternative <img src="https://latex.codecogs.com/png.latex?H_1%5Ccolon%20%5Cmu%20%3E0">. In this admittedly very simple example, the Econometrics 101 test statistic is <img src="https://latex.codecogs.com/png.latex?%0AT_%7Bn%7D%20=%20%5Csqrt%7Bn%7D%20%5Cbar%7BX%7D_%7Bn%7D%20%5Csim%20N%5Cleft(%5Cmu%20%5Csqrt%7Bn%7D,%201%5Cright)%0A"> where <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_%7Bn%7D"> is the sample mean. We reject when <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bn%7D%20%5Cbar%7BX%7D_%7Bn%7D%3Ez_%7B1-%5Calpha%7D"> where <img src="https://latex.codecogs.com/png.latex?z_%7B1-%5Calpha%7D"> is the <img src="https://latex.codecogs.com/png.latex?1-%5Calpha"> quantile of a standard normal distribution. Let’s calculate the <em>power</em> of this test: the probability of rejecting the null hypothesis <em>given that it is false</em>. We find that <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%20%20%5Cmbox%7BPower%7D(T_%7Bn%7D)%20&amp;=%20P%5Cleft(%5Csqrt%7Bn%7D%20%5Cbar%7BX%7D_%7Bn%7D%3Ez_%7B1-%5Calpha%7D%5Cright)%20=%20P%5Cleft(Z%20+%20%5Cmu%5Csqrt%7Bn%7D%20%3Ez_%7B1-%5Calpha%7D%5Cright)%5C%5C%0A%20%20&amp;=P%5Cleft(Z%20%3Ez_%7B1-%5Calpha%7D%20-%20%5Cmu%5Csqrt%7Bn%7D%5Cright)%20=%201%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cmu%5Csqrt%7Bn%7D%5Cright)%0A%20%20%5Cend%7Baligned%7D%0A"> where <img src="https://latex.codecogs.com/png.latex?Z"> is a standard normal random variable and <img src="https://latex.codecogs.com/png.latex?%5CPhi"> is the standard normal CDF.</p>
-<p>Now suppose we decided to do something completely crazy: throw away half our sample. Let <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_%7Bn/2%7D"> denote the sample mean based on observations <img src="https://latex.codecogs.com/png.latex?1,%202,%20%5Cdots,%20%5Clfloor%20n/2%20%5Crfloor"> <em>only</em>, where <img src="https://latex.codecogs.com/png.latex?%5Clfloor%20x%20%5Crfloor"> denotes the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor function</a>, i.e.&nbsp;the greatest integer less than or equal to <img src="https://latex.codecogs.com/png.latex?x">.<sup>2</sup> We can still construct a perfectly valid test with size <img src="https://latex.codecogs.com/png.latex?%5Calpha"> as follows. Define <img src="https://latex.codecogs.com/png.latex?%0AT_%7Bn/2%7D%20=%20%5Csqrt%7B%5Clfloor%20n/2%20%5Crfloor%20%7D%20%5Cbar%7BX%7D_%7Bn/2%7D%20%5Csim%20N%5Cleft(%5Cmu%20%5Csqrt%7B%5Clfloor%20n/2%20%5Crfloor%20%7D,%201%5Cright)%0A"> and reject if <img src="https://latex.codecogs.com/png.latex?T_%7Bn/2%7D%20%3E%20z_%7B1-%5Calpha%7D">. But there’s an obvious problem here: there <em>must</em> be a cost for throwing away perfectly good data. Indeed, if we calculate the power for this crazy test, we’ll find that it’s <em>strictly lower</em> than that of the sensible test based on the full sample. In particular, <img src="https://latex.codecogs.com/png.latex?%5Cmbox%7BPower%7D(T_%7Bn/2%7D)%20=%201%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cmu%5Csqrt%7B%5Clfloor%20n/2%20%5Crfloor%20%7D%5Cright)"> using the same argument as above with <img src="https://latex.codecogs.com/png.latex?%5Clfloor%20n/2%20%5Crfloor"> in place of <img src="https://latex.codecogs.com/png.latex?n">. Unsurprisingly, it turns out to be a bad idea to throw away half of your data!</p>
-<p>Now, for an example this simple we’d never resort to asymptotics, but suppose we did. How do these two tests compare as the sample size goes to infinity? The asymptotic size in this example is the same as the finite-sample size since we know the exact sampling distribution of the test statistics under the null and neither depends on sample size. But what about the power? We have, <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%20%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%20%5Cmbox%7BPower%7D(T_%7Bn%7D)%20&amp;=%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%5Cleft%5B1%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cmu%5Csqrt%7Bn%7D%5Cright)%20%5Cright%5D%20=%201%5C%5C%0A%20%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%20%5Cmbox%7BPower%7D(T_%7Bn/2%7D)%20&amp;=%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%5Cleft%5B1%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cmu%5Csqrt%7B%5Clfloor%20n/2%20%5Crfloor%20%7D%5Cright)%20%5Cright%5D%20=%201%0A%20%20%5Cend%7Baligned%7D%0A"> In other words, both of these tests are <em>consistent</em>: as the sample size goes to infinity, the power goes to one. Think about this for a moment: we know that for <em>any</em> fixed sample size a test based on the full sample is <em>strictly more powerful</em> but in the limit this difference disappears. This strongly suggests that something is wrong with comparing two tests on the basis of their asymptotic power. Clearly the second test is worse than the first, but the asymptotics obscure this.</p>
-<p>You might object that I’ve cooked up a particularly perverse example, but it turns out that this phenomenon is quite general. It’s easy to find consistent tests, in fact it’s difficult to find tests that <em>aren’t</em> consistent. But we know from simulation studies that not all consistent tests are created equal: some have <em>much</em> better finite sample power than others and it’s ultimately finite sample performance that we care about. One way around this problem would be to only compare the finite-sample properties of different tests and never use asymptotics. But we almost <em>never</em> know the exact sampling distribution of our test statistics.<sup>3</sup></p>
-<p>This is where <em>local alternatives</em> come in. Rather than evaluating our tests against a <em>fixed</em> alternative <img src="https://latex.codecogs.com/png.latex?%5Cmu">, suppose we were to evaluate it against a <em>sequence</em> of <em>local</em> alternatives that <em>drift towards the null</em> at rate <img src="https://latex.codecogs.com/png.latex?n%5E%7B-1/2%7D">. In other words, our alternative becomes <img src="https://latex.codecogs.com/png.latex?H_%7B1,n%7D%20%5Ccolon%20%5Cmu%20=%20%5Cdelta%20/%20%5Csqrt%7Bn%7D"> where, for this one-sided test, <img src="https://latex.codecogs.com/png.latex?%5Cdelta%20%3E%200">. If we substitute <img src="https://latex.codecogs.com/png.latex?%5Cdelta/%5Csqrt%7Bn%7D"> for <img src="https://latex.codecogs.com/png.latex?%5Cmu"> and take the limit as <img src="https://latex.codecogs.com/png.latex?n%5Crightarrow%20%5Cinfty">, we find <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%20%5Cmbox%7BPower%7D(T_%7Bn%7D)%20&amp;=%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%5Cleft%5B1%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cfrac%7B%5Cdelta%7D%7B%5Csqrt%7Bn%7D%7D%5Csqrt%7Bn%7D%5Cright)%20%5Cright%5D%5C%5C%0A&amp;=%201%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cdelta%20%5Cright)%0A%5Cend%7Baligned%7D%0A"> and similarly <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%20%5Cmbox%7BPower%7D(T_%7Bn/2%7D)%20&amp;=%20%5Clim_%7Bn%5Crightarrow%20%5Cinfty%7D%5Cleft%5B1%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cfrac%7B%5Cdelta%7D%7B%5Csqrt%7Bn%7D%7D%5Csqrt%7B%5Clfloor%20n/2%20%5Crfloor%20%7D%5Cright)%20%5Cright%5D%5C%5C%0A&amp;=%201%20-%20%5CPhi%5Cleft(z_%7B1-%5Calpha%7D%20-%20%5Cfrac%7B%5Cdelta%7D%7B%5Csqrt%7B2%7D%7D%20%5Cright)%0A%5Cend%7Baligned%7D%0A"> Wow! Our problem has disappeared! The asymptotic power of the two tests now differs in essentially the same way as the finite sample power. Also note that the power no longer converges to one. Intuitively, this is because the drifting sequence of alternatives <img src="https://latex.codecogs.com/png.latex?%5Cdelta/%5Csqrt%7Bn%7D"> makes it “harder and harder” to reject the null as the sample size grows by shrinking <em>just fast enough</em> but not so fast that the power goes to zero. This type of calculation is called a <em>local power analysis</em>. A test that has asymptotic power greater than zero in such a setting is said to have “power against local alternatives.”</p>
-<p>This example was a bit silly since we already knew the answer. But this is precisely what made it so obvious that local asymptotics make <em>more sense</em> in this setting than fixed-parameter asymptotics. Now that you understand this basic intuition, I hope you’ll feel more confident tackling examples of local asymptotics that come up in the econometrics literature.</p>
-
-
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I’ve used this idea in my own work on <a href="https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html">moment selection</a> and, with <a href="http://minsuchang.com">Minsu Chang</a>, on <a href="https://ideas.repec.org/a/wly/japmet/v33y2018i3p378-397.html">model selection</a>.↩︎</p></li>
-<li id="fn2"><p>If you don’t like this, ignore it and pretend that <img src="https://latex.codecogs.com/png.latex?n"> is an even number!↩︎</p></li>
-<li id="fn3"><p>This blog post is a very special exception created for pedagogical purposes :)↩︎</p></li>
-</ol>
-</section></div> ]]></description>
-  <category>econometrics</category>
-  <guid>https://www.econometrics.blog/post/local-asymptotics-the-simplest-possible-example/</guid>
-  <pubDate>Sat, 12 Nov 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
