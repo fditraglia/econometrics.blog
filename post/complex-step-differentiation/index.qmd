@@ -16,7 +16,8 @@ $$
 f'(x) \approx \frac{\text{Im}[f(x + \Delta i)]}{\Delta}
 $$
 where $i$ is the imaginary unit and $\text{Im}(z)$ denotes the imaginary part of a complex number.
-This unexpected but highly accurate approximation is called **complex step differentiation**, as introduced by [Squire and Trapp (1998)](https://researchrepository.wvu.edu/faculty_publications/426/).
+This unexpected but highly accurate approximation is called **complex step differentiation**.
+The method dates back to [Lyness and Moler (1967)](https://epubs.siam.org/doi/10.1137/0704019); [Squire and Trapp (1998)](https://researchrepository.wvu.edu/faculty_publications/426/) give a concise modern exposition.
 
 To see why it works, Taylor-expand $f(x + \Delta i)$ around $x$ yielding
 $$
@@ -144,7 +145,7 @@ When reading the first table, recall from above that direct calculation gives $f
 cbind(delta, simple, symmetric, complex_step) |> 
   knitr::kable(digits = 15)
 
-get_rel_error <- function(x, truth) 100 * (x - truth) / x
+get_rel_error <- function(x, truth) 100 * abs(x - truth) / abs(truth)
 
 cbind(
   delta,
@@ -158,7 +159,7 @@ cbind(
 The simple difference approach is clearly less accurate than both the symmetric difference and complex step approach, particularly at larger values of $\Delta$.
 And while it may seem that there's not much to choose between these latter two approximations, look carefully at what happens as $\Delta$ gets smaller.
 Eventually the relative error of the simple and symmetric difference approaches **starts to increase**!
-For example, the symmetric difference approximation is better with $\Delta = 0.1$ (relative error $<1\%$) than it is at $\Delta = 10^{-15}$ (relative error $\approx 9\%$).
+For example, the symmetric difference approximation is better with $\Delta = 0.1$ (relative error $<1\%$) than it is at $\Delta = 10^{-15}$ (relative error $\approx 10\%$).
 
 How can this be? 
 The derivative is *defined* as the limit of the simple difference approximation as $\Delta \rightarrow 0$.
@@ -189,7 +190,7 @@ sprintf("%.20f", f(x + 1e-15) - f(x - 1e-15))
 Here we'd expect a result of around $3.720162 \times 10^{-14}$ and, again, every digit after the first two is just noise.
 
 In contrast, complex step differentiation *has no subtraction in the numerator*. This means that it is not subject to catastrophic cancellation.
-As $\Delta$ becomes smaller, the approximation just keeps improving.
+As $\Delta$ becomes smaller, the approximation just keeps improving---down to roughly machine precision.
 The cost is that $f$ must be [analytic](https://en.wikipedia.org/wiki/Analytic_function) at $x$ and evaluable at complex inputs.
 Most smooth functions you'll encounter qualify, but those involving $|x|$, $\max$, $\min$, or indicator functions generally don't.
 
