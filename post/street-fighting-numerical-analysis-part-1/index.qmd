@@ -4,7 +4,8 @@ author: Francis J. DiTraglia
 date: '2021-10-29'
 categories:
 - computing
-tags: []
+tags:
+- numerical analysis
 ---
 
 

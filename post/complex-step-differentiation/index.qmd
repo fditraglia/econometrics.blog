@@ -1,0 +1,215 @@
+---
+title: "Complex Step Differentiation"
+subtitle: "Street Fighting Numerical Analysis - Part 2"
+author: Francis J. DiTraglia
+date: '2026-04-26'
+categories:
+- computing
+tags:
+- numerical analysis
+---
+
+Sometimes we need a good approximation to the derivative $f'(x)$ of a real-valued function $f$ at some real value $x$. 
+So here's a fun fact that you may not know. 
+If $\Delta$ is a small positive number and $f$ can be evaluated at a complex argument, then
+$$
+f'(x) \approx \frac{\text{Im}[f(x + \Delta i)]}{\Delta}
+$$
+where $i$ is the imaginary unit and $\text{Im}(z)$ denotes the imaginary part of a complex number.
+This unexpected but highly accurate approximation is called **complex step differentiation**, as introduced by [Squire and Trapp (1998)](https://researchrepository.wvu.edu/faculty_publications/426/).
+
+To see why it works, Taylor-expand $f(x + \Delta i)$ around $x$ yielding
+$$
+\begin{aligned}
+f(x + \Delta i) &= f(x) + f'(x)\; i\Delta + f''(x) \frac{(i\Delta)^2}{2!} + f'''(x) \frac{(i\Delta)^3}{3!} + \cdots\\
+&= \left[f(x) - f''(x) \frac{\Delta^2}{2}\right]+ \left[f'(x)\; \Delta - f'''(x) \frac{\Delta^3}{3!}\right]i + \cdots
+\end{aligned}
+$$
+since $i^2 = -1$ and $i^3 = -i$.
+Taking the imaginary part and dividing by $\Delta$, 
+$$
+\frac{\text{Im}[f(x + \Delta i)]}{\Delta} = f'(x) - f'''(x) \frac{\Delta^2}{3!} + \cdots
+$$
+so complex step differentiation approximates $f'(x)$ to order $O(\Delta^2)$.
+
+Sure it's a cute trick. But why go to the trouble of introducing complex numbers? 
+Complex step differentiation turns out to be much better behaved from a numerical perspective than the simple difference approximation 
+$$
+f'(x) \approx \frac{f(x + \Delta) - f(x)}{\Delta}
+$$
+or the symmetric difference
+$$
+f'(x) \approx \frac{f(x + \Delta) - f(x - \Delta)}{2\Delta}.
+$$
+In the remainder of this post, I'll explain why.
+Before beginning, I'll start with a brief overview of complex numbers in R. 
+If this material is already familiar to you, [skip ahead](#complex-step-differentiation-in-action) to the following section.
+
+## Complex Numbers in R
+
+R provides basic functionality for working with complex numbers, documented in the helpful `?complex`.
+The imaginary unit in R is denoted by `1i`.
+Don't try `i` by itself because that won't work:
+```{r}
+#| error: true
+i # this doesn't work
+1i # this works
+```
+To write a complex number, simply use `+` to separate the real and imaginary parts, e.g.
+```{r}
+3 + 4i
+```
+A common error when learning R is to write code with "implied multiplication" e.g. `4x` (wrong) rather than `4 * x` (right). 
+But don't be tempted to try `4 * i` since, again, `i` is *not* the imaginary unit in R:
+```{r}
+#| error: true
+4 * i # this doesn't work 
+4 * 1i # this works
+```
+
+To demonstrate R's basic functionality for working with complex numbers, let's specify a complex number $z$ in Cartesian coordinates: $z = 3 + 4i$.
+The real part is $\text{Re}(z) = 3$, the imaginary part is $\text{Im}(z) = 4$, the modulus is $|z| = \sqrt{3^2 + 4^2} = 5$, and the complex conjugate is $\bar{z} = 3 - 4i$.
+All of these operations are available in R:
+```{r}
+z <- 3 + 4i
+Re(z)
+Im(z)
+Mod(z)
+abs(z) # same as Mod(z) for a complex number z
+Conj(z)
+```
+
+All of the basic operations `+`, `-`, `*`, `/`, and `^` work on complex numbers and are vectorized
+```{r}
+w <- (-3) - 1i
+z + w
+z - w
+z * w
+z / w
+z^3
+```
+as are functions such as `log()`, `exp()`, `sin()`, `cos()`, etc. If you supply them a complex input, they will return a complex output; if you supply them a real input, they will return a real output.
+This behavior explains a common gotcha: `sqrt(-1)` doesn't work because there's no real number whose square root is `-1` but `sqrt(-1 + 0i)` does work:
+```{r}
+sqrt(-1) # this doesn't work
+sqrt(-1 + 0i)  # this works
+```
+Another common gotcha is trying to apply functions like `max()` and `min()` or operators like `<` and `>` to complex numbers.
+Since [complex numbers aren't ordered](https://en.wikipedia.org/wiki/Ordered_field), this doesn't work:
+```{r}
+#| error: true
+min(c(z, w))
+z < w
+```
+but testing for equality / non-equality does work:
+```{r}
+z == w
+z != w
+```
+
+## Complex Step Differentiation in Action
+
+Let's test out complex step differentiation with a simple example.
+Let $f(x) = x^{9/2}$ and suppose we want to compute $f'(1.5)$.
+This one is easy to compute analytically:
+$$
+f'(x) = \frac{9}{2} x^{7/2} \implies f'(1.5) = 4.5 \times(1.5)^{3.5}
+$$
+so we can check how accurate different numerical approximations turn out to be.
+Computing the derivative directly gives
+```{r}
+direct <- 4.5 * (1.5)^(3.5)
+direct
+```
+Now we'll compare this value against three numerical derivatives: the "simple difference" approach, the "symmetric difference" approach, and the complex step approach.
+```{r}
+f <- function(x) x^(4.5) # the function to differentiate
+
+x <- 1.5 # the point where we'll evaluate f'(x)
+```
+Since R functions are vectorized, we can evaluate the quality of each approximation over many values of $\Delta$ at once by setting up a vector of progressively smaller positive values:
+```{r}
+delta <- 1 / 10^(1:15)
+
+simple <- (f(x + delta) - f(x)) / delta
+
+symmetric <- (f(x + delta) - f(x - delta)) / (2 * delta)
+
+complex_step <- Im(f(x + delta * 1i)) / delta
+```
+
+Now we'll make two tables: the first containing raw results---the approximate value of $f'(x)$---and the second containing the relative error of the approximation in percentage points.
+When reading the first table, recall from above that direct calculation gives $f'(1.5) \approx 18.60081$. 
+```{r}
+cbind(delta, simple, symmetric, complex_step) |> 
+  knitr::kable(digits = 15)
+
+get_rel_error <- function(x, truth) 100 * (x - truth) / x
+
+cbind(
+  delta,
+  simple = get_rel_error(simple, direct),
+  symmetric = get_rel_error(symmetric, direct),
+  complex_step = get_rel_error(complex_step, direct)
+) |> 
+  knitr::kable(digits = c(15, rep(4, 3)))
+```
+
+The simple difference approach is clearly less accurate than both the symmetric difference and complex step approach, particularly at larger values of $\Delta$.
+And while it may seem that there's not much to choose between these latter two approximations, look carefully at what happens as $\Delta$ gets smaller.
+Eventually the relative error of the simple and symmetric difference approaches **starts to increase**!
+For example, the symmetric difference approximation is better with $\Delta = 0.1$ (relative error $<1\%$) than it is at $\Delta = 10^{-15}$ (relative error $\approx 9\%$).
+
+How can this be? 
+The derivative is *defined* as the limit of the simple difference approximation as $\Delta \rightarrow 0$.
+So how can the approximation get *worse* if $\Delta$ becomes smaller?
+
+## Catastrophic Cancellation
+
+The culprit is [catastrophic cancellation](https://en.wikipedia.org/wiki/Catastrophic_cancellation).
+As explained in an [earlier post](/post/street-fighting-numerical-analysis-part-1/), computers cannot represent all real numbers exactly. 
+Instead they use [floating point numbers](https://ngrok.com/blog/quantization#how-do-computers-store-numbers) as an approximation.
+So when we compute a difference like $f(x + \Delta) - f(x)$ what we're *really* computing is the difference of two approximations.
+The problem is that even when $A$ is a very good approximation to $f(x + \Delta)$ and $B$ is a very good approximation to $f(x)$, the difference $A - B$ may be a *poor approximation* to $f(x + \Delta) - f(x)$.
+This is an unfortunate property of subtraction, nicely illustrated in [this post](https://www.johndcook.com/blog/2025/07/20/interest-tech-note/) by John D. Cook. 
+
+A double in R is accurate to around 16 decimal places. 
+For small values of $\Delta$, $f(x + \Delta)$ and $f(x)$ agree in nearly all of those digits. 
+Subtracting them eliminates the digits that match, leaving behind what is effectively  rounding noise.
+Dividing by $\Delta$ then magnifies this noise.
+For example, since $f'(x)$ in our example is around $18.60081$ when we compute $f(x + 10^{-15}) - f(x)$ we should obtain a result of approximately $1.860081\times 10^{-14}$ but instead we get
+```{r}
+sprintf("%.20f", f(x + 1e-15) - f(x))
+```
+The first couple of digits are in the ballpark, but the remaining ones are just noise.  
+The symmetric difference formula has the same problem because it too relies on a subtraction of two approximate values in the numerator:
+```{r}
+sprintf("%.20f", f(x + 1e-15) - f(x - 1e-15))
+```
+Here we'd expect a result of around $3.720162 \times 10^{-14}$ and, again, every digit after the first two is just noise.
+
+In contrast, complex step differentiation *has no subtraction in the numerator*. This means that it is not subject to catastrophic cancellation.
+As $\Delta$ becomes smaller, the approximation just keeps improving.
+The cost is that $f$ must be [analytic](https://en.wikipedia.org/wiki/Analytic_function) at $x$ and evaluable at complex inputs.
+Most smooth functions you'll encounter qualify, but those involving $|x|$, $\max$, $\min$, or indicator functions generally don't.
+
+
+## Don't Roll Your Own
+
+In this post I computed the complex step derivative by hand.
+That's useful for understanding the method, but it's a bad idea in practice.
+Whenever you can, you should rely on high-quality existing libraries to implement numerical methods. 
+Numerical analysis is a deeply complicated subject and we are but lowly econometricians! 
+Fortunately for us, the `grad()` function from the `numDeriv` R package implements complex step differentiation as one of its three methods:
+```{r}
+library(numDeriv)
+grad(f, 1.5, method = 'complex')
+```
+So the next time you need to differentiate something numerically, remember the value in making things more *complex* than they need to be!
+
+
+
+
+
+
+
