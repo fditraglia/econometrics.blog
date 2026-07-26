@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -14,10 +14,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -41,10 +44,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-acf12a64177840b8d86f2d4f01b2e9fb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-faddd3e26d9eeda0553b794fd8c35b5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-4b00167c484a2cc7a33201ae4909e30d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,9 +75,67 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<style>
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../../fonts/jetbrains-mono-latin-ext-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -282,6 +343,132 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
 <li id="fn6"><p>If you’re studying introductory probability and statistics, see if you can figure out how. It’s a great practice exam question!<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
+<script>
+// Shrink display equations that are wider than the text column.
+//
+// Display math on this site is routinely wider than a comfortable reading
+// measure. custom.scss first lets equations bleed into both margins; anything
+// still too wide is scaled down here, by setting a --math-fit multiplier that
+// custom.scss folds into the element's font-size. Scaling stops at FLOOR so an
+// equation is never shrunk into illegibility -- those scroll horizontally
+// instead, which the .math-overflows class marks with an edge fade.
+(function () {
+  var FLOOR = 0.78;   // smallest allowed scale
+  var EPS   = 1;      // px tolerance for "fits"
+  var PASSES = 3;     // refinement passes; MathJax width is ~linear in font-size
+
+  function fitOne(el) {
+    el.style.removeProperty('--math-fit');
+    el.classList.remove('math-overflows');
+
+    var avail = el.clientWidth;
+    if (!avail || el.scrollWidth <= avail + EPS) return null;
+
+    var scale = 1;
+    for (var i = 0; i < PASSES; i++) {
+      var need = el.scrollWidth;
+      if (need <= avail + EPS) break;
+      scale = Math.max(FLOOR, scale * (avail / need));
+      el.style.setProperty('--math-fit', scale.toFixed(4));
+      if (scale === FLOOR) break;
+    }
+
+    if (el.scrollWidth > el.clientWidth + EPS) {
+      el.classList.add('math-overflows');
+      return {scale: scale, width: el.scrollWidth, avail: avail};
+    }
+    return null;
+  }
+
+  function fitAll() {
+    var hitFloor = [];
+    document.querySelectorAll('mjx-container[display="true"]').forEach(function (el) {
+      var r = fitOne(el);
+      if (r) hitFloor.push(r);
+    });
+    if (hitFloor.length) {
+      console.log('[math-fit] ' + hitFloor.length +
+                  ' equation(s) still overflow at the ' + FLOOR + ' floor', hitFloor);
+    }
+  }
+
+  function whenMathReady(cb) {
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(cb).catch(cb);
+      return;
+    }
+    var tries = 0;
+    (function poll() {
+      if (document.querySelector('mjx-container') || ++tries > 120) return cb();
+      setTimeout(poll, 50);
+    })();
+  }
+
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fitAll, 150); }
+
+  whenMathReady(function () {
+    fitAll();
+    window.addEventListener('resize', schedule);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  });
+})();
+</script>
+<script>
+// Tidy the homepage excerpts.
+//
+// Quarto builds each listing excerpt by truncating the rendered post at a
+// fixed character count (max=175). On a maths-heavy blog that regularly cuts
+// an inline equation in half, leaving a math span holding an unterminated
+// "\(" plus a run of empty spans. The substitution happens during Quarto's
+// post-processing, after the listing template has run, so this is the first
+// point at which the text can be corrected.
+//
+// This runs before MathJax typesets, so the broken fragment is removed rather
+// than handed to MathJax as invalid input.
+(function () {
+  function tidy(desc) {
+    var nodes = desc.querySelectorAll('.math, strong, em');
+
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      var el = nodes[i];
+      var tex = el.textContent.trim();
+
+      // Empty leftovers from the truncation
+      if (tex === '') { el.remove(); continue; }
+
+      // A math span whose \( or \[ never closes is a cut-off equation
+      if (el.classList.contains('math')) {
+        var opensInline = tex.indexOf('\\(') === 0 && tex.indexOf('\\)') === -1;
+        var opensDisplay = tex.indexOf('\\[') === 0 && tex.indexOf('\\]') === -1;
+        if (opensInline || opensDisplay) { el.remove(); }
+      }
+    }
+
+    // Normalise whatever punctuation the truncation left at the end
+    var last = desc.lastChild;
+    while (last && last.nodeType === 3 && last.textContent.trim() === '') {
+      last.remove();
+      last = desc.lastChild;
+    }
+    if (last && last.nodeType === 3) {
+      last.textContent = last.textContent.replace(/[\s.,;:]*(…|\.\.\.)?\s*$/, '…');
+    } else if (last) {
+      desc.appendChild(document.createTextNode('…'));
+    }
+  }
+
+  function run() {
+    document.querySelectorAll('.listing-description').forEach(tidy);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

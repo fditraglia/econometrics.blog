@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -41,10 +44,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-acf12a64177840b8d86f2d4f01b2e9fb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-faddd3e26d9eeda0553b794fd8c35b5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4b00167c484a2cc7a33201ae4909e30d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -82,10 +85,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      page: 25,
-    pagination: { item: "<li class='page-item'><a class='page page-link' href='#'></a></li>" },
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
+      valueNames: ['listing-date','listing-title','listing-subtitle','listing-description','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-date-modified-sort'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
+      
+      searchColumns: ["listing-project","listing-website","listing-format","listing-freeze","listing-engines","listing-language","listing-comments","listing-author","listing-title","listing-date","listing-categories","listing-tags","listing-path","listing-outputHref","listing-date-modified","listing-description","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-subtitle","listing-execute"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -102,9 +104,67 @@ ul.task-list li input[type="checkbox"] {
     }
   })
   </script>
+<link rel="preload" href="./fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="./fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<style>
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(./fonts/jetbrains-mono-latin-ext-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(./fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(./fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(./fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(./fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url(./fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -180,14 +240,14 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
     <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(38)</span></div><div class="category" data-category="YXBwbGllZA==">applied <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Y2F1c2FsJTIwaW5mZXJlbmNl">causal inference <span class="quarto-category-count">(7)</span></div><div class="category" data-category="Y29tcHV0aW5n">computing <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ZWNvbm9tZXRyaWNz">econometrics <span class="quarto-category-count">(11)</span></div><div class="category" data-category="bWVhc3VyZW1lbnQlMjBlcnJvcg==">measurement error <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bWV0YQ==">meta <span class="quarto-category-count">(4)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(10)</span></div><div class="category" data-category="dGVhY2hpbmc=">teaching <span class="quarto-category-count">(7)</span></div><div class="category" data-category="dGltZSUyMHNlcmllcw==">time series <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -196,7 +256,7 @@ window.Quarto = {
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
   
@@ -212,1293 +272,848 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1344">
-<div class="thumbnail"><a href="./post/complex-step-differentiation/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="0" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1777161600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/complex-step-differentiation/index.html" class="no-external">Complex Step Differentiation</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/complex-step-differentiation/index.html" class="no-external">Street Fighting Numerical Analysis - Part 2</a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Apr 26, 2026</span>
+<span class="listing-reading-time">7 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</div>
+<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/complex-step-differentiation/index.html" class="no-external">Complex Step Differentiation</a></h3>
+
+<div class="listing-subtitle"><a href="./post/complex-step-differentiation/index.html" class="no-external">Street Fighting Numerical Analysis - Part 2</a></div>
+
 <div class="delink listing-description"><a href="./post/complex-step-differentiation/index.html" class="no-external">
 Sometimes we need a good approximation to the derivative <span class="math inline">\(f'(x)\)</span> of a real-valued function <span class="math inline">\(f\)</span> at some real value <span class="math inline">\(x\)</span>. So here’s a fun fact that you may not know. If <span class="math inline">\(…</span><span class="math inline"></span><span class="math display"></span><span class="math inline"></span><span class="math inline"></span><strong></strong>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/complex-step-differentiation/index.html" class="no-external">
-<div class="listing-date">
-Apr 26, 2026
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="bWV0YQ==" data-listing-date-sort="1775692800000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="122">
-<div class="thumbnail"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="1" data-categories="bWV0YQ==" data-listing-date-sort="1775692800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">A Makeover for econometrics.blog</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/makeover-for-econometrics-blog/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Apr 9, 2026</span>
+<span class="listing-reading-time">1 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">A Makeover for econometrics.blog</a></h3>
+
 <div class="delink listing-description"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">
 Today econometrics.blog got a long-overdue update from blogdown to Quarto. Thanks to Claude Code, the transition was seamless: all existing links are preserved, along with…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">
-<div class="listing-date">
-Apr 9, 2026
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="bWV0YQ==" data-listing-date-sort="1773532800000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="433">
-<div class="thumbnail"><a href="./post/chris-sims-rip/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="2" data-categories="bWV0YQ==" data-listing-date-sort="1773532800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/chris-sims-rip/index.html" class="no-external">Chris Sims - RIP</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/chris-sims-rip/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Mar 15, 2026</span>
+<span class="listing-reading-time">3 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/chris-sims-rip/index.html" class="no-external">Chris Sims - RIP</a></h3>
+
 <div class="delink listing-description"><a href="./post/chris-sims-rip/index.html" class="no-external">
 I was saddened to hear of Chris Sims’s passing yesterday. Although I’m not a macroeconometrician, his work has strongly influenced the way I think about econometrics. I…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/chris-sims-rip/index.html" class="no-external">
-<div class="listing-date">
-Mar 15, 2026
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763769600000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2086">
-<div class="thumbnail"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/overlapping-confidence-intervals-part-ii/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="3" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763769600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">Overlapping Confidence Intervals: Part II</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Nov 22, 2025</span>
+<span class="listing-reading-time">11 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">Overlapping Confidence Intervals: Part II</a></h3>
+
 <div class="delink listing-description"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">
 In my earlier post on Overlapping Confidence Intervals I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means…<em></em><em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">
-<div class="listing-date">
-Nov 22, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763164800000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2457">
-<div class="thumbnail"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/overlapping-confidence-intervals/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="4" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763164800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/overlapping-confidence-intervals/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Nov 15, 2025</span>
+<span class="listing-reading-time">13 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a></h3>
+
 <div class="delink listing-description"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">
 Perhaps you’ve seen a claim like this in an applied paper: “the estimated effect for Group A is statistically significant, but the estimated effect for Group B is not; this…<em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/overlapping-confidence-intervals/index.html" class="no-external">
-<div class="listing-date">
-Nov 15, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1756339200000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1937">
-<div class="thumbnail"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/a-good-instrument-is-a-bad-control-part-ii/index_files/figure-html/unnamed-chunk-2-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="5" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1756339200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">A Good Instrument is a Bad Control: Part II</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Aug 28, 2025</span>
+<span class="listing-reading-time">10 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">A Good Instrument is a Bad Control: Part II</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">
 At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called “Bad Control”.<sup>1</sup> A…<em></em><em></em><em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">
-<div class="listing-date">
-Aug 28, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1755129600000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1888">
-<div class="thumbnail"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="6" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1755129600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 14, 2025</span>
+<span class="listing-reading-time">10 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a></h3>
+
 <div class="delink listing-description"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">
 The result that I prefer to call Yule’s Rule, more commonly known as the “Frisch-Waugh-Lovell (FWL) theorem”, shows how to calculate the regression slope coefficient for <strong>one…</strong><strong></strong><em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">
-<div class="listing-date">
-Aug 14, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1753315200000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="443">
-<div class="thumbnail"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="7" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1753315200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Jul 24, 2025</span>
+<span class="listing-reading-time">3 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a></h3>
+
 <div class="delink listing-description"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">
 Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a <em>second</em> regression of…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">
-<div class="listing-date">
-Jul 24, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1752364800000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1281">
-<div class="thumbnail"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="8" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1752364800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">Econometrics Puzzler #1: To Instrument or Not?</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Jul 13, 2025</span>
+<span class="listing-reading-time">7 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">Econometrics Puzzler #1: To Instrument or Not?</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">
 Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition. Here’s the format: I’ll…<sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">
-<div class="listing-date">
-Jul 13, 2025
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1723248000000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="37" data-listing-word-count-sort="7368">
-<div class="thumbnail"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="9" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1723248000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 10, 2024</span>
+<span class="listing-reading-time">37 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a></h3>
+
 <div class="delink listing-description"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">
 If you study enough econometrics or statistics, you’ll eventually hear someone mention “Stein’s Paradox” or the “James-Stein Estimator”. You’ve probably learned in your…<em></em><sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">
-<div class="listing-date">
-Aug 10, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="10" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1722556800000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4639">
-<div class="thumbnail"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="10" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1722556800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/how-to-do-regression-adjustment/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 2, 2024</span>
+<span class="listing-reading-time">24 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a></h3>
+
 <div class="delink listing-description"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">
 By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear…<em></em><sup></sup><em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">
-<div class="listing-date">
-Aug 2, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="11" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1721865600000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1704">
-<div class="thumbnail"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="11" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1721865600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Jul 25, 2024</span>
+<span class="listing-reading-time">9 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">
 Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability. Imagine that you’re developing a diagnostic…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">
-<div class="listing-date">
-Jul 25, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="12" data-categories="dGVhY2hpbmc=" data-listing-date-sort="1721433600000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2425">
-<div class="thumbnail"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="12" data-categories="dGVhY2hpbmc=" data-listing-date-sort="1721433600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Jul 20, 2024</span>
+<span class="listing-reading-time">13 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a></h3>
+
 <div class="delink listing-description"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">
 Reading and understanding econometrics papers can be hard work. Most published articles, even review articles, are written by specialists for specialists. Unless you’re…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">
-<div class="listing-date">
-Jul 20, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="13" data-categories="dGltZSUyMHNlcmllcw==" data-listing-date-sort="1721001600000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1496">
-<div class="thumbnail"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="13" data-categories="dGltZSUyMHNlcmllcw==" data-listing-date-sort="1721001600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Jul 15, 2024</span>
+<span class="listing-reading-time">8 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</div>
+<span class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a></h3>
+
 <div class="delink listing-description"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">
 As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by Sims &amp; Uhlig…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">
-<div class="listing-date">
-Jul 15, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="14" data-categories="bWV0YQ==" data-listing-date-sort="1720915200000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="208">
-<div class="thumbnail"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="14" data-categories="bWV0YQ==" data-listing-date-sort="1720915200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">The Return of econometrics.blog!</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/the-return-of-econometrics-blog/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Jul 14, 2024</span>
+<span class="listing-reading-time">2 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">The Return of econometrics.blog!</a></h3>
+
 <div class="delink listing-description"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">
 After a year-long hiatus, I’m excited to return to regular blogging about econometrics! I have a long list of posts that I’m eager to write, and I hope you’ll find them…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">
-<div class="listing-date">
-Jul 14, 2024
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="15" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1687996800000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1650">
-<div class="thumbnail"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="15" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1687996800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Jun 29, 2023</span>
+<span class="listing-reading-time">9 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">
 Here’s a puzzle for you. What will happen if we regress some outcome of interest on <em>both</em> an endogenous regressor <em>and</em> a valid instrument for that regressor? I hadn’t thought…<sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">
-<div class="listing-date">
-Jun 29, 2023
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="16" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1681862400000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="368">
-<div class="thumbnail"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="16" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1681862400000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/the-r-formula-cheatsheet/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Apr 19, 2023</span>
+<span class="listing-reading-time">2 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</div>
+<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a></h3>
+
 <div class="delink listing-description"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">
 R’s formula syntax is extremely powerful but can be confusing for beginners.<sup>1</sup> This post is a quick reference covering all of the symbols that have a “special” meaning inside…<code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">
-<div class="listing-date">
-Apr 19, 2023
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="17" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1673049600000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="97">
-<div class="thumbnail"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="17" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1673049600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/random-variables-cheatsheet/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Jan 7, 2023</span>
+<span class="listing-reading-time">1 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a></h3>
+
 <div class="delink listing-description"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">
 To do well in an econometrics or statistics course at any level, you need to have a large number of simple properties of random variables at your fingertips. Some years back…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/random-variables-cheatsheet/index.html" class="no-external">
-<div class="listing-date">
-Jan 7, 2023
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="18" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1672531200000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3780">
-<div class="thumbnail"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index_files/figure-html/tikz-ex-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="18" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1672531200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">Why Econometrics is Confusing Part II: The Independence Zoo</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Jan 1, 2023</span>
+<span class="listing-reading-time">19 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">Why Econometrics is Confusing Part II: The Independence Zoo</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">
 In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical…<sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">
-<div class="listing-date">
-Jan 1, 2023
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="19" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==" data-listing-date-sort="1668729600000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1278">
-<div class="thumbnail"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/from-the-poisson-distribution-to-stirling-s-approximation/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="19" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==" data-listing-date-sort="1668729600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling’s Approximation</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Nov 18, 2022</span>
+<span class="listing-reading-time">7 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling's Approximation</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">
 The Poisson distribution is the most famous probability model for <em>counts</em>, non-negative integer values. Many real-world phenomena are well approximated by this distribution…<span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math display"></span><span class="math inline"></span><em></em><span class="math inline"></span>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">
-<div class="listing-date">
-Nov 18, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="20" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1668211200000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1173">
-<div class="thumbnail"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="20" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1668211200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Nov 12, 2022</span>
+<span class="listing-reading-time">6 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a></h3>
+
 <div class="delink listing-description"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">
 If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to <em>change with sample size</em>. This peculiar notion…<sup></sup><em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">
-<div class="listing-date">
-Nov 12, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="21" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1667692800000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2048">
-<div class="thumbnail"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="21" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1667692800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Nov 6, 2022</span>
+<span class="listing-reading-time">11 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">
 In this post we’ll examine a very simple instrumental variables model from three different perspectives: two familiar and one a bit more exotic. While all three yield the…<em></em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">
-<div class="listing-date">
-Nov 6, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="22" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1658620800000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="972">
-<div class="thumbnail"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="22" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1658620800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing Part 1: The Error Term</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Jul 24, 2022</span>
+<span class="listing-reading-time">5 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing Part 1: The Error Term</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">
 “Suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span>.” A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be…<span class="math inline"></span><span class="math inline"></span>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">
-<div class="listing-date">
-Jul 24, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="23" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1647216000000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2314">
-<div class="thumbnail"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/a-new-way-of-looking-at-least-squares/index_files/figure-html/unnamed-chunk-2-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="23" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1647216000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Mar 14, 2022</span>
+<span class="listing-reading-time">12 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a></h3>
+
 <div class="delink listing-description"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">
 Have you got a ruler handy? Fantastic! Then hold out your right hand, extend your thumb and little finger as far as they’ll go, and measure the distance in centimeters…<em></em><sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">
-<div class="listing-date">
-Mar 14, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="24" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1644019200000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4747">
-<div class="thumbnail"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="post/the-wilson-confidence-interval-for-a-proportion/index_files/figure-html/unnamed-chunk-4-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="24" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1644019200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Feb 5, 2022</span>
+<span class="listing-reading-time">24 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a></h3>
+
 <div class="delink listing-description"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">
 This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">
-<div class="listing-date">
-Feb 5, 2022
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="25" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=" data-listing-date-sort="1640908800000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2710">
-<div class="thumbnail"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="25" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=" data-listing-date-sort="1640908800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Dec 31, 2021</span>
+<span class="listing-reading-time">14 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">
 
 Sorry <span class="citation" data-cites="UniofOxford">@UniofOxford</span>, but this is wildly misleading. Students who choose to reply to a vaccination survey are likely very different from those who choose not to reply. If…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">
-<div class="listing-date">
-Dec 31, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="26" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1635465600000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500">
-<div class="thumbnail"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="26" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1635465600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis - Part 1</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Oct 29, 2021</span>
+<span class="listing-reading-time">8 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</div>
+<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis - Part 1</a></h3>
+
 <div class="delink listing-description"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">
 Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training in numerical analysis and…<em></em><sup></sup><code></code>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">
-<div class="listing-date">
-Oct 29, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="27" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1633305600000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2166">
-<div class="thumbnail"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/don-t-use-the-textbook-ci-for-a-proportion/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="27" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1633305600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don’t Use the Textbook CI for a Proportion</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Oct 4, 2021</span>
+<span class="listing-reading-time">11 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don't Use the Textbook CI for a Proportion</a></h3>
+
 <div class="delink listing-description"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">
 In a previous post I showed an example in which the “textbook” confidence interval for a proportion performs poorly despite a fairly large sample size. My aim in that post…<span class="math inline"></span>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">
-<div class="listing-date">
-Oct 4, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="28" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1630281600000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3049">
-<div class="thumbnail"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="28" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1630281600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 30, 2021</span>
+<span class="listing-reading-time">16 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a></h3>
+
 <div class="delink listing-description"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">
 Many outcomes of interest in economics are binary. For example, we may want to learn how employment status <span class="math inline">\(Y^*\)</span> varies with demographics <span class="math inline">\(X\)</span>, where <span class="math inline">\(Y^*=1\)</span> means…<span class="math inline"></span><span class="math inline"></span><span class="math inline"></span>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">
-<div class="listing-date">
-Aug 30, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1629676800000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="990">
-<div class="thumbnail"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1629676800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/beyond-classical-measurement-error/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 23, 2021</span>
+<span class="listing-reading-time">5 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a></h3>
+
 <div class="delink listing-description"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">
 Pop Quiz: If <span class="math inline">\(D^*\)</span> and <span class="math inline">\(D\)</span> are binary random variables and <span class="math inline">\(D\)</span> is a noisy measure of <span class="math inline">\(D^*\)</span>, is it possible for the measurement error <span class="math inline">\(W \equiv D - D^*\)</span> to be <em>classi…</em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/beyond-classical-measurement-error/index.html" class="no-external">
-<div class="listing-date">
-Aug 23, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="30" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1628985600000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="20" data-listing-word-count-sort="3874">
-<div class="thumbnail"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/understanding-the-f-statistic/index_files/figure-html/SSRplot-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="30" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1628985600000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/understanding-the-f-statistic/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Aug 15, 2021</span>
+<span class="listing-reading-time">20 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">
 The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses. In the simplest case, it can be written as <span class="math display">\[F \equiv…</span><span class="math inline"></span><em></em><span class="math inline"></span><em></em><span class="math inline"></span><span class="math inline"></span><sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/understanding-the-f-statistic/index.html" class="no-external">
-<div class="listing-date">
-Aug 15, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="31" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1628380800000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1103">
-<div class="thumbnail"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="31" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1628380800000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Aug 8, 2021</span>
+<span class="listing-reading-time">6 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a></h3>
+
 <div class="delink listing-description"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">
 On a recent exam I asked students to extend the logic of propensity score weighting to handle a treatment that takes on <em>three</em> rather than two values: basically a…<em></em><span class="math display"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><sup></sup>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">
-<div class="listing-date">
-Aug 8, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=" data-listing-date-sort="1627776000000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1473">
-<div class="thumbnail"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=" data-listing-date-sort="1627776000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">Aug 1, 2021</span>
+<span class="listing-reading-time">8 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">
 <em>The following is a piece I wrote for the LMH News, based on a general interest webinar that I gave in November of 2020. If this post inspires you to learn more about causal…</em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">
-<div class="listing-date">
-Aug 1, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="33" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1620432000000" data-listing-file-modified-sort="1777230529627" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2970">
-<div class="thumbnail"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/thirty-isn-t-the-magic-number/index_files/figure-html/unnamed-chunk-1-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="33" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1620432000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn’t the magic number</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external"></a>
+<div class="listing-meta">
+<span class="listing-date">May 8, 2021</span>
+<span class="listing-reading-time">15 min</span>
+<span class="listing-categories">
+
+<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
+
+<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
+
+</span>
 </div>
-<div class="listing-categories">
+<h3 class="no-anchor listing-title"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn't the magic number</a></h3>
 
-<div class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</div>
-
-</div>
 <div class="delink listing-description"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">
 The simplest version of the central limit theorem (CLT) says that if <span class="math inline">\(X_1, \dots, X_n\)</span> are iid random variables with mean <span class="math inline">\(\mu\)</span> and finite variance <span class="math inline">\(\sigma^2\)</span>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">
-<div class="listing-date">
-May 8, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="34" data-categories="bWV0YQ==" data-listing-date-sort="1617235200000" data-listing-file-modified-sort="1777230529625" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="711">
-<div class="thumbnail"><a href="./post/econometricians-anonymous/index.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
+<div class="quarto-post" data-index="34" data-categories="bWV0YQ==" data-listing-date-sort="1617235200000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/econometricians-anonymous/index.html" class="no-external">Econometricians Anonymous</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/econometricians-anonymous/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">Apr 1, 2021</span>
+<span class="listing-reading-time">4 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
+<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/econometricians-anonymous/index.html" class="no-external">Econometricians Anonymous</a></h3>
+
 <div class="delink listing-description"><a href="./post/econometricians-anonymous/index.html" class="no-external">
 <em>Some years back, I wrote a monologue for the Economics Department Skit Night at UPenn. It was a niche venue, granted, but the crowd seemed to enjoy my contribution. In honor…</em>
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/econometricians-anonymous/index.html" class="no-external">
-<div class="listing-date">
-Apr 1, 2021
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="35" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000" data-listing-file-modified-sort="1777230529626" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="546">
-<div class="thumbnail"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/past-the-peak-excess-deaths-in-england-and-wales/index_files/figure-html/plot-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="35" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">May 13, 2020</span>
+<span class="listing-reading-time">3 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</div>
+<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a></h3>
+
 <div class="delink listing-description"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">
 Since my previous post, the Office for National Statistics has posted updated data on weekly deaths, and we’ve updated rcovidUK accordingly. Here’s where things stand:
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2020
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="36" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="965">
-<div class="thumbnail"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/uk-excess-deaths-are-concentrated-among-older-men/index_files/figure-html/plot-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="36" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">May 13, 2020</span>
+<span class="listing-reading-time">5 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</div>
+<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a></h3>
+
 <div class="delink listing-description"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">
 In an earlier post I looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">
-<div class="listing-date">
-May 13, 2020
 </div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="37" data-categories="YXBwbGllZA==" data-listing-date-sort="1588550400000" data-listing-file-modified-sort="1777230529628" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="525">
-<div class="thumbnail"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' data-src="post/uk-excess-deaths-by-region/index_files/figure-html/plot-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
+<div class="quarto-post" data-index="37" data-categories="YXBwbGllZA==" data-listing-date-sort="1588550400000">
 <div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./post/uk-excess-deaths-by-region/index.html" class="no-external"></a>
-</div>
-<div class="listing-categories">
+<div class="listing-meta">
+<span class="listing-date">May 4, 2020</span>
+<span class="listing-reading-time">3 min</span>
+<span class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</div>
+<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
 
+</span>
 </div>
+<h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a></h3>
+
 <div class="delink listing-description"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">
 To get a better idea of the impact of Covid19 in the UK, Dan Mead and I put together an R package rcovidUK with weekly deaths in England and Wales, taken from the Office for…
 </a></div>
 </div>
-<div class="metadata">
-<a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">
-<div class="listing-date">
-May 4, 2020
-</div>
-<div class="listing-author">
-Francis J. DiTraglia
-</div>
-</a>
-</div>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
-<nav id="listing-pagination" class="listing-pagination" aria-label="Page Navigation">
-  <ul class="pagination"></ul>
-</nav>
 </div></main> <!-- /main -->
+<script>
+// Shrink display equations that are wider than the text column.
+//
+// Display math on this site is routinely wider than a comfortable reading
+// measure. custom.scss first lets equations bleed into both margins; anything
+// still too wide is scaled down here, by setting a --math-fit multiplier that
+// custom.scss folds into the element's font-size. Scaling stops at FLOOR so an
+// equation is never shrunk into illegibility -- those scroll horizontally
+// instead, which the .math-overflows class marks with an edge fade.
+(function () {
+  var FLOOR = 0.78;   // smallest allowed scale
+  var EPS   = 1;      // px tolerance for "fits"
+  var PASSES = 3;     // refinement passes; MathJax width is ~linear in font-size
+
+  function fitOne(el) {
+    el.style.removeProperty('--math-fit');
+    el.classList.remove('math-overflows');
+
+    var avail = el.clientWidth;
+    if (!avail || el.scrollWidth <= avail + EPS) return null;
+
+    var scale = 1;
+    for (var i = 0; i < PASSES; i++) {
+      var need = el.scrollWidth;
+      if (need <= avail + EPS) break;
+      scale = Math.max(FLOOR, scale * (avail / need));
+      el.style.setProperty('--math-fit', scale.toFixed(4));
+      if (scale === FLOOR) break;
+    }
+
+    if (el.scrollWidth > el.clientWidth + EPS) {
+      el.classList.add('math-overflows');
+      return {scale: scale, width: el.scrollWidth, avail: avail};
+    }
+    return null;
+  }
+
+  function fitAll() {
+    var hitFloor = [];
+    document.querySelectorAll('mjx-container[display="true"]').forEach(function (el) {
+      var r = fitOne(el);
+      if (r) hitFloor.push(r);
+    });
+    if (hitFloor.length) {
+      console.log('[math-fit] ' + hitFloor.length +
+                  ' equation(s) still overflow at the ' + FLOOR + ' floor', hitFloor);
+    }
+  }
+
+  function whenMathReady(cb) {
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(cb).catch(cb);
+      return;
+    }
+    var tries = 0;
+    (function poll() {
+      if (document.querySelector('mjx-container') || ++tries > 120) return cb();
+      setTimeout(poll, 50);
+    })();
+  }
+
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fitAll, 150); }
+
+  whenMathReady(function () {
+    fitAll();
+    window.addEventListener('resize', schedule);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  });
+})();
+</script>
+<script>
+// Tidy the homepage excerpts.
+//
+// Quarto builds each listing excerpt by truncating the rendered post at a
+// fixed character count (max=175). On a maths-heavy blog that regularly cuts
+// an inline equation in half, leaving a math span holding an unterminated
+// "\(" plus a run of empty spans. The substitution happens during Quarto's
+// post-processing, after the listing template has run, so this is the first
+// point at which the text can be corrected.
+//
+// This runs before MathJax typesets, so the broken fragment is removed rather
+// than handed to MathJax as invalid input.
+(function () {
+  function tidy(desc) {
+    var nodes = desc.querySelectorAll('.math, strong, em');
+
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      var el = nodes[i];
+      var tex = el.textContent.trim();
+
+      // Empty leftovers from the truncation
+      if (tex === '') { el.remove(); continue; }
+
+      // A math span whose \( or \[ never closes is a cut-off equation
+      if (el.classList.contains('math')) {
+        var opensInline = tex.indexOf('\\(') === 0 && tex.indexOf('\\)') === -1;
+        var opensDisplay = tex.indexOf('\\[') === 0 && tex.indexOf('\\]') === -1;
+        if (opensInline || opensDisplay) { el.remove(); }
+      }
+    }
+
+    // Normalise whatever punctuation the truncation left at the end
+    var last = desc.lastChild;
+    while (last && last.nodeType === 3 && last.textContent.trim() === '') {
+      last.remove();
+      last = desc.lastChild;
+    }
+    if (last && last.nodeType === 3) {
+      last.textContent = last.textContent.replace(/[\s.,;:]*(…|\.\.\.)?\s*$/, '…');
+    } else if (last) {
+      desc.appendChild(document.createTextNode('…'));
+    }
+  }
+
+  function run() {
+    document.querySelectorAll('.listing-description').forEach(tidy);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
