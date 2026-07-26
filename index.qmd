@@ -3,10 +3,15 @@ title: "econometrics.blog"
 listing:
   contents: post
   sort: "date desc"
-  type: default
+  template: listing.ejs.md
+  fields: [date, title, subtitle, description, categories, reading-time]
   categories: true
   feed: true
-page-layout: full
+  date-format: "MMM D, YYYY"
+  # Show every post on one page. Quarto's default of 25 would paginate the
+  # 38 posts, and a Bootstrap pagination widget sits badly in this layout.
+  page-size: 200
+page-layout: article
 title-block-banner: false
 comments: false
 ---

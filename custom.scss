@@ -1,3 +1,651 @@
 /*-- scss:defaults --*/
 
+// ---------------------------------------------------------------- type --
+// Source Serif 4 and JetBrains Mono are self-hosted; the @font-face rules
+// live in fonts/fonts.css, loaded from _quarto.yml.
+
+$font-family-serif:     "Source Serif 4", Charter, "Iowan Old Style", Georgia, "Times New Roman", serif;
+$font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+// Bootstrap builds body text from $font-family-sans-serif, so point it at
+// the serif. Prose and KaTeX then share a family instead of clashing.
+$font-family-sans-serif: $font-family-serif;
+$font-family-base:       $font-family-serif;
+$headings-font-family:   $font-family-serif;
+
+// --------------------------------------------------------------- color --
+// Contrast ratios below are against $paper. WCAG AA wants 4.5:1 for normal
+// text and AAA wants 7:1.
+//
+// $ink-muted is for CHROME ONLY -- text that is skimmed, such as dates,
+// categories, captions, TOC entries and the footer. Never use it for text a
+// reader actually reads. Blockquotes, footnotes, code output and listing
+// excerpts are content and belong at $ink, however secondary they may feel.
+// Lowering contrast is a fair way to build hierarchy, but it costs legibility,
+// and that cost is only worth paying on text nobody has to read closely.
+$paper:      #fdfcfa; // page, very slightly warm
+$ink:        #23211e; // body text and all read-in-full content -- 15.7:1
+$ink-strong: #14120f; // headings                                 -- 18.2:1
+$ink-muted:  #585249; // chrome only, see note above              --  7.5:1
+$rule:       #d5cfc3; // hairlines (decorative)                   --  1.6:1
+$accent:     #1f5488; // links
+$accent-dk:  #143a61;
+$wash:       #f6f4ee; // faint fill behind code
+
+$body-bg:    $paper;
+$body-color: $ink;
+
+$link-color:       $accent;
+$link-hover-color: $accent-dk;
+$link-decoration:  none;
+
+$headings-color:       $ink-strong;
+$headings-font-weight: 600;
+
+$border-color:       $rule;
+$table-border-color: $rule;
+
+// --------------------------------------------------------------- scale --
+$font-size-base:   1.1875rem; // 19px
+$line-height-base: 1.65;
+
+$h1-font-size: $font-size-base * 2.35;
+$h2-font-size: $font-size-base * 1.5;
+$h3-font-size: $font-size-base * 1.18;
+$h4-font-size: $font-size-base * 1;
+$h5-font-size: $font-size-base * 0.92;
+$h6-font-size: $font-size-base * 0.85;
+
+$headings-margin-bottom: 0.55em;
+$paragraph-margin-bottom: 1.35em;
+
+// ------------------------------------------------------- quarto layout --
+$grid-body-width:          680px;
+$grid-margin-width:        250px;
+$grid-sidebar-width:       250px;
+// Gutter is wide enough to absorb the display-math bleed below and still
+// leave visible clearance before the table of contents.
+$grid-column-gutter-width: 4.25rem;
+
+// ---------------------------------------------------------------- code --
+$code-color:       $ink;
+$code-bg:          $wash;
+$code-block-bg:    $wash;
+$code-block-border-left: $rule;
+$blockquote-font-size: 1em;
+
+// -------------------------------------------------------------- navbar --
+$navbar-bg: $paper;
+$navbar-fg: $ink;
+$navbar-hl: $accent;
+
+// ----------------------------------------------------------------- toc --
+$toc-color:         $ink-muted;
+$toc-active-border: $accent;
+$toc-font-size:     0.8rem;
+
+$border-radius: 3px;
+
+// How far display equations may bleed into each margin. Held at or below the
+// body-to-TOC gutter ($grid-column-gutter-width) so they never overlap it.
+$math-bleed: 2.5rem;
+
+
 /*-- scss:rules --*/
+
+// One shared treatment for everything that is metadata rather than prose:
+// dates, tags, nav labels, table headers, captions. Small, spaced, uppercase
+// monospace reads as chrome and stays out of the way of the reading text.
+%chrome {
+  font-family: $font-family-monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: $ink-muted;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-optical-sizing: auto; // Source Serif 4 carries an 8–60pt opsz axis
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+}
+
+::selection { background: rgba($accent, 0.16); }
+
+// ------------------------------------------------------------ headings --
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  letter-spacing: -0.012em;
+  line-height: 1.18;
+}
+
+h1, .h1 { line-height: 1.1; letter-spacing: -0.018em; }
+
+h2, .h2 {
+  margin-top: 2.1em;
+  border-bottom: none; // cosmo puts a rule here; space does the job better
+  padding-bottom: 0;
+}
+
+h3, .h3 { margin-top: 1.9em; }
+h4, .h4 { margin-top: 1.7em; font-weight: 600; }
+
+// --------------------------------------------------------------- prose --
+
+p, li { hanging-punctuation: first last; }
+
+main ul, main ol { margin-bottom: 1.35em; }
+main li { margin-bottom: 0.35em; }
+
+// Links carry a thin underline set below the baseline so descenders stay
+// legible, rather than Bootstrap's default full-weight rule.
+main a,
+.quarto-title-block a {
+  text-decoration: underline;
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.16em;
+  text-decoration-color: rgba($accent, 0.35);
+  transition: text-decoration-color 0.12s ease, color 0.12s ease;
+
+  &:hover { text-decoration-color: $accent; }
+}
+
+// A quotation is read word by word, so it stays at full body contrast. The
+// left rule and the italic carry the distinction instead.
+blockquote {
+  border-left: 2px solid $rule;
+  padding-left: 1.5em;
+  margin: 2em 0;
+  color: $ink;
+  font-style: italic;
+
+  p:last-child { margin-bottom: 0; }
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid $rule;
+  opacity: 1;
+  margin: 3em 0;
+}
+
+// ---------------------------------------------------------------- math --
+// The site renders math with MathJax (Quarto's default), so equations are
+// mjx-container elements. The .katex selectors are kept alongside in case
+// the engine is ever switched via html-math-method.
+
+mjx-container, .katex { font-size: 1.02em !important; }
+
+// Display equations are routinely wider than a comfortable reading column.
+// Rather than narrow the prose to suit the widest equation, let display math
+// bleed symmetrically into the margins on wide screens. $math-bleed is capped
+// by the gutter to the table of contents so equations never collide with it.
+mjx-container[display="true"],
+.katex-display {
+  margin: 1.9em 0 !important;
+  padding: 4px 0;
+  overflow-x: auto;   // last-resort fallback; the fitter below avoids it
+  overflow-y: hidden;
+}
+
+@media (min-width: 1200px) {
+  mjx-container[display="true"],
+  .katex-display {
+    width: calc(100% + 2 * #{$math-bleed});
+    margin-left: -$math-bleed !important;
+    margin-right: -$math-bleed !important;
+  }
+}
+
+// Equations still too wide after the bleed are scaled down by _math-fit.html
+// (wired up in _quarto.yml); --math-fit is the multiplier that script sets.
+mjx-container[display="true"] {
+  font-size: calc(1.02em * var(--math-fit, 1)) !important;
+}
+
+// The rare equation too wide even at the script's floor scrolls instead. Fade
+// its right edge so it is visible that there is more to see.
+mjx-container[display="true"].math-overflows {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent 100%);
+}
+
+// ---------------------------------------------------------------- code --
+
+code, kbd, pre, samp { font-family: $font-family-monospace; }
+
+// Inline code
+code:not(.sourceCode):not(pre code) {
+  background: $wash;
+  border: 1px solid $rule;
+  border-radius: 3px;
+  padding: 0.08em 0.32em;
+  font-size: 0.8em;
+  color: $ink;
+}
+
+div.sourceCode {
+  background: $wash;
+  border: 1px solid $rule;
+  border-left: 1px solid $rule;
+  border-radius: 4px;
+  padding: 0.85rem 1.1rem;
+  margin: 1.9em 0;
+}
+
+// A chunk and the output it produced belong together. Without this, posts
+// built from many short chunks spread out badly, because the gap between a
+// chunk and its own result is as large as the gap between separate chunks.
+//
+// knitr emits several code/output pairs inside a single .cell, and wraps each
+// source block in .code-copy-outer-scaffold, so the rule that reopens the gap
+// has to target the scaffold rather than div.sourceCode directly.
+.cell {
+  margin: 1.9em 0;
+
+  div.sourceCode { margin: 0 0 0.5em; }
+
+  .cell-output + .code-copy-outer-scaffold,
+  .cell-output + div.sourceCode { margin-top: 1.5em; }
+}
+
+pre.sourceCode,
+pre {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+// Printed R output. Set at full contrast: on this blog the numbers in the
+// output are often the point of the post. The left rule and the smaller size
+// mark it as output without making it harder to read.
+.cell-output pre {
+  color: $ink;
+  font-size: 0.78rem;
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 1px solid $rule;
+  margin: 0;
+}
+
+// ------------------------------------------------------------- figures --
+
+figure, .quarto-figure, .cell-output-display {
+  margin-top: 2.2em;
+  margin-bottom: 2.2em;
+}
+
+figcaption, .figure-caption, .quarto-figure figcaption {
+  font-family: $font-family-monospace;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: $ink-muted;
+  text-align: center;
+  margin-top: 0.9em;
+}
+
+// -------------------------------------------------------------- tables --
+
+main table, .table {
+  font-size: 0.9em;
+  border-top: 1px solid $rule;
+  border-bottom: 1px solid $rule;
+  margin: 2em 0;
+}
+
+main thead th, .table thead th {
+  @extend %chrome;
+  font-size: 0.64rem;
+  border-bottom: 1px solid $rule;
+  padding-bottom: 0.5em;
+}
+
+main tbody td, .table tbody td { border-color: rgba($rule, 0.7); }
+main tbody tr:last-child td { border-bottom: none; }
+
+// ---------------------------------------------------- post title block --
+
+#title-block-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2.6rem;
+}
+
+// Date and author read before the headline, as a small mono line above it.
+#title-block-header .quarto-title-meta {
+  order: -1;
+  display: flex;
+  flex-direction: row;
+  gap: 1.6rem;
+  margin: 0 0 1.1rem;
+  padding: 0;
+  border: none;
+}
+
+#title-block-header .quarto-title-meta > div { margin: 0; }
+
+#title-block-header .quarto-title-meta-heading { display: none; }
+
+#title-block-header .quarto-title-meta-contents,
+#title-block-header .quarto-title-meta-contents p {
+  @extend %chrome;
+  margin: 0;
+}
+
+#title-block-header .quarto-title .title {
+  font-size: $font-size-base * 2.5;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.28em;
+}
+
+#title-block-header .quarto-title .subtitle {
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+  color: $ink-muted;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+// ---------------------------------------------------------- categories --
+
+.quarto-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.3rem;
+  padding: 0;
+  border: none;
+  margin-top: 1.2rem;
+}
+
+// Quarto ships a more specific rule for these, hence the !important flags —
+// without them the default pill border and font size win.
+.quarto-categories .quarto-category {
+  @extend %chrome;
+  background: none !important;
+  border: none !important;
+  border-bottom: 1px solid $rule !important;
+  border-radius: 0 !important;
+  padding: 0 0 3px !important;
+  margin: 0 !important;
+  opacity: 1 !important;
+  font-size: 0.64rem !important;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    font-size: inherit;
+    letter-spacing: inherit;
+  }
+
+  &:hover {
+    border-bottom-color: $accent !important;
+    color: $accent;
+  }
+}
+
+// -------------------------------------------------------------- navbar --
+
+.navbar {
+  background: $paper !important;
+  border-bottom: 1px solid $rule;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  box-shadow: none;
+}
+
+.navbar-brand {
+  font-family: $font-family-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: $ink-strong !important;
+}
+
+.navbar-nav .nav-link {
+  @extend %chrome;
+  font-size: 0.7rem;
+  padding-left: 0.9rem !important;
+  padding-right: 0.9rem !important;
+
+  &:hover, &.active { color: $ink-strong !important; }
+}
+
+.navbar .quarto-navbar-tools a,
+.navbar .nav-link i { color: $ink-muted; }
+
+// ----------------------------------------------------------------- toc --
+
+nav[role="doc-toc"] > h2,
+nav[role="doc-toc"] .h2,
+#toc-title {
+  @extend %chrome;
+  font-size: 0.64rem;
+  border: none;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0;
+}
+
+nav[role="doc-toc"] ul { border-left: none; }
+
+nav[role="doc-toc"] ul li a {
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: $ink-muted;
+  padding: 0.32rem 0 0.32rem 0.85rem;
+  border-left: 1px solid $rule;
+  text-decoration: none;
+
+  &:hover { color: $ink-strong; border-left-color: $ink-muted; }
+  &.active { color: $ink-strong; border-left-color: $accent; font-weight: 600; }
+}
+
+// ---------------------------------------------------------- footnotes --
+
+// Footnotes on this blog often carry real argument, not just citations, so
+// they stay at body contrast and are marked as secondary by size alone.
+#footnotes, .footnotes {
+  margin-top: 3.5em;
+  padding-top: 1.6em;
+  border-top: 1px solid $rule;
+  font-size: 0.88em;
+  color: $ink;
+
+  h2 { @extend %chrome; font-size: 0.64rem; margin-top: 0; }
+}
+
+// ------------------------------------------------------------- footer --
+
+.nav-footer {
+  border-top: 1px solid $rule;
+  background: $paper;
+  font-family: $font-family-monospace;
+  font-size: 0.7rem;
+  color: $ink-muted;
+  margin-top: 4rem;
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+
+// ------------------------------------------------------- home listing --
+// Markup comes from listing.ejs.md, which keeps Quarto's class names so the
+// category filter and feed still work. Everything visual is set here.
+
+.quarto-listing {
+  margin-top: 1rem;
+
+  .quarto-post {
+    display: block;          // override Quarto's flex row (no thumbnails here)
+    padding: 2.1rem 0;
+    border-bottom: 1px solid $rule;
+
+    &:first-child { padding-top: 0.5rem; }
+    &:last-child  { border-bottom: none; }
+
+    .thumbnail, .metadata { display: none; }
+    .body { width: 100%; }
+  }
+}
+
+// The small monospace line above each title: date, reading time, categories.
+.listing-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.55rem 1.1rem;
+  margin-bottom: 0.55rem;
+
+  > * {
+    @extend %chrome;
+    font-size: 0.64rem;
+  }
+
+  // Separator dots between the metadata items
+  > * + *::before {
+    content: "·";
+    margin-right: 1.1rem;
+    color: rgba($ink-muted, 0.55);
+  }
+
+  // Quarto styles .listing-category as a bordered pill and sizes it in `em`,
+  // which compounds against the small chrome size. Both need overriding.
+  .listing-categories { display: inline; }
+
+  .listing-category {
+    display: inline;
+    cursor: pointer;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 0.8rem 0 0 !important;
+    font-size: 0.64rem !important;
+    opacity: 1 !important;
+    border-bottom: 1px solid transparent !important;
+    transition: color 0.12s ease, border-color 0.12s ease;
+
+    &:last-child { margin-right: 0 !important; }
+    &:hover { color: $accent; border-bottom-color: $accent !important; }
+  }
+}
+
+.quarto-listing .listing-title {
+  font-size: $font-size-base * 1.42;
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.016em;
+  margin: 0 0 0.2rem;
+
+  a {
+    color: $ink-strong;
+    text-decoration: none;
+    background-image: linear-gradient(to right, $accent, $accent);
+    background-size: 0 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.22s ease, color 0.15s ease;
+  }
+
+  a:hover {
+    color: $accent;
+    background-size: 100% 1px;
+  }
+}
+
+.quarto-listing .listing-subtitle {
+  font-size: 1rem;
+  font-style: italic;
+  color: $ink-muted;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+
+  a { color: inherit; text-decoration: none; }
+}
+
+// The excerpt is what a reader uses to decide whether to open a post, so it
+// is content rather than chrome. Hierarchy against the title comes from the
+// size difference, which is large enough on its own.
+.quarto-listing .listing-description {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: $ink;
+  margin: 0;
+
+  a { color: inherit; text-decoration: none; }
+
+  // Two lines of standfirst is enough to judge a post by
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  p { margin: 0; }
+
+  // Truncated excerpts leave behind empty math spans and empty emphasis
+  .math:empty, strong:empty, em:empty { display: none; }
+
+  // A footnote marker carried over from the post body points nowhere here
+  .footnote-ref, a[role="doc-noteref"] { display: none; }
+
+  // Keep any surviving equation from setting the excerpt's line height
+  .math { font-size: 0.95em; }
+}
+
+// The category filter list in the margin. The heading is a sibling of the
+// list container, not a child, so it needs its own top-level selector.
+.quarto-listing-category-title {
+  @extend %chrome;
+  font-size: 0.64rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.85rem;
+}
+
+.quarto-listing-category {
+  font-family: $font-family-monospace;
+
+  .category {
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    color: $ink-muted;
+    padding: 0.28rem 0 0.28rem 0.85rem;
+    border-left: 1px solid $rule;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: color 0.12s ease, border-color 0.12s ease;
+
+    &:hover { color: $ink-strong; border-left-color: $ink-muted; }
+
+    &.active {
+      color: $ink-strong;
+      border-left-color: $accent;
+      font-weight: 700;
+    }
+  }
+}
+
+// Homepage title: this is the masthead, so give it more presence than a
+// post title and set it apart with a rule rather than a banner.
+body.quarto-listing-page #title-block-header .quarto-title .title,
+.quarto-listing-page #title-block-header .quarto-title .title {
+  font-size: $font-size-base * 2.1;
+  letter-spacing: -0.022em;
+}
+
+// ------------------------------------------------------------ comments --
+
+#quarto-comments, .giscus, .utterances {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid $rule;
+}

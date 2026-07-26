@@ -1,0 +1,55 @@
+<script>
+// Tidy the homepage excerpts.
+//
+// Quarto builds each listing excerpt by truncating the rendered post at a
+// fixed character count (max=175). On a maths-heavy blog that regularly cuts
+// an inline equation in half, leaving a math span holding an unterminated
+// "\(" plus a run of empty spans. The substitution happens during Quarto's
+// post-processing, after the listing template has run, so this is the first
+// point at which the text can be corrected.
+//
+// This runs before MathJax typesets, so the broken fragment is removed rather
+// than handed to MathJax as invalid input.
+(function () {
+  function tidy(desc) {
+    var nodes = desc.querySelectorAll('.math, strong, em');
+
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      var el = nodes[i];
+      var tex = el.textContent.trim();
+
+      // Empty leftovers from the truncation
+      if (tex === '') { el.remove(); continue; }
+
+      // A math span whose \( or \[ never closes is a cut-off equation
+      if (el.classList.contains('math')) {
+        var opensInline = tex.indexOf('\\(') === 0 && tex.indexOf('\\)') === -1;
+        var opensDisplay = tex.indexOf('\\[') === 0 && tex.indexOf('\\]') === -1;
+        if (opensInline || opensDisplay) { el.remove(); }
+      }
+    }
+
+    // Normalise whatever punctuation the truncation left at the end
+    var last = desc.lastChild;
+    while (last && last.nodeType === 3 && last.textContent.trim() === '') {
+      last.remove();
+      last = desc.lastChild;
+    }
+    if (last && last.nodeType === 3) {
+      last.textContent = last.textContent.replace(/[\s.,;:]*(…|\.\.\.)?\s*$/, '…');
+    } else if (last) {
+      desc.appendChild(document.createTextNode('…'));
+    }
+  }
+
+  function run() {
+    document.querySelectorAll('.listing-description').forEach(tidy);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>

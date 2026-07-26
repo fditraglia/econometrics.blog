@@ -5,6 +5,8 @@ project:
     - index.qmd
     - about/index.qmd
     - post/
+  resources:
+    - fonts/
 
 website:
   title: "econometrics.blog"
@@ -34,9 +36,13 @@ format:
     toc: true
     code-fold: false
     highlight-style: github
+    include-in-header:
+      - _fonts.html
     include-after-body:
-      text: |
-        <script data-goatcounter="https://econometrics.goatcounter.com/count"
-                async src="//gc.zgo.at/count.js"></script>
+      - text: |
+          <script data-goatcounter="https://econometrics.goatcounter.com/count"
+                  async src="//gc.zgo.at/count.js"></script>
+      - _math-fit.html
+      - _listing-tidy.html
 
 freeze: auto

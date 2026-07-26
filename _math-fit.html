@@ -1,0 +1,71 @@
+<script>
+// Shrink display equations that are wider than the text column.
+//
+// Display math on this site is routinely wider than a comfortable reading
+// measure. custom.scss first lets equations bleed into both margins; anything
+// still too wide is scaled down here, by setting a --math-fit multiplier that
+// custom.scss folds into the element's font-size. Scaling stops at FLOOR so an
+// equation is never shrunk into illegibility -- those scroll horizontally
+// instead, which the .math-overflows class marks with an edge fade.
+(function () {
+  var FLOOR = 0.78;   // smallest allowed scale
+  var EPS   = 1;      // px tolerance for "fits"
+  var PASSES = 3;     // refinement passes; MathJax width is ~linear in font-size
+
+  function fitOne(el) {
+    el.style.removeProperty('--math-fit');
+    el.classList.remove('math-overflows');
+
+    var avail = el.clientWidth;
+    if (!avail || el.scrollWidth <= avail + EPS) return null;
+
+    var scale = 1;
+    for (var i = 0; i < PASSES; i++) {
+      var need = el.scrollWidth;
+      if (need <= avail + EPS) break;
+      scale = Math.max(FLOOR, scale * (avail / need));
+      el.style.setProperty('--math-fit', scale.toFixed(4));
+      if (scale === FLOOR) break;
+    }
+
+    if (el.scrollWidth > el.clientWidth + EPS) {
+      el.classList.add('math-overflows');
+      return {scale: scale, width: el.scrollWidth, avail: avail};
+    }
+    return null;
+  }
+
+  function fitAll() {
+    var hitFloor = [];
+    document.querySelectorAll('mjx-container[display="true"]').forEach(function (el) {
+      var r = fitOne(el);
+      if (r) hitFloor.push(r);
+    });
+    if (hitFloor.length) {
+      console.log('[math-fit] ' + hitFloor.length +
+                  ' equation(s) still overflow at the ' + FLOOR + ' floor', hitFloor);
+    }
+  }
+
+  function whenMathReady(cb) {
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(cb).catch(cb);
+      return;
+    }
+    var tries = 0;
+    (function poll() {
+      if (document.querySelector('mjx-container') || ++tries > 120) return cb();
+      setTimeout(poll, 50);
+    })();
+  }
+
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fitAll, 150); }
+
+  whenMathReady(function () {
+    fitAll();
+    window.addEventListener('resize', schedule);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  });
+})();
+</script>
