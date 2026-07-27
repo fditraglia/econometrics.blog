@@ -45,4 +45,11 @@ format:
       - _math-fit.html
       - _listing-tidy.html
 
+knitr:
+  opts_chunk:
+    dev: svglite
+    dev.args:
+      bg: "#fdfcfa"
+      pointsize: 14
+
 freeze: auto

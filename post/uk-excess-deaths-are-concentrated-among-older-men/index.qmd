@@ -8,6 +8,12 @@ tags:
 - covid
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 <!--One of the most striking facts about covid has been its disproportionate impact on men and older people.--> 
 In an earlier post I looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five years. There the idea was to get a sense for the number of deaths that were likely caused by Covid-19 regardless of whether they were officially registered as such, e.g. deaths that occurred outside of hospitals. Thanks to my RA Dan Mead, here's the same analysis carried out by age group and sex rather than region:
 
@@ -52,7 +58,6 @@ df_prev5 |>
                      labels = c("Av. Past 5 Years", "2020")) +
   labs(x= "Week from Start of Year",
        y = "Deaths per Week") +
-  theme_bw()+
   theme(legend.position = 'top',
         legend.title = element_blank(),
         legend.key.size = unit(1, "cm"))

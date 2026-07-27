@@ -9,6 +9,12 @@ tags:
 - regression
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 
 The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses.
 In the simplest case, it can be written as 
@@ -94,7 +100,6 @@ Each panel plots the observations from the `midterms` dataset along with the fit
 ```{r}
 #| label: SSRplot
 #| message: false
-#| fig-width: 10
 #| echo: false
 par(mfrow = c(1, 2))
 plot(Midterm2 ~ Midterm1, data = midterms, main = 'Unrestricted', pch = 20)

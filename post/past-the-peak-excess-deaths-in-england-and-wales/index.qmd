@@ -8,6 +8,12 @@ tags:
 - covid
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 Since my previous post, the [Office for National Statistics](https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/weeklyprovisionalfiguresondeathsregisteredinenglandandwales) has posted updated data on weekly deaths, and we've updated [rcovidUK](https://github.com/fditraglia/rcovidUK) accordingly. Here's where things stand: 
 ```{r}
 #| label: plot
@@ -49,7 +55,6 @@ df_prev5 |>
                      labels = c("Av. Past 5 Years", "2020")) +
   labs(x= "Week from Start of Year",
        y = "Deaths per Week") +
-  theme_bw()+
   theme(legend.position = 'top',
         legend.title = element_blank(),
         legend.key.size = unit(1, "cm"))

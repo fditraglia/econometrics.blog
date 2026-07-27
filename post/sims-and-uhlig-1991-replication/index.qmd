@@ -8,6 +8,12 @@ tags:
 - Bayesian
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by [Sims & Uhlig (1991)](https://ideas.repec.org/a/ecm/emetrp/v59y1991i6p1591-99.html) contrasting Bayesian and Frequentist inferences for a unit root. In the post I'll focus on explaining and implementing the authors' simulation design. In the reading group session (and possibly a future post) we'll talk more about the paper's implications for the Bayesian-Frequentist debate and relate it to more recent work by [Mueller & Norets (2016)](https://ideas.repec.org/a/taf/jnlasa/v111y2016i515p1233-1241.html). We'll also be joined by special guest [Frank Schorfheide](https://web.sas.upenn.edu/schorf/) who will help guide us through the recent literature on Bayesian approaches to VARs, including [Giannone et al (2015)](https://ideas.repec.org/a/tpr/restat/v97y2015i2p436-451.html) and [(2019)](https://ideas.repec.org/a/taf/jnlasa/v114y2019i526p565-580.html). If you're an Oxford student or staff member, you can sign up for the reading group [here](https://edstem.org/us/join/6j2hay). Otherwise, send me an email and I'll add you manually.
 
 ## A Simple Example
@@ -105,8 +111,7 @@ joint |>
   coord_cartesian(ylim = c(0.8, 1.1)) + # Restrict rho_hat axis
   labs(title = "Joint Distribution",
        x = expression(rho),
-       y = expression(hat(rho))) +
-  theme_minimal()
+       y = expression(hat(rho)))
 
 joint |>
   filter(rho_hat >= 0.995 & rho_hat < 1.005) |>
@@ -114,8 +119,7 @@ joint |>
   geom_histogram(binwidth = 0.01, fill = "skyblue", color = "black") +
   labs(title = expression(hat(rho) == 1),
        x = expression(rho),
-       y = "Frequency") +
-  theme_minimal()
+       y = "Frequency")
 
 joint |>
   filter(rho == 1) |>
@@ -123,8 +127,7 @@ joint |>
   geom_histogram(binwidth = 0.01, fill = "skyblue", color = "black") +
   labs(title = expression(rho == 1),
        x = expression(hat(rho)),
-       y = "Frequency") +
-  theme_minimal()
+       y = "Frequency")
 
 # Function that makes the preceding two plots, puts them side-by-side and lets
 # the user specify the value of rho/rho_hat that we condition on:
@@ -136,8 +139,7 @@ plot_Bayes_vs_Freq <- \(r) {
                    binwidth = 0.01, fill = "skyblue", color = "black") +
     geom_vline(xintercept = r, color = "red", linetype = "dashed", linewidth = 1) +
     labs(title = bquote(hat(rho) == .(round(r, 3))),
-         x = expression(rho)) +
-    theme_minimal()
+         x = expression(rho))
 
   p2 <- joint |>
     filter(rho >= r - 0.005 & rho < r + 0.005) |>
@@ -146,8 +148,7 @@ plot_Bayes_vs_Freq <- \(r) {
                    binwidth = 0.01, fill = "skyblue", color = "black") +
     geom_vline(xintercept = r, color = "red", linetype = "dashed", linewidth = 1) +
     labs(title = bquote(rho == .(round(r, 3))),
-         x = expression(hat(rho))) +
-    theme_minimal()
+         x = expression(hat(rho)))
 
   p1 + p2
 }

@@ -9,6 +9,12 @@ tags:
 - CLT
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 The [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution) is the most famous probability model for *counts*, non-negative integer values. Many real-world phenomena are well approximated by this distribution, including the [number of German bombs](https://www.jstor.org/stable/41138751) that landed in 1/4km grid squares in south London during WWII.
 Formally, we say that a discrete random variable $X$ follows a Poisson distribution with rate parameter $\mu > 0$, abbreviated  $X \sim \text{Poisson}(\mu)$, if $X$ has support set $\{0, 1, 2, ...\}$ and probability mass function
 $$

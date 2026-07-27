@@ -8,6 +8,11 @@ tags:
 - confidence interval
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
 
 Perhaps you've seen a claim like this in an applied paper: "the estimated effect for Group A is statistically significant, but the estimated effect for Group B is not; this treatment helps As but not Bs." 
 But this reasoning is *flawed*. 
@@ -91,29 +96,28 @@ ggplot(df, aes(x = group, y = mean)) +
   geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.1, linewidth = 1) +
   # Dashed lines for overlap region
   geom_segment(aes(x = 1 - 0.2, xend = 2 + 0.2, y = lower_a, yend = lower_a),
-               color = "blue", linetype = "dashed", linewidth = 0.5) +
+               color = econblog_accent, linetype = "dashed", linewidth = 0.5) +
   geom_segment(aes(x = 1 - 0.2, xend = 2 + 0.2, y = upper_b, yend = upper_b),
-               color = "red", linetype = "dashed", linewidth = 0.5) +
+               color = econblog_warm, linetype = "dashed", linewidth = 0.5) +
   # Labels for dashed lines
   annotate("text", x = 1.5, y = lower_a + 3, 
-           label = "Lower CI for A", color = "blue", size = 3.5) +
+           label = "Lower CI for A", color = econblog_accent, size = 4.375) +
   annotate("text", x = 1.5, y = upper_b - 3, 
-           label = "Upper CI for B", color = "red", size = 3.5) +
+           label = "Upper CI for B", color = econblog_warm, size = 4.375) +
   # Point estimate labels
-  annotate("text", x = 1.15, y = 25, label = "bar(A)", parse = TRUE, size = 4) +
-  annotate("text", x = 2.15, y = 7.5, label = "bar(B)", parse = TRUE, size = 4) +
+  annotate("text", x = 1.15, y = 25, label = "bar(A)", parse = TRUE, size = 5) +
+  annotate("text", x = 2.15, y = 7.5, label = "bar(B)", parse = TRUE, size = 5) +
   # Endpoint labels for A (left side)
   annotate("text", x = 0.75, y = lower_a, 
-           label = "bar(A) - 2 %.% SE(bar(A))", parse = TRUE, size = 3, hjust = 1) +
+           label = "bar(A) - 2 %.% SE(bar(A))", parse = TRUE, size = 3.75, hjust = 1) +
   annotate("text", x = 0.75, y = upper_a, 
-           label = "bar(A) + 2 %.% SE(bar(A))", parse = TRUE, size = 3, hjust = 1) +
+           label = "bar(A) + 2 %.% SE(bar(A))", parse = TRUE, size = 3.75, hjust = 1) +
   # Endpoint labels for B (right side)
   annotate("text", x = 2.25, y = lower_b, 
-           label = "bar(B) - 2 %.% SE(bar(B))", parse = TRUE, size = 3, hjust = 0) +
+           label = "bar(B) - 2 %.% SE(bar(B))", parse = TRUE, size = 3.75, hjust = 0) +
   annotate("text", x = 2.25, y = upper_b, 
-           label = "bar(B) + 2 %.% SE(bar(B))", parse = TRUE, size = 3, hjust = 0) +
+           label = "bar(B) + 2 %.% SE(bar(B))", parse = TRUE, size = 3.75, hjust = 0) +
   ylim(-25, 50) +
-  theme_minimal() +
   theme(
     axis.text.y = element_blank(),
     axis.ticks.y = element_blank()
@@ -184,34 +188,34 @@ endpoints <- data.frame(
 ggplot() +
   # Direct path (hypotenuse) - blue solid line
   geom_segment(aes(x = 0, xend = se_a, y = 0, yend = se_b),
-               color = "blue", linewidth = 1.5) +
+               color = econblog_accent, linewidth = 1.5) +
   # Two-leg path - red dashed lines
   geom_segment(aes(x = 0, xend = se_a, y = 0, yend = 0),
-               color = "red", linetype = "dashed", linewidth = 1.2) +
+               color = econblog_warm, linetype = "dashed", linewidth = 1.2) +
   geom_segment(aes(x = se_a, xend = se_a, y = 0, yend = se_b),
-               color = "red", linetype = "dashed", linewidth = 1.2) +
+               color = econblog_warm, linetype = "dashed", linewidth = 1.2) +
   # Endpoints
   geom_point(data = endpoints, aes(x = x, y = y), size = 3) +
   # Labels with mathematical notation
   annotate("text", x = se_a/2 - 2.5, y = se_b/2 + 1.5,
            label = "SE(bar(A) - bar(B))", parse = TRUE,
-           color = "blue", fontface = "bold", size = 4) +
+           color = econblog_accent, fontface = "bold", size = 5) +
   annotate("text", x = se_a/2 - 2.5, y = se_b/2 + 0.3,
            label = "sqrt(SE(bar(A))^2 + SE(bar(B))^2)",
-           parse = TRUE, color = "blue", fontface = "italic", size = 3.5) +
+           parse = TRUE, color = econblog_accent, fontface = "italic", size = 4.375) +
   annotate("text", x = se_a/2, y = -1.2,
            label = "SE(bar(A))", parse = TRUE,
-           color = "red", size = 4) +
+           color = econblog_warm, size = 5) +
   annotate("text", x = se_a + 1.2, y = se_b/2,
            label = "SE(bar(B))", parse = TRUE,
-           color = "red", size = 4) +
+           color = econblog_warm, size = 5) +
   annotate("text", x = se_a/2, y = -2.5,
            label = "SE(bar(A)) + SE(bar(B))", parse = TRUE,
-           color = "red", fontface = "bold", size = 4) +
+           color = econblog_warm, fontface = "bold", size = 5) +
   coord_equal() +
   xlim(-1, 15) +
   ylim(-3.5, 15) +
-  theme_void() #+
+  theme_econblog_void() #+
   #labs(title = "The Triangle Inequality: Direct vs Two-Leg Path")
 ```
 

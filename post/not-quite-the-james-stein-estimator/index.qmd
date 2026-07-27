@@ -9,6 +9,12 @@ tags:
 - bias-variance tradeoff
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 If you study enough econometrics or statistics, you'll eventually hear someone mention "Stein's Paradox" or the ["James-Stein Estimator"](https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator). You've probably learned in your introductory econometrics course that ordinary least squares (OLS) is the [best linear unbiased estimator](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations "linear" and "unbiased" are crucial here. If we remove them, it's possible to do better--maybe even *much better*--than OLS.^[If I ruled the universe, the Gauss-Markov Theorem would be demoted to much less exalted status in econometrics teaching!] Stein's paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by [Charles Stein](https://en.wikipedia.org/wiki/Charles_M._Stein) in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity. 
 
 The supposed [paradox](https://youtu.be/XXhJKzI1u48?si=cS--uLd09_JnAXdr) is most simply stated by considering a special case of linear regression--that of estimating multiple unknown means. [Efron & Morris (1977)](https://www.jstor.org/stable/24954030) introduce the basic idea as follows:
@@ -289,7 +295,6 @@ example_points <- data.frame(
 p <- ggplot(circle_df, aes(x = mu1, y = mu2)) +
   geom_path(color = "blue", linewidth = 1) +
   coord_fixed(ratio = 1, xlim = c(-1.2, 1.2), ylim = c(-1.2, 1.2)) +
-  theme_minimal(base_size = 14) +
   theme(
     axis.line = element_line(color = "black"),
     #panel.grid.major = element_line(color = "gray90"),
@@ -346,7 +351,6 @@ Since $c^2/(2 + c^2) < 1$ for all $c^2 > 0$, the optimal shrinkage estimator *al
 You may have already noticed that it's easy to generalize this argument to $p>2$. But before we consider the general case, let's take a moment to understand the geometry of shrinkage estimation for $p=2$ a bit more deeply. The nice thing about two-dimensional problems is that they're easy to plot. So here's a graphical representation of both the ML estimator and our infeasible optimum shrinkage estimator when $p = 2$. I've set the true, unknown, values of $\mu_1$ and $\mu_2$ to one so the true value of $c^2$ is $2$ and the optimal choice of $\lambda$ is $\lambda^* = 2/(2 + c^2) = 2/4 = 0.5$. The following R code simulates our estimators and visualizes their performance, helping us see the shrinkage effect in action.
 
 ```{r}
-#| fig-width: 8
 #| fig-height: 4
 #| warning: false
 #| message: false

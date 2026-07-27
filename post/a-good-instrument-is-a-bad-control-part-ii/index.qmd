@@ -10,6 +10,12 @@ tags:
 - FWL
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called "Bad Control".^[I have a very rich inner life.] 
 A lively discussion of bad controls ensued, during which I offered one of my favorite examples: [a good instrument is a bad control](/post/a-good-instrument-is-a-bad-control/).
 To summarize that earlier post: including a valid instrumental variable as a *control* variable can only amplify the bias on the coefficient for our endogenous regressor of interest. 
@@ -168,7 +174,6 @@ Even if you're not familiar with DAGs, you will probably find this diagram relat
 ```{r}
 #| warning: false
 #| message: false
-#| fig-width: 6
 #| fig-height: 3.5
 library(ggdag)
 library(ggplot2)
@@ -184,7 +189,7 @@ iv_dag <- dagify(
 
 iv_dag |>
   ggdag() +
-  theme_dag()
+  theme_econblog_void()
 ```
 
 In the figure, an arrow from $A$ to $B$ means that $A$ is a cause of $B$.

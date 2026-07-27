@@ -8,6 +8,12 @@ tags:
 - regression
 ---
 
+```{r}
+#| include: false
+source(here::here("_common.R"))
+```
+
+
 
 Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a *second* regression of the outcome variable on the fitted values, what will I get? For extra credit: how will the R-squared from the second regression compare to that from the first regression?
 
