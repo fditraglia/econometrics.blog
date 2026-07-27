@@ -139,6 +139,9 @@ h4, .h4 { margin-top: 1.7em; font-weight: 600; }
 
 // --------------------------------------------------------------- prose --
 
+// Safari is the only engine that implements hanging-punctuation, so this is a
+// Safari-only refinement. See the math section for the one place it has to be
+// switched back off.
 p, li { hanging-punctuation: first last; }
 
 main ul, main ol { margin-bottom: 1.35em; }
@@ -182,6 +185,15 @@ hr {
 // the engine is ever switched via html-math-method.
 
 mjx-container, .katex { font-size: 1.02em !important; }
+
+// MathJax gives each character a zero-width ::before block and supplies the
+// advance width as padding, so the glyph deliberately overflows its own box.
+// Under the hanging-punctuation set on p and li, Safari treats an opening "("
+// or "[" as the first character of a line and hangs it outside that box, where
+// it lands on top of the preceding symbol and leaves a gap behind it. Chrome
+// and Firefox do not implement hanging-punctuation and so never showed this.
+// The property is inherited, so switching it off on the container is enough.
+mjx-container, .katex { hanging-punctuation: none; }
 
 // Display equations are routinely wider than a comfortable reading column.
 // Rather than narrow the prose to suit the widest equation, let display math
