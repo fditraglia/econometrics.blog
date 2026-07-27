@@ -657,7 +657,35 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
 // ------------------------------------------------------------ comments --
 
 #quarto-comments, .giscus, .utterances {
-  margin-top: 3.5rem;
-  padding-top: 2rem;
+  margin-top: 2.6rem;
   border-top: 1px solid $rule;
+}
+
+// Quarto ships `#quarto-content > * { padding-top: 14px }`, and an id selector
+// outranks a class, so the padding that opens up room for the caption below has
+// to be written at the same strength to take effect.
+#quarto-content > .utterances {
+  padding-top: 3rem;
+}
+
+// Utterances draws no heading of its own, and its first line of text is small
+// and gray, so a reader who reaches the rule above sees what looks like the
+// end of the page and stops scrolling. Label the section the way the footnotes
+// are labeled, with the rule above and a monospaced caption below it.
+//
+// The caption is positioned rather than set in the normal flow. Utterances
+// gives this element an explicit pixel height and fills it with an absolutely
+// positioned iframe, so anything added to the flow pushes that iframe down and
+// out of the bottom of its own box. Utterances also sets position: relative
+// here, but this rule does not rely on that.
+.utterances {
+  position: relative;
+
+  &::before {
+    @extend %chrome;
+    content: "Comments";
+    position: absolute;
+    top: 1.05rem;
+    left: 8px;  // cancels the negative left margin Quarto puts on this element
+  }
 }
