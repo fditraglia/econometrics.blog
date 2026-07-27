@@ -229,7 +229,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -299,7 +299,7 @@ c^2 = a^2 + b^2 - 2\cos(\theta) \cdot ab
 c^2 = a^2 + b^2.
 \]</span> When <span class="math inline">\(\theta \neq 90°\)</span>, the “correction term” <span class="math inline">\(-2\cos(\theta)\cdot ab\)</span> shows how the length of <span class="math inline">\(c\)</span> differs from that of a right triangle with legs of lengths <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. When <span class="math inline">\(\theta &lt; 90°\)</span> the cosine is positive so the correction term <em>shortens</em> <span class="math inline">\(c\)</span>; when <span class="math inline">\(\theta &gt; 90°\)</span> the cosine is negative so the correction term <em>lengthens</em> <span class="math inline">\(c\)</span>. Regardless of the angle <span class="math inline">\(\theta\)</span>, however, the Triangle Inequality still holds: <span class="math inline">\(c &lt; a + b\)</span> because the shortest distance between two points is a straight line.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </section>
-<section id="from-geometry-to-statistics" class="level2">
+<section id="from-geometry-to-statistics" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="from-geometry-to-statistics">From Geometry to Statistics</h2>
 <p>The cosine of an angle is always between negative one and one. Can you think of anything else that shares this property? That’s right: correlation! So let’s put the Law of Cosines and our standard error formula from above side-by-side: <span class="math display">\[
 \begin{aligned}
@@ -307,11 +307,11 @@ c^2 &amp;= a^2 + b^2 - 2\cos(\theta) \cdot ab\\ \\
 \text{SE}(\hat{\alpha} - \hat{\beta})^2 &amp;= \text{SE}(\hat{\alpha})^2 + \text{SE}(\hat{\beta})^2 - 2\rho \cdot \text{SE}(\hat{\alpha}) \cdot \text{SE}(\hat{\beta}).
 \end{aligned}
 \]</span> The analogy is <em>perfect</em>. We can view <span class="math inline">\(\text{SE}(\hat{\alpha})\)</span> and <span class="math inline">\(\text{SE}(\hat{\beta})\)</span> as the lengths of two sides of a triangle and <span class="math inline">\(\rho\)</span> as the cosine of the angle between these sides. This makes <span class="math inline">\(\text{SE}(\hat{\alpha} - \hat{\beta})\)</span> the length of the third side, indicated in blue in the following diagram. When <span class="math inline">\(\rho\)</span> is <em>positive</em>, the standard error of the difference is <em>smaller</em> than it would be under independence; if <span class="math inline">\(\rho\)</span> is <em>negative</em>, the standard error of the difference is <em>larger</em> than it would be under independence.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="1152"></p>
+<div class="cell page-columns page-full">
+<div class="cell-output-display page-columns page-full">
+<div class="page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img column-page" width="1056"></p>
 </figure>
 </div>
 </div>

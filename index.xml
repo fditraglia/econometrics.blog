@@ -794,14 +794,14 @@ font-style: inherit;">'complex'</span>)</span></code></pre></div></div>
 <p>Consider a triangle whose sides have lengths <img src="https://latex.codecogs.com/png.latex?a,b"> and <img src="https://latex.codecogs.com/png.latex?c">. Let <img src="https://latex.codecogs.com/png.latex?%5Ctheta"> be the angle between the sides whose lengths are <img src="https://latex.codecogs.com/png.latex?a"> and <img src="https://latex.codecogs.com/png.latex?b">. Then by the <em>Law of Cosines</em><br>
 <img src="https://latex.codecogs.com/png.latex?%0Ac%5E2%20=%20a%5E2%20+%20b%5E2%20-%202%5Ccos(%5Ctheta)%20%5Ccdot%20ab%0A"> This equality holds for <em>any triangle</em>. For a right triangle whose legs have lengths <img src="https://latex.codecogs.com/png.latex?a"> and <img src="https://latex.codecogs.com/png.latex?b">, we have <img src="https://latex.codecogs.com/png.latex?%5Ctheta%20=%2090%C2%B0"> so the Law of Cosines reduces to the Pythagorean Theorem <img src="https://latex.codecogs.com/png.latex?%0Ac%5E2%20=%20a%5E2%20+%20b%5E2.%0A"> When <img src="https://latex.codecogs.com/png.latex?%5Ctheta%20%5Cneq%2090%C2%B0">, the “correction term” <img src="https://latex.codecogs.com/png.latex?-2%5Ccos(%5Ctheta)%5Ccdot%20ab"> shows how the length of <img src="https://latex.codecogs.com/png.latex?c"> differs from that of a right triangle with legs of lengths <img src="https://latex.codecogs.com/png.latex?a"> and <img src="https://latex.codecogs.com/png.latex?b">. When <img src="https://latex.codecogs.com/png.latex?%5Ctheta%20%3C%2090%C2%B0"> the cosine is positive so the correction term <em>shortens</em> <img src="https://latex.codecogs.com/png.latex?c">; when <img src="https://latex.codecogs.com/png.latex?%5Ctheta%20%3E%2090%C2%B0"> the cosine is negative so the correction term <em>lengthens</em> <img src="https://latex.codecogs.com/png.latex?c">. Regardless of the angle <img src="https://latex.codecogs.com/png.latex?%5Ctheta">, however, the Triangle Inequality still holds: <img src="https://latex.codecogs.com/png.latex?c%20%3C%20a%20+%20b"> because the shortest distance between two points is a straight line.<sup>2</sup></p>
 </section>
-<section id="from-geometry-to-statistics" class="level2">
+<section id="from-geometry-to-statistics" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="from-geometry-to-statistics">From Geometry to Statistics</h2>
 <p>The cosine of an angle is always between negative one and one. Can you think of anything else that shares this property? That’s right: correlation! So let’s put the Law of Cosines and our standard error formula from above side-by-side: <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Ac%5E2%20&amp;=%20a%5E2%20+%20b%5E2%20-%202%5Ccos(%5Ctheta)%20%5Ccdot%20ab%5C%5C%20%5C%5C%0A%5Ctext%7BSE%7D(%5Chat%7B%5Calpha%7D%20-%20%5Chat%7B%5Cbeta%7D)%5E2%20&amp;=%20%5Ctext%7BSE%7D(%5Chat%7B%5Calpha%7D)%5E2%20+%20%5Ctext%7BSE%7D(%5Chat%7B%5Cbeta%7D)%5E2%20-%202%5Crho%20%5Ccdot%20%5Ctext%7BSE%7D(%5Chat%7B%5Calpha%7D)%20%5Ccdot%20%5Ctext%7BSE%7D(%5Chat%7B%5Cbeta%7D).%0A%5Cend%7Baligned%7D%0A"> The analogy is <em>perfect</em>. We can view <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSE%7D(%5Chat%7B%5Calpha%7D)"> and <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSE%7D(%5Chat%7B%5Cbeta%7D)"> as the lengths of two sides of a triangle and <img src="https://latex.codecogs.com/png.latex?%5Crho"> as the cosine of the angle between these sides. This makes <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSE%7D(%5Chat%7B%5Calpha%7D%20-%20%5Chat%7B%5Cbeta%7D)"> the length of the third side, indicated in blue in the following diagram. When <img src="https://latex.codecogs.com/png.latex?%5Crho"> is <em>positive</em>, the standard error of the difference is <em>smaller</em> than it would be under independence; if <img src="https://latex.codecogs.com/png.latex?%5Crho"> is <em>negative</em>, the standard error of the difference is <em>larger</em> than it would be under independence.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals-part-ii/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="1152"></p>
+<div class="cell page-columns page-full">
+<div class="cell-output-display page-columns page-full">
+<div class="page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals-part-ii/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img column-page" width="1056"></p>
 </figure>
 </div>
 </div>
@@ -860,7 +860,7 @@ font-style: inherit;">'complex'</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -894,7 +894,7 @@ font-style: inherit;">'complex'</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/overlapping-confidence-intervals/index_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1236,11 +1236,11 @@ background-color: null;
 font-style: inherit;">+</span></span>
 <span id="cb7-15">  <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">theme_dag</span>()</span></code></pre></div></div>
+font-style: inherit;">theme_econblog_void</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control-part-ii/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="576"></p>
+<p><img src="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control-part-ii/index_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1716,7 +1716,7 @@ font-style: inherit;">"Handspan (cm)"</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2130,7 +2130,7 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2360,7 +2360,7 @@ font-style: inherit;">2</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-3-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2498,7 +2498,7 @@ font-style: inherit;">'red'</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-4-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2545,7 +2545,7 @@ font-style: inherit;">'red'</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-5-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2911,7 +2911,7 @@ font-style: inherit;">2</span>)))</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="768"></p>
+<p><img src="https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/index_files/figure-html/unnamed-chunk-6-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -3914,7 +3914,7 @@ font-style: inherit;">toc</span>() <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ~0.6 seconds on my machine</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.368 sec elapsed</code></pre>
+<pre><code>0.385 sec elapsed</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -3960,7 +3960,7 @@ font-style: inherit;">toc</span>() <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ~17 seconds on my machine (1991 was a long time ago!)</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>11.287 sec elapsed</code></pre>
+<pre><code>11.614 sec elapsed</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -4038,16 +4038,11 @@ font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">expression</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">hat</span>(rho))) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb5-16">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
+font-style: inherit;">hat</span>(rho)))</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4117,16 +4112,11 @@ font-style: inherit;">expression</span>(rho),</span>
 background-color: null;
 font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"Frequency"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-8">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
+font-style: inherit;">"Frequency"</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-2.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4190,16 +4180,11 @@ font-style: inherit;">hat</span>(rho)),</span>
 background-color: null;
 font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"Frequency"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb7-8">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_minimal</span>()</span></code></pre></div></div>
+font-style: inherit;">"Frequency"</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-3.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4307,19 +4292,14 @@ font-style: inherit;">3</span>))),</span>
 background-color: null;
 font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">expression</span>(rho)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-12">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_minimal</span>()</span>
-<span id="cb8-13"></span>
-<span id="cb8-14">  p2 <span class="ot" style="color: #003B4F;
+font-style: inherit;">expression</span>(rho))</span>
+<span id="cb8-12"></span>
+<span id="cb8-13">  p2 <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> joint <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb8-15">    <span class="fu" style="color: #4758AB;
+<span id="cb8-14">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">filter</span>(rho <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -4338,7 +4318,7 @@ background-color: null;
 font-style: inherit;">0.005</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
-<span id="cb8-16">    <span class="fu" style="color: #4758AB;
+<span id="cb8-15">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -4347,7 +4327,7 @@ background-color: null;
 font-style: inherit;">x =</span> rho_hat)) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb8-17">    <span class="fu" style="color: #4758AB;
+<span id="cb8-16">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_histogram</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -4356,7 +4336,7 @@ background-color: null;
 font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">after_stat</span>(density)),</span>
-<span id="cb8-18">                   <span class="at" style="color: #657422;
+<span id="cb8-17">                   <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">binwidth =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
@@ -4371,7 +4351,7 @@ background-color: null;
 font-style: inherit;">"black"</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb8-19">    <span class="fu" style="color: #4758AB;
+<span id="cb8-18">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">geom_vline</span>(<span class="at" style="color: #657422;
 background-color: null;
@@ -4390,7 +4370,7 @@ background-color: null;
 font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
-<span id="cb8-20">    <span class="fu" style="color: #4758AB;
+<span id="cb8-19">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
 background-color: null;
@@ -4403,25 +4383,20 @@ background-color: null;
 font-style: inherit;">round</span>(r, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>))),</span>
-<span id="cb8-21">         <span class="at" style="color: #657422;
+<span id="cb8-20">         <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">expression</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">hat</span>(rho))) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-22">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme_minimal</span>()</span>
-<span id="cb8-23"></span>
-<span id="cb8-24">  p1 <span class="sc" style="color: #5E5E5E;
+font-style: inherit;">hat</span>(rho)))</span>
+<span id="cb8-21"></span>
+<span id="cb8-22">  p1 <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> p2</span>
-<span id="cb8-25">}</span>
-<span id="cb8-26"></span>
-<span id="cb8-27"><span class="fu" style="color: #4758AB;
+<span id="cb8-23">}</span>
+<span id="cb8-24"></span>
+<span id="cb8-25"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot_Bayes_vs_Freq</span>(<span class="fl" style="color: #AD0000;
 background-color: null;
@@ -4429,7 +4404,7 @@ font-style: inherit;">0.98</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-4.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4441,7 +4416,7 @@ font-style: inherit;">0.99</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-5.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-5.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4453,7 +4428,7 @@ font-style: inherit;">1.0</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-6.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-6.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4465,7 +4440,7 @@ font-style: inherit;">1.01</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-7.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-7.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4477,7 +4452,7 @@ font-style: inherit;">1.02</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-1-8.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/index_files/figure-html/unnamed-chunk-2-8.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -4990,7 +4965,7 @@ font-style: inherit;">~</span> w))</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -5190,7 +5165,7 @@ font-style: inherit;">'Poisson(171) pmf'</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
