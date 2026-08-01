@@ -123,17 +123,20 @@ The site sets its own typography rather than using cosmo's defaults. Two self-ho
 - **Source Serif 4** for body text, headings, and post titles. Serif matters here specifically because MathJax renders math in a serif face — a sans body would make every inline `$\hat\beta$` clash with the sentence around it. The variable font carries an 8–60pt optical size axis, and `font-optical-sizing: auto` in `custom.scss` is what gives large headings a true display cut.
 - **JetBrains Mono** for everything that is metadata rather than prose: dates, categories, nav links, table headers, captions, the TOC heading. In `custom.scss` this is the `%chrome` placeholder selector — extend it rather than restating the rules.
 
+One exemption, in the tables section: a `thead th` that contains math is matched by `:has(mjx-container)` and opts back out of `%chrome`. MathJax inherits the surrounding font size and color, so a column label like `$Y = 0$` would otherwise render small and gray beside a row label like `$X = -1$` set full size in the body cell below it. The rule keys on content rather than on any one post, so it covers future tables too; only the independence-zoo table uses it today.
+
 Both live in `fonts/` as woff2 and are declared in `_fonts.html`, which is pulled in via `include-in-header`. They are deliberately **not** loaded from the Google Fonts CDN, so no reader IP addresses go to Google. Do not "simplify" this back to a CDN link.
 
 Font URLs in that file are site-root absolute (`/fonts/...`). Declaring them in a `.css` file listed under `format.html.css` does **not** work — Quarto rewrites the paths and produces a broken `/fonts/..fonts/...`.
 
 **Editing the theme never invalidates `_freeze/`.** Freeze keys on `.qmd` source, so restyling costs a re-render of HTML only and never re-runs R.
 
-Two fragile spots, both of which degrade to "looks more like stock Quarto" rather than breaking:
+A few fragile spots, all of which degrade to "looks more like stock Quarto" rather than breaking:
 
 - Several selectors target Quarto-internal class names (`.quarto-title-meta-heading`, `.quarto-category`, `#title-block-header`). A Quarto upgrade could rename these.
 - The post date is moved above the title with flexbox `order`, which depends on Quarto's DOM order inside `#title-block-header`.
 - The `!important` flags on `.quarto-category` are required, not stylistic. Quarto ships a more specific rule that restores the default pill border without them.
+- The table of contents is held back to 900px, above Quarto's own 768px breakpoint, because the wide `$grid-column-gutter-width` leaves the page grid about 862px wide and it does not shrink in that band. Without the override the sidebar hangs off the right edge and the page scrolls sideways. If the gutter is ever narrowed, recheck the breakpoint — the two are tied together, as `$math-bleed` already is.
 
 ### Figures
 
@@ -166,6 +169,14 @@ source(here::here("_common.R"))
 ````
 
 Check figure sizes after adding any plot with more than a few thousand marks. Note the argument name differs by device: `svglite` takes `bg`, `ragg_png` takes `background`.
+
+**The one tikz figure is styled separately, in LaTeX.** `why-econometrics-is-confusing-part-ii-the-independence-zoo` draws its diagram in a `{tikz}` chunk rather than an `{r}` one. knitr compiles that through LaTeX, not through an R graphics device, so nothing in `_common.R` reaches it — the theme, the `par` hook and the SVG font-embedding hook all apply to R figures only. The chunk therefore carries its own styling in `engine.opts`:
+
+- `classoption: "dvisvgm,tikz"` makes pgf write SVG drawing commands directly. Without it pgf emits PostScript, which the TeX Live build of `dvisvgm` cannot read unless Ghostscript is also installed. Two inert PostScript specials are still reported as a warning on every render; output with and without Ghostscript is pixel-identical, so the warning can be ignored.
+- `dvisvgm.opts: "--no-fonts"` converts glyphs to outlines. The figure then carries no font references at all, which is why it needs none of the subset-font machinery the R figures use.
+- `extra.preamble` loads `sourceserif` for the words and defines the ink color. Setting a color matters twice over: it matches `econblog_ink`, and it keeps the image from being pure grayscale. The old PNG was flattened onto white precisely because ImageMagick saw an all-gray image and dropped its alpha channel.
+
+Math deliberately stays in Computer Modern, because that is what MathJax draws on the page. Only the text takes Source Serif 4. This route needs `latex` and `dvisvgm`, both part of TeX Live, and no R packages.
 
 **Editing `_common.R` does NOT invalidate `_freeze/`.** Freeze keys on `.qmd` source, so a change to the shared theme reaches only posts that happen to re-render. To propagate one, delete the cache for every post that sources it and render:
 
@@ -210,4 +221,4 @@ Coverage was checked on the two math-heaviest posts, not all 38.
 - **Image/asset references** in posts should use relative paths within the post directory
 - **Never delete `.quarto/`** — it's Quarto's local cache, needed for rendering. Gitignored, safe to leave alone.
 - **Never delete `_freeze/`** — the committed cache that lets CI build without R. Only Quarto should modify this directory (via `quarto render`). The one exception is deliberately clearing a post's subdirectory to force re-execution after a change to `_common.R`, which `freeze` cannot see.
-- **Several posts depend on packages that are not on CRAN.** `rcovidUK` (`remotes::install_github("fditraglia/rcovidUK")`) and `ManyIV` (`kolesarm/ManyIV`) hold datasets; `ggdag`, `tictoc`, `magick` and `pdftools` come from CRAN, the last two only so the tikz diagram in the independence-zoo post can be converted to PNG. The `_freeze` cache hides their absence until something forces a re-render, at which point the build fails. If you are setting up a new machine, install all six before touching any `.qmd`.
+- **Several posts depend on packages that are not on CRAN.** `rcovidUK` (`remotes::install_github("fditraglia/rcovidUK")`) and `ManyIV` (`kolesarm/ManyIV`) hold datasets; `ggdag` and `tictoc` come from CRAN. The `_freeze` cache hides their absence until something forces a re-render, at which point the build fails. If you are setting up a new machine, install all four before touching any `.qmd`.

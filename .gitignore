@@ -7,3 +7,10 @@ Thumbs.db
 /.claude/
 
 **/*.quarto_ipynb
+
+# knitr's tikz engine deletes its temporary .tex but leaves the LaTeX log behind
+post/*/tikz*.log
+
+# The tikz engine converts LaTeX output to SVG and leaves the intermediate in
+# _freeze/. Only the .svg is read, by the browser; nothing reads the .dvi.
+_freeze/**/*.dvi

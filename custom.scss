@@ -295,13 +295,16 @@ figure, .quarto-figure, .cell-output-display {
   margin-bottom: 2.2em;
 }
 
+// Left, to match the headings, the body text and the titles and captions that
+// _common.R sets inside the figures themselves. Centering a caption that runs
+// to more than one line also leaves a short last line stranded mid-column.
 figcaption, .figure-caption, .quarto-figure figcaption {
   font-family: $font-family-monospace;
   font-size: 0.72rem;
   line-height: 1.5;
   letter-spacing: 0.01em;
   color: $ink-muted;
-  text-align: center;
+  text-align: left;
   margin-top: 0.9em;
 }
 
@@ -319,6 +322,21 @@ main thead th, .table thead th {
   font-size: 0.64rem;
   border-bottom: 1px solid $rule;
   padding-bottom: 0.5em;
+}
+
+// A header cell whose label is mathematics is notation, not chrome. Under
+// %chrome, MathJax inherits the 0.64rem size and the muted gray, so a column
+// label like $Y = 0$ comes out small and faint beside a row label like
+// $X = -1$ set full size in the body cell directly below it. Give those cells
+// the same treatment the body cells get, so the two sets of labels match.
+main thead th:has(mjx-container),
+.table thead th:has(mjx-container) {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  color: $ink;
 }
 
 main tbody td, .table tbody td { border-color: rgba($rule, 0.7); }
@@ -450,6 +468,20 @@ nav[role="doc-toc"] .h2,
 }
 
 nav[role="doc-toc"] ul { border-left: none; }
+
+// Quarto reveals the margin sidebar at 768px, but this site's page grid is
+// fixed at about 862px from that breakpoint up to 900px, so in between the
+// table of contents hangs off the right edge and the whole page scrolls
+// sideways. The extra width comes from the widened $grid-column-gutter-width,
+// which at 4.25rem a side against Quarto's 1.5rem adds 93.5px to the layout --
+// almost exactly the overflow measured at 768px. The gutter has to stay wide,
+// since it is what keeps
+// bleeding display equations clear of the table of contents, so instead hold
+// the sidebar back until the grid can actually hold one. Quarto already hides
+// it below 768px; this only moves that threshold up.
+@media (max-width: 899.98px) {
+  #quarto-margin-sidebar { display: none !important; }
+}
 
 nav[role="doc-toc"] ul li a {
   font-size: 0.82rem;
