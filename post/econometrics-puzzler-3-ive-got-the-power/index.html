@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Francis J. DiTraglia">
-<meta name="dcterms.date" content="2022-07-24">
+<meta name="dcterms.date" content="2026-08-06">
 
-<title>Why Econometrics is Confusing Part 1: The Error Term – econometrics.blog</title>
+<title>Econometrics Puzzler #3: I’ve Got the Power – econometrics.blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -219,9 +219,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#population-linear-regression" id="toc-population-linear-regression" class="nav-link active" data-scroll-target="#population-linear-regression">Population Linear Regression</a></li>
-  <li><a href="#conditional-mean-function" id="toc-conditional-mean-function" class="nav-link" data-scroll-target="#conditional-mean-function">Conditional Mean Function</a></li>
-  <li><a href="#causal-model" id="toc-causal-model" class="nav-link" data-scroll-target="#causal-model">Causal Model</a></li>
+  <li><a href="#lehrs-rule" id="toc-lehrs-rule" class="nav-link active" data-scroll-target="#lehrs-rule">Lehr’s Rule</a></li>
+  <li><a href="#why-does-it-work" id="toc-why-does-it-work" class="nav-link" data-scroll-target="#why-does-it-work">Why does it work?</a></li>
   </ul>
 </nav>
     </div>
@@ -230,10 +229,10 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Why Econometrics is Confusing Part 1: The Error Term</h1>
+<h1 class="title">Econometrics Puzzler #3: I’ve Got the Power</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">econometrics</div>
-    <div class="quarto-category">teaching</div>
+    <div class="quarto-category">statistics</div>
+    <div class="quarto-category">puzzler</div>
   </div>
   </div>
 
@@ -251,7 +250,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 24, 2022</p>
+      <p class="date">August 6, 2026</p>
     </div>
   </div>
   
@@ -263,48 +262,44 @@ window.Quarto = {
 </header>
 
 
-<p>“Suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span>.” A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be stamped out completely. Without further clarification, this sentence could mean any number of different things. Even with clarification, it is a source of endless confusion for beginning students. What is <span class="math inline">\(U\)</span> exactly? What is the meaning of “<span class="math inline">\(=\)</span>” in this context? We can do better. Here are a few suggestions.</p>
-<section id="population-linear-regression" class="level2">
-<h2 class="anchored" data-anchor-id="population-linear-regression">Population Linear Regression</h2>
-<p>Sometimes <span class="math inline">\(Y = \alpha + \beta X + U\)</span> is nothing more than the <em>population linear regression model</em>. In other words <span class="math inline">\((\alpha, \beta)\)</span> are the solutions to <span class="math display">\[
-\min_{\alpha, \beta} \mathbb{E}[(Y - \alpha - \beta X)^2].
-\]</span></p>
-<p>The usual way to signal this is by adding the “assumptions” that <span class="math inline">\(\mathbb{E}[XU] = \mathbb{E}[U] = 0\)</span>. It’s no wonder that students find this confusing. Neither of these equalities is in fact an assumption; each is true <em>by construction</em>. Rather than “let <span class="math inline">\(Y = \alpha + \beta X + U\)</span>,” I suggest</p>
-<blockquote class="blockquote">
-<p>Define <span class="math inline">\(U \equiv Y - (\alpha + \beta X)\)</span> where <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are the slope and intercept from a population linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</p>
-</blockquote>
-<p>This makes it clear that <span class="math inline">\(U\)</span> has no life of its own; it is defined by the coefficients <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. In this way, the equalities <span class="math inline">\(\mathbb{E}[XU] = \mathbb{E}[U] = 0\)</span> become a theorem to be deduced rather than a spurious “assumption” of linear regression. Repeat after me: <strong>the population linear regression model has no assumptions</strong>. We can always choose <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> to ensure that <span class="math inline">\(U\)</span> satisfies the equalities from above. The solution to the population least squares problem is <span class="math display">\[
-\beta = \text{Cov}(X,Y)/\text{Var}(X),\quad
-\alpha = \mathbb{E}[Y] - \beta \mathbb{E}[X].
-\]</span> By the linearity of expectation, it follows that <span class="math display">\[
-\mathbb{E}[U] = \mathbb{E}[Y - \alpha - \beta X] = \mathbb{E}[Y] - (\mathbb{E}[Y] - \beta \mathbb{E}[X]) - \beta \mathbb{E}[X] = 0
-\]</span> and similarly, although with a bit more algebra<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[
+<p>Today’s challenge is to do a power calculation <em>in your head</em>. No paper, no pencils, no normal tables, and no statistical software packages are allowed!</p>
+<p>Suppose you observe <span class="math inline">\(n\)</span> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <span class="math inline">\(\sigma^2\)</span>, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <span class="math inline">\(H_0\colon \mu_1 = \mu_2\)</span>, against the two-sided alternative with significance level <span class="math inline">\(\alpha = 0.05\)</span>. How many observations <span class="math inline">\(n\)</span> do you need from each population so that the approximate power of your test will be 0.8?</p>
+<p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\mu_1\)</span>, and <span class="math inline">\(\mu_2\)</span>.</p>
+<p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert a nonlinear function of the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
+<section id="lehrs-rule" class="level2">
+<h2 class="anchored" data-anchor-id="lehrs-rule">Lehr’s Rule</h2>
+<p>In a short note from <em>Statistics in Medicine</em>, <a href="https://doi.org/10.1002/sim.4780110811">Lehr (1992)</a> suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory: &gt; For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80 &gt; <span class="math display">\[
+&gt; n = 16 s^2 / d^2
+&gt; \]</span> Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives <span class="math display">\[
+n = \frac{16}{\Delta^2}, \quad \Delta \equiv \frac{\mu_1 - \mu_2}{\sigma}
+\]</span> The quantity that I have called <span class="math inline">\(\Delta\)</span> is a unitless measure of <em>effect size</em>: it compares the difference between populations, <span class="math inline">\(\mu_1 - \mu_2\)</span>, to the variability within each population, <span class="math inline">\(\sigma\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Notice that the sample size required is inversely proportional to the <em>square</em> of the effect size. This means that very large samples are needed to detect small effects. For <span class="math inline">\(\Delta = 1\)</span> (a large effect size) we only need 16 observations per group but for <span class="math inline">\(\Delta = 0.1\)</span> (a very small effect size) we need a whopping 1600 observations per group!</p>
+</section>
+<section id="why-does-it-work" class="level2">
+<h2 class="anchored" data-anchor-id="why-does-it-work">Why does it work?</h2>
+<p>Here’s a proof of Lehr’s rule. Let <span class="math inline">\(\bar{X}_1\)</span> and <span class="math inline">\(\bar{X}_2\)</span> be the sample means corresponding to each population. Then <span class="math inline">\(\bar{X}_1 \sim \text{N}(\mu_1, \sigma^2/n)\)</span> independently of <span class="math inline">\(\bar{X}_2 \sim \text{N}(\mu_2, \sigma^2/n)\)</span> and our test statistic can be written as <span class="math display">\[
 \begin{aligned}
-\mathbb{E}[XU] &amp;= \mathbb{E}[X(Y - \alpha - \beta X)] \\
-&amp;= \mathbb{E}[X(Y - \left\{\mathbb{E}(Y) - \beta \mathbb{E}(X)\right\} - \beta X)]\\
-&amp;= \mathbb{E}[X\left\{Y - \mathbb{E}(Y) \right\}] -  \beta \mathbb{E}[X\left\{X - \mathbb{E}(X)\right\} ]\\
-&amp;= \text{Cov}(X,Y) - \beta \text{Var}(X) = 0.
+T &amp;\equiv \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{2\sigma^2 / n}} =\frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{2\sigma^2 / n}}  + \frac{\mu_1 - \mu_2}{\sqrt{2 \sigma^2/n}}\\
+&amp;= Z + \Delta \sqrt{n/2}
 \end{aligned}
-\]</span></p>
-</section>
-<section id="conditional-mean-function" class="level2">
-<h2 class="anchored" data-anchor-id="conditional-mean-function">Conditional Mean Function</h2>
-<p>In other situations <span class="math inline">\(Y = \alpha + \beta X + U\)</span> is intended to represent a <em>conditional mean function</em>. This is usually signaled by the assumption <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span>. This time around I haven’t written the word assumption in “scare quotes.” That’s because there is an assumption lurking here, unlike in the population linear regression model from above. Still, this is a hopelessly confusing way of indicating it. Here’s a better way:</p>
-<blockquote class="blockquote">
-<p>Define <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|X)\)</span> and assume that <span class="math inline">\(\mathbb{E}(Y|X) = \alpha + \beta X\)</span>.</p>
-</blockquote>
-<p>Again, this makes it clear that <span class="math inline">\(U\)</span> has no life of its own. It is <em>constructed</em> from <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>. The conditional mean function <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is simply the minimizer of <span class="math inline">\(\mathbb{E}[\left\{ Y - f(X)\right\}^2]\)</span> over all (well-behaved) functions.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> By construction <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span> since <span class="math display">\[
-\mathbb{E}[U|X] = \mathbb{E}[Y - \mathbb{E}(Y|X)|X] = \mathbb{E}[Y|X] - \mathbb{E}[Y|X] = 0
-\]</span> by the linearity of conditional expectation and the fact that <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a function of <span class="math inline">\(X\)</span>. But how can we be sure that the conditional mean function is linear? This is a <em>bona fide</em> assumption: it may be true or it may be false. Either way, it is much clearer to emphasize that we are making an assumption about the <em>form</em> of the conditional mean function, <em>not</em> an assumption about the error term <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|X)\)</span>.</p>
-</section>
-<section id="causal-model" class="level2">
-<h2 class="anchored" data-anchor-id="causal-model">Causal Model</h2>
-<p>Both interpretations of <span class="math inline">\(Y = \alpha + \beta X + U\)</span> from above are purely predictive; they say nothing about whether <span class="math inline">\(X\)</span> <em>causes</em> <span class="math inline">\(Y\)</span>. To indicate that a linear model is meant to be causal, it is traditional to write something like “suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span> where <span class="math inline">\(X\)</span> may be endogenous.” Often “may be endogenous” is replaced by “where <span class="math inline">\(X\)</span> may be correlated with <span class="math inline">\(U\)</span>.” What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of “<span class="math inline">\(=\)</span>” beyond all reason. Here’s my suggested improvement:</p>
-<blockquote class="blockquote">
-<p>Consider the causal model <span class="math inline">\(Y \leftarrow (\alpha + \beta X + U)\)</span> where <span class="math inline">\(U\)</span> is unobserved and <span class="math inline">\((X,U)\)</span> may be dependent.</p>
-</blockquote>
-<p>Causality is intrinsically directional: cigarettes cause lung cancer; lung cancer doesn’t cause cigarettes. The notation “<span class="math inline">\(\leftarrow\)</span>” makes this clear. In stark contrast, the notion of mathematical equality is <em>symmetric</em>. If <span class="math inline">\(Y = \alpha + \beta X + U\)</span>, it is just as true to say that <span class="math inline">\(X = (Y - \alpha - U) / \beta\)</span>. Of course this is nonsensical when applied to cigarettes and cancer.</p>
-<p>In a causal model, <span class="math inline">\(U\)</span> <em>does</em> have a life of its own; it represents the causes of <span class="math inline">\(Y\)</span> that we cannot observe. Perhaps <span class="math inline">\(Y\)</span> is wage, <span class="math inline">\(X\)</span> is years of schooling and <span class="math inline">\(U\)</span> is “family background” plus “ability.” For this reason I do <em>not</em> write “define <span class="math inline">\(U \equiv (\text{something})\)</span>.” We aren’t defining a residual in a prediction problem. We are taking a stand on how the world works by writing down a particular causal model. In a randomized controlled trial, any unobserved causes <span class="math inline">\(U\)</span> would be independent of <span class="math inline">\(X\)</span>. Here we have not made this assumption. We have, however, assumed a particular form for the causal relationship: linear with constant coefficients. Each additional year of schooling causes the same increase (or decrease) in wage regardless of who you are or how many years of schooling you already have. This model could be wrong. But right or wrong, it is fundamentally distinct from the population linear regression and conditional mean models described above. Let’s endeavour to make this clear in our notation.</p>
+\]</span> where <span class="math inline">\(Z \sim \text{N}(0,1)\)</span>. Now let <span class="math inline">\(c\)</span> be the critical value for our two-sided test with significance level <span class="math inline">\(\alpha\)</span>. We reject the null if <span class="math inline">\(|T| &gt; c\)</span>, in other words if <span class="math inline">\(T&gt;c\)</span> or <span class="math inline">\(T &lt; - c\)</span>. Thus the power of our test is <span class="math display">\[
+\begin{aligned}
+\text{Power} &amp;= \mathbb{P}(Z + \Delta \sqrt{n/2} &gt; c) + \mathbb{P}(Z + \Delta \sqrt{n / 2} &lt; -c)\\
+&amp;= 1 - \Phi(c - \Delta \sqrt{n / 2}) + \Phi(-c - \Delta \sqrt{n / 2})
+\end{aligned}
+\]</span> where <span class="math inline">\(\Phi(\cdot)\)</span> denotes the CDF of a standard normal random variable. Rearranging, <span class="math display">\[
+1 - \text{Power} = \Phi(c - \Delta \sqrt{n / 2}) - \Phi(-c - \Delta \sqrt{n/2})
+\]</span> It turns out that the right hand side of this expression would be <em>completely unchanged</em> if we replaced <span class="math inline">\(\Delta\)</span> with <span class="math inline">\(-\Delta\)</span>, so we can assume without loss of generality that <span class="math inline">\(\Delta\)</span> is positive.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This makes intuitive sense: power should depend on the <em>difference of means</em> but it should not depend on which we labeled “1” and which we labeled “2”, which determines the sign of <span class="math inline">\(\Delta\)</span>.</p>
+<p>Now comes the approximation. The second term on the right hand side of our expression for <span class="math inline">\(1 - \text{Power}\)</span> is <span class="math inline">\(\mathbb{P}(T &lt; -c)\)</span>. Since <span class="math inline">\(\Delta\)</span> is <em>positive</em>, this is the probability of rejecting the null <em>in the wrong direction</em>. In other words, it is the probability of rejecting <span class="math inline">\(\mu_1 = \mu_2\)</span> when <span class="math inline">\(\mu_1 &gt; \mu_2\)</span> by observing a test statistic that takes on a large <em>negative</em> value. We will approximate this probability by <strong>setting it equal to zero</strong>. For a test with a reasonable amount of power–remember that we are targeting 80% power–this is a very good approximation.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> If you worry that there’s something circular in my logic here, fear not: we will return to this point at the end! But for the moment, we will assume that it’s safe to write <span class="math display">\[
+1 - \text{Power} \approx \Phi(c - \Delta \sqrt{n / 2}) .
+\]</span> Applying the standard normal quantile function <span class="math inline">\(\Phi^{-1}\)</span> to both sides gives <span class="math display">\[
+\Phi^{-1}(1 - \text{Power})  \approx c - \Delta \sqrt{n / 2}
+\]</span> and rearranging the result gives <span class="math display">\[
+n \approx 2 \left[\frac{c - \Phi^{-1}(1 - \text{Power})}{\Delta}\right]^2.
+\]</span> Finally, substituting <span class="math inline">\(\text{Power} = 0.8\)</span> and <span class="math inline">\(c = 1.96\)</span>, <span class="math display">\[
+n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[ \frac{1.96 - (-0.84)}{\Delta} \right]^2 \approx \frac{15.7}{\Delta^2}.
+\]</span> We obtain Lehr’s rule by rounding <span class="math inline">\(15.7\)</span> up to <span class="math inline">\(16\)</span>.</p>
+<p>Now what about that <span class="math inline">\(\mathbb{P}(T &lt; - c)\)</span> term we discarded above? Is it really negligible? Substituting <span class="math inline">\(c = 1.96\)</span> and <span class="math inline">\(\Phi^{-1}(1 - \text{Power}) = -0.84\)</span> into our intermediate step while solving for <span class="math inline">\(n\)</span> above gives <span class="math inline">\(\Delta \sqrt{n/2} = 1.96 + 0.84 = 2.8\)</span>. This automatically holds for any value of <span class="math inline">\(\Delta\)</span> since Lehr’s rule automatically increases <span class="math inline">\(n\)</span> to offset a smaller effect size. Thus, the discarded term equals <span class="math inline">\(\Phi(-1.96 - 2.8) = \Phi(-4.76) \approx 10^{-6}\)</span> so it is perfectly safe to neglect it!</p>
+<p>Notice that we used two approximations in this derivation, but both of them are <em>conservative</em>. In other words, Lehr’s rule slightly <em>overstates</em> the required sample size to achieve 80% power in this example.</p>
 
 
 </section>
@@ -313,8 +308,9 @@ window.Quarto = {
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Surprised that <span class="math inline">\(\mathbb{E}[X(Y - \mathbb{E}[Y])] = \text{Cov}(X,Y)\)</span> and <span class="math inline">\(\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)\)</span>? These are great homework problems! Work through the algebra using the definitions of variance and covariance.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>See Section 2.1 of my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a> for details.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <span class="math inline">\(d\)</span></a>. Be careful not to confuse it with the <span class="math inline">\(d\)</span> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <span class="math inline">\(\mu_1 - \mu_2\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>To see why substitute <span class="math inline">\(-\Delta\)</span> in place of <span class="math inline">\(\Delta\)</span> and use the symmetry of the normal distribution. In particular, apply <span class="math inline">\(\Phi(-x) = 1 - \Phi(x)\)</span> <em>twice</em>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script>

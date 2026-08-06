@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-baf48d291c545c46c701d963c63f1c31.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-b32e1109dbf20673b888623802c74391.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -326,12 +326,15 @@ window.Quarto = {
 
 
 <p>In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical introductory econometrics course moves back and forth between different notions of dependence, stopping occasionally to mention that they’re not equivalent but never fully explaining why, on the premise that “you’ve certainly already learned this in your introductory probability and statistics course.” I remember finding this extremely frustrating as a student, but only recently managed to translate this frustration into meaningful changes in my own teaching.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Building on some of my recent teaching materials, this post is a field guide to the menagerie–or at least petting zoo–of “dependence” notions that appear regularly in econometrics. We’ll examine each property on its own along with the relationships between them, using the simple examples to build your intuition. Since a picture is worth a thousand words, here’s one that summarizes the entire post:</p>
-<!-- Note that the following requires the magick and pdftools R packages. These can be installed from cran.-->
+<!-- Rendered by TeX Live: latex writes a DVI, dvisvgm turns it into SVG. The
+     dvisvgm class option makes pgf emit SVG directly instead of PostScript, so
+     no Ghostscript is needed; --no-fonts converts glyphs to outlines, so the
+     figure carries no font references. See CLAUDE.md. -->
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/tikz-ex-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="index_files/figure-html/tikz-ex-1.svg" class="img-fluid figure-img" width="480"></p>
 <figcaption>Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another.</figcaption>
 </figure>
 </div>

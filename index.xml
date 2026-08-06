@@ -10,7 +10,48 @@
 <atom:link href="https://www.econometrics.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.10.18</generator>
-<lastBuildDate>Sun, 26 Apr 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 06 Aug 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Econometrics Puzzler #3: I’ve Got the Power</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/econometrics-puzzler-3-ive-got-the-power/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Today’s challenge is to do a power calculation <em>in your head</em>. No paper, no pencils, no normal tables, and no statistical software packages are allowed!</p>
+<p>Suppose you observe <img src="https://latex.codecogs.com/png.latex?n"> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <img src="https://latex.codecogs.com/png.latex?H_0%5Ccolon%20%5Cmu_1%20=%20%5Cmu_2">, against the two-sided alternative with significance level <img src="https://latex.codecogs.com/png.latex?%5Calpha%20=%200.05">. How many observations <img src="https://latex.codecogs.com/png.latex?n"> do you need from each population so that the approximate power of your test will be 0.8?</p>
+<p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1">, and <img src="https://latex.codecogs.com/png.latex?%5Cmu_2">.</p>
+<p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert a nonlinear function of the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
+<section id="lehrs-rule" class="level2">
+<h2 class="anchored" data-anchor-id="lehrs-rule">Lehr’s Rule</h2>
+<p>In a short note from <em>Statistics in Medicine</em>, <a href="https://doi.org/10.1002/sim.4780110811">Lehr (1992)</a> suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory: &gt; For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80 &gt; <img src="https://latex.codecogs.com/png.latex?%0A%3E%20n%20=%2016%20s%5E2%20/%20d%5E2%0A%3E%20"> Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives <img src="https://latex.codecogs.com/png.latex?%0An%20=%20%5Cfrac%7B16%7D%7B%5CDelta%5E2%7D,%20%5Cquad%20%5CDelta%20%5Cequiv%20%5Cfrac%7B%5Cmu_1%20-%20%5Cmu_2%7D%7B%5Csigma%7D%0A"> The quantity that I have called <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is a unitless measure of <em>effect size</em>: it compares the difference between populations, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">, to the variability within each population, <img src="https://latex.codecogs.com/png.latex?%5Csigma">.<sup>1</sup> Notice that the sample size required is inversely proportional to the <em>square</em> of the effect size. This means that very large samples are needed to detect small effects. For <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%201"> (a large effect size) we only need 16 observations per group but for <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%200.1"> (a very small effect size) we need a whopping 1600 observations per group!</p>
+</section>
+<section id="why-does-it-work" class="level2">
+<h2 class="anchored" data-anchor-id="why-does-it-work">Why does it work?</h2>
+<p>Here’s a proof of Lehr’s rule. Let <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_1"> and <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_2"> be the sample means corresponding to each population. Then <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_1%20%5Csim%20%5Ctext%7BN%7D(%5Cmu_1,%20%5Csigma%5E2/n)"> independently of <img src="https://latex.codecogs.com/png.latex?%5Cbar%7BX%7D_2%20%5Csim%20%5Ctext%7BN%7D(%5Cmu_2,%20%5Csigma%5E2/n)"> and our test statistic can be written as <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0AT%20&amp;%5Cequiv%20%5Cfrac%7B%5Cbar%7BX%7D_1%20-%20%5Cbar%7BX%7D_2%7D%7B%5Csqrt%7B2%5Csigma%5E2%20/%20n%7D%7D%20=%5Cfrac%7B(%5Cbar%7BX%7D_1%20-%20%5Cbar%7BX%7D_2)%20-%20(%5Cmu_1%20-%20%5Cmu_2)%7D%7B%5Csqrt%7B2%5Csigma%5E2%20/%20n%7D%7D%20%20+%20%5Cfrac%7B%5Cmu_1%20-%20%5Cmu_2%7D%7B%5Csqrt%7B2%20%5Csigma%5E2/n%7D%7D%5C%5C%0A&amp;=%20Z%20+%20%5CDelta%20%5Csqrt%7Bn/2%7D%0A%5Cend%7Baligned%7D%0A"> where <img src="https://latex.codecogs.com/png.latex?Z%20%5Csim%20%5Ctext%7BN%7D(0,1)">. Now let <img src="https://latex.codecogs.com/png.latex?c"> be the critical value for our two-sided test with significance level <img src="https://latex.codecogs.com/png.latex?%5Calpha">. We reject the null if <img src="https://latex.codecogs.com/png.latex?%7CT%7C%20%3E%20c">, in other words if <img src="https://latex.codecogs.com/png.latex?T%3Ec"> or <img src="https://latex.codecogs.com/png.latex?T%20%3C%20-%20c">. Thus the power of our test is <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Ctext%7BPower%7D%20&amp;=%20%5Cmathbb%7BP%7D(Z%20+%20%5CDelta%20%5Csqrt%7Bn/2%7D%20%3E%20c)%20+%20%5Cmathbb%7BP%7D(Z%20+%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D%20%3C%20-c)%5C%5C%0A&amp;=%201%20-%20%5CPhi(c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%20+%20%5CPhi(-c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%0A%5Cend%7Baligned%7D%0A"> where <img src="https://latex.codecogs.com/png.latex?%5CPhi(%5Ccdot)"> denotes the CDF of a standard normal random variable. Rearranging, <img src="https://latex.codecogs.com/png.latex?%0A1%20-%20%5Ctext%7BPower%7D%20=%20%5CPhi(c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%20-%20%5CPhi(-c%20-%20%5CDelta%20%5Csqrt%7Bn/2%7D)%0A"> It turns out that the right hand side of this expression would be <em>completely unchanged</em> if we replaced <img src="https://latex.codecogs.com/png.latex?%5CDelta"> with <img src="https://latex.codecogs.com/png.latex?-%5CDelta">, so we can assume without loss of generality that <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is positive.<sup>2</sup> This makes intuitive sense: power should depend on the <em>difference of means</em> but it should not depend on which we labeled “1” and which we labeled “2”, which determines the sign of <img src="https://latex.codecogs.com/png.latex?%5CDelta">.</p>
+<p>Now comes the approximation. The second term on the right hand side of our expression for <img src="https://latex.codecogs.com/png.latex?1%20-%20%5Ctext%7BPower%7D"> is <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-c)">. Since <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is <em>positive</em>, this is the probability of rejecting the null <em>in the wrong direction</em>. In other words, it is the probability of rejecting <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20=%20%5Cmu_2"> when <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20%3E%20%5Cmu_2"> by observing a test statistic that takes on a large <em>negative</em> value. We will approximate this probability by <strong>setting it equal to zero</strong>. For a test with a reasonable amount of power–remember that we are targeting 80% power–this is a very good approximation.<sup>3</sup> If you worry that there’s something circular in my logic here, fear not: we will return to this point at the end! But for the moment, we will assume that it’s safe to write <img src="https://latex.codecogs.com/png.latex?%0A1%20-%20%5Ctext%7BPower%7D%20%5Capprox%20%5CPhi(c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%20.%0A"> Applying the standard normal quantile function <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D"> to both sides gives <img src="https://latex.codecogs.com/png.latex?%0A%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20%20%5Capprox%20c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D%0A"> and rearranging the result gives <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7Bc%20-%20%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%7D%7B%5CDelta%7D%5Cright%5D%5E2.%0A"> Finally, substituting <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BPower%7D%20=%200.8"> and <img src="https://latex.codecogs.com/png.latex?c%20=%201.96">, <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7B1.96%20-%20%5CPhi%5E%7B-1%7D(0.2)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%202%5Cleft%5B%20%5Cfrac%7B1.96%20-%20(-0.84)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%20%5Cfrac%7B15.7%7D%7B%5CDelta%5E2%7D.%0A"> We obtain Lehr’s rule by rounding <img src="https://latex.codecogs.com/png.latex?15.7"> up to <img src="https://latex.codecogs.com/png.latex?16">.</p>
+<p>Now what about that <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-%20c)"> term we discarded above? Is it really negligible? Substituting <img src="https://latex.codecogs.com/png.latex?c%20=%201.96"> and <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20=%20-0.84"> into our intermediate step while solving for <img src="https://latex.codecogs.com/png.latex?n"> above gives <img src="https://latex.codecogs.com/png.latex?%5CDelta%20%5Csqrt%7Bn/2%7D%20=%201.96%20+%200.84%20=%202.8">. This automatically holds for any value of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> since Lehr’s rule automatically increases <img src="https://latex.codecogs.com/png.latex?n"> to offset a smaller effect size. Thus, the discarded term equals <img src="https://latex.codecogs.com/png.latex?%5CPhi(-1.96%20-%202.8)%20=%20%5CPhi(-4.76)%20%5Capprox%2010%5E%7B-6%7D"> so it is perfectly safe to neglect it!</p>
+<p>Notice that we used two approximations in this derivation, but both of them are <em>conservative</em>. In other words, Lehr’s rule slightly <em>overstates</em> the required sample size to achieve 80% power in this example.</p>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <img src="https://latex.codecogs.com/png.latex?d"></a>. Be careful not to confuse it with the <img src="https://latex.codecogs.com/png.latex?d"> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">.↩︎</p></li>
+<li id="fn2"><p>To see why substitute <img src="https://latex.codecogs.com/png.latex?-%5CDelta"> in place of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> and use the symmetry of the normal distribution. In particular, apply <img src="https://latex.codecogs.com/png.latex?%5CPhi(-x)%20=%201%20-%20%5CPhi(x)"> <em>twice</em>.↩︎</p></li>
+<li id="fn3"><p>For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.↩︎</p></li>
+</ol>
+</section></div> ]]></description>
+  <category>statistics</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/econometrics-puzzler-3-ive-got-the-power/</guid>
+  <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Complex Step Differentiation</title>
   <dc:creator>Francis J. DiTraglia</dc:creator>
@@ -1815,6 +1856,7 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 </ol>
 </section></div> ]]></description>
   <category>econometrics</category>
+  <category>puzzler</category>
   <guid>https://www.econometrics.blog/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/</guid>
   <pubDate>Thu, 24 Jul 2025 00:00:00 GMT</pubDate>
 </item>
@@ -2099,6 +2141,7 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 </section></div> ]]></description>
   <category>econometrics</category>
   <category>causal inference</category>
+  <category>puzzler</category>
   <guid>https://www.econometrics.blog/post/econometrics-puzzler-1-to-instrument-or-not/</guid>
   <pubDate>Sun, 13 Jul 2025 00:00:00 GMT</pubDate>
 </item>
@@ -4836,12 +4879,15 @@ font-style: inherit;">2</span>)</span></code></pre></div></div>
 
 
 <p>In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical introductory econometrics course moves back and forth between different notions of dependence, stopping occasionally to mention that they’re not equivalent but never fully explaining why, on the premise that “you’ve certainly already learned this in your introductory probability and statistics course.” I remember finding this extremely frustrating as a student, but only recently managed to translate this frustration into meaningful changes in my own teaching.<sup>1</sup> Building on some of my recent teaching materials, this post is a field guide to the menagerie–or at least petting zoo–of “dependence” notions that appear regularly in econometrics. We’ll examine each property on its own along with the relationships between them, using the simple examples to build your intuition. Since a picture is worth a thousand words, here’s one that summarizes the entire post:</p>
-<!-- Note that the following requires the magick and pdftools R packages. These can be installed from cran.-->
+<!-- Rendered by TeX Live: latex writes a DVI, dvisvgm turns it into SVG. The
+     dvisvgm class option makes pgf emit SVG directly instead of PostScript, so
+     no Ghostscript is needed; --no-fonts converts glyphs to outlines, so the
+     figure carries no font references. See CLAUDE.md. -->
 <div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index_files/figure-html/tikz-ex-1.png" class="img-fluid figure-img" width="480"></p>
+<p><img src="https://www.econometrics.blog/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index_files/figure-html/tikz-ex-1.svg" class="img-fluid figure-img" width="480"></p>
 <figcaption>Different notions of dependence in econometrics and their relationships. A directed double arrow indicates that one property implies another.</figcaption>
 </figure>
 </div>
@@ -5094,458 +5140,6 @@ font-style: inherit;">~</span> w))</span></code></pre></div></div>
   <category>teaching</category>
   <guid>https://www.econometrics.blog/post/why-econometrics-is-confusing-part-ii-the-independence-zoo/</guid>
   <pubDate>Sun, 01 Jan 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>From the Poisson Distribution to Stirling’s Approximation</title>
-  <dc:creator>Francis J. DiTraglia</dc:creator>
-  <link>https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p>The <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Poisson distribution</a> is the most famous probability model for <em>counts</em>, non-negative integer values. Many real-world phenomena are well approximated by this distribution, including the <a href="https://www.jstor.org/stable/41138751">number of German bombs</a> that landed in 1/4km grid squares in south London during WWII. Formally, we say that a discrete random variable <img src="https://latex.codecogs.com/png.latex?X"> follows a Poisson distribution with rate parameter <img src="https://latex.codecogs.com/png.latex?%5Cmu%20%3E%200">, abbreviated <img src="https://latex.codecogs.com/png.latex?X%20%5Csim%20%5Ctext%7BPoisson%7D(%5Cmu)">, if <img src="https://latex.codecogs.com/png.latex?X"> has support set <img src="https://latex.codecogs.com/png.latex?%5C%7B0,%201,%202,%20...%5C%7D"> and probability mass function <img src="https://latex.codecogs.com/png.latex?%0Ap(x)%20%5Cequiv%20%5Cmathbb%7BP%7D(X=x)%20=%20%5Cfrac%7Be%5E%7B-%5Cmu%20%7D%5Cmu%5Ex%7D%7Bx!%7D.%0A"> Using some <a href="https://drive.explaineverything.com/thecode/CHAKTHR">clever algebra with sums</a> it’s not too hard to show that the rate parameter, <img src="https://latex.codecogs.com/png.latex?%5Cmu">, is <em>both the mean and the variance</em> of <img src="https://latex.codecogs.com/png.latex?X">.</p>
-<section id="numerical-problems-try-taking-logs." class="level2">
-<h2 class="anchored" data-anchor-id="numerical-problems-try-taking-logs.">Numerical problems? Try taking logs.</h2>
-<p>Now, suppose that we wanted to plot the pmf of a Poisson RV with rate <img src="https://latex.codecogs.com/png.latex?%5Cmu%20=%20171">. The R function for the pmf of a Poisson RV is <code>dpois()</code>, so we can make our plot as follows (indicating the rate parameter as a vertical line)</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tidyverse)</span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tibble</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">300</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb1-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">p =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dpois</span>(x, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb1-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aes</span>(x, p)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb1-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_point</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb1-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_vline</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xintercept =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb1-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ylab</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'Poisson(171) pmf'</span>)</span></code></pre></div></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/index_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>For such a large value of <img src="https://latex.codecogs.com/png.latex?%5Cmu">, this distribution looks decidedly bell-shaped. And indeed, it turns out to be extremely well-approximated by a normal distribution, as we’ll see below. It’s also clear that <img src="https://latex.codecogs.com/png.latex?X"> is most likely to take on a value relatively close to 171. We can use <code>dpois()</code> to calculate the exact probability that <img src="https://latex.codecogs.com/png.latex?X%20=%20171"> as follows: the answer is just over 3%.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dpois</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03049301</code></pre>
-</div>
-</div>
-<p>Now let’s try to calculate exactly the same probability <em>by hand</em>, that is by using the formula for the Poisson pmf from above.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">my_dpois <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(x, mu) {</span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">exp</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>mu) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> mu<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">^</span>x <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">factorial</span>(x)</span>
-<span id="cb4-3">}</span>
-<span id="cb4-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">my_dpois</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] NaN</code></pre>
-</div>
-</div>
-<p>What gives?! The abbreviation <code>NaN</code> stands for “not a number.” The problem in this case is that both the numerator and denominator of the fraction inside of <code>my_dpois()</code> evaluate to infinity when <code>mu</code> and <code>x</code> are 171, and the ratio <img src="https://latex.codecogs.com/png.latex?%5Cinfty/%5Cinfty"> is undefined.<sup>1</sup></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">numerator =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">exp</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">denominator =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">factorial</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  numerator denominator 
-        Inf         Inf </code></pre>
-</div>
-</div>
-<p>As I discussed in an <a href="../../post/street-fighting-numerical-analysis-part-1/">earlier post</a>, computers can only store a finite number of distinct numeric values. It’s not literally true that <code>factorial(171)</code> equals <img src="https://latex.codecogs.com/png.latex?%5Cinfty">. What’s really going on here is that <code>factorial(171)</code> is <em>such a large number</em> that it can’t be stored as a <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">floating-point number</a>. In this case there’s a very simple fix. If you haven’t seen this trick before, it’s a helpful one to keep up your sleeves: <strong>if you run into numerical problems with very large or very small values, try taking logs.</strong><sup>2</sup> The log of the Poisson pmf is simply <img src="https://latex.codecogs.com/png.latex?%0A%5Clog%20p(x)%20=%20-%5Cmu%20+%20x%20%5Clog(%5Cmu)%20-%20%5Clog(x!).%0A"> R even has a convenient, built-in function for evaluating the natural log of a factorial: <code>lfactorial()</code>. Now we can compute the log of our desired probability as follows:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">log</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lfactorial</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -3.490258</code></pre>
-</div>
-</div>
-<p>To obtain the probability, simply exponentiate:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">exp</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">log</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lfactorial</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">171</span>))</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03049301</code></pre>
-</div>
-</div>
-<p>Of course this just passes the buck to <code>lfactorial()</code>. So how does this mysterious function work? The bad news is that I’m not going to tell you; the good news is that I’m going to show you something <em>even better</em>, namely <a href="https://en.wikipedia.org/wiki/Stirling%27s_approximation">Stirling’s approximation</a>: a way to understand how <img src="https://latex.codecogs.com/png.latex?n!"> behaves <em>qualitatively</em> that turns out to give a pretty darned good approximation to <code>lfactorial()</code>. This may seem like an odd topic for a blog devoted to econometrics and statistics, so allow me to offer a few words of justification. First, computations involving <img src="https://latex.codecogs.com/png.latex?n!"> come up all the time in applied work. Second, it can be extremely helpful for certain theoretical arguments to have good approximations to <img src="https://latex.codecogs.com/png.latex?n!"> for large values of <img src="https://latex.codecogs.com/png.latex?n">. Finally, and most importantly from my perspective, the heuristic argument I’ll use below relies on none other than the <a href="../../post/thirty-isn-t-the-magic-number/">central limit theorem</a>. So even if you’ve seen a more traditional proof of Stirling’s approximation, I hope you’ll enjoy this alternative approach.<sup>3</sup></p>
-</section>
-<section id="stirlings-approximation" class="level2">
-<h2 class="anchored" data-anchor-id="stirlings-approximation">Stirling’s Approximation</h2>
-<p>The key step in our argument is to show that the pmf of a <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BPoisson%7D(%5Cmu)"> random variable is well-approximated by the <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BNormal%7D(%5Cmu,%20%5Cmu)"> density. This explains the bell-shaped curve that we plotted above. To obtain this result, we’ll use the central limit theorem. But there is one fact that you will need to take on faith if you don’t already know it: if <img src="https://latex.codecogs.com/png.latex?X_1%20%5Csim%20%5Ctext%7BPoisson%7D(%5Cmu_1)"> is independent of <img src="https://latex.codecogs.com/png.latex?X_2%20%5Csim%20%5Ctext%7BPoisson%7D(%5Cmu_2)"> then <img src="https://latex.codecogs.com/png.latex?X_1%20+%20X_2%20%5Csim%20%5Ctext%7BPoisson%7D(%5Cmu_1%20+%20%5Cmu_2)">. Proceeding <a href="https://en.wikipedia.org/wiki/Mathematical_induction">by induction</a> we can view a Poisson(171) random variable as the sum of 171 independent Poisson(1) random variables. More generally, we can view a Poisson RV with rate parameter <img src="https://latex.codecogs.com/png.latex?n"> as the sum of <img src="https://latex.codecogs.com/png.latex?n"> iid Poisson(1) random variables. By the <a href="../../post/thirty-isn-t-the-magic-number/">central limit theorem</a>, it follows that <img src="https://latex.codecogs.com/png.latex?%0A%5Csqrt%7Bn%7D(%5Cbar%7BX%7D_n%20-%201)%20%5Crightarrow_d%20%5Ctext%7BN%7D(0,1)%0A"> since the mean and variance of a Poisson(1) RV are both equal to one. From a practical perspective, this means that <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bn%7D(%5Cbar%7BX%7D_n%20-%201)"> is approximately equal to <img src="https://latex.codecogs.com/png.latex?Z">, a standard normal random variable. Re-arranging, <img src="https://latex.codecogs.com/png.latex?%0AX_1%20+%20X_2%20+%20...%20+%20X_n%20=%20n%5Cbar%7BX%7D_n%20=%20n%20+%20%5Csqrt%7Bn%7D%20%5Ctimes%20%5B%5Csqrt%7Bn%7D(%5Cbar%7BX%7D_n%20-%201)%5D%20%5Capprox%20n%20+%20%5Csqrt%7Bn%7D%20Z%0A"> and <img src="https://latex.codecogs.com/png.latex?n%20+%20%5Csqrt%7Bn%7D%20Z"> is simply a <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BN%7D(n,%20n)"> random variable! This is a quick way of seeing why the <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BPoisson%7D(%5Cmu)"> distribution is well-approximated by the <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BN%7D(%5Cmu,%20%5Cmu)"> distribution when <img src="https://latex.codecogs.com/png.latex?%5Cmu"> is large.</p>
-<p>Now let’s run with this. As we just saw, for large <img src="https://latex.codecogs.com/png.latex?%5Cmu"> the Poisson<img src="https://latex.codecogs.com/png.latex?(%5Cmu)"> pmf is well-approximated by the Normal<img src="https://latex.codecogs.com/png.latex?(%5Cmu,%20%5Cmu)"> density: <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7Be%5E%7B-%5Cmu%7D%5Cmu%5Ex%7D%7Bx!%7D%20%5Capprox%20%5Cfrac%7B1%7D%7B%5Csqrt%7B2%5Cpi%20%5Cmu%7D%7D%20%5Cexp%5Cleft%5C%7B%20-%5Cfrac%7B1%7D%7B2%7D%5Cleft(%20%5Cfrac%7Bx%20-%20%5Cmu%7D%7B%5Csqrt%7B%5Cmu%7D%7D%5Cright)%5E2%5Cright%5C%7D%0A"> This approximation is particularly accurate for <img src="https://latex.codecogs.com/png.latex?x"> near the <em>mean</em>. This is convenient, because substituting <img src="https://latex.codecogs.com/png.latex?%5Cmu"> for <img src="https://latex.codecogs.com/png.latex?x"> considerably simplifies the right hand side: <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7Be%5E%7B-%5Cmu%7D%5Cmu%5E%5Cmu%7D%7B%5Cmu!%7D%20%5Capprox%20%5Cfrac%7B1%7D%7B%5Csqrt%7B2%5Cpi%5Cmu%7D%7D%0A"> Re-arranging, we obtain <img src="https://latex.codecogs.com/png.latex?%0A%5Cmu!%20%5Capprox%20%5Cmu%5E%5Cmu%20e%5E%7B-%5Cmu%7D%20%5Csqrt%7B2%20%5Cpi%20%5Cmu%7D%0A"> Taking logs of both sides gives: <img src="https://latex.codecogs.com/png.latex?%0A%5Clog(%5Cmu!)%20%5Capprox%20%5Cmu%20%5Clog(%5Cmu)%20-%20%5Cmu%20+%20%5Cfrac%7B1%7D%7B2%7D%20%5Clog(2%20%5Cpi%20%5Cmu)%0A"> Writing this with <img src="https://latex.codecogs.com/png.latex?n"> in place of <img src="https://latex.codecogs.com/png.latex?%5Cmu"> gives the following: <img src="https://latex.codecogs.com/png.latex?%0A%5Clog(n!)%20%5Capprox%20n%20%5Clog(n)%20-%20n%20+%20%5Cfrac%7B1%7D%7B2%7D%20%5Clog(2%20%5Cpi%20n)%0A"> This is called <em>Stirling’s Approximation</em>. The usual way of writing this excludes the <img src="https://latex.codecogs.com/png.latex?%5Clog(2%5Cpi%20n)/2"> term, yielding <img src="https://latex.codecogs.com/png.latex?%5Clog(n!)%20%5Capprox%20n%5Clog(n)%20-%20n">, which is fairly easy to remember. Including the extra term, however, gives increased accuracy for smaller values of <img src="https://latex.codecogs.com/png.latex?n">. While I haven’t formally proved this, it turns out that <img src="https://latex.codecogs.com/png.latex?%0A%5Clog(n!)%20%5Csim%20n%20%5Clog(n)%20-%20n%20+%20%5Cfrac%7B1%7D%7B2%7D%20%5Clog(2%20%5Cpi%20n)%0A"> as <img src="https://latex.codecogs.com/png.latex?n%20%5Crightarrow%20%5Cinfty">. In other words, the ratio of the LHS and RHS tends to one in the large <img src="https://latex.codecogs.com/png.latex?n"> limit. Perhaps surprisingly, this approximation is extremely accurate even for fairly small values of <img src="https://latex.codecogs.com/png.latex?n">, as we can see by comparing it against <code>lfactorial()</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">stirling1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(n) n <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">log</span>(n) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> n</span>
-<span id="cb12-2">stirling2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(n) n <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">log</span>(n) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> n <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">log</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> pi <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> n)</span>
-<span id="cb12-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tibble</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb12-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Stirling1 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stirling1</span>(n),</span>
-<span id="cb12-5">         <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">Stirling2 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stirling2</span>(n),</span>
-<span id="cb12-6">         <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">R =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lfactorial</span>(n)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb12-7">  knitr<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">kable</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">digits =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>)</span></code></pre></div></div>
-<div class="cell-output-display">
-<table class="caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: right;">n</th>
-<th style="text-align: right;">Stirling1</th>
-<th style="text-align: right;">Stirling2</th>
-<th style="text-align: right;">R</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">-1.000</td>
-<td style="text-align: right;">-0.081</td>
-<td style="text-align: right;">0.000</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">-0.614</td>
-<td style="text-align: right;">0.652</td>
-<td style="text-align: right;">0.693</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0.296</td>
-<td style="text-align: right;">1.764</td>
-<td style="text-align: right;">1.792</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">1.545</td>
-<td style="text-align: right;">3.157</td>
-<td style="text-align: right;">3.178</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">3.047</td>
-<td style="text-align: right;">4.771</td>
-<td style="text-align: right;">4.787</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">4.751</td>
-<td style="text-align: right;">6.565</td>
-<td style="text-align: right;">6.579</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">6.621</td>
-<td style="text-align: right;">8.513</td>
-<td style="text-align: right;">8.525</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">8.636</td>
-<td style="text-align: right;">10.594</td>
-<td style="text-align: right;">10.605</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">9</td>
-<td style="text-align: right;">10.775</td>
-<td style="text-align: right;">12.793</td>
-<td style="text-align: right;">12.802</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">13.026</td>
-<td style="text-align: right;">15.096</td>
-<td style="text-align: right;">15.104</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">15.377</td>
-<td style="text-align: right;">17.495</td>
-<td style="text-align: right;">17.502</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">17.819</td>
-<td style="text-align: right;">19.980</td>
-<td style="text-align: right;">19.987</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">20.344</td>
-<td style="text-align: right;">22.546</td>
-<td style="text-align: right;">22.552</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">22.947</td>
-<td style="text-align: right;">25.185</td>
-<td style="text-align: right;">25.191</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">25.621</td>
-<td style="text-align: right;">27.894</td>
-<td style="text-align: right;">27.899</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">28.361</td>
-<td style="text-align: right;">30.667</td>
-<td style="text-align: right;">30.672</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">31.165</td>
-<td style="text-align: right;">33.500</td>
-<td style="text-align: right;">33.505</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">34.027</td>
-<td style="text-align: right;">36.391</td>
-<td style="text-align: right;">36.395</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">19</td>
-<td style="text-align: right;">36.944</td>
-<td style="text-align: right;">39.335</td>
-<td style="text-align: right;">39.340</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">39.915</td>
-<td style="text-align: right;">42.331</td>
-<td style="text-align: right;">42.336</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="epilogue" class="level2">
-<h2 class="anchored" data-anchor-id="epilogue">Epilogue</h2>
-<p>I have a bad habit of trying to add a “moral” or “lesson” to the end of my posts, but I suppose there’s no point trying to break the habit today! While there are easier ways to derive Stirling’s approximation, there are two things I enjoy about this one. First, we get a more accurate approximation than <img src="https://latex.codecogs.com/png.latex?n%20%5Clog(n)%20-%20n"> with practically no effort. Second, making unexpected connections between facts that we already know both <em>deepens our understanding</em> and helps us “compress” information. If you ever forget Stirling’s approximation, now you know how to very quickly re-derive it on the spot!</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>There’s an important but subtle difference between <code>NA</code> and <code>NaN</code>. The former is synonymous with “missing.” If <code>x</code> equals <code>NA</code> this means “we don’t know the value of <code>x</code>.” If instead <code>x</code> equals <code>NaN</code>, this means “<code>x</code> isn’t missing, but it’s not a well-defined numeric value either.”↩︎</p></li>
-<li id="fn2"><p>Unless otherwise specified log always means “natural logarithm” on this blog :)↩︎</p></li>
-<li id="fn3"><p>I first came across this argument from the late David MacKay’s fantastic book <a href="http://www.inference.org.uk/mackay/itila/book.html">Information Theory, Inference, and Learning Algorithms</a>. His book on <a href="http://www.withouthotair.com/">sustainable energy</a>, while a bit out-of-date at this point, is also spectacularly good.↩︎</p></li>
-</ol>
-</section></div> ]]></description>
-  <category>statistics</category>
-  <category>computing</category>
-  <guid>https://www.econometrics.blog/post/from-the-poisson-distribution-to-stirling-s-approximation/</guid>
-  <pubDate>Fri, 18 Nov 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
