@@ -5,6 +5,7 @@ date: '2025-07-13'
 categories:
 - econometrics
 - causal inference
+- puzzler
 tags:
 - instrumental variables
 - prediction vs. causation

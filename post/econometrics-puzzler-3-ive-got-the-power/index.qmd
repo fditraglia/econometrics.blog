@@ -1,0 +1,75 @@
+---
+title: "Econometrics Puzzler #3: I've Got the Power"
+author: Francis J. DiTraglia
+date: '2026-08-06'
+categories:
+- statistics
+- puzzler
+tags:
+- statistical power
+- effect size
+---
+
+
+Today's challenge is to do a power calculation *in your head*. No paper, no pencils, no normal tables, and no statistical software packages are allowed!
+
+Suppose you observe $n$ independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance $\sigma^2$, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, $H_0\colon \mu_1 = \mu_2$, against the two-sided alternative with significance level $\alpha = 0.05$. How many observations $n$ do you need from each population so that the approximate power of your test will be 0.8?
+
+In case it's been a while since you've thought about power calculations, remember that statistical power is the probability of rejecting the null *given that it is false*. As such, your answer will depend on $\sigma^2$, $\mu_1$, and $\mu_2$.
+
+Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert a nonlinear function of the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that's worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.
+
+## Lehr's Rule
+In a short note from *Statistics in Medicine*, [Lehr (1992)](https://doi.org/10.1002/sim.4780110811) suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory:
+> For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80
+> $$
+> n = 16 s^2 / d^2
+> $$
+Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives
+$$
+n = \frac{16}{\Delta^2}, \quad \Delta \equiv \frac{\mu_1 - \mu_2}{\sigma}
+$$
+The quantity that I have called $\Delta$ is a unitless measure of *effect size*: it compares the difference between populations, $\mu_1 - \mu_2$, to the variability within each population, $\sigma$.^[This is the population version of [Cohen's $d$](https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d). Be careful not to confuse it with the $d$ in Lehr's formula, which rather confusingly denotes the *raw* difference of means $\mu_1 - \mu_2$.] Notice that the sample size required is inversely proportional to the *square* of the effect size. This means that very large samples are needed to detect small effects. For $\Delta = 1$ (a large effect size) we only need 16 observations per group but for $\Delta = 0.1$ (a very small effect size) we need a whopping 1600 observations per group!
+
+## Why does it work?
+Here's a proof of Lehr's rule. Let $\bar{X}_1$ and $\bar{X}_2$ be the sample means corresponding to each population. Then $\bar{X}_1 \sim \text{N}(\mu_1, \sigma^2/n)$ independently of $\bar{X}_2 \sim \text{N}(\mu_2, \sigma^2/n)$ and our test statistic can be written as
+$$
+\begin{aligned}
+T &\equiv \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{2\sigma^2 / n}} =\frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{2\sigma^2 / n}}  + \frac{\mu_1 - \mu_2}{\sqrt{2 \sigma^2/n}}\\
+&= Z + \Delta \sqrt{n/2}
+\end{aligned}
+$$
+where $Z \sim \text{N}(0,1)$. Now let $c$ be the critical value for our two-sided test with significance level $\alpha$. We reject the null if $|T| > c$, in other words if $T>c$ or $T < - c$. Thus the power of our test is
+$$
+\begin{aligned}
+\text{Power} &= \mathbb{P}(Z + \Delta \sqrt{n/2} > c) + \mathbb{P}(Z + \Delta \sqrt{n / 2} < -c)\\
+&= 1 - \Phi(c - \Delta \sqrt{n / 2}) + \Phi(-c - \Delta \sqrt{n / 2})
+\end{aligned}
+$$
+where $\Phi(\cdot)$ denotes the CDF of a standard normal random variable. Rearranging,
+$$
+1 - \text{Power} = \Phi(c - \Delta \sqrt{n / 2}) - \Phi(-c - \Delta \sqrt{n/2})
+$$
+It turns out that the right hand side of this expression would be *completely unchanged* if we replaced $\Delta$ with $-\Delta$, so we can assume without loss of generality that $\Delta$ is positive.^[To see why substitute $-\Delta$ in place of $\Delta$ and use the symmetry of the normal distribution. In particular, apply $\Phi(-x) = 1 - \Phi(x)$ *twice*.] This makes intuitive sense: power should depend on the *difference of means* but it should not depend on which we labeled "1" and which we labeled "2", which determines the sign of $\Delta$.
+
+Now comes the approximation. The second term on the right hand side of our expression for $1 - \text{Power}$ is $\mathbb{P}(T < -c)$. Since $\Delta$ is *positive*, this is the probability of rejecting the null *in the wrong direction*. In other words, it is the probability of rejecting $\mu_1 = \mu_2$ when $\mu_1 > \mu_2$ by observing a test statistic that takes on a large *negative* value. We will approximate this probability by **setting it equal to zero**. For a test with a reasonable amount of power--remember that we are targeting 80% power--this is a very good approximation.^[For a test with low power, on the other hand, rejections *in the wrong direction* present a serious problem, leading to the notion of a "Type S" error as described by [Gelman & Carlin (2014)](https://ditraglia.com/erm/Gelman-Carlin-2014.pdf).] If you worry that there's something circular in my logic here, fear not: we will return to this point at the end! But for the moment, we will assume that it's safe to write
+$$
+1 - \text{Power} \approx \Phi(c - \Delta \sqrt{n / 2}) .
+$$
+Applying the standard normal quantile function $\Phi^{-1}$ to both sides gives
+$$
+\Phi^{-1}(1 - \text{Power})  \approx c - \Delta \sqrt{n / 2}
+$$
+and rearranging the result gives
+$$
+n \approx 2 \left[\frac{c - \Phi^{-1}(1 - \text{Power})}{\Delta}\right]^2.
+$$
+Finally, substituting $\text{Power} = 0.8$ and $c = 1.96$,
+$$
+n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[ \frac{1.96 - (-0.84)}{\Delta} \right]^2 \approx \frac{15.7}{\Delta^2}.
+$$
+We obtain Lehr's rule by rounding $15.7$ up to $16$.
+
+Now what about that $\mathbb{P}(T < - c)$ term we discarded above? Is it really negligible? Substituting $c = 1.96$ and $\Phi^{-1}(1 - \text{Power}) = -0.84$ into our intermediate step while solving for $n$ above gives $\Delta \sqrt{n/2} = 1.96 + 0.84 = 2.8$. This automatically holds for any value of $\Delta$ since Lehr's rule automatically increases $n$ to offset a smaller effect size. Thus, the discarded term equals $\Phi(-1.96 - 2.8) = \Phi(-4.76) \approx 10^{-6}$ so it is perfectly safe to neglect it!
+
+Notice that we used two approximations in this derivation, but both of them are *conservative*. In other words, Lehr's rule slightly *overstates* the required sample size to achieve 80% power in this example.

@@ -45,8 +45,10 @@ tags:
 - `.github/workflows/publish.yml` — GitHub Actions deployment workflow
 
 ### Taxonomy
-- **Categories** (9, lowercase): `econometrics`, `statistics`, `causal inference`, `measurement error`, `time series`, `computing`, `applied`, `teaching`, `meta`
-- **Tags** (follow English conventions — acronyms uppercase `CLT`, proper nouns capitalized `Bayesian`): `instrumental variables`, `regression`, `confidence interval`, `CLT`, `asymptotics`, `treatment effects`, `mean independence`, `prediction vs. causation`, `bias-variance tradeoff`, `FWL`, `covid`, `shrinkage`, `Bayesian`
+- **Categories** (10, lowercase): `econometrics`, `statistics`, `causal inference`, `measurement error`, `time series`, `computing`, `applied`, `teaching`, `meta`, `puzzler`
+- **Tags** (follow English conventions — acronyms uppercase `CLT`, proper nouns capitalized `Bayesian`): `instrumental variables`, `regression`, `confidence interval`, `CLT`, `asymptotics`, `treatment effects`, `mean independence`, `prediction vs. causation`, `bias-variance tradeoff`, `FWL`, `covid`, `shrinkage`, `Bayesian`, `statistical power`, `effect size`
+
+`puzzler` is the odd one out: the other nine name a topic, while this one names a format, the *Econometrics Puzzler* series of shorter posts. It is a category rather than a tag because **only categories reach the reader**. The homepage listing is built with `categories: true`, which produces the sidebar filter, and post pages show category chips; the `tags` field appears nowhere in the rendered HTML. Anything meant to be found must be a category.
 
 ## Writing and Editing Posts
 

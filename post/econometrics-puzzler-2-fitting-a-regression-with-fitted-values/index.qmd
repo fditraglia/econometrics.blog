@@ -4,6 +4,7 @@ author: Francis J. DiTraglia
 date: '2025-07-24'
 categories:
 - econometrics
+- puzzler
 tags:
 - regression
 ---
