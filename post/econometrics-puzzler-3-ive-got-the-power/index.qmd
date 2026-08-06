@@ -17,14 +17,16 @@ Suppose you observe $n$ independent draws from each of two normally distributed 
 
 In case it's been a while since you've thought about power calculations, remember that statistical power is the probability of rejecting the null *given that it is false*. As such, your answer will depend on $\sigma^2$, $\mu_1$, and $\mu_2$.
 
-Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert a nonlinear function of the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that's worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.
+Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that's worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.
 
 ## Lehr's Rule
 In a short note from *Statistics in Medicine*, [Lehr (1992)](https://doi.org/10.1002/sim.4780110811) suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory:
+
 > For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80
 > $$
 > n = 16 s^2 / d^2
 > $$
+
 Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives
 $$
 n = \frac{16}{\Delta^2}, \quad \Delta \equiv \frac{\mu_1 - \mu_2}{\sigma}
