@@ -108,7 +108,7 @@ uv run tools-check-layout.py
 
 It needs browsers that uv does not install; once per machine run `uv run --with playwright playwright install chromium webkit`. Overflow is detected by scrolling the page and reading `window.scrollX` back, rather than by comparing `scrollWidth` to `clientWidth`, which reports content inside a scrolling box as an overflow when that is the intended behavior.
 
-Known failures it still reports, none of them regressions: five pages overflow by 6–39px at 390px, and `overlapping-confidence-intervals-part-ii` overflows at 768px because of its deliberately page-width figure.
+All 41 pages pass at all four widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
 
 ### Deployment
 Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.

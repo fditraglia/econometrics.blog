@@ -746,3 +746,81 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
     left: 8px;  // cancels the negative left margin Quarto puts on this element
   }
 }
+
+// -------------------------------------------------- narrow screens --
+//
+// Everything here exists because a phone column is around 348px and some
+// content is intrinsically wider. Widening the column (see
+// $grid-column-gutter-width-mobile) removed most of the problem; these are the
+// cases that remain. tools-check-layout.py is what finds them.
+
+// A call written inline, like quantile(your_data_here, probs = p), ran past the
+// column. Inline code inherits white-space: pre, which forbids wrapping outright
+// and so makes overflow-wrap inert; pre-wrap keeps the spacing but allows a
+// break. Code blocks are excluded because they scroll inside their own box
+// already, and rewrapping them would break the alignment of the code.
+:not(pre) > code {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+// Inline math cannot wrap at all, and unlike display math it gets no help from
+// _math-fit.html. Let a long expression scroll inside its own box rather than
+// widen the page. overflow-y stays hidden so the box does not gain a vertical
+// scrollbar from the glyph overhang MathJax relies on.
+mjx-container:not([display="true"]) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: bottom;
+}
+
+@media (max-width: 767.98px) {
+  // A table is only as narrow as the widest unbreakable word in each column
+  // added together, which on the R formula cheatsheet came to more than a phone
+  // screen. "anywhere" rather than "break-word" because only the former reduces
+  // that intrinsic minimum; break-word breaks a line that has already been laid
+  // out and so leaves the column widths untouched. Confined to narrow screens,
+  // since on a desktop there is room and mid-token breaks would be gratuitous.
+  main table td, main table th,
+  .table td, .table th {
+    overflow-wrap: anywhere;
+  }
+
+  // "econometrics.blog" is a single 17-character token, so at the full title
+  // size it is wider than a phone column and three pages overflowed on the
+  // site's own name. Breaking a domain name across lines reads worse than
+  // setting it smaller.
+  #title-block-header .quarto-title .title {
+    font-size: $font-size-base * 2.1;
+  }
+}
+
+// A post using `column: page`, as overlapping-confidence-intervals-part-ii does
+// for one figure, gets `main.content.page-full` spanning screen-start to
+// screen-end. Below 992px those tracks total 934px, wider than the screen,
+// because Quarto keeps the margin-sidebar tracks whether or not a sidebar is
+// shown. The page then scrolled sideways from 768px up to about 934px.
+//
+// Below 992px there is no room for a page-wide figure in any case, so give that
+// main the ordinary body column and a single content track, and let the figure
+// fill it. The figure is img-fluid and scales down rather than being cropped.
+// Nothing is needed below 768px, where Quarto already collapses the grid.
+// Quarto nests the same grid again on each cell inside such a post, so both the
+// outer main and every .page-columns within it have to be flattened; changing
+// only the outer one leaves the nested tracks to push the page out further.
+@media (max-width: 991.98px) {
+  main.content.page-full {
+    grid-column: body-content-start / body-content-end !important;
+  }
+
+  main.content.page-full,
+  main.content.page-full .page-columns {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  main.content.page-full > *,
+  main.content.page-full .page-columns > * {
+    grid-column: 1 / -1 !important;
+  }
+}
