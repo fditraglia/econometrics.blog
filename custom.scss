@@ -67,6 +67,13 @@ $grid-sidebar-width:       250px;
 // leave visible clearance before the table of contents.
 $grid-column-gutter-width: 4.25rem;
 
+// Quarto applies the gutter above at every viewport, which on a phone left a
+// 216px reading column on a 360px screen -- around 25 characters a line, with
+// 40% of the display given over to empty margin. Neither reason for the wide
+// gutter applies there: equations do not bleed below 1200px, and there is no
+// table of contents to keep clear below 900px. See the rules section.
+$grid-column-gutter-width-mobile: 1.25rem;
+
 // ---------------------------------------------------------------- code --
 $code-color:       $ink;
 $code-bg:          $wash;
@@ -481,6 +488,24 @@ nav[role="doc-toc"] ul { border-left: none; }
 // it below 768px; this only moves that threshold up.
 @media (max-width: 899.98px) {
   #quarto-margin-sidebar { display: none !important; }
+}
+
+// Narrow the page gutter on phones. Below 768px Quarto collapses the page grid
+// to a single content column between two gutter tracks, and it uses
+// $grid-column-gutter-width for those tracks at every viewport, so the desktop
+// value was costing 40% of a phone screen. The track list below is Quarto's own
+// for this breakpoint with only the two edge values changed; keep the line
+// names in step if a Quarto upgrade alters them. !important is needed because
+// Quarto states the same rule through several more specific body-class
+// selectors (body.fullcontent, body.docked and others).
+@media (max-width: 767.98px) {
+  body .page-columns {
+    grid-template-columns:
+      [screen-start] $grid-column-gutter-width-mobile
+      [screen-start-inset page-start page-start-inset body-start-outset body-start body-content-start] minmax(0px, 1fr)
+      [body-content-end body-end body-end-outset page-end-inset page-end screen-end-inset] $grid-column-gutter-width-mobile
+      [screen-end] !important;
+  }
 }
 
 nav[role="doc-toc"] ul li a {

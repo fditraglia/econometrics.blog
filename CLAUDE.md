@@ -98,6 +98,18 @@ quarto render           # full render to _site/
 quarto render post/my-post/index.qmd   # render one post
 ```
 
+### Layout check
+
+`tools-check-layout.py` loads every rendered page at 390, 768 and 1200px and fails if any of them scrolls sideways, naming the widest element that is not inside a scrolling container. Run it after `quarto render` when changing anything in `custom.scss`:
+
+```
+uv run tools-check-layout.py
+```
+
+It needs browsers that uv does not install; once per machine run `uv run --with playwright playwright install chromium webkit`. Overflow is detected by scrolling the page and reading `window.scrollX` back, rather than by comparing `scrollWidth` to `clientWidth`, which reports content inside a scrolling box as an overflow when that is the intended behavior.
+
+Known failures it still reports, none of them regressions: five pages overflow by 6–39px at 390px, and `overlapping-confidence-intervals-part-ii` overflows at 768px because of its deliberately page-width figure.
+
 ### Deployment
 Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
 
@@ -139,6 +151,7 @@ A few fragile spots, all of which degrade to "looks more like stock Quarto" rath
 - The post date is moved above the title with flexbox `order`, which depends on Quarto's DOM order inside `#title-block-header`.
 - The `!important` flags on `.quarto-category` are required, not stylistic. Quarto ships a more specific rule that restores the default pill border without them.
 - The table of contents is held back to 900px, above Quarto's own 768px breakpoint, because the wide `$grid-column-gutter-width` leaves the page grid about 862px wide and it does not shrink in that band. Without the override the sidebar hangs off the right edge and the page scrolls sideways. If the gutter is ever narrowed, recheck the breakpoint — the two are tied together, as `$math-bleed` already is.
+- Below 768px the page grid is restated with `$grid-column-gutter-width-mobile` in place of the desktop gutter, because Quarto applies one gutter at every viewport and the desktop value left a 216px reading column on a 360px phone. The rule reproduces Quarto's own track list for that breakpoint with only the two edge values changed, so a Quarto upgrade that renames the grid lines would need it updated. It carries `!important` because Quarto states the same rule through several more specific body-class selectors.
 
 ### Figures
 
