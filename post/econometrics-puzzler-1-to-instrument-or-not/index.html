@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c0fcc54928c8a79a4f0511930784b02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -255,6 +255,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#to-instrument-or-not-to-instrument" id="toc-to-instrument-or-not-to-instrument" class="nav-link active" data-scroll-target="#to-instrument-or-not-to-instrument">To Instrument or Not to Instrument?</a></li>
+  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
 </nav>
     </div>
@@ -302,6 +303,16 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="to-instrument-or-not-to-instrument">To Instrument or Not to Instrument?</h2>
 <p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <span class="math inline">\(Y_i\)</span> and years of schooling <span class="math inline">\(X_i\)</span>. I could use an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background. Fortunately, I also have a valid and relevant instrument: quarter of birth <span class="math inline">\(Z_i\)</span> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-section" role="doc-footnote">
+<hr>
+<ol>
+<li id="fn1"><p>I’m sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If you’re unfamiliar with this example check out my <a href="https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&amp;t=2034">video overview</a>, including some discussion of why quarter of birth might <em>not</em> really be exogenous after all!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+</section>
+<section id="solution" class="level2">
+<h2 class="anchored" data-anchor-id="solution">Solution</h2>
 <div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -381,6 +392,13 @@ IV     4.749959 0.09000644</code></pre>
 </div>
 </div>
 <p>OLS beats IV by a small but appreciable margin. (The relatively small difference in this case reflects the fact that IV and OLS estimates are fairly similar in this example.) It turns out that this <em>isn’t a fluke</em>. The same will be true in <em>any example</em>. Unless the instrument is perfectly correlated with the endogenous regressor, OLS will always have a lower predictive MSE than IV.</p>
+<aside id="footnotes-2" class="footnotes footnotes-end-of-section" role="doc-footnote">
+<hr>
+<ol start="3">
+<li id="fn3"><p>You can install this package using the <a href="https://cran.r-project.org/web/packages/remotes/index.html"><code>remotes</code></a> package, which is a convenient way to install packages from GitHub.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>It’s crucial that we used one dataset to <em>estimate</em> our models and a <em>different</em> one to evaluate their predictive performance to avoid a problem called “overfitting”. This issue calls for a post of its own, but if you want a preview check out this blog post on <a href="https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html">Goodhart’s law</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
 </section>
 <section id="whats-really-going-on-here" class="level2">
 <h2 class="anchored" data-anchor-id="whats-really-going-on-here">What’s really going on here?</h2>
@@ -389,6 +407,12 @@ IV     4.749959 0.09000644</code></pre>
 <section id="a-red-herring-the-bias-variance-tradeoff" class="level2">
 <h2 class="anchored" data-anchor-id="a-red-herring-the-bias-variance-tradeoff">A Red Herring: The Bias-Variance Tradeoff</h2>
 <p>Students sometimes answer this question by invoking the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a>, pointing out that “OLS is biased but has a lower variance than IV, so it could have a lower MSE.” This is correct, but misses the deeper point. They’re thinking about bias in estimating the <em>causal parameter</em>.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> But, again, the point here is that this isn’t relevant when prediction is our goal. When ML researchers discuss the bias-variance tradeoff in predictive settings, they mean something entirely different: bias of a linear predictive model relative to the true conditional mean function. OLS gives the best linear approximation to <span class="math inline">\(\mathbb{E}[Y|X]\)</span>, so it’s what we want in this example, since I stipulated we’d be working with linear models.</p>
+<aside id="footnotes-3" class="footnotes footnotes-end-of-section" role="doc-footnote">
+<hr>
+<ol start="5">
+<li id="fn5"><p>When our goal is to learn the causal parameter, this bias-variance tradeoff becomes relevant. I even <a href="https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html">wrote a paper</a>!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
 </section>
 <section id="take-home-message" class="level2">
 <h2 class="anchored" data-anchor-id="take-home-message">Take Home Message</h2>
@@ -401,17 +425,7 @@ IV     4.749959 0.09000644</code></pre>
 
 </section>
 
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I’m sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>If you’re unfamiliar with this example check out my <a href="https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&amp;t=2034">video overview</a>, including some discussion of why quarter of birth might <em>not</em> really be exogenous after all!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>You can install this package using the <a href="https://cran.r-project.org/web/packages/remotes/index.html"><code>remotes</code></a> package, which is a convenient way to install packages from GitHub.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>It’s crucial that we used one dataset to <em>estimate</em> our models and a <em>different</em> one to evaluate their predictive performance to avoid a problem called “overfitting”. This issue calls for a post of its own, but if you want a preview check out this blog post on <a href="https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html">Goodhart’s law</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>When our goal is to learn the causal parameter, this bias-variance tradeoff becomes relevant. I even <a href="https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html">wrote a paper</a>!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //

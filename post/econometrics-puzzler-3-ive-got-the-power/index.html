@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0c0fcc54928c8a79a4f0511930784b02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -214,8 +214,14 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#solution" id="toc-solution" class="nav-link active" data-scroll-target="#solution">Solution</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -259,6 +265,8 @@ window.Quarto = {
 <p>Suppose you observe <span class="math inline">\(n\)</span> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <span class="math inline">\(\sigma^2\)</span>, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <span class="math inline">\(H_0\colon \mu_1 = \mu_2\)</span>, against the two-sided alternative with significance level <span class="math inline">\(\alpha = 0.05\)</span>. How many observations <span class="math inline">\(n\)</span> do you need from each population so that the approximate power of your test will be 0.8?</p>
 <p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\mu_1\)</span>, and <span class="math inline">\(\mu_2\)</span>.</p>
 <p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
+<section id="solution" class="level2">
+<h2 class="anchored" data-anchor-id="solution">Solution</h2>
 <div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -328,6 +336,7 @@ n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script>
