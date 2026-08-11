@@ -764,17 +764,6 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
   overflow-wrap: break-word;
 }
 
-// Inline math cannot wrap at all, and unlike display math it gets no help from
-// _math-fit.html. Let a long expression scroll inside its own box rather than
-// widen the page. overflow-y stays hidden so the box does not gain a vertical
-// scrollbar from the glyph overhang MathJax relies on.
-mjx-container:not([display="true"]) {
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  vertical-align: bottom;
-}
-
 @media (max-width: 767.98px) {
   // A table is only as narrow as the widest unbreakable word in each column
   // added together, which on the R formula cheatsheet came to more than a phone
