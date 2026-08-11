@@ -22,6 +22,8 @@ Fortunately, I also have a valid and relevant instrument: quarter of birth $Z_i$
 
 So here's the question: **to get the best possible predictions of wage from the information I have, should I run OLS or IV?** More specifically, let's use mean squared error (MSE) as our measure of "best". To borrow a term from [Grant Sanderson](https://www.3blue1brown.com/), "pause and ponder" before reading further.
 
+::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
+
 ## Taking it to the Data
 
 The Angrist & Krueger (1991) dataset is available from Michal Kolesár's [`ManyIV` R package](https://github.com/kolesarm/ManyIV?tab=readme-ov-file).^[You can install this package using the [`remotes`](https://cran.r-project.org/web/packages/remotes/index.html) package, which is a convenient way to install packages from GitHub.]
@@ -99,4 +101,4 @@ Students sometimes answer this question by invoking the [bias-variance tradeoff]
 ## Take Home Message
 Causal inference and prediction are different goals. Causality is about *counterfactuals*: what would happen if we *intervened* to change someone's years of education? Prediction answers a different question: if I *observe* that someone has eight years of schooling, what is my best guess of their wage? If you want to predict, use OLS; if you want to estimate a causal effect, use IV. 
 
-
+:::

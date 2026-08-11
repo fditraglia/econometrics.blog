@@ -525,13 +525,37 @@ nav[role="doc-toc"] ul li a {
 // Footnotes on this blog often carry real argument, not just citations, so
 // they stay at body contrast and are marked as secondary by size alone.
 #footnotes, .footnotes {
+  font-size: 0.88em;
+  color: $ink;
+}
+
+// The list that closes a whole post.
+#footnotes:not(.footnotes-end-of-block):not(.footnotes-end-of-section),
+.footnotes:not(.footnotes-end-of-block):not(.footnotes-end-of-section) {
   margin-top: 3.5em;
   padding-top: 1.6em;
   border-top: 1px solid $rule;
-  font-size: 0.88em;
-  color: $ink;
 
   h2 { @extend %chrome; font-size: 0.64rem; margin-top: 0; }
+}
+
+// A post that sets reference-location prints each note beneath the passage
+// that cites it instead. The puzzlers do this so that a note belonging to a
+// solution stays inside the fold that hides it; at the foot of the page it
+// would answer the question for a reader who had not opened the fold.
+//
+// These blocks interrupt a post rather than close one, so they take a hairline
+// and a little room and nothing else. Pandoc opens them with an <hr>, which
+// would double the hairline. Both of its placements are covered here; the
+// puzzlers use the per-block one, which is the only placement that keeps every
+// marker on the same side of the fold as the note it points to.
+.footnotes-end-of-block,
+.footnotes-end-of-section {
+  margin: 1.7em 0 2em;
+  padding-top: 1.1em;
+  border-top: 1px solid $rule;
+
+  > hr { display: none; }
 }
 
 // ------------------------------------------------------------- footer --
@@ -745,6 +769,77 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
     top: 1.05rem;
     left: 8px;  // cancels the negative left margin Quarto puts on this element
   }
+}
+
+// ---------------------------------------------------- solution folds --
+//
+// A puzzler post hides its solution behind a collapsed callout so that a
+// reader can think about the question without the answer in view. The markup
+// is Quarto's:
+//
+//   ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
+//
+// callout-note supplies the collapsing behavior and arrives in Bootstrap's
+// blue inside a bordered box. The .solution class is ours, and everything
+// below is scoped to it, so an ordinary callout in some future post still
+// looks like a Quarto callout.
+//
+// icon=false is not only about the information icon, which says the wrong
+// thing here. Quarto reserves room for that icon by indenting the body 1.6em,
+// and on a phone the fold has no width to spare.
+//
+// Several of these carry the callout-style-simple class alongside .solution,
+// which is how Quarto states its own padding and borders; the extra class is
+// there to win on specificity, not for decoration.
+.callout.solution.callout-style-simple {
+  border: 0;
+  border-left: 2px solid $rule;
+  border-radius: 0;
+  background: none;
+  margin: 2.4em 0;
+  padding: 0;
+}
+
+.callout.solution {
+  .callout-header {
+    background: none;
+    padding: 0.15rem 0 0.15rem 1rem;
+    cursor: pointer;
+  }
+
+  // The label is chrome rather than prose: it names a mechanism, and a reader
+  // who has not opened the fold should not read it as the start of a section.
+  .callout-title-container {
+    @extend %chrome;
+    color: $ink-muted;
+  }
+
+  // The chevron alone is a weak signal that there is something to open, and a
+  // reader who misses it reads a puzzler with no solution. Bootstrap keeps the
+  // collapsed class on the header while the fold is shut, so the invitation
+  // disappears once it has been acted on.
+  .callout-header.collapsed .callout-title-container::after {
+    content: " — click to reveal";
+  }
+
+  .callout-header:hover {
+    .callout-title-container, .callout-toggle { color: $accent; }
+  }
+
+  .callout-toggle { color: $ink-muted; }
+
+  // Line the solution up with its label rather than indenting it further.
+  .callout-body-container { padding: 0.35rem 0 0 1rem; }
+
+  // A solution is ordinary reading text and takes the ordinary size.
+  .callout-body { font-size: 1em; }
+
+  // A solution that opens with a section heading, as the longer puzzlers do,
+  // would otherwise carry that heading's full top margin below the label.
+  // Quarto wraps each heading and its content in a section element, so the
+  // margin to cancel is one level further in.
+  .callout-body > :first-child,
+  .callout-body > :first-child > :first-child { margin-top: 0; }
 }
 
 // -------------------------------------------------- narrow screens --

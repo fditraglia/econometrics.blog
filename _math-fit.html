@@ -66,6 +66,11 @@
     fitAll();
     window.addEventListener('resize', schedule);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    // An equation inside a collapsed solution fold has no width to measure
+    // while it is hidden, so fitOne skips it. Measure again once the reader
+    // opens the fold. Bootstrap dispatches this event on the collapsing
+    // element and it bubbles to the document.
+    document.addEventListener('shown.bs.collapse', schedule);
   });
 })();
 </script>

@@ -86,6 +86,25 @@ Workflow for any `.qmd` change:
 4. `git commit && git push`
 5. Verify green check at https://github.com/fditraglia/econometrics.blog/actions
 
+### Hiding a puzzler solution
+
+A puzzler post keeps its solution behind a fold so that a reader meets the question first. The markup is a collapsed Quarto callout, styled in the "solution folds" section of `custom.scss`:
+
+```
+::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
+
+## Taking it to the Data
+...everything from the reveal to the end of the post...
+
+:::
+```
+
+Three things to know before adding one:
+
+- **Headings inside a fold stay out of the table of contents**, so a section title cannot give the answer away. This is Quarto's behavior, not something the CSS arranges.
+- **Footnotes cited inside a fold print at the foot of the page by default**, in view of a reader who has not opened it. `reference-location: section` in the frontmatter moves each note to the end of its own section, which keeps it inside the fold — but only for sections that *begin* inside the fold. A note cited before the fold, in the section that contains it, is moved inside too and its marker then points at hidden text. Puzzler #3 sets it and is safe; puzzler #1 cannot, because its opening paragraphs carry notes of their own. `reference-location: margin` does keep everything in the right place but its below-1200px fallback overlaps the following heading, so it needs CSS work first.
+- **`tools-check-layout.py` cannot see inside a closed fold.** After adding one, open it and check for sideways scroll at 390px separately.
+
 ### R conventions
 Use tidyverse: native pipe `|>`, anonymous functions `\(x)`, dplyr verbs, ggplot2.
 

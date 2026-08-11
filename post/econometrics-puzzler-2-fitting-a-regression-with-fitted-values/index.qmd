@@ -56,7 +56,7 @@ The R-squared values from the two regressions are *identical*! Surprised? Now's 
 
 
 
-## Solution
+::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 
 Suppose we wanted to choose $\alpha_0$ and $\alpha_1$ to minimize $\sum_{i=1}^n (Y_i - \alpha_0 - \alpha_1 \widehat{Y}_i)^2$ where $\widehat{Y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 X_i$. This is equivalent to minimizing 
 $$
@@ -73,3 +73,5 @@ $$
 The total sum of squares is the same for both regressions because they have the same outcome variable. The residual sum of squares is the same because $\widehat{\alpha}_0 = 0$ and $\widehat{\alpha}_1 = 1$ together imply that both regressions have the same fitted values.
 
 Here I focused on the case of a simple linear regression, one with a single predictor variable, but the same basic idea holds in general.
+
+:::

@@ -5,6 +5,7 @@ date: '2026-08-06'
 categories:
 - statistics
 - puzzler
+reference-location: section
 tags:
 - statistical power
 - effect size
@@ -18,6 +19,8 @@ Suppose you observe $n$ independent draws from each of two normally distributed 
 In case it's been a while since you've thought about power calculations, remember that statistical power is the probability of rejecting the null *given that it is false*. As such, your answer will depend on $\sigma^2$, $\mu_1$, and $\mu_2$.
 
 Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that's worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.
+
+::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 
 ## Lehr's Rule
 In a short note from *Statistics in Medicine*, [Lehr (1992)](https://doi.org/10.1002/sim.4780110811) suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory:
@@ -75,3 +78,5 @@ We obtain Lehr's rule by rounding $15.7$ up to $16$.
 Now what about that $\mathbb{P}(T < - c)$ term we discarded above? Is it really negligible? Substituting $c = 1.96$ and $\Phi^{-1}(1 - \text{Power}) = -0.84$ into our intermediate step while solving for $n$ above gives $\Delta \sqrt{n/2} = 1.96 + 0.84 = 2.8$. This automatically holds for any value of $\Delta$ since Lehr's rule automatically increases $n$ to offset a smaller effect size. Thus, the discarded term equals $\Phi(-1.96 - 2.8) = \Phi(-4.76) \approx 10^{-6}$ so it is perfectly safe to neglect it!
 
 Notice that we used two approximations in this derivation, but both of them are *conservative*. In other words, Lehr's rule slightly *overstates* the required sample size to achieve 80% power in this example.
+
+:::
