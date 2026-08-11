@@ -771,9 +771,17 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
   // that intrinsic minimum; break-word breaks a line that has already been laid
   // out and so leaves the column widths untouched. Confined to narrow screens,
   // since on a desktop there is room and mid-token breaks would be gratuitous.
-  main table td, main table th,
-  .table td, .table th {
+  //
+  // Hyphenation comes first where the browser can find a break point, so a
+  // squeezed prose cell reads "every-thing" rather than "everythi ng"; the
+  // arbitrary break remains as the fallback for code, which cannot be
+  // hyphenated. Header cells are exempt: their labels are short, and the
+  // cheatsheet fits at 390px without breaking them, so the rule only cost us a
+  // "SYMBOL" split across two lines.
+  main table td,
+  .table td {
     overflow-wrap: anywhere;
+    hyphens: auto;
   }
 
   // "econometrics.blog" is a single 17-character token, so at the full title
