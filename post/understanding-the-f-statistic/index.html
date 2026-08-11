@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f798f075adf7f3cd7f7edb1032bf76ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0c0fcc54928c8a79a4f0511930784b02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -609,6 +609,11 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
     fitAll();
     window.addEventListener('resize', schedule);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    // An equation inside a collapsed solution fold has no width to measure
+    // while it is hidden, so fitOne skips it. Measure again once the reader
+    // opens the fold. Bootstrap dispatches this event on the collapsing
+    // element and it bubbles to the document.
+    document.addEventListener('shown.bs.collapse', schedule);
   });
 })();
 </script>

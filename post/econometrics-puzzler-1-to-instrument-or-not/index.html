@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f798f075adf7f3cd7f7edb1032bf76ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0c0fcc54928c8a79a4f0511930784b02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -255,10 +255,6 @@ window.Quarto = {
    
   <ul>
   <li><a href="#to-instrument-or-not-to-instrument" id="toc-to-instrument-or-not-to-instrument" class="nav-link active" data-scroll-target="#to-instrument-or-not-to-instrument">To Instrument or Not to Instrument?</a></li>
-  <li><a href="#taking-it-to-the-data" id="toc-taking-it-to-the-data" class="nav-link" data-scroll-target="#taking-it-to-the-data">Taking it to the Data</a></li>
-  <li><a href="#whats-really-going-on-here" id="toc-whats-really-going-on-here" class="nav-link" data-scroll-target="#whats-really-going-on-here">What’s really going on here?</a></li>
-  <li><a href="#a-red-herring-the-bias-variance-tradeoff" id="toc-a-red-herring-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#a-red-herring-the-bias-variance-tradeoff">A Red Herring: The Bias-Variance Tradeoff</a></li>
-  <li><a href="#take-home-message" id="toc-take-home-message" class="nav-link" data-scroll-target="#take-home-message">Take Home Message</a></li>
   </ul>
 </nav>
     </div>
@@ -306,7 +302,18 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="to-instrument-or-not-to-instrument">To Instrument or Not to Instrument?</h2>
 <p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <span class="math inline">\(Y_i\)</span> and years of schooling <span class="math inline">\(X_i\)</span>. I could use an OLS regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background. Fortunately, I also have a valid and relevant instrument: quarter of birth <span class="math inline">\(Z_i\)</span> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
-</section>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <section id="taking-it-to-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="taking-it-to-the-data">Taking it to the Data</h2>
 <p>The Angrist &amp; Krueger (1991) dataset is available from Michal Kolesár’s <a href="https://github.com/kolesarm/ManyIV?tab=readme-ov-file"><code>ManyIV</code> R package</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Here I’ll restrict attention to people born in the first or fourth quarter of the year. The instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:</p>
@@ -386,6 +393,10 @@ IV     4.749959 0.09000644</code></pre>
 <section id="take-home-message" class="level2">
 <h2 class="anchored" data-anchor-id="take-home-message">Take Home Message</h2>
 <p>Causal inference and prediction are different goals. Causality is about <em>counterfactuals</em>: what would happen if we <em>intervened</em> to change someone’s years of education? Prediction answers a different question: if I <em>observe</em> that someone has eight years of schooling, what is my best guess of their wage? If you want to predict, use OLS; if you want to estimate a causal effect, use IV.</p>
+</section>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -469,6 +480,11 @@ IV     4.749959 0.09000644</code></pre>
     fitAll();
     window.addEventListener('resize', schedule);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    // An equation inside a collapsed solution fold has no width to measure
+    // while it is hidden, so fitOne skips it. Measure again once the reader
+    // opens the fold. Bootstrap dispatches this event on the collapsing
+    // element and it bubbles to the document.
+    document.addEventListener('shown.bs.collapse', schedule);
   });
 })();
 </script>

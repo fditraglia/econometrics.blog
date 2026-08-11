@@ -24,6 +24,18 @@
 <p>Suppose you observe <img src="https://latex.codecogs.com/png.latex?n"> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <img src="https://latex.codecogs.com/png.latex?H_0%5Ccolon%20%5Cmu_1%20=%20%5Cmu_2">, against the two-sided alternative with significance level <img src="https://latex.codecogs.com/png.latex?%5Calpha%20=%200.05">. How many observations <img src="https://latex.codecogs.com/png.latex?n"> do you need from each population so that the approximate power of your test will be 0.8?</p>
 <p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1">, and <img src="https://latex.codecogs.com/png.latex?%5Cmu_2">.</p>
 <p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <section id="lehrs-rule" class="level2">
 <h2 class="anchored" data-anchor-id="lehrs-rule">Lehr’s Rule</h2>
 <p>In a short note from <em>Statistics in Medicine</em>, <a href="https://doi.org/10.1002/sim.4780110811">Lehr (1992)</a> suggested that researchers who regularly design randomized controlled trials should commit the following rule-of-thumb to memory:</p>
@@ -31,6 +43,12 @@
 <p>For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80 <img src="https://latex.codecogs.com/png.latex?%0An%20=%2016%20s%5E2%20/%20d%5E2%0A"></p>
 </blockquote>
 <p>Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives <img src="https://latex.codecogs.com/png.latex?%0An%20=%20%5Cfrac%7B16%7D%7B%5CDelta%5E2%7D,%20%5Cquad%20%5CDelta%20%5Cequiv%20%5Cfrac%7B%5Cmu_1%20-%20%5Cmu_2%7D%7B%5Csigma%7D%0A"> The quantity that I have called <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is a unitless measure of <em>effect size</em>: it compares the difference between populations, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">, to the variability within each population, <img src="https://latex.codecogs.com/png.latex?%5Csigma">.<sup>1</sup> Notice that the sample size required is inversely proportional to the <em>square</em> of the effect size. This means that very large samples are needed to detect small effects. For <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%201"> (a large effect size) we only need 16 observations per group but for <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%200.1"> (a very small effect size) we need a whopping 1600 observations per group!</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-section">
+<hr>
+<ol>
+<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <img src="https://latex.codecogs.com/png.latex?d"></a>. Be careful not to confuse it with the <img src="https://latex.codecogs.com/png.latex?d"> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">.↩︎</p></li>
+</ol>
+</aside>
 </section>
 <section id="why-does-it-work" class="level2">
 <h2 class="anchored" data-anchor-id="why-does-it-work">Why does it work?</h2>
@@ -38,19 +56,21 @@
 <p>Now comes the approximation. The second term on the right hand side of our expression for <img src="https://latex.codecogs.com/png.latex?1%20-%20%5Ctext%7BPower%7D"> is <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-c)">. Since <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is <em>positive</em>, this is the probability of rejecting the null <em>in the wrong direction</em>. In other words, it is the probability of rejecting <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20=%20%5Cmu_2"> when <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20%3E%20%5Cmu_2"> by observing a test statistic that takes on a large <em>negative</em> value. We will approximate this probability by <strong>setting it equal to zero</strong>. For a test with a reasonable amount of power–remember that we are targeting 80% power–this is a very good approximation.<sup>3</sup> If you worry that there’s something circular in my logic here, fear not: we will return to this point at the end! But for the moment, we will assume that it’s safe to write <img src="https://latex.codecogs.com/png.latex?%0A1%20-%20%5Ctext%7BPower%7D%20%5Capprox%20%5CPhi(c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%20.%0A"> Applying the standard normal quantile function <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D"> to both sides gives <img src="https://latex.codecogs.com/png.latex?%0A%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20%20%5Capprox%20c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D%0A"> and rearranging the result gives <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7Bc%20-%20%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%7D%7B%5CDelta%7D%5Cright%5D%5E2.%0A"> Finally, substituting <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BPower%7D%20=%200.8"> and <img src="https://latex.codecogs.com/png.latex?c%20=%201.96">, <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7B1.96%20-%20%5CPhi%5E%7B-1%7D(0.2)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%202%5Cleft%5B%20%5Cfrac%7B1.96%20-%20(-0.84)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%20%5Cfrac%7B15.7%7D%7B%5CDelta%5E2%7D.%0A"> We obtain Lehr’s rule by rounding <img src="https://latex.codecogs.com/png.latex?15.7"> up to <img src="https://latex.codecogs.com/png.latex?16">.</p>
 <p>Now what about that <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-%20c)"> term we discarded above? Is it really negligible? Substituting <img src="https://latex.codecogs.com/png.latex?c%20=%201.96"> and <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20=%20-0.84"> into our intermediate step while solving for <img src="https://latex.codecogs.com/png.latex?n"> above gives <img src="https://latex.codecogs.com/png.latex?%5CDelta%20%5Csqrt%7Bn/2%7D%20=%201.96%20+%200.84%20=%202.8">. This automatically holds for any value of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> since Lehr’s rule automatically increases <img src="https://latex.codecogs.com/png.latex?n"> to offset a smaller effect size. Thus, the discarded term equals <img src="https://latex.codecogs.com/png.latex?%5CPhi(-1.96%20-%202.8)%20=%20%5CPhi(-4.76)%20%5Capprox%2010%5E%7B-6%7D"> so it is perfectly safe to neglect it!</p>
 <p>Notice that we used two approximations in this derivation, but both of them are <em>conservative</em>. In other words, Lehr’s rule slightly <em>overstates</em> the required sample size to achieve 80% power in this example.</p>
-
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <img src="https://latex.codecogs.com/png.latex?d"></a>. Be careful not to confuse it with the <img src="https://latex.codecogs.com/png.latex?d"> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">.↩︎</p></li>
+<aside id="footnotes-2" class="footnotes footnotes-end-of-section">
+<hr>
+<ol start="2">
 <li id="fn2"><p>To see why substitute <img src="https://latex.codecogs.com/png.latex?-%5CDelta"> in place of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> and use the symmetry of the normal distribution. In particular, apply <img src="https://latex.codecogs.com/png.latex?%5CPhi(-x)%20=%201%20-%20%5CPhi(x)"> <em>twice</em>.↩︎</p></li>
 <li id="fn3"><p>For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.↩︎</p></li>
 </ol>
-</section></div> ]]></description>
+</aside>
+</section>
+</div>
+</div>
+</div>
+
+
+
+ ]]></description>
   <category>statistics</category>
   <category>puzzler</category>
   <guid>https://www.econometrics.blog/post/econometrics-puzzler-3-ive-got-the-power/</guid>
@@ -1842,12 +1862,24 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 </div>
 </div>
 <p>The R-squared values from the two regressions are <em>identical</em>! Surprised? Now’s your last chance to think it through on your own before I give my solution.</p>
-</section>
-<section id="solution" class="level2">
-<h2 class="anchored" data-anchor-id="solution">Solution</h2>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Suppose we wanted to choose <img src="https://latex.codecogs.com/png.latex?%5Calpha_0"> and <img src="https://latex.codecogs.com/png.latex?%5Calpha_1"> to minimize <img src="https://latex.codecogs.com/png.latex?%5Csum_%7Bi=1%7D%5En%20(Y_i%20-%20%5Calpha_0%20-%20%5Calpha_1%20%5Cwidehat%7BY%7D_i)%5E2"> where <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7BY%7D_i%20=%20%5Cwidehat%7B%5Cbeta%7D_0%20+%20%5Cwidehat%7B%5Cbeta%7D_1%20X_i">. This is equivalent to minimizing <img src="https://latex.codecogs.com/png.latex?%0A%5Csum_%7Bi=1%7D%5En%20%5Cleft%5BY_i%20-%20(%5Calpha_0%20+%20%5Calpha_1%20%5Cwidehat%7B%5Cbeta%7D_0)%20-%20(%5Calpha_1%5Cwidehat%7B%5Cbeta%7D_1)X_i%5Cright%5D%5E2.%0A"> By construction <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Cbeta%7D_0"> and <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Cbeta%7D_1"> minimize <img src="https://latex.codecogs.com/png.latex?%5Csum_%7Bi=1%7D%5En%20(Y_i%20-%20%5Cbeta_0%20-%20%20%5Cbeta_1%20X_i)%5E2">, so unless <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Calpha%7D_0%20=%200"> and <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Calpha%7D_1%20=%201"> we’d have a contradiction!</p>
 <p>Similar reasoning explains why the R-squared values for the two regressions are the same. The R-squared of a regression equals <img src="https://latex.codecogs.com/png.latex?1%20-%20%5Ctext%7BSS%7D_%7B%5Ctext%7Bresidual%7D%7D%20/%20%5Ctext%7BSS%7D_%7B%5Ctext%7Btotal%7D%7D"> <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BSS%7D_%7B%5Ctext%7Btotal%7D%7D%20=%20%5Csum_%7Bi=1%7D%5En%20(Y_i%20-%20%5Cbar%7BY%7D)%5E2,%5Cquad%0A%5Ctext%7BSS%7D_%7B%5Ctext%7Bresidual%7D%7D%20=%20%5Csum_%7Bi=1%7D%5En%20(Y_i%20-%20%5Cwidehat%7BY%7D_i)%5E2%0A"> The total sum of squares is the same for both regressions because they have the same outcome variable. The residual sum of squares is the same because <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Calpha%7D_0%20=%200"> and <img src="https://latex.codecogs.com/png.latex?%5Cwidehat%7B%5Calpha%7D_1%20=%201"> together imply that both regressions have the same fitted values.</p>
 <p>Here I focused on the case of a simple linear regression, one with a single predictor variable, but the same basic idea holds in general.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -1878,7 +1910,18 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 <h2 class="anchored" data-anchor-id="to-instrument-or-not-to-instrument">To Instrument or Not to Instrument?</h2>
 <p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <img src="https://latex.codecogs.com/png.latex?Y_i"> and years of schooling <img src="https://latex.codecogs.com/png.latex?X_i">. I could use an OLS regression of <img src="https://latex.codecogs.com/png.latex?Y"> on <img src="https://latex.codecogs.com/png.latex?X"> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background. Fortunately, I also have a valid and relevant instrument: quarter of birth <img src="https://latex.codecogs.com/png.latex?Z_i"> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<sup>2</sup></p>
 <p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
-</section>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <section id="taking-it-to-the-data" class="level2">
 <h2 class="anchored" data-anchor-id="taking-it-to-the-data">Taking it to the Data</h2>
 <p>The Angrist &amp; Krueger (1991) dataset is available from Michal Kolesár’s <a href="https://github.com/kolesarm/ManyIV?tab=readme-ov-file"><code>ManyIV</code> R package</a>.<sup>3</sup> Here I’ll restrict attention to people born in the first or fourth quarter of the year. The instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:</p>
@@ -2128,6 +2171,10 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 <section id="take-home-message" class="level2">
 <h2 class="anchored" data-anchor-id="take-home-message">Take Home Message</h2>
 <p>Causal inference and prediction are different goals. Causality is about <em>counterfactuals</em>: what would happen if we <em>intervened</em> to change someone’s years of education? Prediction answers a different question: if I <em>observe</em> that someone has eight years of schooling, what is my best guess of their wage? If you want to predict, use OLS; if you want to estimate a causal effect, use IV.</p>
+</section>
+</div>
+</div>
+</div>
 
 
 </section>

@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f798f075adf7f3cd7f7edb1032bf76ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0c0fcc54928c8a79a4f0511930784b02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -255,7 +255,6 @@ window.Quarto = {
    
   <ul>
   <li><a href="#example-height-and-handspan" id="toc-example-height-and-handspan" class="nav-link active" data-scroll-target="#example-height-and-handspan">Example: Height and Handspan</a></li>
-  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   </ul>
 </nav>
     </div>
@@ -362,9 +361,18 @@ window.Quarto = {
 </div>
 </div>
 <p>The R-squared values from the two regressions are <em>identical</em>! Surprised? Now’s your last chance to think it through on your own before I give my solution.</p>
-</section>
-<section id="solution" class="level2">
-<h2 class="anchored" data-anchor-id="solution">Solution</h2>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Suppose we wanted to choose <span class="math inline">\(\alpha_0\)</span> and <span class="math inline">\(\alpha_1\)</span> to minimize <span class="math inline">\(\sum_{i=1}^n (Y_i - \alpha_0 - \alpha_1 \widehat{Y}_i)^2\)</span> where <span class="math inline">\(\widehat{Y}_i = \widehat{\beta}_0 + \widehat{\beta}_1 X_i\)</span>. This is equivalent to minimizing <span class="math display">\[
 \sum_{i=1}^n \left[Y_i - (\alpha_0 + \alpha_1 \widehat{\beta}_0) - (\alpha_1\widehat{\beta}_1)X_i\right]^2.
 \]</span> By construction <span class="math inline">\(\widehat{\beta}_0\)</span> and <span class="math inline">\(\widehat{\beta}_1\)</span> minimize <span class="math inline">\(\sum_{i=1}^n (Y_i - \beta_0 -  \beta_1 X_i)^2\)</span>, so unless <span class="math inline">\(\widehat{\alpha}_0 = 0\)</span> and <span class="math inline">\(\widehat{\alpha}_1 = 1\)</span> we’d have a contradiction!</p>
@@ -373,6 +381,9 @@ window.Quarto = {
 \text{SS}_{\text{residual}} = \sum_{i=1}^n (Y_i - \widehat{Y}_i)^2
 \]</span> The total sum of squares is the same for both regressions because they have the same outcome variable. The residual sum of squares is the same because <span class="math inline">\(\widehat{\alpha}_0 = 0\)</span> and <span class="math inline">\(\widehat{\alpha}_1 = 1\)</span> together imply that both regressions have the same fitted values.</p>
 <p>Here I focused on the case of a simple linear regression, one with a single predictor variable, but the same basic idea holds in general.</p>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -452,6 +463,11 @@ window.Quarto = {
     fitAll();
     window.addEventListener('resize', schedule);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    // An equation inside a collapsed solution fold has no width to measure
+    // while it is hidden, so fitOne skips it. Measure again once the reader
+    // opens the fold. Bootstrap dispatches this event on the collapsing
+    // element and it bubbles to the document.
+    document.addEventListener('shown.bs.collapse', schedule);
   });
 })();
 </script>
