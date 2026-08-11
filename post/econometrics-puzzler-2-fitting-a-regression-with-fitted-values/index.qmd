@@ -5,6 +5,7 @@ date: '2025-07-24'
 categories:
 - econometrics
 - puzzler
+reference-location: section
 tags:
 - regression
 ---
@@ -55,6 +56,8 @@ glance(reg2)
 The R-squared values from the two regressions are *identical*! Surprised? Now's your last chance to think it through on your own before I give my solution.  
 
 
+
+## Solution
 
 ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 

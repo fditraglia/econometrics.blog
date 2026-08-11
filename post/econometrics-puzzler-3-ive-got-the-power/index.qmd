@@ -20,6 +20,8 @@ In case it's been a while since you've thought about power calculations, remembe
 
 Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that's worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.
 
+## Solution
+
 ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 
 ## Lehr's Rule

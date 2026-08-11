@@ -88,9 +88,19 @@ Workflow for any `.qmd` change:
 
 ### Hiding a puzzler solution
 
-A puzzler post keeps its solution behind a fold so that a reader meets the question first. The markup is a collapsed Quarto callout, styled in the "solution folds" section of `custom.scss`:
+A puzzler post keeps its solution behind a fold so that a reader meets the question first. Three pieces are needed, and all three matter:
+
+1. `reference-location: section` in the frontmatter.
+2. A `## Solution` heading, which gives the fold a section of its own.
+3. The fold itself, a collapsed Quarto callout styled in the "solution folds" section of `custom.scss`.
 
 ```
+---
+reference-location: section
+---
+
+## Solution
+
 ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 
 ## Taking it to the Data
@@ -99,10 +109,13 @@ A puzzler post keeps its solution behind a fold so that a reader meets the quest
 :::
 ```
 
-Three things to know before adding one:
+The heading carries the name, and the bar below it reads "CLICK TO REVEAL" when shut and "HIDE" when open. Both labels come from `custom.scss`; the `title="Solution"` in the markup is sized away and remains only for screen readers.
+
+Four things to know before adding one:
 
 - **Headings inside a fold stay out of the table of contents**, so a section title cannot give the answer away. This is Quarto's behavior, not something the CSS arranges.
-- **Footnotes cited inside a fold print at the foot of the page by default**, in view of a reader who has not opened it. `reference-location: section` in the frontmatter moves each note to the end of its own section, which keeps it inside the fold — but only for sections that *begin* inside the fold. A note cited before the fold, in the section that contains it, is moved inside too and its marker then points at hidden text. Puzzler #3 sets it and is safe; puzzler #1 cannot, because its opening paragraphs carry notes of their own. `reference-location: margin` does keep everything in the right place but its below-1200px fallback overlaps the following heading, so it needs CSS work first.
+- **Footnotes are why the heading is there.** Quarto prints notes at the foot of the page by default, where a note cited inside the fold answers the question for a reader who has not opened it. `reference-location: section` prints each note at the end of the section that cites it instead — but a section that *begins* before the fold ends inside it, which carries a visible marker's note into hiding. A heading immediately above the fold keeps the two apart.
+- **Run `uv run tools-check-folds.py` after rendering.** It fails when any footnote marker and its note end up on opposite sides of a fold, which nothing else detects.
 - **`tools-check-layout.py` cannot see inside a closed fold.** After adding one, open it and check for sideways scroll at 390px separately.
 
 ### R conventions

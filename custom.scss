@@ -775,9 +775,17 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
 //
 // A puzzler post hides its solution behind a collapsed callout so that a
 // reader can think about the question without the answer in view. The markup
-// is Quarto's:
+// is Quarto's, under a heading of its own:
+//
+//   ## Solution
 //
 //   ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
+//
+// The heading is not decoration. Footnotes cited inside the fold are printed
+// at the end of the section that contains them, and a section that starts
+// before the fold ends inside it, which would hide a note whose marker is in
+// plain view. Giving the fold its own section keeps each note on the same side
+// of it as its marker. tools-check-folds.py is what enforces this.
 //
 // callout-note supplies the collapsing behavior and arrives in Bootstrap's
 // blue inside a bordered box. The .solution class is ours, and everything
@@ -807,19 +815,28 @@ body.quarto-listing-page #title-block-header .quarto-title .title,
     cursor: pointer;
   }
 
-  // The label is chrome rather than prose: it names a mechanism, and a reader
-  // who has not opened the fold should not read it as the start of a section.
+  // A "## Solution" heading sits above every fold, so the bar does not repeat
+  // the name. It says what a click will do instead, which the chevron alone
+  // signals too weakly: a reader who misses it reads a puzzler with no
+  // solution. Bootstrap keeps the collapsed class on the header while the fold
+  // is shut, which is what distinguishes the two states here.
+  //
+  // The title text stays in the markup, where a screen reader still announces
+  // it, and is sized away so that only the state label shows.
   .callout-title-container {
     @extend %chrome;
     color: $ink-muted;
+    font-size: 0;
+
+    &::after { font-size: 0.68rem; }
   }
 
-  // The chevron alone is a weak signal that there is something to open, and a
-  // reader who misses it reads a puzzler with no solution. Bootstrap keeps the
-  // collapsed class on the header while the fold is shut, so the invitation
-  // disappears once it has been acted on.
   .callout-header.collapsed .callout-title-container::after {
-    content: " — click to reveal";
+    content: "Click to reveal";
+  }
+
+  .callout-header:not(.collapsed) .callout-title-container::after {
+    content: "Hide";
   }
 
   .callout-header:hover {
