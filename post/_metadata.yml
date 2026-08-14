@@ -1,2 +1,26 @@
 freeze: auto
 author: Francis J. DiTraglia
+
+# The post page per the 2026 redesign: the table of contents sits in the body
+# as a one-line strip under the title, numbered h2 sections, and footnotes in
+# the right margin. Puzzler posts override reference-location in their own
+# frontmatter so that notes stay inside the solution fold.
+date-format: "D MMMM YYYY"
+
+# The eyebrow line above each title (subject · date · reading time · series
+# position) is rendered by _partials/title-block.html; the reading time it
+# shows is computed at render time by _reading-time.lua.
+filters:
+  - ../_reading-time.lua
+
+format:
+  html:
+    toc: true
+    toc-location: body
+    toc-depth: 2
+    toc-title: "On this page"
+    number-sections: true
+    number-depth: 2
+    reference-location: margin
+    template-partials:
+      - ../_partials/title-block.html

@@ -19,14 +19,14 @@
     }
   ]]></style>
 </defs>
-<rect width='100%' height='100%' style='stroke: none; fill: #FDFCFA;'/>
+<rect width='100%' height='100%' style='stroke: none; fill: #F8F6F1;'/>
 <defs>
   <clipPath id='cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA='>
     <rect x='0.00' y='0.00' width='504.00' height='360.00' />
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA=)'>
-<rect x='0.00' y='0.00' width='504.00' height='360.00' style='stroke-width: 1.36; stroke: none; fill: #FDFCFA;' />
+<rect x='0.00' y='0.00' width='504.00' height='360.00' style='stroke-width: 1.36; stroke: none; fill: #F8F6F1;' />
 </g>
 <defs>
   <clipPath id='cpMy45OXw1MDAuMDF8MjcuNDF8MzIyLjU0'>
@@ -34,13 +34,13 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMy45OXw1MDAuMDF8MjcuNDF8MzIyLjU0)'>
-<rect x='3.99' y='27.41' width='496.03' height='295.13' style='stroke-width: 1.36; stroke: none; fill: #FDFCFA;' />
-<polyline points='3.99,309.13 500.01,309.13 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
-<polyline points='3.99,219.69 500.01,219.69 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
-<polyline points='3.99,130.26 500.01,130.26 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
-<polyline points='3.99,40.83 500.01,40.83 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
-<polyline points='139.27,322.54 139.27,27.41 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
-<polyline points='364.73,322.54 364.73,27.41 ' style='stroke-width: 0.64; stroke: #D5CFC3; stroke-linecap: butt;' />
+<rect x='3.99' y='27.41' width='496.03' height='295.13' style='stroke-width: 1.36; stroke: none; fill: #F8F6F1;' />
+<polyline points='3.99,309.13 500.01,309.13 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
+<polyline points='3.99,219.69 500.01,219.69 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
+<polyline points='3.99,130.26 500.01,130.26 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
+<polyline points='3.99,40.83 500.01,40.83 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
+<polyline points='139.27,322.54 139.27,27.41 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
+<polyline points='364.73,322.54 364.73,27.41 ' style='stroke-width: 0.64; stroke: #DCD7CD; stroke-linecap: butt;' />
 <circle cx='139.27' cy='130.26' r='3.65' style='stroke-width: 0.90; stroke: #23211E; fill: #23211E;' />
 <circle cx='364.73' cy='192.86' r='3.65' style='stroke-width: 0.90; stroke: #23211E; fill: #23211E;' />
 <polyline points='127.99,58.72 150.54,58.72 ' style='stroke-width: 2.13; stroke-linecap: butt;' />
@@ -51,10 +51,10 @@
 <polyline points='353.46,282.30 376.01,282.30 ' style='stroke-width: 2.13; stroke-linecap: butt;' />
 <line x1='94.17' y1='201.81' x2='409.83' y2='201.81' style='stroke-width: 1.07; stroke: #1F5488; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
 <line x1='94.17' y1='201.81' x2='409.83' y2='201.81' style='stroke-width: 1.07; stroke: #1F5488; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<line x1='94.17' y1='103.43' x2='409.83' y2='103.43' style='stroke-width: 1.07; stroke: #A3402A; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
-<line x1='94.17' y1='103.43' x2='409.83' y2='103.43' style='stroke-width: 1.07; stroke: #A3402A; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+<line x1='94.17' y1='103.43' x2='409.83' y2='103.43' style='stroke-width: 1.07; stroke: #A63A1C; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
+<line x1='94.17' y1='103.43' x2='409.83' y2='103.43' style='stroke-width: 1.07; stroke: #A63A1C; stroke-dasharray: 5.69,5.69; stroke-linecap: butt;' />
 <text x='252.00' y='195.24' text-anchor='middle' style='font-size: 12.45px;fill: #1F5488; font-family: "Source Serif 4";'>Lower CI for A</text>
-<text x='252.00' y='118.33' text-anchor='middle' style='font-size: 12.45px;fill: #A3402A; font-family: "Source Serif 4";'>Upper CI for B</text>
+<text x='252.00' y='118.33' text-anchor='middle' style='font-size: 12.45px;fill: #A63A1C; font-family: "Source Serif 4";'>Upper CI for B</text>
 <text x='168.36' y='136.02' style='font-size: 14.23px;fill: #23211E; font-family: "Source Serif 4";'>A</text>
 <polyline points='168.36,124.51 177.81,124.51 ' style='stroke-width: 0.75; stroke: #23211E;' />
 <text x='394.08' y='198.58' style='font-size: 14.23px;fill: #23211E; font-family: "Source Serif 4";'>B</text>

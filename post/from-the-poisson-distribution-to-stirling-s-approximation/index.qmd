@@ -2,6 +2,7 @@
 title: "From the Poisson Distribution to Stirling's Approximation"
 author: Francis J. DiTraglia
 date: '2022-11-18'
+subject: 'Inference & uncertainty'
 categories:
 - statistics
 - computing

@@ -2,6 +2,7 @@
 title: Lessons from the Oxford Vaccination Survey
 author: Francis J. DiTraglia
 date: '2021-12-31'
+subject: 'Computing & applied work'
 categories:
 - statistics
 - applied

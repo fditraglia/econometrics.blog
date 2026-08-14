@@ -7,21 +7,26 @@ project:
     - post/
   resources:
     - fonts/
+    - apple-touch-icon.png
 
 website:
   title: "econometrics.blog"
   site-url: https://www.econometrics.blog
+  favicon: favicon.png
   navbar:
     left:
       - href: index.qmd
-        text: Home
+        text: Contents
+      # The homepage listing reads #category=... on load, so this filters the
+      # contents down to the puzzler series without needing a page of its own.
+      - href: "/#category=puzzler"
+        text: Puzzlers
       - href: about/index.qmd
         text: About
-    right:
-      - icon: github
-        href: https://github.com/fditraglia/econometrics.blog
-      - icon: rss
-        href: index.xml
+      - href: index.xml
+        text: Feed
+  page-footer:
+    center: "&copy; 2020&ndash;2026 Francis J. DiTraglia &nbsp;&middot;&nbsp; [Source on GitHub](https://github.com/fditraglia/econometrics.blog) &nbsp;&middot;&nbsp; [Feed](/index.xml)"
   comments:
     utterances:
       repo: fditraglia/econometrics.blog-comments
@@ -38,18 +43,22 @@ format:
     highlight-style: github
     include-in-header:
       - _fonts.html
+      - text: |
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
     include-after-body:
       - text: |
           <script data-goatcounter="https://econometrics.goatcounter.com/count"
                   async src="//gc.zgo.at/count.js"></script>
       - _math-fit.html
       - _listing-tidy.html
+      - _theme.html
 
 knitr:
   opts_chunk:
     dev: svglite
     dev.args:
-      bg: "#fdfcfa"
+      bg: "#f8f6f1"
       pointsize: 14
 
 freeze: auto

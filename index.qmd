@@ -1,5 +1,6 @@
 ---
 title: "econometrics.blog"
+description: "Puzzles, intuitions, and sundry economic tricks."
 listing:
   contents: post
   sort: "date desc"

@@ -2,6 +2,7 @@
 title: Regressions with a Mis-measured, Binary Outcome
 author: Francis J. DiTraglia
 date: '2021-08-30'
+subject: 'Causal inference & identification'
 categories:
 - measurement error
 tags: []

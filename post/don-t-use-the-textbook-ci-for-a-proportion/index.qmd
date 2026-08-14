@@ -2,6 +2,7 @@
 title: Don't Use the Textbook CI for a Proportion
 author: Francis J. DiTraglia
 date: '2021-10-04'
+subject: 'Inference & uncertainty'
 categories:
 - statistics
 tags:

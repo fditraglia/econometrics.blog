@@ -2,6 +2,10 @@
 title: A Good Instrument is a Bad Control
 author: Francis J. DiTraglia
 date: '2023-06-29'
+subject: 'Causal inference & identification'
+series: 'A Good Instrument is a Bad Control'
+series-label: 'Part I'
+series-position: 'Part I of II'
 categories:
 - econometrics
 - causal inference

@@ -2,6 +2,7 @@
 title: Not Quite the James-Stein Estimator
 author: Francis J. DiTraglia
 date: '2024-08-10'
+subject: 'Inference & uncertainty'
 categories:
 - statistics
 tags:

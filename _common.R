@@ -7,12 +7,15 @@
 #
 # Palette is taken from custom.scss. Keep the two in step.
 
-econblog_paper <- "#fdfcfa"  # page background
+econblog_paper <- "#f8f6f1"  # page background
 econblog_ink   <- "#23211e"  # body text
 econblog_muted <- "#585249"  # chrome: axis text, strip labels
-econblog_rule  <- "#d5cfc3"  # hairlines, gridlines
-econblog_accent<- "#1f5488"  # links; the site's one chromatic note
-econblog_warm  <- "#a3402a"  # counterpart to the accent, for two-way contrasts
+econblog_rule  <- "#dcd7cd"  # hairlines, gridlines
+# The site's UI accent is the vermilion below; the blue exists only inside
+# figures, where several posts pair it against the vermilion as a two-way
+# contrast. Turning it red as well would collapse those encodings.
+econblog_accent<- "#1f5488"  # chart blue, for two-way contrasts
+econblog_warm  <- "#a63a1c"  # the site accent (vermilion), counterpart to the blue
 
 # Two faces, matching the roles they already play on the page: mono for chart
 # chrome (axis labels, ticks, legends), serif for anything that reads as prose

@@ -2,6 +2,7 @@
 title: "A Makeover for econometrics.blog"
 author: Francis J. DiTraglia
 date: '2026-04-09'
+subject: 'Odds & ends'
 categories:
 - meta
 tags: []

@@ -2,6 +2,7 @@
 title: "Sims and Uhlig (1991) Replication"
 author: Francis J. DiTraglia
 date: '2024-07-15'
+subject: 'Econometric theory'
 categories:
 - time series
 tags:

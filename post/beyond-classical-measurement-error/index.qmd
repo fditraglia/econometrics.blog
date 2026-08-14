@@ -2,6 +2,7 @@
 title: Beyond Classical Measurement Error
 author: Francis J. DiTraglia
 date: '2021-08-23'
+subject: 'Causal inference & identification'
 categories:
 - measurement error
 tags:

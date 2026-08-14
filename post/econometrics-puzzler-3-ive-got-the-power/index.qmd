@@ -2,6 +2,7 @@
 title: "Econometrics Puzzler #3: I've Got the Power"
 author: Francis J. DiTraglia
 date: '2026-08-06'
+subject: 'Puzzler No. 3'
 categories:
 - statistics
 - puzzler

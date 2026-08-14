@@ -2,6 +2,7 @@
 title: Two FWL Theorems for the Price of One
 author: Francis J. DiTraglia
 date: '2025-08-14'
+subject: 'Econometric theory'
 categories:
 - econometrics
 tags:

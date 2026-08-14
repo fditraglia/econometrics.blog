@@ -14,3 +14,7 @@ post/*/tikz*.log
 # The tikz engine converts LaTeX output to SVG and leaves the intermediate in
 # _freeze/. Only the .svg is read, by the browser; nothing reads the .dvi.
 _freeze/**/*.dvi
+
+# The 2026 redesign handoff (mockups and spec). The repo itself is the record
+# of the redesign; the zip was scaffolding and stays out of history.
+Personalizing blog design.zip

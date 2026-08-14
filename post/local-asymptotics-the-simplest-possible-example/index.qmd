@@ -2,6 +2,7 @@
 title: 'Local Asymptotics: The Simplest Possible Example'
 author: Francis J. DiTraglia
 date: '2022-11-12'
+subject: 'Econometric theory'
 categories:
 - econometrics
 tags:

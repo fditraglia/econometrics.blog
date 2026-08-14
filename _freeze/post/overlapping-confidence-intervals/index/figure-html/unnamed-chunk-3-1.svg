@@ -19,7 +19,7 @@
     }
   ]]></style>
 </defs>
-<rect width='100%' height='100%' style='stroke: none; fill: #FDFCFA;'/>
+<rect width='100%' height='100%' style='stroke: none; fill: #F8F6F1;'/>
 <defs>
   <clipPath id='cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA='>
     <rect x='0.00' y='0.00' width='504.00' height='360.00' />
@@ -33,7 +33,7 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpOTUuNzl8NDA4LjIxfDAuMDB8MzYwLjAw)'>
-<rect x='95.79' y='0.00' width='312.43' height='360.00' style='stroke-width: 0.00; stroke: none; fill: #FDFCFA;' />
+<rect x='95.79' y='0.00' width='312.43' height='360.00' style='stroke-width: 0.00; stroke: none; fill: #F8F6F1;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA=)'>
 </g>
@@ -43,10 +43,10 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpOTkuNzd8NDA0LjIzfDMuOTl8MzU2LjAx)'>
-<rect x='99.77' y='3.99' width='304.46' height='352.03' style='stroke-width: 0.00; stroke: none; fill: #FDFCFA;' />
+<rect x='99.77' y='3.99' width='304.46' height='352.03' style='stroke-width: 0.00; stroke: none; fill: #F8F6F1;' />
 <line x1='130.91' y1='279.47' x2='303.90' y2='63.23' style='stroke-width: 3.20; stroke: #1F5488; stroke-linecap: butt;' />
-<line x1='130.91' y1='279.47' x2='303.90' y2='279.47' style='stroke-width: 2.56; stroke: #A3402A; stroke-dasharray: 13.66,13.66; stroke-linecap: butt;' />
-<line x1='303.90' y1='279.47' x2='303.90' y2='63.23' style='stroke-width: 2.56; stroke: #A3402A; stroke-dasharray: 13.66,13.66; stroke-linecap: butt;' />
+<line x1='130.91' y1='279.47' x2='303.90' y2='279.47' style='stroke-width: 2.56; stroke: #A63A1C; stroke-dasharray: 13.66,13.66; stroke-linecap: butt;' />
+<line x1='303.90' y1='279.47' x2='303.90' y2='63.23' style='stroke-width: 2.56; stroke: #A63A1C; stroke-dasharray: 13.66,13.66; stroke-linecap: butt;' />
 <circle cx='130.91' cy='279.47' r='3.65' style='stroke-width: 0.90; stroke: #23211E; fill: #23211E;' />
 <circle cx='303.90' cy='63.23' r='3.65' style='stroke-width: 0.90; stroke: #23211E; fill: #23211E;' />
 <text x='144.43' y='150.09' style='font-size: 14.23px;fill: #1F5488; font-family: "Source Serif 4";'>SE</text>
@@ -71,27 +71,27 @@
 <polyline points='201.68,161.44 209.50,161.44 ' style='stroke-width: 0.75; stroke: #1F5488;' />
 <text x='209.50' y='171.44' style='font-size: 15.56px;fill: #1F5488; font-family: "Source Serif 4";'>)</text>
 <text x='214.67' y='167.31' style='font-size: 8.71px;fill: #1F5488; font-family: "Source Serif 4";'>2</text>
-<text x='198.90' y='304.91' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>SE</text>
-<text x='214.62' y='304.91' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>(</text>
-<text x='220.54' y='304.91' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>A</text>
-<polyline points='220.54,293.40 229.99,293.40 ' style='stroke-width: 0.75; stroke: #A3402A;' />
-<text x='229.99' y='304.91' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>)</text>
-<text x='306.41' y='176.04' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>SE</text>
-<text x='322.12' y='176.04' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>(</text>
-<text x='328.04' y='176.04' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>B</text>
-<polyline points='328.04,164.60 336.99,164.60 ' style='stroke-width: 0.75; stroke: #A3402A;' />
-<text x='336.99' y='176.04' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>)</text>
-<text x='173.90' y='327.40' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>SE</text>
-<text x='189.62' y='327.40' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>(</text>
-<text x='195.54' y='327.40' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>A</text>
-<polyline points='195.54,315.89 204.98,315.89 ' style='stroke-width: 0.75; stroke: #A3402A;' />
-<text x='204.98' y='327.40' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>)</text>
-<text x='213.75' y='327.40' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>+</text>
-<text x='224.41' y='327.40' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>SE</text>
-<text x='240.13' y='327.40' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>(</text>
-<text x='246.04' y='327.40' style='font-size: 14.23px;fill: #A3402A; font-family: "Source Serif 4";'>B</text>
-<polyline points='246.04,315.96 254.99,315.96 ' style='stroke-width: 0.75; stroke: #A3402A;' />
-<text x='254.99' y='327.40' style='font-size: 17.78px;fill: #A3402A; font-family: "Source Serif 4";'>)</text>
+<text x='198.90' y='304.91' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>SE</text>
+<text x='214.62' y='304.91' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>(</text>
+<text x='220.54' y='304.91' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>A</text>
+<polyline points='220.54,293.40 229.99,293.40 ' style='stroke-width: 0.75; stroke: #A63A1C;' />
+<text x='229.99' y='304.91' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>)</text>
+<text x='306.41' y='176.04' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>SE</text>
+<text x='322.12' y='176.04' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>(</text>
+<text x='328.04' y='176.04' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>B</text>
+<polyline points='328.04,164.60 336.99,164.60 ' style='stroke-width: 0.75; stroke: #A63A1C;' />
+<text x='336.99' y='176.04' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>)</text>
+<text x='173.90' y='327.40' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>SE</text>
+<text x='189.62' y='327.40' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>(</text>
+<text x='195.54' y='327.40' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>A</text>
+<polyline points='195.54,315.89 204.98,315.89 ' style='stroke-width: 0.75; stroke: #A63A1C;' />
+<text x='204.98' y='327.40' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>)</text>
+<text x='213.75' y='327.40' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>+</text>
+<text x='224.41' y='327.40' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>SE</text>
+<text x='240.13' y='327.40' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>(</text>
+<text x='246.04' y='327.40' style='font-size: 14.23px;fill: #A63A1C; font-family: "Source Serif 4";'>B</text>
+<polyline points='246.04,315.96 254.99,315.96 ' style='stroke-width: 0.75; stroke: #A63A1C;' />
+<text x='254.99' y='327.40' style='font-size: 17.78px;fill: #A63A1C; font-family: "Source Serif 4";'>)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw1MDQuMDB8MC4wMHwzNjAuMDA=)'>
 </g>

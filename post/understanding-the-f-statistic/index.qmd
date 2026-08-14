@@ -2,6 +2,7 @@
 title: Understanding the F Statistic
 author: Francis J. DiTraglia
 date: '2021-08-15'
+subject: 'Teaching & explainers'
 categories:
 - econometrics
 - teaching

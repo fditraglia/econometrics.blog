@@ -2,6 +2,7 @@
 title: Random Variables Cheatsheet
 author: Francis J. DiTraglia
 date: '2023-01-07'
+subject: 'Teaching & explainers'
 categories:
 - statistics
 tags: []

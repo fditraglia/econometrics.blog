@@ -2,6 +2,7 @@
 title: Econometricians Anonymous
 author: Francis J. DiTraglia
 date: '2021-04-01'
+subject: 'Odds & ends'
 categories:
 - meta
 tags: []

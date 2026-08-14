@@ -2,6 +2,7 @@
 title: Three Ways of Thinking About Instrumental Variables
 author: Francis J. DiTraglia
 date: '2022-11-06'
+subject: 'Causal inference & identification'
 categories:
 - econometrics
 - causal inference

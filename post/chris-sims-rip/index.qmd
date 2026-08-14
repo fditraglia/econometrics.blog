@@ -2,6 +2,7 @@
 title: Chris Sims - RIP
 author: Francis J. DiTraglia
 date: '2026-03-15'
+subject: 'Odds & ends'
 categories:
 - meta
 tags: []

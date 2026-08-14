@@ -2,6 +2,7 @@
 title: Thirty isn't the magic number
 author: Francis J. DiTraglia
 date: '2021-05-08'
+subject: 'Teaching & explainers'
 categories:
 - statistics
 - teaching
@@ -103,7 +104,7 @@ But we've only looked at two values of $t$.
 While we could continue trying additional values one at a time, it's much faster to use R's built-in function for computing an empirical cdf, `ecdf()`. First we pass our simulated z-scores `z` into `ecdf()` function to calculate the empirical CDF and plot the result. Next we overlay some points from the standard normal CDF, `pnorm` in blue for comparison:
 ```{r}
 #| dev: ragg_png
-#| dev.args: {background: "#fdfcfa", pointsize: 14}
+#| dev.args: {background: "#f8f6f1", pointsize: 14}
 z <- sqrt(120) * (xbar_sims - 1/2)
 plot(ecdf(z), xlab = 't', ylab = 'F(t)', main = 'F(t) versus pnorm(t)')
 tseq <- seq(-4, 4, by = 0.2)
@@ -154,7 +155,7 @@ The plot that we have just made is called a *normal quantile-quantile plot*. It 
 If the points all fall on a line, then the quantiles of the observed data agree with those of *some* normal distribution, although perhaps not a standard normal. If we standardize the data before making such a plot, as we did to construct `z` above, the relevant line will be the 45-degree line. If not, it will be a different line but the interpretation remains the same. The easiest way to make a normal quantile-quantile plot in R is by using the function `qqnorm` followed by `qqline`. We could do this either using the centered and standardized simulation draws `z` or the original draws `xbar_sims` 
 ```{r}
 #| dev: ragg_png
-#| dev.args: {background: "#fdfcfa", pointsize: 14}
+#| dev.args: {background: "#f8f6f1", pointsize: 14}
 par(mfrow = c(1, 2))
 qqnorm(z, ylab = 'Quantiles of z')
 qqline(z)

@@ -27,12 +27,23 @@ Posts live in `post/slug-name/` directories. Each post directory contains:
 title: "Post Title"
 author: Francis J. DiTraglia
 date: 'YYYY-MM-DD'
+subject: 'Econometric theory'
 categories:
 - econometrics
 tags:
 - regression
 ---
 ```
+
+`subject` places the post on the home page's by-subject view and leads the metadata line above the title. The five values for topical posts, which must match `listing.ejs.md` exactly: `Causal inference & identification`, `Inference & uncertainty`, `Econometric theory`, `Teaching & explainers`, `Computing & applied work`. Puzzlers take `Puzzler No. N` and meta posts take `Odds & ends`; both sit outside the five sections.
+
+Posts in a multi-part series carry three more fields, e.g. the second part of a pair:
+```yaml
+series: 'Overlapping Confidence Intervals'   # same string on every part
+series-label: 'Part II'                       # this part's name on the index
+series-position: 'Part II of II'              # shown in the title-block metadata line
+```
+The home page folds all parts of a series onto one line; `series-label` supplies the italic suffix.
 
 ### Site Structure
 - `index.qmd` — Homepage (post listing)
@@ -164,14 +175,17 @@ gh run view <run-id> --log-failed   # if a run failed
 
 ### Theme
 
-The site sets its own typography rather than using cosmo's defaults. Two self-hosted typefaces do all the work:
+The 2026 redesign (spec: the "Personalizing blog design" handoff from Claude Design) sets the site's own typography and color on top of cosmo. Three self-hosted typefaces do all the work:
 
-- **Source Serif 4** for body text, headings, and post titles. Serif matters here specifically because MathJax renders math in a serif face — a sans body would make every inline `$\hat\beta$` clash with the sentence around it. The variable font carries an 8–60pt optical size axis, and `font-optical-sizing: auto` in `custom.scss` is what gives large headings a true display cut.
-- **JetBrains Mono** for everything that is metadata rather than prose: dates, categories, nav links, table headers, captions, the TOC heading. In `custom.scss` this is the `%chrome` placeholder selector — extend it rather than restating the rules.
+- **EB Garamond** for body text. Its x-height is small, which is why the base size is 21px where Source Serif 4 sat at 19px.
+- **Libre Caslon Text** for titles, headings, the masthead wordmark and nav. Caslon at weight 400 IS the heading weight — do not bold headings.
+- **JetBrains Mono** only where a number or code token needs it: dates, reading times, section numerals, code, printed output, figure captions, table headers, and the small specified labels (the title-block metadata line, `ON THIS PAGE`, the view toggle, `CLICK TO REVEAL`). Never as a label style for prose. The old `%chrome` placeholder is gone; each site is styled at its own call site in `custom.scss`.
 
-One exemption, in the tables section: a `thead th` that contains math is matched by `:has(mjx-container)` and opts back out of `%chrome`. MathJax inherits the surrounding font size and color, so a column label like `$Y = 0$` would otherwise render small and gray beside a row label like `$X = -1$` set full size in the body cell below it. The rule keys on content rather than on any one post, so it covers future tables too; only the independence-zoo table uses it today.
+Color: cream paper `#f8f6f1`, near-black inks, hairlines `#dcd7cd`, and **one accent** — vermilion `#a63a1c` (6.0:1 on the paper). It appears on links, the double rule under the masthead, the `.blog` half of the wordmark, section and equation numerals, index section headings and rules, margin asides, table header rows, and the solution folds' rules and labels. Post-body section headings stay ink; only the numeral before them is red. Figures keep a chart blue (`econblog_accent` in `_common.R`) because two posts pair it against the vermilion as a two-way contrast — do not turn it red.
 
-Both live in `fonts/` as woff2 and are declared in `_fonts.html`, which is pulled in via `include-in-header`. They are deliberately **not** loaded from the Google Fonts CDN, so no reader IP addresses go to Google. Do not "simplify" this back to a CDN link.
+One exemption, in the tables section: a `thead th` that contains math is matched by `:has(mjx-container)` and opts back out of the mono header treatment. MathJax inherits the surrounding font size and color, so a column label like `$Y = 0$` would otherwise render tiny and red beside a row label like `$X = -1$` set full size in the body cell below it. The rule keys on content rather than on any one post, so it covers future tables too; only the independence-zoo table uses it today.
+
+All faces live in `fonts/` as woff2 and are declared in `_fonts.html`, which is pulled in via `include-in-header`. They are deliberately **not** loaded from the Google Fonts CDN, so no reader IP addresses go to Google. Do not "simplify" this back to a CDN link. (Figure SVGs still embed **Source Serif 4** subsets from `fonts/subset/`; the page-level Source Serif declarations were removed, but the figure pipeline is unchanged.)
 
 Font URLs in that file are site-root absolute (`/fonts/...`). Declaring them in a `.css` file listed under `format.html.css` does **not** work — Quarto rewrites the paths and produces a broken `/fonts/..fonts/...`.
 
@@ -180,7 +194,8 @@ Font URLs in that file are site-root absolute (`/fonts/...`). Declaring them in 
 A few fragile spots, all of which degrade to "looks more like stock Quarto" rather than breaking:
 
 - Several selectors target Quarto-internal class names (`.quarto-title-meta-heading`, `.quarto-category`, `#title-block-header`). A Quarto upgrade could rename these.
-- The post date is moved above the title with flexbox `order`, which depends on Quarto's DOM order inside `#title-block-header`.
+- The post title block is a custom template partial, `_partials/title-block.html`, wired up in `post/_metadata.yml`. It renders the metadata line (subject · date · reading time · series position) from front matter; the reading time comes from `_reading-time.lua`, a Pandoc filter that counts words at render time (200 wpm, matching Quarto's listing field), so no R and no JavaScript are involved. A Quarto upgrade that restructures its title-block partial could need this file revisited.
+- The home page is `listing.ejs.md`: a hero for the latest post (text-only unless the post opts in with an `image:` frontmatter line, which the hero shows at 150px), a by-subject view (default) and a by-date view behind a client-side toggle, a puzzler block, and a hidden flat list of per-post stubs. The stubs are what List.js — and therefore the category filter — actually operates on; `_theme.html` mirrors the filter state onto the visible views via their `data-indexes` attributes, moves the margin block into the sidebar, wires the toggle (localStorage, subject view rendered first so the page is correct before JS runs), and collapses long sections behind an italic "five more". The `Puzzlers` nav item points at `/#category=puzzler`, which Quarto's listing JS reads on load; puzzler and meta filters force the date view, since those posts have no subject-view lines.
 - The `!important` flags on `.quarto-category` are required, not stylistic. Quarto ships a more specific rule that restores the default pill border without them.
 - The table of contents is held back to 900px, above Quarto's own 768px breakpoint, because the wide `$grid-column-gutter-width` leaves the page grid about 862px wide and it does not shrink in that band. Without the override the sidebar hangs off the right edge and the page scrolls sideways. If the gutter is ever narrowed, recheck the breakpoint — the two are tied together, as `$math-bleed` already is.
 - Below 768px the page grid is restated with `$grid-column-gutter-width-mobile` in place of the desktop gutter, because Quarto applies one gutter at every viewport and the desktop value left a 216px reading column on a 360px phone. The rule reproduces Quarto's own track list for that breakpoint with only the two edge values changed, so a Quarto upgrade that renames the grid lines would need it updated. It carries `!important` because Quarto states the same rule through several more specific body-class selectors.
@@ -212,10 +227,10 @@ source(here::here("_common.R"))
 
 ````
 #| dev: ragg_png
-#| dev.args: {background: "#fdfcfa", pointsize: 14}
+#| dev.args: {background: "#f8f6f1", pointsize: 14}
 ````
 
-Check figure sizes after adding any plot with more than a few thousand marks. Note the argument name differs by device: `svglite` takes `bg`, `ragg_png` takes `background`.
+Check figure sizes after adding any plot with more than a few thousand marks. Note the argument name differs by device: `svglite` takes `bg`, `ragg_png` takes `background`; both must stay in step with `$paper` in `custom.scss`.
 
 **The one tikz figure is styled separately, in LaTeX.** `why-econometrics-is-confusing-part-ii-the-independence-zoo` draws its diagram in a `{tikz}` chunk rather than an `{r}` one. knitr compiles that through LaTeX, not through an R graphics device, so nothing in `_common.R` reaches it — the theme, the `par` hook and the SVG font-embedding hook all apply to R figures only. The chunk therefore carries its own styling in `engine.opts`:
 

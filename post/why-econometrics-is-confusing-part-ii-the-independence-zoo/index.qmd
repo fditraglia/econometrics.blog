@@ -2,6 +2,10 @@
 title: 'Why Econometrics is Confusing Part II: The Independence Zoo'
 author: Francis J. DiTraglia
 date: '2023-01-01'
+subject: 'Teaching & explainers'
+series: 'Why Econometrics is Confusing'
+series-label: 'Part II'
+series-position: 'Part II of II'
 categories:
 - econometrics
 - teaching

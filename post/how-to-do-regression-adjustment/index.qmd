@@ -2,6 +2,7 @@
 title: How to Do Regression Adjustment
 author: Francis J. DiTraglia
 date: '2024-08-02'
+subject: 'Causal inference & identification'
 execute:
   message: false
   warning: false

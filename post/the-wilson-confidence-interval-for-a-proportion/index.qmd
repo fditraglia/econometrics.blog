@@ -2,6 +2,7 @@
 title: The Wilson Confidence Interval for a Proportion
 author: Francis J. DiTraglia
 date: '2022-02-05'
+subject: 'Inference & uncertainty'
 categories:
 - statistics
 tags:

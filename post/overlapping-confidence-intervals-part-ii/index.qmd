@@ -2,6 +2,10 @@
 title: 'Overlapping Confidence Intervals: Part II'
 author: Francis J. DiTraglia
 date: '2025-11-22'
+subject: 'Inference & uncertainty'
+series: 'Overlapping Confidence Intervals'
+series-label: 'Part II'
+series-position: 'Part II of II'
 categories:
 - statistics
 tags:

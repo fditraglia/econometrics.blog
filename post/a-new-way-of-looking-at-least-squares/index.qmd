@@ -2,6 +2,7 @@
 title: A New Way of Looking at Least Squares
 author: Francis J. DiTraglia
 date: '2022-03-14'
+subject: 'Econometric theory'
 categories:
 - econometrics
 tags:
