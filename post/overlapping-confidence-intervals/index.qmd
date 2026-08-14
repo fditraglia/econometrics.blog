@@ -42,9 +42,9 @@ If the two intervals *do not* overlap, does that mean that there *is* a signific
 
 
 
-# Setting the Stage 
+## Setting the Stage 
 
-## Intervals for A, B and their difference.
+### Intervals for A, B and their difference.
 
 Let $\bar{A}$ be our estimator of the population mean $\mu_A$ for Group A, and let $\text{SE}(\bar{A})$ be its standard error. 
 Similarly, let $\bar{B}$ be our estimator of the population mean $\mu_B$ for Group B, with standard error $\text{SE}(\bar{B})$.
@@ -58,13 +58,13 @@ $$
 $$
 More generally, to construct an approximate $(1 - \alpha) \times 100\%$ confidence interval, we would replace the 2 above with the appropriate quantile of a standard normal distribution.^[Granted, 2 is *slightly* larger than $\texttt{qnorm}(0.975)$, but do you really want to multiply by 1.96 in your head?] Below I'll call this quantile $z$ for short.
 
-## When is the difference significant?
+### When is the difference significant?
 
 The difference between $\mu_A$ and $\mu_B$ is statistically significant at the $\alpha \times 100\%$ level if the confidence interval for $\Delta$ does not include zero, i.e. if $|\bar{A} - \bar{B}| > z \cdot \text{SE}(\bar{A} - \bar{B})$.
 But working with absolute values will quickly become tedious, so without loss of generality, let's assume $\bar{A} \geq \bar{B}$. If this doesn't hold, we can always relabel the two groups so it does hold. Then the condition for a significant difference becomes 
 $$(\bar{A} - \bar{B})/z > \text{SE}(\bar{A} - \bar{B}).$$
 
-## When do the intervals overlap?
+### When do the intervals overlap?
 
 Again, without loss of generality, we can assume that $\bar{A}\geq \bar{B}$.
 Now think about what it would mean for the two confidence intervals to overlap.
@@ -140,9 +140,9 @@ $$(\bar{A} - \bar{B})/z < \text{SE}(\bar{A}) + \text{SE}(\bar{B}).$$
 
 
 
-# Case I: Overlapping Intervals for A and B 
+## Case I: Overlapping Intervals for A and B 
 
-## Formalizing the Question
+### Formalizing the Question
 
 Can the confidence intervals for A and B overlap despite there being a significant difference of means between the two groups?
 Using the results from above, this question is equivalent to asking whether it's possible for both of these inequalities to hold at the same time:
@@ -154,15 +154,15 @@ So the question becomes: can we find values of $\bar{A}$, $\bar{B}$, $\text{SE}(
 $$\text{SE}(\bar{A} - \bar{B}) < \frac{\bar{A} - \bar{B}}{z} < \text{SE}(\bar{A}) + \text{SE}(\bar{B})?$$
 
 
-## Let's talk about triangles!
+### Let's talk about triangles!
 
 For just a moment, forget that we're talking about statistics and cast your mind back to *high school geometry*. 
 There are two facts I'd like you to recall:
 
-### 1: The Pythagorean Theorem
+#### 1: The Pythagorean Theorem
 If $a$ and $b$ are the lengths of the legs of a right triangle, then the length $c$ of the hypotenuse satisfies $c = \sqrt{a^2 + b^2}$. 
 
-### 2: The Triangle Inequality
+#### 2: The Triangle Inequality
 For *any triangle* with sides $a$, $b$, and $c$, we have $c \leq a + b$.^[The triangle inequality just says that "the shortest distance between two points in a Euclidean plane is a straight line." If we're working with a genuine triangle, then the vertices *cannot* lie on the same line. So traveling from $x$ to $z$ via $y$ always covers a greater distance than going straight from $x$ to $z$.]
 
 So how do these two facts help us? Consider a right triangle whose legs have lengths $\text{SE}(\bar{A})$ and $\text{SE}(\bar{B})$. By the Pythagorean Theorem, the hypotenuse of this triangle has length 
@@ -224,7 +224,7 @@ ggplot() +
 ```
 
 
-## The Solution
+### The Solution
 The question we set out to answer is whether we can find values that satisfy the inequality:
 $$\text{SE}(\bar{A} - \bar{B}) < \frac{\bar{A} - \bar{B}}{z} < \text{SE}(\bar{A}) + \text{SE}(\bar{B}).$$
 Since the right-hand side is *always* strictly larger than the left-hand side, the answer is *yes*.
@@ -248,7 +248,7 @@ If all we know is that two intervals overlap, we can't say *anything* about the 
 
 
 
-# Case II: Intervals for A and B that Don't Overlap 
+## Case II: Intervals for A and B that Don't Overlap 
 
 Now for the easy one.
 Since 
@@ -260,7 +260,7 @@ $$(\bar{A} - \bar{B})/z > \text{SE}(\bar{A}) + \text{SE}(\bar{B})> \text{SE}(\ba
 So if the intervals *do not* overlap, then $(\bar{A} - \bar{B})/z$ must be *greater than* $\text{SE}(\bar{A} - \bar{B})$, which is precisely the condition for a significant difference between the two groups.
 
 
-# In Summary 
+## In Summary 
 
 In an independent samples problem where the two individual confidence intervals overlap, there *may or may not* be a significant difference between the groups.
 Even if the two intervals both contain zero, there *could still* be a significant difference between them.

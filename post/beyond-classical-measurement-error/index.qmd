@@ -11,7 +11,7 @@ tags:
 
 Pop Quiz: If $D^*$ and $D$ are binary random variables and $D$ is a noisy measure of $D^*$, is it possible for the measurement error $W \equiv D - D^*$ to be *classical*? Explain why or why not. (Answer below)
 
-# Classical Measurement Error
+## Classical Measurement Error
 Classical measurement error is a problem that is easy to understand and relatively easy to address. 
 Roughly speaking, classical measurement error refers to a situation in which the variable we observe equals the truth plus noise
 $$
@@ -21,7 +21,7 @@ where the noise is unrelated to the truth and "everything else."
 (I'll be precise about the meaning of "unrelated" and "everything else" in a moment.)
 Mis-measuring a regressor $X$ in this way biases the OLS slope estimator towards zero (*attenuation bias*) but we can correct for this with a valid instrument. Mis-measuring the outcome $Y$ increases standard errors but doesn't bias the OLS estimator. You can find all the details in your favorite introductory econometrics textbook, but in the interest of making this post self-contained, here's a quick review.
 
-## Least Squares Attenuation Bias 
+### Least Squares Attenuation Bias 
 Suppose that we want to learn the slope coefficient from a population linear regression of $Y$ on $X^*$:
 $$
 \beta \equiv \frac{\text{Cov}(Y,X^*)}{\text{Var}(X^*)}. 
@@ -52,7 +52,7 @@ so we see that regressing $Y$ on $X$ gives $\lambda \beta$ rather than $\beta$.
 Since $0 < \lambda < 1$, this phenomenon is called *least squares attenuation bias*: $\lambda \beta$ has the same sign as $\beta$ but is smaller in magnitude.
 The greater the extent of measurement error, the larger the variance of $W_X$ and the smaller that $|\lambda \beta|$ becomes.
 
-## Instrumental variables to the rescue
+### Instrumental variables to the rescue
 Suppose that $Y = \alpha + \beta X^* + U$ where $X = X^* + W_X$ as above.
 Now suppose that we can find a variable $Z$ that is correlated with $X^*$ but uncorrelated with $U$ and $W_X$.
 Then 
@@ -69,7 +69,7 @@ If $\beta$ is the population linear regression slope, then $U$ is uncorrelated w
 But this derivation still goes through if $Y = \alpha + \beta X^* + U$ is a *causal model* in which $X^*$ is correlated with $U$, e.g. if $Y$ is wage and $X^*$ is years of schooling, in which case $U$ might be "unobserved ability."
 In this way, a *single* valid instrument can serve "double-duty," eliminating both attenuation bias and selection bias.
 
-## Measurement error in the outcome 
+### Measurement error in the outcome 
 Now suppose that $X^*$ is observed but the true *outcome* $Y^*$ is not: we only observe a noisy measure $Y = Y^* + W_Y$.
 If $W_Y$ is uncorrelated with $X^*$, 
 $$
@@ -79,7 +79,7 @@ $$
 so we'll obtain the same slope from a regression of $Y$ on $X^*$ as we would from a regression of $Y^*$ on $X^*$.
 Classical measurement error in the outcome variable doesn't introduce a bias.
 
-# Solution to the Pop Quiz
+## Solution to the Pop Quiz
 
 Now that we've refreshed our memories about classical measurement error, let's take a look at my pop quiz question from above:
 
@@ -95,7 +95,7 @@ Hence, unless $W$ always equals zero, in which case there's no measurement error
 In other words, measurement error in a binary variable can never be classical.
 The same basic logic applies whenever $X$ and $X^*$ are bounded: to ensure that $X$ stays within its bounds, any measurement error must be correlated with $X^*$. 
 
-# Non-Differential Measurement Error
+## Non-Differential Measurement Error
 
 Classical measurement error, as we've seen, is a very special case. 
 Or to put it another way, non-classical measurement error isn't as exotic as it sounds.

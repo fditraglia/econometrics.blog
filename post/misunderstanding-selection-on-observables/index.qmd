@@ -18,7 +18,7 @@ $$
 $$
 where $(Y_0, Y_1)$ are the [potential outcomes](https://expl.ai/QHUAVRV) corresponding to a binary treatment $D$ and $X$ is a vector of observed covariates.^[For more details see my [lecture notes on treatment effects](https://www.treatment-effects.com/)] Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.
 
-# Two Misconceptions
+## Two Misconceptions
 The following two statements about selection on observables are *false*:
 
 > 1. Under selection on observables, if I know the value of someone's covariate vector $X$, then learning her treatment status $D$ provides no additional information about the average value of her observed outcome $Y$.
@@ -26,7 +26,7 @@ The following two statements about selection on observables are *false*:
 
 If you've studied treatment effects, pause for a moment and see if you can figure out what's wrong with each of them before reading further.
 
-# The First Misconception
+## The First Misconception
 
 The first statement:
 
@@ -77,7 +77,7 @@ To summarize: the first statement above cannot be an implication of selection on
 
 This is a correct verbal statement of the mean exclusion restriction $\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)$ and $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)$.
 
-# The Second Misconception
+## The Second Misconception
 
 And this leads nicely to the second misconception:
 
@@ -126,7 +126,7 @@ and similarly $\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X) = \alpha_1 + X'\beta_1$. 
 
 Conditional independence implies conditional mean independence, but the converse is false.
 
-# Epilogue
+## Epilogue
 So what's the moral here? First, it's crucial to distinguish between the *observed* outcome $Y$ and the *potential outcomes* $(Y_0, Y_1)$. Second, the various notions of "unrelatedness" between random variables—independence, conditional mean independence, and uncorrelatedness—can be confusing. Be sure to pay attention to exactly which condition is used and why. In a future post, I'll have more to say about the relationships between these notions.
 
 

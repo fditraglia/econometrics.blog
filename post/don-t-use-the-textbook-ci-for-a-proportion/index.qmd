@@ -19,7 +19,7 @@ In a [previous post](/post/thirty-isn-t-the-magic-number/) I showed an example i
 
 This post draws on two very approachable papers from around the turn of the millennium: [Agresti & Coull (1998)](https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550) and [Brown, Cai, & DasGupta (2001)](https://projecteuclid.org/journals/statistical-science/volume-16/issue-2/Interval-Estimation-for-a-Binomial-Proportion/10.1214/ss/1009213286.full). More theoretically-inclined readers may also enjoy a companion paper to the latter reference: [Brown, Cai, & DasGupta (2002)](https://projecteuclid.org/journals/annals-of-statistics/volume-30/issue-1/Confidence-Intervals-for-a-binomial-proportion-and-asymptotic-expansions/10.1214/aos/1015362189.full).
 
-# The Wald Confidence Interval
+## The Wald Confidence Interval
 This is what you learned in your introductory statistics course: it's the textbook interval I alluded to above. Let $X_1, ..., X_n \sim \text{iid Bernoulli}(p)$ and define $\widehat{p} = \sum_{i=1}^n X_i/n$. By the central limit theorem 
 $$
 \frac{\widehat{p} - p}{\sqrt{\widehat{p}(1 - \widehat{p})/n}} \rightarrow_d N(0,1)
@@ -29,7 +29,7 @@ $$
 \widehat{p} \pm 1.96 \times \sqrt{\frac{\widehat{p}(1- \widehat{p})}{n}}.
 $$
 
-# An Obvious Objection to the Wald Interval
+## An Obvious Objection to the Wald Interval
 Suppose we want to estimate the proportion of Trump voters in Berkeley California. We decide to carry out a poll of 25 randomly-sampled Berkeley residents and find that none of them voted for Trump. Then $\widehat{p} = 0$ and the Wald confidence interval is
 $$
 0 \pm 1.96 \times \sqrt{0 \times (1 - 0) / 25}
@@ -37,7 +37,7 @@ $$
 in other words $[0, 0]$. Clearly this is absurd: unless there are literally *zero* Trump voters in Berkeley, we can be *certain* that this interval does not contain the true population parameter. A similar problem would emerge if we instead tried to estimate the proportion of Biden voters in Berkeley: if $\widehat{p} = 1$ then our confidence interval would be $[1,1]$. This too is absurd. More broadly, the Wald confidence interval is extremely poorly behaved in situations where $p$ is close to zero or one. You may have encountered a suggestion that $np(1-p)$ should be at least 5 for the Wald interval to perform well. There's something to this advice, as we'll see below, but it's not sufficient. More to the point: we don't *know* $p$ in practice so there is no way to apply this rule! 
 
 
-# The Agresti-Coull Interval
+## The Agresti-Coull Interval
 Here's a quick and dirty fix that is surprisingly effective. Simply add four "fake" observations to the dataset: two zeros (failures) and two ones (successes). The 95% Agresti-Coull confidence interval is constructed in exactly the same way as 95% Wald interval only using this "artificially augmented" dataset rather than the original one. In other words, if the sample size is $n$ and the sample proportion is $\widehat{p}$, then Agresti-Coull interval is constructed from $\widetilde{n} = n + 4$ and 
 $$
 \widetilde{p} \equiv \frac{n \widehat{p} + 2}{n + 4} = \frac{\left(\sum_{i=1}^n X_i\right) + 0 + 0 + 1 + 1}{n + 4}
@@ -65,7 +65,7 @@ $$
 $$
 Of course a proportion can't be negative, so we would report $[0, 0.16]$. This seems like a much more reasonable summary of our uncertainty than reporting an interval of $[0,0]$, but does it really work? Does adding fake data really improve things?
 
-# Comparing the Wald and Agresti-Coull Intervals 
+## Comparing the Wald and Agresti-Coull Intervals 
 
 To answer the question raised at the end of the last paragraph, let's use R to calculate the *coverage probability* of the Wald and Agresti-Coull intervals for a range of values of the sample size $n$ and true population proportion $p$. In other words, let's see how often these intervals *actually* contain the true population parameter $p$. If they are bona fide 95% confidence intervals, this should occur with probability close to 0.95. One way to carry out this exercise is via Monte Carlo simulation: repeatedly drawing randomly generated datasets and counting the proportion of our resulting confidence intervals that contain the true value of $p$. In this example, however, it turns out that there's a quick and easy way to calculate *exact* coverage probabilities using the R function `dbinom`. For full details, see the R code appendix at the end of the post.
 
@@ -200,11 +200,11 @@ plot_n_comparison(n_seq = 200:2000, p = 0.005)
 plot_n_comparison(n_seq = 25:100, p = 0.2)
 ```
 
-# Conclusion
+## Conclusion
 Friends don't let friends use the Wald interval for a proportion. Fortunately there's a simple alternative when you're after a 95% confidence interval: add two successes and two failures to your dataset, then proceed as normal. I encourage you to use my R code to test out different values of $p$ and $n$, making your own comparisons of the Wald and Agresti-Coull intervals. In a future post, I'll show you where the Agresti-Coull interval comes from, why it works so well, and how to generalize it to construct 90%, 99% and indeed arbitrary $(1 - \alpha) \times 100\%$ confidence intervals.
 
 
-# R Code Appendix
+## R Code Appendix
 I wrote four R functions to generate the plots shown above: `get_Wald_coverage()` and `get_AC_coverage()` calculate the coverage probabilities of the Wald and Agresti-Coull confidence intervals, while `plot_n_comparison()` and `plot_p_comparison()` construct the plots comparing coverage probabilities across different values of the sample size $n$ and true population proportion $p$.
 ```{r}
 #| label: codeAppendix

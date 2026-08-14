@@ -38,7 +38,7 @@ Because handspan is only measured to the nearest half of a centimeter and height
 coef(lm(height ~ handspan, dat))
 ```
 
-# Where does the regression line come from?
+## Where does the regression line come from?
 If you've taken an introductory statistics or econometrics course, you most likely learned that the least squares regression line $\widehat{\alpha} + \widehat{\beta} x$ minimizes the *sum of squared vertical deviations* by solving the optimization problem 
 $$
 \min_{\alpha, \beta} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2.
@@ -58,7 +58,7 @@ coef(lm(height ~ handspan, dat))
  
 This is all perfectly correct, and an entirely reasonable way of looking at the problem. But I'd now like to suggest a *completely different* way of looking at regression. Why bother? The more different ways we have of understanding an idea or method, the more deeply we understand how it works, when it works, and when it is likely to fail. So bear with me while I take you on what might at first appear to be a poorly-motivated computational detour. I promise that there's a payoff at the end!  
 
-# A Crazy Idea
+## A Crazy Idea
 
 There is a unique line that passes through any two distinct points in a plane. So here's a crazy idea: let's form every unique pair of *students* from my height and handspan dataset. To understand what I have in mind, consider a small subset of the data, call it `test`
 ```{r}
@@ -92,7 +92,7 @@ mean(slopes)
 ```
 Something interesting is going on here, but it's not clear what. To learn more, it would be helpful to play with more than three points. But doing this by hand would be extremely tedious. Time to write a function!
 
-# All Pairs of Students
+## All Pairs of Students
 The following function generates all unique pairs of elements taken from a vector `x` and stores them in a matrix:
 ```{r}
 make_pairs <- function(x) {
@@ -127,7 +127,7 @@ choose(326, 2)
 ```
 
 
-# I just calculated 52,975 slopes.
+## I just calculated 52,975 slopes.
 Corresponding to each row of `regression_pairs` is a slope. We can calculate and summarize them as follows, using the `dplyr` package from the `tidyverse` to make things easier to read:
 ```{r}
 library(dplyr)
@@ -164,7 +164,7 @@ regression_pairs |>
 ```
 This is tantalizingly close to the slope of the regression line from above: `r coef(lm(height ~ handspan, dat))[2]`. But it's still *slightly off*.
 
-# Not All Slopes are Created Equal
+## Not All Slopes are Created Equal
 The median handspan in my dataset is `r median(dat$handspan)`. Let's take a closer look at the heights of students whose handspans are *close* to this value:
 ```{r}
 boxplot(height ~ handspan, dat, subset = handspan %in% c(21, 21.5, 22))

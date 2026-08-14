@@ -24,7 +24,7 @@ The parameter $\beta$ may have a causal interpretation or may simply have a pred
 Either way, the question I'll focus on here is whether, and if so how, $\beta$ can be identified in the presence of measurement error.
 For simplicity I will assume throughout that that the covariates $X$ are measured without error. 
 
-# What's the problem?
+## What's the problem?
 
 Why does observing $Y$ rather than $Y^*$ present a problem?
 To answer this question, we need to derive the relationship between
@@ -107,7 +107,7 @@ If the mis-classification probabilities are constants that do not depend on $X$,
 This is only possible if all the elements of $\beta$ besides the intercept are zero.
 Since $\mathbb{E}(W|X)$ will not in general equal zero, $\mathbb{P}(Y=1|X)$ will not in general equal $\mathbb{P}(Y^*=1|X)$.
 
-# What happens if we ignore the problem?
+## What happens if we ignore the problem?
 
 Substituting our expression for $\mathbb{E}(W|X)$ and factoring the result, 
 $$
@@ -131,7 +131,7 @@ It's common in practice, however, to assume that $\alpha_0(X) + \alpha_1(X) < 1$
 To understand this assumption, and the problem more generally, it's helpful to consider a simple special case in which the mis-classification probabilities do not depend on $X$.
 In this case we can say precisely how measurement error in the outcome affects what we can learn about the relationship between $X$ and $Y^*$ and make clear why $\alpha_0(X) + \alpha_1(X) < 1$ is usually a reasonable assumption.
 
-## A Special Case: Fixed Mis-classification
+### A Special Case: Fixed Mis-classification
 Suppose that the mis-classification probabilities are *fixed*, i.e. that
 $$
 \begin{aligned}
@@ -167,7 +167,7 @@ $$
 $$
 So in this special case, *non-classical* measurement error in a binary outcome variable has the same effect as *classical* measurement error in a continuous *regressor*: attenuation bias.
 
-## Observational Equivalence and $(\alpha_0 + \alpha_1)$
+### Observational Equivalence and $(\alpha_0 + \alpha_1)$
 
 You may be wondering: do we really *need* the assumption $\alpha_0 + \alpha_1<1$ or is it merely convenient? Couldn't the observed *data* tell us whether $\alpha_0 + \alpha_1$ is less than one or greater than one? The answer turns out to be no, and it's easy to show why if $F(t) = 1 - F(-t)$ as in the probit, logit, and the linear probability models. Suppose that this condition on $F$ holds. Then we can write
 $$
@@ -190,7 +190,7 @@ Since $Y$ is binary, $\mathbb{P}(Y=1|X)$ tells us everything that there is to kn
 The preceding pair of equalities shows that the observed conditional distribution $\mathbb{P}(Y=1|X)$ could just as well have arisen from $\mathbb{P}(Y^*=1|X) = F(X'\widetilde{\beta})$ with mis-classification probabilities $(\widetilde{\alpha}_0, \widetilde{\alpha}_1)$ as it could from $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ with mis-classification probabilities $(\alpha_0, \alpha_1)$. From observations of $(Y, X)$ alone there is no way to tell these possibilities apart: we say that they are *observationally equivalent*. Notice that if $\alpha_0 + \alpha_1 < 1$ then $\widetilde{\alpha}_0 + \widetilde{\alpha}_1 > 1$ and vice-versa. This shows that the only way to point identify $\beta$ is to assume either that $\alpha_0 + \alpha_1 < 1$ or the reverse inequality.^[Alternatively, you could say that the only way to identify $(\alpha_0, \alpha_1)$ is by making an assumption about the sign of one component of $\beta$.] For the reasons discussed above, it usually makes sense to choose $\alpha_0 + \alpha_1 < 1$.
 
 
-# Some Solutions
+## Some Solutions
 
 So what is an applied researcher to do?  If we could somehow learn the mis-classification probabilities, we could use them to "adjust" $\mathbb{P}(Y=1|X)$ and identify $\mathbb{P}(Y^*=1|X) = F(X'\beta)$ as follows: 
 $$
@@ -201,7 +201,7 @@ The first approach estimates $\alpha_0(X)$ and $\alpha_1(X)$ using a *second* da
 The second approach uses a single dataset and exploits non-linearity in the function $F$ instead.
 For the remainder of this discussion I will assume that $\alpha_0(X) + \alpha_1(X) < 1$ or $\alpha_0 + \alpha_1 < 1$ if the mis-classification probabilities are fixed.
 
-## Method 1: Auxiliary Data
+### Method 1: Auxiliary Data
 
 Let's start by making life simple: assume *fixed* mis-classification. Now suppose that we observe two random samples from the *same* population. In the first, we observe pairs $(Y_i,X_i)$ for $i = 1, ..., n$ and in the second we observe pairs $(Y_j, Y^*_j)$ for $j = 1, ..., m$. Notice that neither dataset contains observations of $X$ and $Y^*$ for the same individual. Using the $(Y_i,X_i)$ observations we can estimate $\mathbb{P}(Y=1|X)$, and using the $(Y_j, Y^*_j)$ observations we can estimate
 $$
@@ -209,7 +209,7 @@ $$
 $$
 This gives us everything we need to determine $F(X'\beta)$ as a function of $X$ and hence $\beta$. The observations of $(Y_i, Y^*_i)$ are called an *auxiliary dataset*. In theory, auxiliary data provide a simple and general solution to measurement error problems of all stripes. Suppose, for example, that we were uncomfortable with the assumption of fixed mis-classification. If we observed an auxiliary dataset of *triples* $(Y_j, Y_j^*, X_j)$ then we could directly estimate $\alpha_0(X)$ and $\alpha_1(X)$. Of course, we if we observed $(Y_j, Y_j^*, X_j)$ for a random sample drawn from the population of interest we could estimate $\mathbb{P}(Y^*=1|X)$ *directly* without the need to account for measurement error! And here lies the fundamental tension of the auxiliary data approach: if we had sufficiently rich auxiliary data we wouldn't really have a measurement error problem in the first place. More typically, we either observe $(Y_j, Y_j^*, X_j)$ for a *different* population, or only observe a subset of these variables for our population of interest. Either way we need to rely on modeling assumptions to bridge the gap. For example, fixed mis-classification and an auxiliary dataset of $(Y^*_j, Y_j)$ suffice to solve the measurement error problem but only if $\alpha_0(X)$ and $\alpha_1(X)$ do not in fact depend on $X$. 
 
-## Method 2: Nonlinearity of $F$
+### Method 2: Nonlinearity of $F$
 
 The auxiliary data approach is very general in principle but relies on information that we simply may not have in practice: a second dataset from the same population. An alternative approach uses only one dataset, $(Y_i, X_i)$ for $i = 1, ..., n$, and instead exploits the *shape* of the function $F$. This second approach is a bit less general but doesn't require any outside sources of information.
 
@@ -272,6 +272,6 @@ $$
 $$
 If $F$ is unknown, estimation is more complicated but the intuition from above continues to hold: a regressor $V$ with "large support" allows us to identify the mis-classification probabilities, and hence $F$. Indeed, we can even allow $\alpha_0$ and $\alpha_1$ to depend covariates, as long as they don't depend on $V$ itself. For more details on the "identification by nonlinearity" approach, see [Hausman et al. (1998)](https://ideas.repec.org/a/eee/econom/v87y1998i2p239-269.html) and [Lewbel (2000)](https://ideas.repec.org/a/cup/etheor/v16y2000i04p603-609_16.html).
 
-# Coming Attractions
+## Coming Attractions
 That's more than enough about measurement error for now! When I return to this topic in a few weeks time, I'll consider the problem of a mis-measured binary *regressor*. In my next installment, however, I'll put measurement error to one side and revisit a classic problem from introductory statistics: constructing a confidence interval for a population proportion. Sometimes the easiest things turn out to be much harder than they first appear. 
 

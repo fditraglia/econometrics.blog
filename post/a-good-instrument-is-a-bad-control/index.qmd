@@ -20,7 +20,7 @@ I hadn't thought about this question until 2018, when one of my undergraduate st
 If memory serves, my off-the-cuff answer left much to be desired.^[I seem to recall saying something like "this won't in general give us the causal effect we're interested in, but I don't think it's possible to say anything more without extra assumptions." Fortunately my lackluster response didn't derail the student who asked the question: he's currently pursuing a PhD in Economics at UChicago!]
 Five years later I'm finally ready to give a fully satisfactory answer; better late than never I suppose!
 
-# The Model
+## The Model
 We'll start by being a bit more precise about the setup.
 Suppose that $Y$ is related to $X$ according to the following **linear causal model** $$
 Y \leftarrow \alpha + \beta X + U
@@ -54,7 +54,7 @@ Here's a helpful way of thinking about this.
 If $Z$ is exogenous then our regression of $X$ on $Z$ *partitions* the overall variation in $X$ into two components: the "good" (exogenous) variation $\pi_1 Z$ is uncorrelated with $U$, while the "bad" (endogenous) variation $V$ is correlated with $U$.
 The logic of two-stage least squares is that regressing $Y$ on the "good" variation, $\pi_1 Z$ allows us to recover $\beta$, the causal effect of interest.^[See [this blog post](/post/three-ways-of-thinking-about-instrumental-variables/) for more discussion.]
 
-# A Simulation Example
+## A Simulation Example
 
 Using the model and derivations from above, let's run a little simulation.
 To simulate a valid instrument $Z$ and an endogenous regressor $X$ we can proceed as follows.
@@ -103,9 +103,9 @@ Perhaps it's an artifact of the simulation parameters I chose, or just bad luck 
 To find out, we'll need a bit more algebra.
 But stay with me: the payoff is worth it, and there's not too much extra math required!
 
-# The General Result 
+## The General Result 
 
-## Regression of $Y$ on $X$ and $Z$
+### Regression of $Y$ on $X$ and $Z$
 The coefficient on $X$ in a population linear regression of $Y$ on $X$ and $Z$ is given by
 $$
 \beta_{X.Z} = \frac{\text{Cov}(\tilde{X}, Y)}{\text{Var}(\tilde{X})} 
@@ -131,7 +131,7 @@ since $\text{Var}(U) = \text{Var}(V) = 1$ and $\text{Cov}(U, V) = 0.5$.
 Therefore $\beta_{X.Z} = 1.5$.
 And, indeed, this is almost *exactly* the value of our estimate from our simulation above.
 
-## Regression of $Y$ on $X$ Only
+### Regression of $Y$ on $X$ Only
 
 So far so good.
 Now what about the "usual" OLS estimator?
@@ -149,7 +149,7 @@ since $Z$ and $V$ are uncorrelated by construction, $\text{Var}(Z) = \text{Var}(
 Hence, $\beta_{\text{OLS}} = 1 + 25/82 \approx 1.305$.
 Again, this agrees almost perfectly with our simulation.
 
-## Comparing the Results
+### Comparing the Results
 To summarize, we have shown that
 $$
 \beta_{X.Z} = \beta + \frac{\text{Cov}(U,V)}{\text{Var}(V)}, \quad \text{while} \quad
@@ -169,7 +169,7 @@ $$
 In other words, $\beta_{X.Z}$ is **always farther from the truth** than $\beta_{OLS}$, exactly as we found in our simulation.
 
 
-# Some Intuition
+## Some Intuition
 
 In our simulation, $\widehat{\beta}_{X.Z}$ gave a *worse* estimate of $\beta$ than $\widehat{\beta}_\text{OLS}$.
 The derivations from above show that this wasn't a fluke: adding a valid instrument $Z$ as an additional control regressor only makes the bias in our estimated causal effect *worse* than it was to begin with.

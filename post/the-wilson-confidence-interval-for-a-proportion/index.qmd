@@ -22,7 +22,7 @@ Somewhat unsatisfyingly, my earlier post gave no indication of where the Agresti
 
 To understand the Wilson interval, we first need to remember a key fact about statistical inference: hypothesis testing and confidence intervals are two sides of the same coin. We can use a test to create a confidence interval, and vice-versa. In case you're feeling a bit rusty on this point, let me begin by refreshing your memory with the simplest possible example. If this is old hat to you, skip ahead to the next section.
 
-# Tests and CIs -- Two Sides of the Same Coin
+## Tests and CIs -- Two Sides of the Same Coin
 Suppose that we observe a random sample $X_1, \dots, X_n$ from a normal population with unknown mean $\mu$ and known variance $\sigma^2$. Under these assumptions, the sample mean $\bar{X}_n \equiv \left(\frac{1}{n} \sum_{i=1}^n X_i\right)$ follows a $N(\mu, \sigma^2/n)$ distribution. Centering and standardizing, 
 $$ \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \sim N(0,1).$$
 Now, suppose we want to test $H_0\colon \mu = \mu_0$ against the two-sided alternative $H_1\colon \mu \neq \mu_0$ at the 5\% significance level. If $\mu = \mu_0$, then the test statistic
@@ -39,7 +39,7 @@ This tells us that the values of $\mu_0$ we will *fail to reject* are precisely 
 
 This example is a special case a more general result. If you give me a $(1 - \alpha)\times 100\%$ confidence interval for a parameter $\theta$, I can use it to test $H_0\colon \theta = \theta_0$ against $H_1 \colon \theta \neq \theta_0$. All I have to do is check whether $\theta_0$ lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of $H_0\colon \theta = \theta_0$ with significance level $\alpha$, I can use it to construct a $(1 - \alpha) \times 100\%$ confidence interval for $\theta$. All I have to do is collect the values of $\theta_0$ that are *not rejected*. This procedure is called *inverting a test*.
 
-# How to Confuse Your Introductory Statistics Students 
+## How to Confuse Your Introductory Statistics Students 
 
 Around the same time as we teach students the duality between testing and confidence intervals--you can use a confidence interval to carry out a test or a test to construct a confidence interval--we throw a wrench into the works. The most commonly-presented test for a population proportion $p$ does *not* coincide with the most commonly-presented confidence interval for $p$. To quote from page 355 of [Kosuke Imai's](https://imai.fas.harvard.edu/) fantastic textbook [Quantitative Social Science: An Introduction](https://press.princeton.edu/books/hardcover/9780691167039/quantitative-social-science)
 
@@ -69,7 +69,7 @@ abs((p_hat - p0) / SE0)
 ```
 The test says reject $H_0\colon p = 0.07$ and the confidence interval says don't. Upon encountering this example, your students decide that statistics is a tangled mess of contradictions, despair of ever making sense of it, and resign themselves to simply memorizing the requisite formulas for the exam.   
 
-# Should we teach the Wald test instead?
+## Should we teach the Wald test instead?
 
 How can we dig our way out of this mess? One idea is to *use a different test*, one that agrees with the Wald confidence interval. If we had used $\widehat{\text{SE}}$ rather than $\text{SE}_0$ to test $H_0\colon p = 0.07$ above, our test statistic would have been 
 ```{r}
@@ -134,7 +134,7 @@ The score test isn't perfect: if $p$ is extremely close to zero or one, its actu
 
 Granted, teaching the Wald test alongside the Wald interval would reduce confusion in introductory statistics courses. But it would also equip students with lousy tools for real-world inference. There is a better way: rather than teaching the *test* that corresponds to the Wald interval, we could teach the *confidence interval* that corresponds to the score test. 
 
-# Inverting the Score Test
+## Inverting the Score Test
 
 Suppose we collect all values $p_0$ that the score test does *not reject* at the 5\% level. If the score test is working well--if its nominal type I error rate is close to 5\%--the resulting set of values $p_0$ will be an approximate $(1 - \alpha) \times 100\%$ confidence interval for $p$. Why is this so? Suppose that $p_0$ is the true population proportion. Then an interval constructed in this way will cover $p_0$ *precisely when* the score test does not reject $H_0\colon p = p_0$. This occurs with probability $(1 - \alpha)$. Because the score test is much more accurate than the Wald test, the confidence interval that we obtain by inverting it way will be much more accurate than the Wald interval. This interval is called the *score interval* or the *Wilson interval*.
 
@@ -214,7 +214,7 @@ get_wilson_CI(x)
 
 
 
-# Understanding the Wilson Interval
+## Understanding the Wilson Interval
 You could stop reading here and simply use the code from above to construct the Wilson interval. But computing is only half the battle: we want to *understand* our measures of uncertainty. While the Wilson interval may look somewhat strange, there's actually some very simple intuition behind it. It amounts to a *compromise* between the sample proportion $\widehat{p}$ and $1/2$.
 
 The Wald estimator is centered around $\widehat{p}$, but the Wilson interval is not.
@@ -252,11 +252,11 @@ $$
 $$
 is slightly different from the quantity that appears in the Agresti-Coull interval, $\widetilde{p}(1 - \widetilde{p})/\widetilde{n}$, the two expressions give very similar results in practice. The Agresti-Coull interval is nothing more than a rough-and-ready approximation to the 95\% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coull interval with a confidence level that differs from 95\%: just construct the Wilson interval!
 
-# Comparing the Wald and Wilson Intervals
+## Comparing the Wald and Wilson Intervals
 
 Another way of understanding the Wilson interval is to ask how it will differ from the Wald interval when computed from the *same dataset*. In large samples, these two intervals will be quite similar. This is because $\omega \rightarrow 1$ as $n \rightarrow \infty$. Using the expressions from the preceding section, this implies that $\widehat{p} \approx \widetilde{p}$ and $\widehat{\text{SE}} \approx \widetilde{\text{SE}}$ for very large sample sizes. For smaller values of $n$, however, the two intervals can differ markedly. To make a long story short, the Wilson interval gives a much more reasonable description of our uncertainty about $p$ for any sample size. Wilson, unlike Wald, is always an *interval*; it cannot collapse to a single point. Moreover, unlike the Wald interval, the Wilson interval is always bounded below by zero and above by one.
 
-## Wald Can Collapse to a Single Point; Wilson Can't
+### Wald Can Collapse to a Single Point; Wilson Can't
 A strange property of the Wald interval is that its width can be zero. Suppose that $\widehat{p} = 0$, i.e. that we observe zero successes. In this case, regardless of sample size and regardless of confidence level, the Wald interval only contains a single point: zero 
 $$
 \widehat{p} \pm c \sqrt{\widehat{p}(1 - \widehat{p})/n} = 0 \pm c \times \sqrt{0(1 - 0)/n} = \{0 \}.
@@ -277,7 +277,7 @@ x1 <- c(rep(1, 2), rep(0, 8)) # 2 successes and 8 failures
 x2 <- c(rep(1, 8), rep(0, 2)) # 8 successes and 2 failures
 ```
 
-## Wald Can Include Impossible Values; Wilson Can't
+### Wald Can Include Impossible Values; Wilson Can't
 A population proportion necessarily lies in the interval $[0,1]$, so it would make sense that any confidence interval for $p$ should as well. An awkward fact about the Wald interval is that it can extend *beyond* zero or one. In contrast, the Wilson interval *always* lies within $[0,1]$. For example, suppose that we observe two successes in a sample of size 10. Then the 95\% Wald confidence interval is approximately [`r round(get_wald_CI(x1), 2)`] while the corresponding Wilson interval is [`r round(get_wilson_CI(x1), 2)`]. Similarly, if we observe eight successes in ten trials, the 95\% Wald interval is approximately [`r round(get_wald_CI(x2), 2)`] while the Wilson interval is [`r round(get_wilson_CI(x2), 2)`].
 
 With a bit of algebra we can show that the Wald interval will include negative values whenever $\widehat{p}$ is less than $(1 - \omega) \equiv c^2/(n + c^2)$. Why is this so? The lower confidence limit of the Wald interval is negative if and only if $\widehat{p} < c \times \widehat{\text{SE}}$. Substituting the definition of $\widehat{\text{SE}}$ and re-arranging, this is equivalent to
@@ -342,12 +342,12 @@ $$
 Now, if we introduce the change of variables $\widehat{q} \equiv 1 - \widehat{p}$, we obtain *exactly* the same inequality as we did above when studying the lower confidence limit, only with $\widehat{q}$ in place of $\widehat{p}$. This is because $\widehat{\text{SE}}^2$ is *symmetric* in $\widehat{p}$ and $(1 - \widehat{p})$. Since we've reduced our problem to one we've already solved, we're done!
 
 
-# More to Come on Inference for a Proportion!
+## More to Come on Inference for a Proportion!
 This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore *yet another* approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical "trinity" of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and [never use the Wald confidence interval for a proportion](/post/don-t-use-the-textbook-ci-for-a-proportion/). 
 
 
 
-# Appendix: R Code 
+## Appendix: R Code 
 ```{r}
 #| label: codeAppendix
 #| eval: false
