@@ -1,36 +1,33 @@
 # /// script
 # dependencies = ["playwright"]
 # ///
-"""Check that no solution fold hides a footnote whose marker is in plain view.
+"""Check that no solution fold leaks a footnote, in either direction.
 
 Run against _site/ after `quarto render`:
 
     uv run tools-check-folds.py
 
-A puzzler post hides its solution behind a collapsed callout. Quarto prints
-footnotes at the foot of the page by default, so a note cited inside a fold
-would be readable without opening it, which gives the answer away. The posts
-therefore set `reference-location: section`, which prints each note at the end
-of the section that cites it.
+A puzzler post hides its solution behind a collapsed callout. Its footnotes
+are ordinary margin footnotes, and Quarto hoists margin notes out of the
+fold's collapse container so the page grid can place them -- left alone, a
+note cited inside a closed fold would sit readable in the margin beside it,
+giving the answer away. A rule in custom.scss therefore hides every margin
+note that follows a collapsed fold (a fold always runs to the end of its
+post, so those notes all belong to the solution) and reveals them when the
+fold opens.
 
-That placement is only correct when the fold has a section to itself. A section
-that begins before the fold ends inside it, so its notes are carried inside too
--- leaving a marker in the visible text pointing at hidden content, which is
-the opposite failure and just as broken. A `## Solution` heading immediately
-above the fold is what prevents it.
+The invariant this enforces is about what a reader can see, not where the
+markup sits: at any moment, a note must be readable exactly when its marker
+is readable. Both failure directions matter -- a readable note with a hidden
+marker leaks the solution, and a visible marker with a hidden note points at
+nothing. The check runs twice per page, once with the fold shut and once
+after opening it.
 
-`reference-location: margin` is a third way to leak: Quarto hoists margin
-notes out of the fold's collapse container so the page grid can place them,
-which leaves a note cited inside a closed fold sitting readable in the margin
-beside it. Margin footnotes render as div[id^="fn"] rather than li[id^="fn"],
-so the probe selects both; an early version looked only at list items and
-reported a leaking page as clean.
+Notes are matched as li[id^="fn"] and div[id^="fn"]: pandoc renders end-of-
+section notes as list items and margin notes as divs. An early version
+looked only at list items and reported a leaking page as clean.
 
-Neither `quarto render` nor tools-check-layout.py can see any of these faults,
-hence this check: for every footnote on a page with a fold, the marker and the
-note must be on the same side of it.
-
-Exits non-zero when they are not, naming the note and which way it went.
+Exits non-zero on any violation, naming the note and which way it went.
 """
 import pathlib
 import sys
@@ -42,19 +39,32 @@ SITE = pathlib.Path(__file__).parent / "_site"
 PROBE = """() => {
   const fold = document.querySelector('.callout.solution');
   if (!fold) return null;
+  const visible = el => !!(el && el.offsetParent !== null);
   const out = [];
   document.querySelectorAll('li[id^="fn"], div[id^="fn"]').forEach(note => {
     if (/^fnref/.test(note.id)) return;  // a marker, not a note
     const marker = document.querySelector('a[href="#' + note.id + '"]');
     out.push({
       id: note.id,
-      noteInside: fold.contains(note),
-      markerInside: marker ? fold.contains(marker) : null,
+      noteVisible: visible(note),
+      markerVisible: marker ? visible(marker) : null,
       text: note.textContent.trim().slice(0, 60),
     });
   });
   return out;
 }"""
+
+
+def collect(notes, state, failures, path):
+    for n in notes:
+        if n["markerVisible"] is None:
+            failures.append((path, n, "has no marker anywhere on the page"))
+        elif n["noteVisible"] and not n["markerVisible"]:
+            failures.append(
+                (path, n, f"is readable while its marker is hidden ({state}) -- leaks the solution"))
+        elif n["markerVisible"] and not n["noteVisible"]:
+            failures.append(
+                (path, n, f"is hidden while its marker is in plain view ({state})"))
 
 
 def main():
@@ -74,20 +84,19 @@ def main():
             if notes is None:
                 continue
             folds += 1
-            for n in notes:
-                if n["markerInside"] is None:
-                    failures.append((path, n, "has no marker anywhere on the page"))
-                elif n["markerInside"] and not n["noteInside"]:
-                    failures.append((path, n, "is cited inside the fold but printed outside it"))
-                elif n["noteInside"] and not n["markerInside"]:
-                    failures.append((path, n, "is cited outside the fold but printed inside it"))
+            collect(notes, "fold closed", failures, path)
+            # Open every fold on the page and re-check.
+            for header in page.query_selector_all(".callout.solution .callout-header"):
+                header.click()
+            page.wait_for_timeout(700)  # Bootstrap collapse animation
+            collect(page.evaluate(PROBE), "fold open", failures, path)
         browser.close()
 
     for path, note, problem in failures:
         print(f"{path.parent.name}: {note['id']} {problem}")
         print(f"    {note['text']}...")
 
-    print(f"{len(failures)} misplaced note(s) across {folds} page(s) with a fold.")
+    print(f"{len(failures)} violation(s) across {folds} page(s) with a fold.")
     return 1 if failures else 0
 
 

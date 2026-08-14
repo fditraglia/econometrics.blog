@@ -642,6 +642,19 @@ nav[role="doc-toc"].toc-left, #quarto-margin-sidebar nav[role="doc-toc"] {
   line-height: 1.5;
 }
 
+// A puzzler's solution fold runs to the end of its post, so every margin
+// note Quarto hoists to AFTER the fold belongs to the solution. Quarto
+// lifts margin notes out of the fold's collapse container to place them on
+// the page grid, so while the fold is shut they would sit readable beside
+// it and give the answer away. Hide them until it opens: Bootstrap keeps
+// .collapsed on the header while the fold is shut, and without JavaScript
+// the fold cannot open at all, so the notes stay hidden for exactly as
+// long as the solution does. tools-check-folds.py verifies this behavior
+// with the fold closed and open.
+.callout.solution:has(.callout-header.collapsed) ~ .column-margin {
+  display: none;
+}
+
 // ---------------------------------------------------------- footnotes --
 
 // Footnotes on this blog often carry real argument, not just citations, so
@@ -1175,11 +1188,12 @@ body.home-view-date {
 //
 //   ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 //
-// The heading is not decoration. Footnotes cited inside the fold are printed
-// at the end of the section that contains them, and a section that starts
-// before the fold ends inside it, which would hide a note whose marker is in
-// plain view. Giving the fold its own section keeps each note on the same side
-// of it as its marker. tools-check-folds.py is what enforces this.
+// Footnotes in a puzzler are ordinary margin footnotes. Quarto hoists margin
+// notes out of the collapse container, so the notes cited inside the fold
+// would be readable beside it while it is shut; the rule at the end of the
+// margin-notes section above hides every margin note that follows a collapsed
+// fold, which is also why a fold must run to the end of its post.
+// tools-check-folds.py is what enforces all of this.
 //
 // callout-note supplies the collapsing behavior and arrives in Bootstrap's
 // blue inside a bordered box. The .solution class is ours, and everything

@@ -9,7 +9,6 @@ categories:
 - teaching
 - puzzler
 tags: []
-reference-location: section
 ---
 
 Here's a slightly unusual exercise on the topic of Bayes' Theorem for those of you teaching or studying introductory probability. Imagine that you're developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test's [sensitivity or its specificity](https://en.wikipedia.org/wiki/Sensitivity_and_specificity). If your goal is to maximize the [positive predictive value (PPV)](https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values) of your test, i.e.\ the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?
@@ -18,9 +17,7 @@ Here's a slightly unusual exercise on the topic of Bayes' Theorem for those of y
 
 While I give you a few minutes to pause and ponder this question, here's a brief rant on the topic of odds. If you're anything like me, the first time you encountered odds, you thought to yourself
 
-> What is this $\*@%^!? Why would anyone want to spoil a perfectly good probability by dividing it by one minus itself?"
-
-[I know first-hand that this sentiment is shared by at least one distinguished professor of probability theory, so at least I'm not completely alone in my earlier view of things!]{.aside}
+> What is this $\*@%^!? Why would anyone want to spoil a perfectly good probability by dividing it by one minus itself?"^[I know first-hand that this sentiment is shared by at least one distinguished professor of probability theory, so at least I'm not completely alone in my earlier view of things!]
 
 But it's time to take the red pill and see the world as it really is: **the only reason you prefer to think in terms of probabilities rather than odds is because you've been brainwashed by the educational system**. Of course I exaggerate slightly, but the point is that odds are just as natural as probabilities; we're just not as accustomed to working with them. In many situations in probability, statistics, and econometrics, it turns out that working with odds (or their logarithm) makes life *much* simpler, as I will try to convince you with a simple example. 
 

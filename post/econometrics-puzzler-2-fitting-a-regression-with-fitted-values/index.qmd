@@ -7,7 +7,6 @@ eyebrow: 'Puzzler No. 2'
 categories:
 - econometrics
 - puzzler
-reference-location: section
 tags:
 - regression
 ---
@@ -24,7 +23,7 @@ Suppose I run a simple linear regression of an outcome variable on a predictor v
 
 ## Example: Height and Handspan
 
-Here's a simple example: a regression of height, measured in inches, on handspan, measured in centimeters. [In case you don't know what handspan is: stretch out your dominant hand, and measure from the tip of your thumb to the tip of your pinky finger. This is your handspan. I collected this dataset from many years of [Econ 103](https://ditraglia.com/Econ103Public) classes at UPenn.]{.aside}
+Here's a simple example: a regression of height, measured in inches, on handspan, measured in centimeters.^[In case you don't know what handspan is: stretch out your dominant hand, and measure from the tip of your thumb to the tip of your pinky finger. This is your handspan. I collected this dataset from many years of [Econ 103](https://ditraglia.com/Econ103Public) classes at UPenn.]
 ```{r}
 #| message: false
 #| warning: false

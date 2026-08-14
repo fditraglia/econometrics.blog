@@ -8,7 +8,6 @@ categories:
 - econometrics
 - causal inference
 - puzzler
-reference-location: section
 tags:
 - instrumental variables
 - prediction vs. causation
@@ -16,12 +15,12 @@ tags:
 ---
 
 
-Welcome to the first installment of the *Econometrics Puzzler*, a new series of shorter posts that will test and strengthen your econometric intuition. Here's the format: I'll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you'll find them both challenging and enlightening. Today we'll revisit everyone's favorite example: Angrist & Krueger's 1991 paper on the returns to education. [I'm sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.]{.aside}
+Welcome to the first installment of the *Econometrics Puzzler*, a new series of shorter posts that will test and strengthen your econometric intuition. Here's the format: I'll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you'll find them both challenging and enlightening. Today we'll revisit everyone's favorite example: Angrist & Krueger's 1991 paper on the returns to education.^[I'm sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.]
 
 ## To Instrument or Not to Instrument? 
 
 Suppose I want to predict someone's wage as accurately as possible using a linear model--that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the *log* of wage.) I observe a representative sample of workers that includes their log wage $Y_i$ and years of schooling $X_i$. I could use an OLS regression of $Y$ on $X$ to make my predictions, but years of schooling are the classic example of an endogenous regressor; they're correlated with myriad unobserved causes of wages, like "ability" and family background. 
-Fortunately, I also have a valid and relevant instrument: quarter of birth $Z_i$ is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage. [If you're unfamiliar with this example check out my [video overview](https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&t=2034), including some discussion of why quarter of birth might *not* really be exogenous after all!]{.aside} 
+Fortunately, I also have a valid and relevant instrument: quarter of birth $Z_i$ is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.^[If you're unfamiliar with this example check out my [video overview](https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&t=2034), including some discussion of why quarter of birth might *not* really be exogenous after all!] 
 
 So here's the question: **to get the best possible predictions of wage from the information I have, should I run OLS or IV?** More specifically, let's use mean squared error (MSE) as our measure of "best". To borrow a term from [Grant Sanderson](https://www.3blue1brown.com/), "pause and ponder" before reading further.
 

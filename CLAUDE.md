@@ -88,28 +88,23 @@ Same pattern: `quarto preview` → edit → stop → `git add` → commit → pu
 ### CRITICAL: run `quarto render` before every push
 GitHub Actions has **no R installed**. Builds rely entirely on the committed `_freeze/` cache. If the cache is stale, CI fails with `ERROR: Unable to locate an installed version of R`.
 
-`freeze: auto` invalidates the cache on **any** change to a `.qmd` file, including prose-only edits like fixing a typo or updating a URL. There is no "safe" edit that skips re-rendering.
+**The freeze cache can also go stale the other way.** On a *project-wide* `quarto render`, `freeze: auto` under Quarto 1.9 does NOT re-execute a post whose only changes are in body prose — frontmatter and code edits invalidate the cache, but a body-text edit can leave the frozen (old) markdown feeding pandoc, silently publishing the pre-edit prose. This bit us on 2026-08-14: a footnote rewrite rendered fine from a single-file render, then a later project render quietly reverted it. After editing a post's body, render that post directly — `quarto render post/slug/index.qmd` always re-executes — or delete its `_freeze/post/slug/` subdirectory first, then check the rendered HTML actually contains the edit.
 
 Workflow for any `.qmd` change:
 1. Edit the `.qmd`
-2. `quarto render` (updates `_freeze/`)
+2. `quarto render post/slug/index.qmd` (forces re-execution and updates `_freeze/`), then `quarto render` if site-wide pages (the listing) need the change
 3. `git add` both the `.qmd` and any changed `_freeze/` files
 4. `git commit && git push`
 5. Verify green check at https://github.com/fditraglia/econometrics.blog/actions
 
 ### Hiding a puzzler solution
 
-A puzzler post keeps its solution behind a fold so that a reader meets the question first. Three pieces are needed, and all three matter:
+A puzzler post keeps its solution behind a fold so that a reader meets the question first. Two pieces are needed:
 
-1. `reference-location: section` in the frontmatter.
-2. A `## Solution` heading, which gives the fold a section of its own.
-3. The fold itself, a collapsed Quarto callout styled in the "solution folds" section of `custom.scss`.
+1. A `## Solution` heading.
+2. The fold itself, a collapsed Quarto callout styled in the "solution folds" section of `custom.scss`, running **from the reveal to the end of the post** — nothing comes after it.
 
 ```
----
-reference-location: section
----
-
 ## Solution
 
 ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
@@ -122,12 +117,14 @@ reference-location: section
 
 The heading carries the name, and the bar below it reads "CLICK TO REVEAL" when shut and "HIDE" when open. Both labels come from `custom.scss`; the `title="Solution"` in the markup is sized away and remains only for screen readers.
 
+Footnotes in a puzzler are ordinary margin footnotes, like every other post — no `reference-location` override. What makes that safe: Quarto hoists margin notes out of the fold's collapse container, so notes cited inside the fold would sit readable in the margin beside it, and a rule in `custom.scss` (`.callout.solution:has(.callout-header.collapsed) ~ .column-margin`) hides every margin note that follows a collapsed fold until it opens. This is why the fold must run to the end of the post: a margin note after the fold is assumed to belong to it. `_theme.html` re-aligns the revealed notes to their markers when the fold opens.
+
 Four things to know before adding one:
 
 - **Headings inside a fold stay out of the table of contents**, so a section title cannot give the answer away. This is Quarto's behavior, not something the CSS arranges.
-- **Footnotes are why the heading is there.** Quarto prints notes at the foot of the page by default, where a note cited inside the fold answers the question for a reader who has not opened it. `reference-location: section` prints each note at the end of the section that cites it instead — but a section that *begins* before the fold ends inside it, which carries a visible marker's note into hiding. A heading immediately above the fold keeps the two apart.
-- **Run `uv run tools-check-folds.py` after rendering.** It fails when any footnote marker and its note end up on opposite sides of a fold, which nothing else detects.
+- **Run `uv run tools-check-folds.py` after rendering.** It opens each fold-bearing page twice — fold shut, fold open — and fails unless every note is readable exactly when its marker is readable. This is what catches a leaked solution or a dangling marker; nothing else does.
 - **`tools-check-layout.py` cannot see inside a closed fold.** After adding one, open it and check for sideways scroll at 390px separately.
+- **Render the post directly** (`quarto render post/slug/index.qmd`) after editing it — see the freeze warning above.
 
 ### R conventions
 Use tidyverse: native pipe `|>`, anonymous functions `\(x)`, dplyr verbs, ggplot2.

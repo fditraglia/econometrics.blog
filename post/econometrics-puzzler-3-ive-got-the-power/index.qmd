@@ -7,7 +7,6 @@ eyebrow: 'Puzzler No. 3'
 categories:
 - statistics
 - puzzler
-reference-location: section
 tags:
 - statistical power
 - effect size
