@@ -633,8 +633,9 @@ nav[role="doc-toc"].toc-left, #quarto-margin-sidebar nav[role="doc-toc"] {
   }
 }
 
-// Asides: italic vermilion, no rule, no label.
-.aside, .column-margin .aside, div.aside > p {
+// Asides: italic vermilion, no rule, no label. An authored [text]{.aside}
+// span comes out of Quarto as span.margin-aside inside the margin container.
+.aside, .margin-aside, .column-margin .aside, div.aside > p {
   font-size: 15px;
   font-style: italic;
   color: $vermilion;
