@@ -916,13 +916,15 @@ body.home-view-date {
 
 // --- puzzler block ---
 
+// Sits at the top of the subject view, ahead of section I, where a new
+// visitor actually sees it.
 .puzzler-block {
   display: flex;
   gap: 1.6rem;
   align-items: flex-start;
   border: 1px solid $rule;
   padding: 1.4rem 1.6rem;
-  margin: 2.8rem 0 1rem;
+  margin: 0.4rem 0 2.4rem;
 
   .puzzler-count {
     font-family: $font-display;

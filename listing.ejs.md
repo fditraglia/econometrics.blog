@@ -143,6 +143,16 @@ const lineAttrs = (l) =>
 </div>
 
 <div class="view-by-subject">
+  <div class="puzzler-block" data-indexes="<%= puzzlers.map(p => p.__idx).join(',') %>" data-categories="<%= b64('puzzler') %>">
+    <span class="puzzler-count"><%= puzzlers.length %></span>
+    <div class="puzzler-body">
+      <p class="puzzler-label">The puzzlers</p>
+      <p class="puzzler-text">Short problems that test econometric intuition. Read the
+      question, think, then open the fold.
+      <em><a href="#category=puzzler" class="puzzler-so-far no-external"><%= numWord(puzzlers.length).replace(/^./, c => c.toUpperCase()) %> so far.</a></em></p>
+    </div>
+  </div>
+
 <% sections.forEach(function (sec) { %>
   <section class="subject-section">
     <div class="subject-head">
@@ -162,16 +172,6 @@ const lineAttrs = (l) =>
     <% } %>
   </section>
 <% }); %>
-
-  <div class="puzzler-block" data-indexes="<%= puzzlers.map(p => p.__idx).join(',') %>" data-categories="<%= b64('puzzler') %>">
-    <span class="puzzler-count"><%= puzzlers.length %></span>
-    <div class="puzzler-body">
-      <p class="puzzler-label">The puzzlers</p>
-      <p class="puzzler-text">Short problems that test econometric intuition. Read the
-      question, think, then open the fold.
-      <em><a href="#category=puzzler" class="puzzler-so-far no-external"><%= numWord(puzzlers.length).replace(/^./, c => c.toUpperCase()) %> so far.</a></em></p>
-    </div>
-  </div>
 </div>
 
 <div class="view-by-date">
