@@ -38,6 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -47,7 +48,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,9 +76,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -96,43 +100,110 @@ ul.task-list li input[type="checkbox"] {
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
 
 </head>
@@ -156,23 +227,19 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -186,43 +253,20 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Teaching &amp; explainers</span>
+<span class="eyebrow-item">1 August 2021</span>
+<span class="eyebrow-item">8 min</span>
+
+</p>
 <h1 class="title">Untangling Cause and Effect Without Experiments</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">causal inference</div>
-    <div class="quarto-category">teaching</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 1, 2021</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
 
@@ -231,25 +275,17 @@ ul.task-list li input[type="checkbox"] {
 <p>Will earning a PPE degree from Oxford increase your lifetime earnings? Does eating bacon sandwiches cause cancer? Does watching Fox News make you vote Republican? Will owning a dog increase your lifespan? Each of these questions concerns the causal effect of a treatment on an outcome. In social science, a “treatment” is any factor whose causal effect we hope to learn. As far as I know, there has never been an experiment that compelled people to study a particular subject at university, watch Fox News, or own a dog: nonetheless, papers have been written and published that use data to estimate the causal effects of each of these treatments. Datasets in which the treatment of interest is “naturally occurring” rather than randomly assigned as part of an experiment are called observational. Many of the most interesting and important treatments in social science cannot be randomly assigned. Social scientists have therefore developed a set of tools for studying treatment effects using observational data. By introducing you to some of these tools and briefly summarising the ways in which researchers have used them, I’ll shed some light on that age-old question: how much is your education worth?</p>
 <p>Alice read PPE at Oxford and currently earns £75,000 a year. Would she have earned as much if she had studied at Oxford Brookes instead? The fundamental problem of causal inference is that we can never observe a person’s counterfactual outcome. In other words, we can never know what her outcome would have been if her treatment had been different. A counterfactual is fundamentally a “within-person” comparison, asking us to imagine two parallel universes, one in which Alice attends Oxford and another in which she attends Brookes. The causal question of interest is how much the Alice in our world earns compared to the Alice who resides through the looking glass. Of course, this comparison can never be more than a thought experiment. To learn about treatment effects in the real world, we develop methods and assumptions that allow us to substitute the idealized within-person comparison with a between-person comparison.</p>
 <p>According to recent data from Department for Education, UCAS and the ONS, the median salary of Oxford graduates is nearly £15,000 higher than that of Brookes graduates.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Does this mean that the treatment effect of attending Oxford rather than Brookes is £15,000 a year? Almost certainly not! This is not an apples-to-apples comparison. One of the crucial differences between the two universities is entry requirements: Oxford requires A*AA for Economics and Management applicants, whereas Brookes asks for BCC for a similar degree. Oxford students on average have higher levels of academic preparation and ability upon entering university: accordingly, it’s possible that attending Oxford has no causal effect on wage, but earning high grades at A level does. In statistical parlance, we would say that ability <em>confounds</em> the relationship between university attended and wage.</p>
-<p>So how can we solve the problem of confounding in observational datasets? One approach is matching, which compares treated and untreated people with the <em>same</em> values of any confounders. For example, we might compare Oxford Economics students with three A-stars at A-level to Brookes Economics students with the same A level results. Repeating this for every combination of subject and A-levels and averaging the results gives an estimate of the overall causal effect of attending Oxford. A recent report from the IFS used a closely related approach to estimate the relative returns to different undergraduate degrees in the UK.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Their findings suggest that confounding is a very serious problem when comparing raw wages of students across universities. For example, women who graduate from LSE earn over 70% more than the average female graduate. After adjusting for differences in student characteristics, however, this wage premium falls dramatically: female graduates of LSE earn only a little over 35% more than similar women who attended different universities. The same story applies to other elite UK institutions such as Oxford, Cambridge, and UCL.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;<a href="https://www.economist.com/britain/2017/08/12/which-british-universities-do-most-to-boost-graduate-salaries" class="uri">https://www.economist.com/britain/2017/08/12/which-british-universities-do-most-to-boost-graduate-salaries</a></p></div><div id="fn2"><p><sup>2</sup>&nbsp;<a href="https://www.ifs.org.uk/publications/13036" class="uri">https://www.ifs.org.uk/publications/13036</a></p></div></div><p>So how can we solve the problem of confounding in observational datasets? One approach is matching, which compares treated and untreated people with the <em>same</em> values of any confounders. For example, we might compare Oxford Economics students with three A-stars at A-level to Brookes Economics students with the same A level results. Repeating this for every combination of subject and A-levels and averaging the results gives an estimate of the overall causal effect of attending Oxford. A recent report from the IFS used a closely related approach to estimate the relative returns to different undergraduate degrees in the UK.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Their findings suggest that confounding is a very serious problem when comparing raw wages of students across universities. For example, women who graduate from LSE earn over 70% more than the average female graduate. After adjusting for differences in student characteristics, however, this wage premium falls dramatically: female graduates of LSE earn only a little over 35% more than similar women who attended different universities. The same story applies to other elite UK institutions such as Oxford, Cambridge, and UCL.</p>
 <p>For matching methods to be effective, we need to observe all important confounders. In some settings this is a reasonable assumption, but in others it clearly isn’t. For this reason, researchers have developed a number of techniques to address the problem of unobserved confounding. Much of my own research focuses on the use of so-called “instrumental variables.” An instrumental variable, or instrument for short, is something that affects the treatment of interest but is unrelated to any unobserved confounders. To understand this idea, we’ll examine one of the most famous papers to use the instrumental variables approach: a 1991 article by Josh Angrist and Alan Krueger studying the impact of compulsory school attendance on later-life earnings.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The paper begins with a striking observation: in the US, people born in the first quarter of the year tend to complete fewer years of education. Why might this be the case? According to Angrist and Krueger: “children born in different months of the year start school at different ages, while compulsory schooling laws generally require students to remain in school until their sixteenth or seventeenth birthday. In effect, the interaction of school-entry requirements and compulsory schooling laws compels students born in certain months to attend school longer than students born in other months.”</p>
-<p>Angrist and Krueger use quarter of birth as an instrumental variable to estimate the causal effect of schooling on wage. Quarter of birth is indeed related to the treatment of interest, years of schooling. But there are many unobserved factors that influence both how many years of education a person attains, and her later-life outcomes: demographics, family background etc. Is quarter of birth unrelated to these? Angrist and Krueger argue in the affirmative: “one’s birthday is unlikely to be correlated with personal attributes other than age at school entry.” If this is correct, then we can estimate the causal effect of education on wages as follows. First we calculate the difference of wages between men born in the first quarter and those born in the rest of the year. Those born in the first quarter earn less on average, so this difference is negative. Next we calculate the corresponding difference in years of education for these two groups. Those born in the first quarter have fewer years of education on average, so this difference is also negative. The <em>ratio</em> of the two differences tells us the <em>fraction</em> of the observed difference in wages that is caused by differences in education. Since both differences are negative, the ratio is positive. Angrist and Krueger find that an extra year of education causes between a 5% and 15% increase in wages.</p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;<a href="https://ideas.repec.org/a/oup/qjecon/v106y1991i4p979-1014..html" class="uri">https://ideas.repec.org/a/oup/qjecon/v106y1991i4p979-1014..html</a></p></div></div><p>Angrist and Krueger use quarter of birth as an instrumental variable to estimate the causal effect of schooling on wage. Quarter of birth is indeed related to the treatment of interest, years of schooling. But there are many unobserved factors that influence both how many years of education a person attains, and her later-life outcomes: demographics, family background etc. Is quarter of birth unrelated to these? Angrist and Krueger argue in the affirmative: “one’s birthday is unlikely to be correlated with personal attributes other than age at school entry.” If this is correct, then we can estimate the causal effect of education on wages as follows. First we calculate the difference of wages between men born in the first quarter and those born in the rest of the year. Those born in the first quarter earn less on average, so this difference is negative. Next we calculate the corresponding difference in years of education for these two groups. Those born in the first quarter have fewer years of education on average, so this difference is also negative. The <em>ratio</em> of the two differences tells us the <em>fraction</em> of the observed difference in wages that is caused by differences in education. Since both differences are negative, the ratio is positive. Angrist and Krueger find that an extra year of education causes between a 5% and 15% increase in wages.</p>
 <p>But is it really true that a person’s birthday is uncorrelated with “personal attributes other than age at school entry?” About seven years ago, Buckles and Hungerman revisited this question, examining US data that includes information on both birth dates and family background<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. In the years since Angrist and Krueger published their original paper, there have been more than 20 other published papers using season of birth as an instrumental variable. Across these studies, US children born in the first quarter—or more generally in the winter months—earn less, pursue less education, and have lower measured intelligence on average compared to those born in other parts of the year. At the same time, researchers have found a correlation between season of birth and schizophrenia, autism, dyslexia, extreme shyness, and even suicide risk.</p>
-<p>What’s going on here? Buckles and Hungerman propose a simple explanation: “children born in different seasons are not initially similar but rather are conceived by different groups of women.” Mothers who give birth in the winter months are disproportionately likely to be teenagers. They are also less educated, and less likely to be married. Buckles and Hungerman conclude that: “The well-known relationship between season of birth and later outcomes is largely driven by differences in fertility patterns across socioeconomic groups, and not merely natural phenomena or schooling laws that intervene after conception.” In other words, quarter of birth is <em>indeed</em> related to confounders that were unobserved by Angrist and Krueger in their original paper.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;<a href="https://ideas.repec.org/a/tpr/restat/v95y2013i3p711-724.html" class="uri">https://ideas.repec.org/a/tpr/restat/v95y2013i3p711-724.html</a></p></div></div><p>What’s going on here? Buckles and Hungerman propose a simple explanation: “children born in different seasons are not initially similar but rather are conceived by different groups of women.” Mothers who give birth in the winter months are disproportionately likely to be teenagers. They are also less educated, and less likely to be married. Buckles and Hungerman conclude that: “The well-known relationship between season of birth and later outcomes is largely driven by differences in fertility patterns across socioeconomic groups, and not merely natural phenomena or schooling laws that intervene after conception.” In other words, quarter of birth is <em>indeed</em> related to confounders that were unobserved by Angrist and Krueger in their original paper.</p>
 <p>So where does all of this leave us? Untangling cause and effect is extremely challenging, and <em>always</em> relies upon assumptions. Social scientists have a powerful toolbox for studying treatment effects in settings where randomized experimentation is impossible, impractical, or unethical. But like any tools, matching, instrumental variables, and related methods depend for their success on the care with which they are used. We can indeed learn about cause-and-effect from observational data, but doing so requires knowledge of the problem we’re studying, a willingness to question our assumptions, and some good old-fashioned intellectual humility.</p>
 
 
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p><a href="https://www.economist.com/britain/2017/08/12/which-british-universities-do-most-to-boost-graduate-salaries" class="uri">https://www.economist.com/britain/2017/08/12/which-british-universities-do-most-to-boost-graduate-salaries</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://www.ifs.org.uk/publications/13036" class="uri">https://www.ifs.org.uk/publications/13036</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p><a href="https://ideas.repec.org/a/oup/qjecon/v106y1991i4p979-1014..html" class="uri">https://ideas.repec.org/a/oup/qjecon/v106y1991i4p979-1014..html</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p><a href="https://ideas.repec.org/a/tpr/restat/v95y2013i3p711-724.html" class="uri">https://ideas.repec.org/a/tpr/restat/v95y2013i3p711-724.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -379,6 +415,231 @@ ul.task-list li input[type="checkbox"] {
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -784,6 +1045,19 @@ ul.task-list li input[type="checkbox"] {
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

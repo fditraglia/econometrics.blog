@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,56 +316,34 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#complex-numbers-in-r" id="toc-complex-numbers-in-r" class="nav-link active" data-scroll-target="#complex-numbers-in-r">Complex Numbers in R</a></li>
-  <li><a href="#complex-step-differentiation-in-action" id="toc-complex-step-differentiation-in-action" class="nav-link" data-scroll-target="#complex-step-differentiation-in-action">Complex Step Differentiation in Action</a></li>
-  <li><a href="#catastrophic-cancellation" id="toc-catastrophic-cancellation" class="nav-link" data-scroll-target="#catastrophic-cancellation">Catastrophic Cancellation</a></li>
-  <li><a href="#dont-roll-your-own" id="toc-dont-roll-your-own" class="nav-link" data-scroll-target="#dont-roll-your-own">Don’t Roll Your Own</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Computing &amp; applied work</span>
+<span class="eyebrow-item">26 April 2026</span>
+<span class="eyebrow-item">7 min</span>
+<span class="eyebrow-item">Part 2 of 2</span>
+</p>
 <h1 class="title">Complex Step Differentiation</h1>
 <p class="subtitle lead">Street Fighting Numerical Analysis - Part 2</p>
-  <div class="quarto-categories">
-    <div class="quarto-category">computing</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 26, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#complex-numbers-in-r" id="toc-complex-numbers-in-r"><span class="header-section-number">1</span> Complex Numbers in R</a></li>
+  <li><a href="#complex-step-differentiation-in-action" id="toc-complex-step-differentiation-in-action"><span class="header-section-number">2</span> Complex Step Differentiation in Action</a></li>
+  <li><a href="#catastrophic-cancellation" id="toc-catastrophic-cancellation"><span class="header-section-number">3</span> Catastrophic Cancellation</a></li>
+  <li><a href="#dont-roll-your-own" id="toc-dont-roll-your-own"><span class="header-section-number">4</span> Don’t Roll Your Own</a></li>
+  </ul>
+</nav>
 <p>Sometimes we need a good approximation to the derivative <span class="math inline">\(f'(x)\)</span> of a real-valued function <span class="math inline">\(f\)</span> at some real value <span class="math inline">\(x\)</span>. So here’s a fun fact that you may not know. If <span class="math inline">\(\Delta\)</span> is a small positive number and <span class="math inline">\(f\)</span> can be evaluated at a complex argument, then <span class="math display">\[
 f'(x) \approx \frac{\text{Im}[f(x + \Delta i)]}{\Delta}
 \]</span> where <span class="math inline">\(i\)</span> is the imaginary unit and <span class="math inline">\(\text{Im}(z)\)</span> denotes the imaginary part of a complex number. This unexpected but highly accurate approximation is called <strong>complex step differentiation</strong>. The method dates back to <a href="https://epubs.siam.org/doi/10.1137/0704019">Lyness and Moler (1967)</a>; <a href="https://researchrepository.wvu.edu/faculty_publications/426/">Squire and Trapp (1998)</a> give a concise modern exposition.</p>
@@ -315,8 +360,8 @@ f'(x) \approx \frac{f(x + \Delta) - f(x)}{\Delta}
 \]</span> or the symmetric difference <span class="math display">\[
 f'(x) \approx \frac{f(x + \Delta) - f(x - \Delta)}{2\Delta}.
 \]</span> In the remainder of this post, I’ll explain why. Before beginning, I’ll start with a brief overview of complex numbers in R. If this material is already familiar to you, <a href="#complex-step-differentiation-in-action">skip ahead</a> to the following section.</p>
-<section id="complex-numbers-in-r" class="level2">
-<h2 class="anchored" data-anchor-id="complex-numbers-in-r">Complex Numbers in R</h2>
+<section id="complex-numbers-in-r" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="complex-numbers-in-r"><span class="header-section-number">1</span> Complex Numbers in R</h2>
 <p>R provides basic functionality for working with complex numbers, documented in the helpful <code>?complex</code>. The imaginary unit in R is denoted by <code>1i</code>. Don’t try <code>i</code> by itself because that won’t work:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>i <span class="co"># this doesn't work</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -435,8 +480,8 @@ f'(x) \approx \frac{f(x + \Delta) - f(x - \Delta)}{2\Delta}.
 </div>
 </div>
 </section>
-<section id="complex-step-differentiation-in-action" class="level2">
-<h2 class="anchored" data-anchor-id="complex-step-differentiation-in-action">Complex Step Differentiation in Action</h2>
+<section id="complex-step-differentiation-in-action" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="complex-step-differentiation-in-action"><span class="header-section-number">2</span> Complex Step Differentiation in Action</h2>
 <p>Let’s test out complex step differentiation with a simple example. Let <span class="math inline">\(f(x) = x^{9/2}\)</span> and suppose we want to compute <span class="math inline">\(f'(1.5)\)</span>. This one is easy to compute analytically: <span class="math display">\[
 f'(x) = \frac{9}{2} x^{7/2} \implies f'(1.5) = 4.5 \times(1.5)^{3.5}
 \]</span> so we can check how accurate different numerical approximations turn out to be. Computing the derivative directly gives</p>
@@ -688,8 +733,8 @@ f'(x) = \frac{9}{2} x^{7/2} \implies f'(1.5) = 4.5 \times(1.5)^{3.5}
 <p>The simple difference approach is clearly less accurate than both the symmetric difference and complex step approach, particularly at larger values of <span class="math inline">\(\Delta\)</span>. And while it may seem that there’s not much to choose between these latter two approximations, look carefully at what happens as <span class="math inline">\(\Delta\)</span> gets smaller. Eventually the relative error of the simple and symmetric difference approaches <strong>starts to increase</strong>! For example, the symmetric difference approximation is better with <span class="math inline">\(\Delta = 0.1\)</span> (relative error <span class="math inline">\(&lt;1\%\)</span>) than it is at <span class="math inline">\(\Delta = 10^{-15}\)</span> (relative error <span class="math inline">\(\approx 10\%\)</span>).</p>
 <p>How can this be? The derivative is <em>defined</em> as the limit of the simple difference approximation as <span class="math inline">\(\Delta \rightarrow 0\)</span>. So how can the approximation get <em>worse</em> if <span class="math inline">\(\Delta\)</span> becomes smaller?</p>
 </section>
-<section id="catastrophic-cancellation" class="level2">
-<h2 class="anchored" data-anchor-id="catastrophic-cancellation">Catastrophic Cancellation</h2>
+<section id="catastrophic-cancellation" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="catastrophic-cancellation"><span class="header-section-number">3</span> Catastrophic Cancellation</h2>
 <p>The culprit is <a href="https://en.wikipedia.org/wiki/Catastrophic_cancellation">catastrophic cancellation</a>. As explained in an <a href="../../post/street-fighting-numerical-analysis-part-1/">earlier post</a>, computers cannot represent all real numbers exactly. Instead they use <a href="https://ngrok.com/blog/quantization#how-do-computers-store-numbers">floating point numbers</a> as an approximation. So when we compute a difference like <span class="math inline">\(f(x + \Delta) - f(x)\)</span> what we’re <em>really</em> computing is the difference of two approximations. The problem is that even when <span class="math inline">\(A\)</span> is a very good approximation to <span class="math inline">\(f(x + \Delta)\)</span> and <span class="math inline">\(B\)</span> is a very good approximation to <span class="math inline">\(f(x)\)</span>, the difference <span class="math inline">\(A - B\)</span> may be a <em>poor approximation</em> to <span class="math inline">\(f(x + \Delta) - f(x)\)</span>. This is an unfortunate property of subtraction, nicely illustrated in <a href="https://www.johndcook.com/blog/2025/07/20/interest-tech-note/">this post</a> by John D. Cook.</p>
 <p>A double in R is accurate to around 16 decimal places. For small values of <span class="math inline">\(\Delta\)</span>, <span class="math inline">\(f(x + \Delta)\)</span> and <span class="math inline">\(f(x)\)</span> agree in nearly all of those digits. Subtracting them eliminates the digits that match, leaving behind what is effectively rounding noise. Dividing by <span class="math inline">\(\Delta\)</span> then magnifies this noise. For example, since <span class="math inline">\(f'(x)\)</span> in our example is around <span class="math inline">\(18.60081\)</span> when we compute <span class="math inline">\(f(x + 10^{-15}) - f(x)\)</span> we should obtain a result of approximately <span class="math inline">\(1.860081\times 10^{-14}\)</span> but instead we get</p>
 <div class="cell">
@@ -709,8 +754,8 @@ The symmetric difference formula has the same problem because it too relies on a
 <p>Here we’d expect a result of around <span class="math inline">\(3.720162 \times 10^{-14}\)</span> and, again, every digit after the first two is just noise.</p>
 <p>In contrast, complex step differentiation <em>has no subtraction in the numerator</em>. This means that it is not subject to catastrophic cancellation. As <span class="math inline">\(\Delta\)</span> becomes smaller, the approximation just keeps improving—down to roughly machine precision. The cost is that <span class="math inline">\(f\)</span> must be <a href="https://en.wikipedia.org/wiki/Analytic_function">analytic</a> at <span class="math inline">\(x\)</span> and evaluable at complex inputs. Most smooth functions you’ll encounter qualify, but those involving <span class="math inline">\(|x|\)</span>, <span class="math inline">\(\max\)</span>, <span class="math inline">\(\min\)</span>, or indicator functions generally don’t.</p>
 </section>
-<section id="dont-roll-your-own" class="level2">
-<h2 class="anchored" data-anchor-id="dont-roll-your-own">Don’t Roll Your Own</h2>
+<section id="dont-roll-your-own" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="dont-roll-your-own"><span class="header-section-number">4</span> Don’t Roll Your Own</h2>
 <p>In this post I computed the complex step derivative by hand. That’s useful for understanding the method, but it’s a bad idea in practice. Whenever you can, you should rely on high-quality existing libraries to implement numerical methods. Numerical analysis is a deeply complicated subject and we are but lowly econometricians! Fortunately for us, the <code>grad()</code> function from the <code>numDeriv</code> R package implements complex step differentiation as one of its three methods:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(numDeriv)</span>
@@ -854,6 +899,231 @@ The symmetric difference formula has the same problem because it too relies on a
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1259,6 +1529,19 @@ The symmetric difference formula has the same problem because it too relies on a
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,69 +316,41 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#a-quick-review" id="toc-a-quick-review" class="nav-link active" data-scroll-target="#a-quick-review">A Quick Review</a></li>
-  <li><a href="#which-regression-should-we-run" id="toc-which-regression-should-we-run" class="nav-link" data-scroll-target="#which-regression-should-we-run">Which regression should we run?</a></li>
-  <li><a href="#two-simple-alternatives" id="toc-two-simple-alternatives" class="nav-link" data-scroll-target="#two-simple-alternatives">Two Simple Alternatives</a></li>
-  <li><a href="#what-if-we-ignore-the-interaction" id="toc-what-if-we-ignore-the-interaction" class="nav-link" data-scroll-target="#what-if-we-ignore-the-interaction">What if we ignore the interaction?</a></li>
-  <li><a href="#what-about-the-general-case" id="toc-what-about-the-general-case" class="nav-link" data-scroll-target="#what-about-the-general-case">What about the general case?</a></li>
-  <li><a href="#does-it-really-work-an-empirical-example" id="toc-does-it-really-work-an-empirical-example" class="nav-link" data-scroll-target="#does-it-really-work-an-empirical-example">Does it really work? An Empirical Example</a>
-  <ul class="collapse">
-  <li><a href="#computing-the-ate-the-hard-way" id="toc-computing-the-ate-the-hard-way" class="nav-link" data-scroll-target="#computing-the-ate-the-hard-way">Computing the ATE the Hard Way</a></li>
-  <li><a href="#computing-the-ate-the-easy-way" id="toc-computing-the-ate-the-easy-way" class="nav-link" data-scroll-target="#computing-the-ate-the-easy-way">Computing the ATE the Easy Way</a></li>
-  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors">Standard Errors</a></li>
-  <li><a href="#excluding-the-interaction" id="toc-excluding-the-interaction" class="nav-link" data-scroll-target="#excluding-the-interaction">Excluding the Interaction</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#appendix-the-missing-algebra" id="toc-appendix-the-missing-algebra" class="nav-link" data-scroll-target="#appendix-the-missing-algebra">Appendix: The Missing Algebra</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Causal inference &amp; identification</span>
+<span class="eyebrow-item">2 August 2024</span>
+<span class="eyebrow-item">21 min</span>
+
+</p>
 <h1 class="title">How to Do Regression Adjustment</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">causal inference</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 2, 2024</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-quick-review" id="toc-a-quick-review"><span class="header-section-number">1</span> A Quick Review</a></li>
+  <li><a href="#which-regression-should-we-run" id="toc-which-regression-should-we-run"><span class="header-section-number">2</span> Which regression should we run?</a></li>
+  <li><a href="#two-simple-alternatives" id="toc-two-simple-alternatives"><span class="header-section-number">3</span> Two Simple Alternatives</a></li>
+  <li><a href="#what-if-we-ignore-the-interaction" id="toc-what-if-we-ignore-the-interaction"><span class="header-section-number">4</span> What if we ignore the interaction?</a></li>
+  <li><a href="#what-about-the-general-case" id="toc-what-about-the-general-case"><span class="header-section-number">5</span> What about the general case?</a></li>
+  <li><a href="#does-it-really-work-an-empirical-example" id="toc-does-it-really-work-an-empirical-example"><span class="header-section-number">6</span> Does it really work? An Empirical Example</a></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">7</span> Conclusion</a></li>
+  <li><a href="#appendix-the-missing-algebra" id="toc-appendix-the-missing-algebra"><span class="header-section-number">8</span> Appendix: The Missing Algebra</a></li>
+  </ul>
+</nav>
 <p>By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter <em>regression adjustment</em>, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a “good control” that will help us learn the causal effect of interest or a “bad control” that will only make things worse.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Another, and the topic of today’s post, is how to actually <em>implement</em> regression adjustment after we’ve decided which covariates to adjust for.</p>
-<p>The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you’re a bit rusty on these points, you might find it helpful to glance at the first half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">lecture slides</a> along with this series of <a href="https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&amp;si=zqxf9LmexMh0cL2E">short videos</a>. If you’re still hungry for more after this, you might also enjoy this <a href="../../post/misunderstanding-selection-on-observables/">earlier post</a> from <a href="https://econometrics.blog">econometrics.blog</a> on common misunderstandings about the selection-on-observables assumption.</p>
-<section id="a-quick-review" class="level2">
-<h2 class="anchored" data-anchor-id="a-quick-review">A Quick Review</h2>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;See <a href="../../post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.</p></div></div><p>The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you’re a bit rusty on these points, you might find it helpful to glance at the first half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">lecture slides</a> along with this series of <a href="https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&amp;si=zqxf9LmexMh0cL2E">short videos</a>. If you’re still hungry for more after this, you might also enjoy this <a href="../../post/misunderstanding-selection-on-observables/">earlier post</a> from <a href="https://econometrics.blog">econometrics.blog</a> on common misunderstandings about the selection-on-observables assumption.</p>
+<section id="a-quick-review" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="a-quick-review"><span class="header-section-number">1</span> A Quick Review</h2>
 <p>Consider a binary treatment <span class="math inline">\(D\)</span> and an observed outcome <span class="math inline">\(Y\)</span>. Let <span class="math inline">\((Y_0, Y_1)\)</span> be the <a href="https://youtu.be/EXgOSj7GdSs?si=0Nhx5p2GwJHH3d69">potential outcomes</a> corresponding to the treatment <span class="math inline">\(D\)</span>. Our goal is to learn the average treatment effect <span class="math inline">\(\text{ATE} \equiv \mathbb{E}(Y_1 - Y_0)\)</span> but, unless <span class="math inline">\(D\)</span> is randomly assigned, using the difference of observed means <span class="math inline">\(\mathbb{E}(Y|D=1) - \mathbb{E}(Y|D=0)\)</span> to estimate the ATE in general <a href="https://youtu.be/zbgN0GLolFo?si=aYH_huGqezsWIuUv">won’t work</a>. The idea of <strong>selection-on-observables</strong> is that <span class="math inline">\(D\)</span> might be “as good as randomly assigned” after we adjust for a collection of observed covariates <span class="math inline">\(X\)</span>.</p>
 <p>Regression adjustment relies on two assumptions: <strong>selection-on-observables</strong> and <strong>overlap</strong>. The selection-on-observables assumption says that learning <span class="math inline">\(D\)</span> provides no additional information about the average values of <span class="math inline">\(Y_0\)</span> and <span class="math inline">\(Y_1\)</span>, provided that we already know <span class="math inline">\(X\)</span>. This implies that we can learn the <em>conditional average treatment effect</em> (CATE) by comparing observed outcomes of the treated and untreated <strong>holding <span class="math inline">\(X\)</span> fixed</strong>: <span class="math display">\[
 \text{CATE}(x) \equiv \mathbb{E}[Y_1 - Y_0|X = x] = \mathbb{E}[Y|D=1, X = x] - \mathbb{E}[Y|D=0, X = x].
@@ -320,8 +359,8 @@ window.Quarto = {
 \text{ATE} = \mathbb{E}[\text{CATE}(X)] = \mathbb{E}[\mathbb{E}(Y|D=1, X) - \mathbb{E}(Y|D=0, X)].
 \]</span> In the medication example, this would correspond to computing the difference of means for each age group <em>separately</em>, and then averaging them using the share of people in each age group. Notice that this is only possible if there are some people who took the medication and some who didn’t in each age group. That’s exactly what the overlap assumption buys us. For example, if there were no senior citizens who <em>didn’t</em> take the medication, we wouldn’t be able to learn the effect of the medication for senior citizens.</p>
 </section>
-<section id="which-regression-should-we-run" class="level2">
-<h2 class="anchored" data-anchor-id="which-regression-should-we-run">Which regression should we run?</h2>
+<section id="which-regression-should-we-run" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="which-regression-should-we-run"><span class="header-section-number">2</span> Which regression should we run?</h2>
 <p>So suppose that we’ve found a set of covariates <span class="math inline">\(X\)</span> that satisfy the required assumptions. How should we actually <em>carry out</em> regression adjustment? To answer this question, let’s start by making things a bit simpler. Suppose that <span class="math inline">\(X\)</span> is a single <em>binary</em> covariate. At the end of the post, we’ll return to the general case. Since <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span> are both binary, we can write the conditional mean function of <span class="math inline">\(Y\)</span> given <span class="math inline">\((D, X)\)</span> as <span class="math display">\[
 \mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX.
 \]</span> Since the true conditional mean function is linear, a linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span>, <span class="math inline">\(DX\)</span> and an intercept will recover <span class="math inline">\((\beta_0, \beta_1, \beta_2, \beta_3)\)</span>. But what on earth do these coefficients actually <em>mean</em>?! Substituting all possible values of <span class="math inline">\((D, X)\)</span>, <span class="math display">\[
@@ -359,8 +398,8 @@ window.Quarto = {
 \end{aligned}
 \]</span> where we define the shorthand <span class="math inline">\(p \equiv \mathbb{P}(X=1)\)</span>. So to compute the ATE, we need to know the coefficients <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_3\)</span> from the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span>, and <span class="math inline">\(DX\)</span>, <em>in addition</em> to the share of people with <span class="math inline">\(X = 1\)</span>. Needless to say, your favorite regression package will not spit out the ATE for you if you run the regression from above. And it <em>certainly</em> won’t spit out the standard error! So what can we do besides computing everything by hand?</p>
 </section>
-<section id="two-simple-alternatives" class="level2">
-<h2 class="anchored" data-anchor-id="two-simple-alternatives">Two Simple Alternatives</h2>
+<section id="two-simple-alternatives" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="two-simple-alternatives"><span class="header-section-number">3</span> Two Simple Alternatives</h2>
 <p>It turns out that there are two simple ways to get the your favorite software package to spit out the ATE for you and associated standard error. Each involves a slight <em>re-parameterization</em> of the conditional mean expression from above. The first one replaces <span class="math inline">\(DX\)</span> with <span class="math inline">\(D\tilde{X}\)</span> where <span class="math inline">\(\tilde{X} \equiv X - p\)</span> and <span class="math inline">\(p \equiv \mathbb{P}(X=1)\)</span>. To see why this works, notice that <span class="math display">\[
 \begin{aligned}
 \mathbb{E}(Y|D, X) &amp;= \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX \\
@@ -377,8 +416,8 @@ window.Quarto = {
 \end{aligned}
 \]</span> where we define <span class="math inline">\(\tilde{\beta}_0 \equiv \beta_0 + p \beta_2\)</span>. Notice that the only coefficient that changes is the intercept, and we’re typically not interested in this anyway!</p>
 </section>
-<section id="what-if-we-ignore-the-interaction" class="level2">
-<h2 class="anchored" data-anchor-id="what-if-we-ignore-the-interaction">What if we ignore the interaction?</h2>
+<section id="what-if-we-ignore-the-interaction" class="level2 page-columns page-full" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="what-if-we-ignore-the-interaction"><span class="header-section-number">4</span> What if we ignore the interaction?</h2>
 <p>Wait a minute, you may be ready to object, when researchers claim to be “adjusting” or “controlling” for <span class="math inline">\(X\)</span> in practice, they very rarely include an interaction term between <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> in their regression! Instead, they just regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span>. What can we say about this approach? To answer this question, let’s continue with our example from above and define the following population linear regression model: <span class="math display">\[
 Y = \alpha_0 + \alpha_1 D + \alpha_2 X + V
 \]</span> where <span class="math inline">\(V\)</span> is the population linear regression error term so that, <a href="../../post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>, <span class="math inline">\(\mathbb{E}(V) = \mathbb{E}(XV) = 0\)</span>. Notice that I’ve called the coefficients in this regression <span class="math inline">\(\alpha\)</span> rather than <span class="math inline">\(\beta\)</span>. That’s because they will <em>not in general coincide</em> with the conditional mean function from above, namely <span class="math inline">\(\mathbb{E}(Y|D, X) = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX\)</span>. In particular, the regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> without an interaction will <em>only</em> coincide with the true conditional mean function if <span class="math inline">\(\beta_3 = 0\)</span>.</p>
@@ -403,17 +442,17 @@ D = \gamma_0 + \gamma_1 X + \tilde{D}, \quad \mathbb{E}(\tilde{D}) = \mathbb{E}(
 \]</span> where we introduce the shorthand <span class="math display">\[
 w(x) \equiv \frac{p(x) \cdot \pi(x)[1 - \pi(x)]}{\sum_{\text{all } k} p(k) \cdot \pi(k)[1 - \pi(k)]}.
 \]</span> In other words, the coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> excluding the interaction term <span class="math inline">\(DX\)</span> gives a <strong>weighted average</strong> of the conditional average treatment effects for the different values of <span class="math inline">\(X\)</span>. The weights are between zero and one and sum to one. Because <span class="math inline">\(w(x)\)</span> is increasing in <span class="math inline">\(p(x)\)</span>, values of <span class="math inline">\(X\)</span> that are <em>more common</em> are given more weight just as they are in the ATE. But since <span class="math inline">\(w(x)\)</span> is <em>also</em> increasing in <span class="math inline">\(\pi(x)[1 - \pi(x)]\)</span>, values of <span class="math inline">\(X\)</span> for which <span class="math inline">\(\pi(x)\)</span> is closer to 0.5 are given more weight, <em>unlike</em> in the ATE. As such, we could describe <span class="math inline">\(\alpha_1\)</span> as a <em>variance-weighted average</em> of the conditional average treatment effects.</p>
-<p>In general, the weighted average <span class="math inline">\(\alpha_1\)</span> will <em>not</em> coincide with the ATE, although there are two special cases where it will. The first case is when <span class="math inline">\(\text{CATE}(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, i.e.&nbsp;treatment effects are <em>homogeneous</em>. In this case <span class="math inline">\(\beta_3 = 0\)</span> so there <em>is no interaction term in the conditional mean function</em>! The second is when <span class="math inline">\(\pi(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, in which case the probability of treatment does not depend on <span class="math inline">\(X\)</span>, so we don’t need to adjust for <span class="math inline">\(X\)</span> in the first place!</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://ideas.repec.org/p/arx/papers/2307.00369.html">make fetch happen</a>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;If you want the standard error of <span class="math inline">\(\beta\)</span> and not just the point estimate, then replace <span class="math inline">\(Y\)</span> with the residual from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</p></div></div><p>In general, the weighted average <span class="math inline">\(\alpha_1\)</span> will <em>not</em> coincide with the ATE, although there are two special cases where it will. The first case is when <span class="math inline">\(\text{CATE}(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, i.e.&nbsp;treatment effects are <em>homogeneous</em>. In this case <span class="math inline">\(\beta_3 = 0\)</span> so there <em>is no interaction term in the conditional mean function</em>! The second is when <span class="math inline">\(\pi(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, in which case the probability of treatment does not depend on <span class="math inline">\(X\)</span>, so we don’t need to adjust for <span class="math inline">\(X\)</span> in the first place!</p>
 </section>
-<section id="what-about-the-general-case" class="level2">
-<h2 class="anchored" data-anchor-id="what-about-the-general-case">What about the general case?</h2>
+<section id="what-about-the-general-case" class="level2 page-columns page-full" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="what-about-the-general-case"><span class="header-section-number">5</span> What about the general case?</h2>
 <p>All of the above derivations assumed that <span class="math inline">\(X\)</span> is one-dimensional and binary. So how much of this still applies more generally? First, if <span class="math inline">\(X\)</span> is a vector of binary variables representing categories like sex, race etc., everything goes through <em>exactly</em> as above.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> All that changes is that <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span> and <span class="math inline">\(p = \mathbb{E}(X)\)</span> become vectors. The coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span> and the interaction <span class="math inline">\(D \tilde{X}\)</span> is still the ATE, and the coefficient on <span class="math inline">\(D\)</span> in a regression that <em>excludes</em> the interaction term is still a weighted average of CATEs that does <em>not in general</em> equal the ATE.</p>
-<p>So whenever the covariates you need to adjust for are categorical, this post has you covered.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> But what if some of our covariates are continuous? In this case things are a bit more complicated, but all of the results from above still go through if we’re willing to assume that the conditional mean functions <span class="math inline">\(\mathbb{E}(Y|D=0, X)\)</span>, <span class="math inline">\(\mathbb{E}(Y|D=1,X)\)</span> and <span class="math inline">\(\mathbb{E}(D|X)\)</span> are linear in <span class="math inline">\(X\)</span>. This is undoubtedly a strong assumption, but not perhaps as strong as it seems. For example, <span class="math inline">\(X\)</span> could include logs, squares or other functions of some underlying continuous covariates, e.g.&nbsp;age or years of experience. In this case, the weighted average interpretation of the coefficient on <span class="math inline">\(D\)</span> in a regression that excludes the interaction term still holds but now involves an integral rather than a sum.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;This is a nice homework exercise to test your understanding of the post!</p></div><div id="fn5"><p><sup>5</sup>&nbsp;If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day!</p></div></div><p>So whenever the covariates you need to adjust for are categorical, this post has you covered.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> But what if some of our covariates are continuous? In this case things are a bit more complicated, but all of the results from above still go through if we’re willing to assume that the conditional mean functions <span class="math inline">\(\mathbb{E}(Y|D=0, X)\)</span>, <span class="math inline">\(\mathbb{E}(Y|D=1,X)\)</span> and <span class="math inline">\(\mathbb{E}(D|X)\)</span> are linear in <span class="math inline">\(X\)</span>. This is undoubtedly a strong assumption, but not perhaps as strong as it seems. For example, <span class="math inline">\(X\)</span> could include logs, squares or other functions of some underlying continuous covariates, e.g.&nbsp;age or years of experience. In this case, the weighted average interpretation of the coefficient on <span class="math inline">\(D\)</span> in a regression that excludes the interaction term still holds but now involves an integral rather than a sum.</p>
 </section>
-<section id="does-it-really-work-an-empirical-example" class="level2">
-<h2 class="anchored" data-anchor-id="does-it-really-work-an-empirical-example">Does it really work? An Empirical Example</h2>
+<section id="does-it-really-work-an-empirical-example" class="level2 page-columns page-full" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="does-it-really-work-an-empirical-example"><span class="header-section-number">6</span> Does it really work? An Empirical Example</h2>
 <p>But perhaps you don’t trust my algebra.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> To assuage your fears, let’s take this to the data! The following example is based on <a href="https://www.almendron.com/tribuna/wp-content/uploads/2018/04/electoral-effects-of-biased-media-russian-television-in-ukraine.pdf">Peisakhin &amp; Rozenas (2018) - Electoral Effects of Biased Media: Russian Television in Ukraine</a>. I’ve adapted it from Llaudet and Imai’s fantastic book <a href="https://press.princeton.edu/books/hardcover/9780691199429/data-analysis-for-social-science">Data Analysis for Social Science</a>, the perfect holiday or birthday gift for the budding social scientist in your life.</p>
-<p>Here’s a bit of background. In the lead-up to Ukraine’s 2014 parliamentary election, Russian state-controlled TV mounted a fierce media campaign against the Ukrainian government. Ukrainians who lived near the border with Russia could <em>potentially</em> receive Russian TV signals. Did receiving these signals <em>cause</em> them to support pro-Russia parties in the election? To answer this question, we’ll use a dataset called <code>precincts</code> that contains aggregate election results in precincts close to the Russian border:</p>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;I certainly don’t!</p></div></div><p>Here’s a bit of background. In the lead-up to Ukraine’s 2014 parliamentary election, Russian state-controlled TV mounted a fierce media campaign against the Ukrainian government. Ukrainians who lived near the border with Russia could <em>potentially</em> receive Russian TV signals. Did receiving these signals <em>cause</em> them to support pro-Russia parties in the election? To answer this question, we’ll use a dataset called <code>precincts</code> that contains aggregate election results in precincts close to the Russian border:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>precincts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://ditraglia.com/data/UA_precincts.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -520,10 +559,10 @@ w(x) \equiv \frac{p(x) \cdot \pi(x)[1 - \pi(x)]}{\sum_{\text{all } k} p(k) \cdot
 </div>
 </div>
 </section>
-<section id="computing-the-ate-the-easy-way" class="level3">
+<section id="computing-the-ate-the-easy-way" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="computing-the-ate-the-easy-way">Computing the ATE the Easy Way</h3>
 <p>And now the easy way, using the two regressions described above<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;If you’re rusty on R’s formula syntax, you may find my <a href="../../post/the-r-formula-cheatsheet/">cheat sheet</a> helpful.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct Xtilde = X - mean(X) </span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Xtilde =</span> X <span class="sc">-</span> <span class="fu">mean</span>(X))</span>
@@ -629,12 +668,12 @@ Coefficients:
 <p>As promised, the coefficient on <span class="math inline">\(D\)</span> equals the variance-weighted average of CATEs that we computed by hand, namely 8.822, which does not equal the ATE, 10.121. Here the CATE for <span class="math inline">\(X=1\)</span> receives <em>more weight</em> when the interaction term is omitted, pulling the coefficient on <span class="math inline">\(D\)</span> away from the ATE and towards the (smaller) CATE for <span class="math inline">\(X=1\)</span>.</p>
 </section>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<section id="conclusion" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">7</span> Conclusion</h2>
 <p>I hope this post has convinced you that regression adjustment isn’t simply a matter of tossing a collection of covariates into your regression! In general, the coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span> will <em>not</em> equal the ATE of <span class="math inline">\(D\)</span>. Instead it will be a weighted average of CATEs. To obtain the ATE we need to include an <em>interaction</em> between <span class="math inline">\(X\)</span> and <span class="math inline">\(D\)</span>. The simplest way to get your favorite statistical software package to calculate this for you, along with an appropriate standard error, is by <em>de-meaning</em> <span class="math inline">\(X\)</span> before including the interaction. And don’t forget that causal inference <em>always requires untestable assumptions</em>, in this case the selection-on-observables assumption. While implementation details are important, getting them right won’t make any difference if you’re not adjusting for the right covariates in the first place.</p>
 </section>
-<section id="appendix-the-missing-algebra" class="level2">
-<h2 class="anchored" data-anchor-id="appendix-the-missing-algebra">Appendix: The Missing Algebra</h2>
+<section id="appendix-the-missing-algebra" class="level2 page-columns page-full" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="appendix-the-missing-algebra"><span class="header-section-number">8</span> Appendix: The Missing Algebra</h2>
 <p>This section provides the algebra needed to justify the expression for <span class="math inline">\(\alpha_1\)</span> from a regression that omits the interaction between <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span>. In particular, we will show that <span class="math display">\[
 \frac{\text{Cov}(Y,\tilde{D})}{\text{Var}(\tilde{D})} = \frac{\mathbb{E}[\text{Var}(D|X)(\beta_1 + \beta_3 X)]}{\mathbb{E}[\text{Var}(D|X)]}.
 \]</span> where <span class="math inline">\(\tilde{D}\)</span> is the error term from a population linear regression of <span class="math inline">\(D\)</span> on <span class="math inline">\(X\)</span>, namely <span class="math inline">\(D = \gamma_0 + \gamma_1 X + \tilde{D}\)</span> so that <span class="math inline">\(\mathbb{E}(\tilde{D}) = \mathbb{E}(X\tilde{D}) = 0\)</span> by construction. The proof isn’t too difficult, but it’s a bit tedious so I thought you might prefer to skip it on a first reading. Still here? Great! Let’s dive into the algebra.</p>
@@ -656,7 +695,7 @@ Coefficients:
 <span class="math display">\[
 \alpha_1 \equiv \frac{\text{Cov}(Y, \tilde{D})}{\text{Var}(\tilde{D})}= \frac{\mathbb{E}[\text{Cov}(Y, D|X)]}{\mathbb{E}[\text{Var}(D|X)]}
 \]</span> in this example. Note that this does <em>not</em> hold in general: it relies on the fact that <span class="math inline">\(\mathbb{E}(\tilde{D}|X)=0\)</span>, which holds in our example because <span class="math inline">\(\mathbb{E}(D|X) = \gamma_0 + \gamma_1 X\)</span> given that <span class="math inline">\(X\)</span> is binary.</p>
-<p>We’re very nearly finished. All that remains is to simplify the numerator. To do this, we’ll use the equality <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;An unconditional expectation like <span class="math inline">\(\mathbb{E}(Y)\)</span> is a constant: it’s a probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>. In contrast, a conditional expectation like <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a random variable: it’s our “best guess” of <span class="math inline">\(Y\)</span> based on observing <span class="math inline">\(X\)</span>, where “best” means “minimum mean-squared error”. See <a href="https://youtu.be/CbsZHNQX54s?si=MN80w00yj1W5yDmX">this video</a> for some more details on conditional expectation.</p></div><div id="fn9"><p><sup>9</sup>&nbsp;In general, a population linear regression gives the best linear approximation of the conditional mean, but when the conditional mean is in fact linear, the two coincide. The reason these coincide in our example is that we can write <span class="math inline">\(\mathbb{E}[D|X] = X \mathbb{E}(D|X=1) + (1 - X) \mathbb{E}(D|X=0)\)</span>. There are only two values that <span class="math inline">\(X\)</span> can take, and we are simply “picking out” the average value of <span class="math inline">\(D\)</span> in each case. But we can re-arrange this to take precisely the form <span class="math inline">\(\delta + \kappa X\)</span> defining <span class="math inline">\(\delta = \mathbb{E}(D|X=0)\)</span> and <span class="math inline">\(\kappa = \mathbb{E}(D|X=1) - \mathbb{E}(D|X=0)\)</span>.</p></div></div><p>We’re very nearly finished. All that remains is to simplify the numerator. To do this, we’ll use the equality <span class="math display">\[
 Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
 \]</span> where <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|D, X)\)</span> satisfies <span class="math inline">\(\mathbb{E}(U|D,X) = 0\)</span> <a href="../../post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>. This allows us to write <span class="math display">\[
 \begin{aligned}
@@ -678,20 +717,7 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>See <a href="../../post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://ideas.repec.org/p/arx/papers/2307.00369.html">make fetch happen</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>If you want the standard error of <span class="math inline">\(\beta\)</span> and not just the point estimate, then replace <span class="math inline">\(Y\)</span> with the residual from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>This is a nice homework exercise to test your understanding of the post!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>I certainly don’t!<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>If you’re rusty on R’s formula syntax, you may find my <a href="../../post/the-r-formula-cheatsheet/">cheat sheet</a> helpful.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>An unconditional expectation like <span class="math inline">\(\mathbb{E}(Y)\)</span> is a constant: it’s a probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>. In contrast, a conditional expectation like <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a random variable: it’s our “best guess” of <span class="math inline">\(Y\)</span> based on observing <span class="math inline">\(X\)</span>, where “best” means “minimum mean-squared error”. See <a href="https://youtu.be/CbsZHNQX54s?si=MN80w00yj1W5yDmX">this video</a> for some more details on conditional expectation.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>In general, a population linear regression gives the best linear approximation of the conditional mean, but when the conditional mean is in fact linear, the two coincide. The reason these coincide in our example is that we can write <span class="math inline">\(\mathbb{E}[D|X] = X \mathbb{E}(D|X=1) + (1 - X) \mathbb{E}(D|X=0)\)</span>. There are only two values that <span class="math inline">\(X\)</span> can take, and we are simply “picking out” the average value of <span class="math inline">\(D\)</span> in each case. But we can re-arrange this to take precisely the form <span class="math inline">\(\delta + \kappa X\)</span> defining <span class="math inline">\(\delta = \mathbb{E}(D|X=0)\)</span> and <span class="math inline">\(\kappa = \mathbb{E}(D|X=1) - \mathbb{E}(D|X=0)\)</span>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -821,6 +847,231 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1226,6 +1477,19 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

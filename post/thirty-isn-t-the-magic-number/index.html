@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,69 +316,42 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#a-sample-size-of-thirty-isnt-necessary." id="toc-a-sample-size-of-thirty-isnt-necessary." class="nav-link active" data-scroll-target="#a-sample-size-of-thirty-isnt-necessary.">A sample size of thirty isn’t necessary.</a>
-  <ul class="collapse">
-  <li><a href="#the-empirical-cdf" id="toc-the-empirical-cdf" class="nav-link" data-scroll-target="#the-empirical-cdf">The Empirical CDF</a></li>
-  <li><a href="#quantile-quantile-plots" id="toc-quantile-quantile-plots" class="nav-link" data-scroll-target="#quantile-quantile-plots">Quantile-Quantile Plots</a></li>
-  </ul></li>
-  <li><a href="#a-sample-size-of-thirty-isnt-sufficient." id="toc-a-sample-size-of-thirty-isnt-sufficient." class="nav-link" data-scroll-target="#a-sample-size-of-thirty-isnt-sufficient.">A sample size of thirty isn’t sufficient.</a></li>
-  <li><a href="#epilogue" id="toc-epilogue" class="nav-link" data-scroll-target="#epilogue">Epilogue</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Teaching &amp; explainers</span>
+<span class="eyebrow-item">8 May 2021</span>
+<span class="eyebrow-item">13 min</span>
+
+</p>
 <h1 class="title">Thirty isn’t the magic number</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">statistics</div>
-    <div class="quarto-category">teaching</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">May 8, 2021</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-sample-size-of-thirty-isnt-necessary." id="toc-a-sample-size-of-thirty-isnt-necessary."><span class="header-section-number">1</span> A sample size of thirty isn’t necessary.</a></li>
+  <li><a href="#a-sample-size-of-thirty-isnt-sufficient." id="toc-a-sample-size-of-thirty-isnt-sufficient."><span class="header-section-number">2</span> A sample size of thirty isn’t sufficient.</a></li>
+  <li><a href="#epilogue" id="toc-epilogue"><span class="header-section-number">3</span> Epilogue</a></li>
+  </ul>
+</nav>
 <p>The simplest version of the central limit theorem (CLT) says that if <span class="math inline">\(X_1, \dots, X_n\)</span> are iid random variables with mean <span class="math inline">\(\mu\)</span> and finite variance <span class="math inline">\(\sigma^2\)</span></p>
 <p><span class="math display">\[
 \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \rightarrow_d N(0,1)
 \]</span> where <span class="math inline">\(\bar{X}_n = \frac{1}{n} \sum_{i=1}^n X_i\)</span>. In other words, if <span class="math inline">\(n\)</span> is sufficiently large, the sample mean is <em>approximately</em> normally distributed with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>, regardless of the distribution of <span class="math inline">\(X_1, \dots, X_n\)</span>. This is a pretty impressive result! It is so impressive, in fact, that students encountering it for the first time are usually a little wary. I’m typically asked “but how large is <em>sufficiently large</em>?” or “how do we know when the CLT will provide a good approximation?” My answer is disappointing: without some additional information about the distribution from which <span class="math inline">\(X_1, \dots, X_n\)</span> were drawn, we simply <em>can’t say</em> how large a sample is large enough for the CLT to work well. At this point, someone invariably volunteers “but in my high school statistics course, we learned that <span class="math inline">\(n = 30\)</span> is big enough for the CLT to hold!”</p>
 <p>I’ve always been surprised by the prevalence of the <span class="math inline">\(n \geq 30\)</span> dictum. It even appears in Charles Wheelan’s <em>Naked Statistics</em>, an otherwise excellent book that I assign as summer reading for our incoming economics undergraduates: “as a rule of thumb, the sample size must be at least 30 for the central limit theorem to hold true.” In this post I’d like to set the record straight: <span class="math inline">\(n\geq 30\)</span> is neither necessary <em>nor</em> sufficient for the CLT to provide a good approximation, as we’ll see by examining two simple examples. Along the way, we’ll learn about two useful tools for visualizing and comparing distributions: the empirical cdf, and quantile-quantile plots.</p>
-<section id="a-sample-size-of-thirty-isnt-necessary." class="level2">
-<h2 class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-necessary.">A sample size of thirty isn’t necessary.</h2>
+<section id="a-sample-size-of-thirty-isnt-necessary." class="level2 page-columns page-full" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-necessary."><span class="header-section-number">1</span> A sample size of thirty isn’t necessary.</h2>
 <p>We’ll start by showing that the CLT can work extremely well even when <span class="math inline">\(n\)</span> is much smaller than <span class="math inline">\(30\)</span> and the random variables that we average are far from normally distributed themselves. Along the way we’ll learn about the <em>empirical CDF</em> and <em>quantile-quantile</em> plots, two extremely useful tools for comparing probability distributions.</p>
 <p>Informally speaking, a Uniform<span class="math inline">\((0,1)\)</span> random variable is equally likely to take on any continuous value in the range <span class="math inline">\([0,1]\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Here’s a histogram of 1000 random draws from this distribution:</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;More formally, <span class="math inline">\(U\sim\)</span> Uniform<span class="math inline">\((0,1)\)</span> if and only if <span class="math inline">\(\mathbb{P}(a \leq U \leq b) = (b - a)\)</span> for any <span class="math inline">\(0 \leq a \leq b \leq 1\)</span>. </p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set the seed to get the same draws I did</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>) </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">runif</span>(<span class="dv">1000</span>), <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, </span>
@@ -348,7 +388,7 @@ window.Quarto = {
 </div>
 </div>
 <p>A beautiful bell curve! This certainly looks normal, but histograms can be tricky to interpret. Their shape depends on how many bins we use to make the plot, something that can be difficult to choose well in practice. In the following two sections, we’ll instead compare <em>distribution functions</em> and <em>quantiles</em>.</p>
-<section id="the-empirical-cdf" class="level3">
+<section id="the-empirical-cdf" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="the-empirical-cdf">The Empirical CDF</h3>
 <!--To find out what the CLT implies in this example, we first need to know the mean and variance of $X_i$. If $X \sim U(0,1)$, then
 $$
@@ -367,13 +407,13 @@ $$-->
 \]</span> so if the CLT provides a good approximation in this example, we should find that <span class="math display">\[
 \frac{\bar{X}_n - 1/2}{1/\sqrt{120}} = \sqrt{120} (\bar{X}_n - 1/2) \approx N(0,1)
 \]</span> in the sense that that the <em>cumulative distribution function</em> (CDF) of <span class="math inline">\(\sqrt{120} (\bar{X}_n - 1/2)\)</span>, call it <span class="math inline">\(F\)</span>, is approximately equal to the standard normal CDF <code>pnorm()</code>. An obvious way to see if this holds is to plot <span class="math inline">\(F\)</span> against <code>pnorm()</code> and see how they compare. From now on, we’ll be working with the z-scores of <code>xbar_sims</code> rather than the raw simulation values themselves, so we’ll start by constructing them, subtracting the population mean and dividing by the population standard deviation:</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;If you’re taking introductory probability and statistics, filling in the missing details for these calculations would be an excellent homework problem!</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> (xbar_sims <span class="sc">-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">120</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We haven’t worked out an expression for the function <span class="math inline">\(F\)</span>, but we can approximate it using our simulation draws <code>xbar_sims</code>. We do this by calculating the <em>empirical CDF</em> of our centered and standardized simulation draws <code>z</code>. Recall that if <span class="math inline">\(Z\)</span> is a random variable, its CDF <span class="math inline">\(F\)</span> is defined as <span class="math inline">\(F(t) = \mathbb{P}(Z \leq t)\)</span>. Given a large number of observed random draws <span class="math inline">\(z_1, \dots, z_J\)</span> from the distribution of <span class="math inline">\(Z\)</span>, we can approximate <span class="math inline">\(\mathbb{P}(Z \leq t)\)</span> by calculating the fraction of observed draws less than or equal to <span class="math inline">\(t\)</span>. In other words <span class="math display">\[
 \mathbb{P}(Z \leq t) \approx \frac{1}{J}\sum_{j=1}^J \mathbf{1}\{z_j \leq t\}
 \]</span> where <span class="math inline">\(\mathbf{1}\{z_j \leq t \}\)</span> is the <em>indicator function</em>: it equals one if <span class="math inline">\(z_j\)</span> is less than or equal to the threshold <span class="math inline">\(t\)</span> and zero otherwise. The sample average on the right-hand side of the preceding expression is called the <em>empirical CDF</em>. It uses empirical data–in this case our simulation draws <span class="math inline">\(z_j\)</span>–to approximate the unknown CDF. By increasing the number of random draws <span class="math inline">\(J\)</span> that we use, we can make this approximation as accurate as we like.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> For example, we don’t know the exact value of <span class="math inline">\(F(0)\)</span>, the probability that <span class="math inline">\(Z \leq 0\)</span>. But using our simulated values <code>z</code> from above, we can approximate it as</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Here we take <span class="math inline">\(J = 100,000\)</span> which is more than enough for the purposes of this exercise.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(z <span class="sc">&lt;=</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.49993</code></pre>
@@ -402,7 +442,7 @@ $$-->
 </div>
 <p>The fit is almost perfect, despite <span class="math inline">\(n=10\)</span> being far below 30. This kind of plot is much more informative than the histogram from above, but it can still be a bit difficult to read. When constructing confidence intervals or calculating p-values it is probabilities in the tails of the distribution that matter most, i.e.&nbsp;values of <span class="math inline">\(t\)</span> that are far from zero in the plot. Ideally, we’d like a plot that makes any discrepancies in the tails <em>jump out</em> at us. That is precisely what we’ll construct next.</p>
 </section>
-<section id="quantile-quantile-plots" class="level3">
+<section id="quantile-quantile-plots" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="quantile-quantile-plots">Quantile-Quantile Plots</h3>
 <p>So far we’ve seen that the histogram of <code>xbar_sims</code> is bell-shaped, and that the empirical CDF of <code>sqrt(120) * (xbar_sims - 0.5)</code> is well-approximated by the standard normal CDF <code>pnorm()</code>. If you’re still not convinced that the CLT <em>can</em> work perfectly well with <span class="math inline">\(n = 10\)</span>, the final plot that we’ll make should dispel any remaining doubts. <!--If $Z$ is a continuous random variable with CDF $F$, its *quantile function* is given by $Q(p) = F^{-1}(p)$. In words $Q(p)$ is the threshold $t$ such that $\mathbb{P}(Z \leq t) = p$, i.e.\ the *inverse function* of the CDF.^[Defining a quantile function for discrete random variables requires a bit more care.] For example, here I have plotted the standard normal quantile function `qnorm` alongside the corresponding CDF `pnorm`
 
@@ -480,7 +520,7 @@ simulation -0.6779843 0.0001169817 0.6791994</code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The only difference between these two plots is the scale of the <span class="math inline">\(y\)</span>-axis. The plot that uses the original simulation draws <code>xbar_sims</code> has a <span class="math inline">\(y\)</span>-axis that runs between <span class="math inline">\(0.1\)</span> and <span class="math inline">\(0.9\)</span> because the sample average of <span class="math inline">\(\text{Uniform}(0,1)\)</span> random variables must lie within the interval <span class="math inline">\([0,1]\)</span>. In contrast, the corresponding <span class="math inline">\(z\)</span>-scores lie in the range <span class="math inline">\([-4,4]\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> For <span class="math inline">\(x\)</span>-values between <span class="math inline">\(-3\)</span> and <span class="math inline">\(3\)</span>, we can’t even see the line generated by <code>qqline</code>: the quantiles of our simulation draws are extremely close to those of a normal distribution. Outside of this range, however, we see that the black circles <em>curve away</em> from the line. For values of <span class="math inline">\(x\)</span> around <span class="math inline">\(-4\)</span>, the quantiles of <code>z</code> are above those of a standard normal, i.e.&nbsp;shifted to the right. For values of <span class="math inline">\(x\)</span> around <span class="math inline">\(4\)</span>, the picture is reversed: the quantiles of <code>z</code> are below those of a standard normal, i.e.&nbsp;shifted to the left. This means that <code>z</code> has <em>lighter tails</em> than a standard normal: it is a bit less likely to yield <em>extremely</em> large positive or negative values, for example</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;Recall that we subtracted <span class="math inline">\(1/2\)</span> and multiplied by <span class="math inline">\(\sqrt{120}\approx 11\)</span> to construct <code>z</code> from <code>xbar_sims</code>.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">simulation =</span> <span class="fu">quantile</span>(z, <span class="fl">0.0001</span>), <span class="at">normal =</span> <span class="fu">qnorm</span>(<span class="fl">0.0001</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      simulation    normal
@@ -499,12 +539,12 @@ simulation -2.302793 -1.958568 -1.654508 -1.290797</code></pre>
 </div>
 </section>
 </section>
-<section id="a-sample-size-of-thirty-isnt-sufficient." class="level2">
-<h2 class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-sufficient.">A sample size of thirty isn’t sufficient.</h2>
+<section id="a-sample-size-of-thirty-isnt-sufficient." class="level2 page-columns page-full" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="a-sample-size-of-thirty-isnt-sufficient."><span class="header-section-number">2</span> A sample size of thirty isn’t sufficient.</h2>
 <p>Now suppose that <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(X_1, \dots X_n \sim\)</span> iid Bernoulli<span class="math inline">\((1/60)\)</span>. What is the CDF of <span class="math inline">\(\bar{X}_n\)</span>? Rather than approximating the answer to this question by simulation, as we did in the uniform example from above, we’ll work out the <em>exact</em> result and compare it to the approximation provided by the CLT. If <span class="math inline">\(X_1, \dots, X_n \sim\)</span> iid Bernoulli<span class="math inline">\((p)\)</span>, then by definition the sum <span class="math inline">\(S_n = \sum_{i=1}^n X_i\)</span> follows a Binomial<span class="math inline">\((n,p)\)</span> distribution. The probability mass function and CDF of this distribution are available in R via the <code>dbinom()</code> and <code>pbinom()</code> commands. So what about <span class="math inline">\(\bar{X}_n\)</span>? Notice that <span class="math display">\[
 \mathbb{P}(\bar{X}_n = x) = \mathbb{P}(S_n/n = x) = \mathbb{P}(S_n = nx)
 \]</span> Thus, if <span class="math inline">\(f(s) = \mathbb{P}(S_n = s)\)</span> is the pmf of <span class="math inline">\(S_n\)</span> for <span class="math inline">\(s \in \{0, 1, \dots n\}\)</span>, it follows that <span class="math inline">\(f(nx)\)</span> is the pmf of <span class="math inline">\(\bar{X}_n\)</span> for <span class="math inline">\(x \in \{0, 1/n, 2/n, \dots, 1\}\)</span>. This means that we can use <code>dbinom</code> to plot the <em>exact</em> sampling distribution of <span class="math inline">\(\bar{X}_n\)</span> when <span class="math inline">\(n = 100\)</span> and <span class="math inline">\(p = 1/60\)</span> as follows<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;Notice that I “zoomed in” on the most interesting part of the plot by setting <code>xlim = c(0, 0.1)</code>.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">60</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span><span class="sc">/</span>n)</span>
@@ -562,25 +602,15 @@ simulation -2.302793 -1.958568 -1.654508 -1.290797</code></pre>
 </div>
 <p>So only 82% of these supposed 95% confidence intervals actually cover the true value of <span class="math inline">\(p\)</span>! Clearly 100 observations aren’t enough to rely upon the CLT in this example.</p>
 </section>
-<section id="epilogue" class="level2">
-<h2 class="anchored" data-anchor-id="epilogue">Epilogue</h2>
+<section id="epilogue" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">3</span> Epilogue</h2>
 <p>I hope these examples have convinced you that, in spite of what you may have heard elsewhere, <span class="math inline">\(n\geq 30\)</span> is neither necessary nor sufficient for the CLT to provide an adequate approximation. But some important questions remain. First, what can we do in situations like the second example, where we want to carry out inference for a small proportion? The problem is hardly academic: at the time of this writing, the most recent estimate of coronavirus prevalence in the UK was approximately 0.2%, i.e.&nbsp;nearly ten times <em>smaller</em> than the value I used for <span class="math inline">\(p\)</span> in my second example.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Second, how did the <span class="math inline">\(n\geq 30\)</span> folk wisdom arise? Is there anything that we can say about <span class="math inline">\(n\geq 30\)</span>? Finally, are there any theoretical results that can provide guidance about the quality of the approximation provided by the CLT? These questions will have to wait for a future post!</p>
 
 
-</section>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;Source: <a href="https://www.gov.uk/government/publications/react-1-study-of-coronavirus-transmission-march-2021-final-results/react-1-study-of-coronavirus-transmission-march-2021-final-results">REACT-1 study of coronavirus transmission: March 2021 final results</a></p></div></div></section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>More formally, <span class="math inline">\(U\sim\)</span> Uniform<span class="math inline">\((0,1)\)</span> if and only if <span class="math inline">\(\mathbb{P}(a \leq U \leq b) = (b - a)\)</span> for any <span class="math inline">\(0 \leq a \leq b \leq 1\)</span>. <a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>If you’re taking introductory probability and statistics, filling in the missing details for these calculations would be an excellent homework problem!<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Here we take <span class="math inline">\(J = 100,000\)</span> which is more than enough for the purposes of this exercise.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Recall that we subtracted <span class="math inline">\(1/2\)</span> and multiplied by <span class="math inline">\(\sqrt{120}\approx 11\)</span> to construct <code>z</code> from <code>xbar_sims</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Notice that I “zoomed in” on the most interesting part of the plot by setting <code>xlim = c(0, 0.1)</code>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Source: <a href="https://www.gov.uk/government/publications/react-1-study-of-coronavirus-transmission-march-2021-final-results/react-1-study-of-coronavirus-transmission-march-2021-final-results">REACT-1 study of coronavirus transmission: March 2021 final results</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -710,6 +740,231 @@ simulation -2.302793 -1.958568 -1.654508 -1.290797</code></pre>
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1115,6 +1370,19 @@ simulation -2.302793 -1.958568 -1.654508 -1.290797</code></pre>
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

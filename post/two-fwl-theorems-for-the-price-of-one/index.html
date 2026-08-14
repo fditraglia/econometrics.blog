@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,60 +316,38 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#simulation-example" id="toc-simulation-example" class="nav-link active" data-scroll-target="#simulation-example">Simulation Example</a></li>
-  <li><a href="#a-bit-of-notation" id="toc-a-bit-of-notation" class="nav-link" data-scroll-target="#a-bit-of-notation">A Bit of Notation</a></li>
-  <li><a href="#why-does-the-alternative-fwl-approach-work" id="toc-why-does-the-alternative-fwl-approach-work" class="nav-link" data-scroll-target="#why-does-the-alternative-fwl-approach-work">Why does the “alternative” FWL approach work?</a></li>
-  <li><a href="#whats-different-about-the-usual-fwl-theorem" id="toc-whats-different-about-the-usual-fwl-theorem" class="nav-link" data-scroll-target="#whats-different-about-the-usual-fwl-theorem">What’s different about the “usual” FWL theorem?</a></li>
-  <li><a href="#taking-stock" id="toc-taking-stock" class="nav-link" data-scroll-target="#taking-stock">Taking Stock</a></li>
-  <li><a href="#the-punchline" id="toc-the-punchline" class="nav-link" data-scroll-target="#the-punchline">The Punchline</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Econometric theory</span>
+<span class="eyebrow-item">14 August 2025</span>
+<span class="eyebrow-item">8 min</span>
+
+</p>
 <h1 class="title">Two FWL Theorems for the Price of One</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">econometrics</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 14, 2025</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#simulation-example" id="toc-simulation-example"><span class="header-section-number">1</span> Simulation Example</a></li>
+  <li><a href="#a-bit-of-notation" id="toc-a-bit-of-notation"><span class="header-section-number">2</span> A Bit of Notation</a></li>
+  <li><a href="#why-does-the-alternative-fwl-approach-work" id="toc-why-does-the-alternative-fwl-approach-work"><span class="header-section-number">3</span> Why does the “alternative” FWL approach work?</a></li>
+  <li><a href="#whats-different-about-the-usual-fwl-theorem" id="toc-whats-different-about-the-usual-fwl-theorem"><span class="header-section-number">4</span> What’s different about the “usual” FWL theorem?</a></li>
+  <li><a href="#taking-stock" id="toc-taking-stock"><span class="header-section-number">5</span> Taking Stock</a></li>
+  <li><a href="#the-punchline" id="toc-the-punchline"><span class="header-section-number">6</span> The Punchline</a></li>
+  </ul>
+</nav>
 <p>The result that I prefer to call <a href="../../post/how-to-do-regression-adjustment/#fnref2">Yule’s Rule</a>, more commonly known as the “Frisch-Waugh-Lovell (FWL) theorem”, shows how to calculate the regression slope coefficient for <strong>one predictor</strong> by carrying out additional “auxiliary” regressions that adjust for <strong>all other predictors</strong>. You’ve probably encountered this result if you’ve studied introductory econometrics. But it may surprise you to learn that there are actually <em>two</em> variants of the FWL theorem, each with its pros and cons. Today we’ll take a look at the less familiar version and then circle back to understand what makes the more familiar one a textbook staple.</p>
-<section id="simulation-example" class="level2">
-<h2 class="anchored" data-anchor-id="simulation-example">Simulation Example</h2>
+<section id="simulation-example" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="simulation-example"><span class="header-section-number">1</span> Simulation Example</h2>
 <p>Let’s start with a little simulation. First we’ll generate 5000 observations of predictors <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span> from a joint normal distribution with standard deviations of one, means of zero, and a correlation of 0.5.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1066</span>)</span>
@@ -369,8 +414,8 @@ window.Quarto = {
 </ol>
 <p>In the rest of this post we’ll answer both questions using simple algebra and the properties of linear regression. There are lots of deep ideas here, but there’s no need to bring out the big matrix algebra guns to explain them.</p>
 </section>
-<section id="a-bit-of-notation" class="level2">
-<h2 class="anchored" data-anchor-id="a-bit-of-notation">A Bit of Notation</h2>
+<section id="a-bit-of-notation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="a-bit-of-notation"><span class="header-section-number">2</span> A Bit of Notation</h2>
 <p>First we need a bit of notation. I find it a bit simpler to work with population linear regressions rather than sample regressions, but the ideas are the same either way. So if you prefer to put “hats” on everything and work with sums rather than expectations and covariances, be my guest!</p>
 <p>First we’ll define the “Long Regression” as a <a href="../../post/why-econometrics-is-confusing-part-1-the-error-term/">population linear regression</a> of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> and <span class="math inline">\(W\)</span>, namely <span class="math display">\[
 Y = \beta_0 + \beta_X X + \beta_W W + U, \quad \mathbb{E}(U) = \text{Cov}(X,U) = \text{Cov}(W,U)=0.
@@ -380,10 +425,10 @@ X = \gamma_0 + \gamma_W W + \tilde{X}, \quad \mathbb{E}(\tilde{X}) = \text{Cov}(
 Y = \delta_0 + \delta_W W + \tilde{Y}, \quad \mathbb{E}(\tilde{Y}) = \text{Cov}(W,\tilde{Y})=0.
 \]</span> I’ve already linked to a post making this point, but it bears repeating: all of the properties of the error terms <span class="math inline">\(U\)</span>, <span class="math inline">\(\tilde{X}\)</span> and <span class="math inline">\(\tilde{Y}\)</span> that I’ve stated here hold <em>by construction</em>. They are not assumptions; they are merely <a href="../../post/why-econometrics-is-confusing-part-1-the-error-term/">what defines an error term</a> in a population linear regression.</p>
 </section>
-<section id="why-does-the-alternative-fwl-approach-work" class="level2">
-<h2 class="anchored" data-anchor-id="why-does-the-alternative-fwl-approach-work">Why does the “alternative” FWL approach work?</h2>
+<section id="why-does-the-alternative-fwl-approach-work" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="why-does-the-alternative-fwl-approach-work"><span class="header-section-number">3</span> Why does the “alternative” FWL approach work?</h2>
 <p>As mentioned in the discussion of our simulation experiment from above, the standard FWL theorem says that a regression of <span class="math inline">\(\tilde{Y}\)</span> on <span class="math inline">\(\tilde{X}\)</span> with no intercept gives us <span class="math inline">\(\beta_X\)</span>, while the <em>alternative</em> version says that a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span> with an intercept also gives us <span class="math inline">\(\beta_X\)</span>. It is the second claim that we’ll prove now.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>The alternative FWL theorem claims that <span class="math inline">\(\beta_X = \text{Cov}(Y,\tilde{X})/\text{Var}(\tilde{X})\)</span>. Since <span class="math inline">\(\tilde{X}\)</span> is uncorrelated with <span class="math inline">\(W\)</span> by construction, we can <a href="https://github.com/fditraglia/random-variables-cheatsheet/blob/main/random-variables-cheatsheet.pdf">expand the numerator</a> as follows: <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Fear not: we’ll return to the first claim soon!</p></div></div><p>The alternative FWL theorem claims that <span class="math inline">\(\beta_X = \text{Cov}(Y,\tilde{X})/\text{Var}(\tilde{X})\)</span>. Since <span class="math inline">\(\tilde{X}\)</span> is uncorrelated with <span class="math inline">\(W\)</span> by construction, we can <a href="https://github.com/fditraglia/random-variables-cheatsheet/blob/main/random-variables-cheatsheet.pdf">expand the numerator</a> as follows: <span class="math display">\[
 \text{Cov}(Y,\tilde{X}) = \text{Cov}(\beta_0 + \beta_X X + \beta_W W + U, \tilde{X}) = \beta_X \text{Cov}(X,\tilde{X}) + \text{Cov}(U,\tilde{X}).
 \]</span> But since <span class="math inline">\(\tilde{X} = (X - \gamma_0 - \gamma_W W)\)</span> we also have <span class="math display">\[
 \text{Cov}(U, \tilde{X}) = \text{Cov}(U, X - \gamma_0 - \gamma_W W) = \text{Cov}(U,X) - \gamma_W \text{Cov}(U,W) = 0
@@ -395,8 +440,8 @@ Y = \delta_0 + \delta_W W + \tilde{Y}, \quad \mathbb{E}(\tilde{Y}) = \text{Cov}(
 \text{Var}(\tilde{X}) - \text{Cov}(X,\tilde{X}) = \gamma_W \left[ \gamma_W \text{Var}(W) - \text{Cov}(X,W) \right].
 \]</span> This shows that <span class="math inline">\(\text{Var}(\tilde{X})\)</span> and <span class="math inline">\(\text{Cov}(X,\tilde{X})\)</span> are equal if and only if <span class="math inline">\(\gamma_W \text{Var}(W) = \text{Cov}(X,W)\)</span>. But since <span class="math inline">\(\gamma_W\)</span> is the coefficient from the regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(W\)</span>, we already know that <span class="math inline">\(\gamma_W = \text{Cov}(X,W)/\text{Var}(W)\)</span>! With a bit of algebra using the properties of covariance and the definition of a population linear regression, we’ve shown that the alternative FWL theorem holds.</p>
 </section>
-<section id="whats-different-about-the-usual-fwl-theorem" class="level2">
-<h2 class="anchored" data-anchor-id="whats-different-about-the-usual-fwl-theorem">What’s different about the “usual” FWL theorem?</h2>
+<section id="whats-different-about-the-usual-fwl-theorem" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="whats-different-about-the-usual-fwl-theorem"><span class="header-section-number">4</span> What’s different about the “usual” FWL theorem?</h2>
 <p>At this point you may be wondering why anyone teaches the “usual” version of the FWL theorem at all. If that extra short regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(W\)</span> isn’t needed to learn <span class="math inline">\(\beta_X\)</span>, why bother?</p>
 <p>To answer this question, we’ll start by re-writing the long regression two different ways. First, we’ll substitute <span class="math inline">\(X = \gamma_0 + \gamma_W W + \tilde{X}\)</span> into the long regression and re-arrange, yielding <span class="math display">\[
 Y = (\beta_0 + \beta_X \gamma_0) + \beta_X \tilde{X} + (\beta_W + \beta_X \gamma_W) W +  U.
@@ -425,8 +470,8 @@ Y &amp;= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
 \beta_0 + \beta_X \gamma_0 = \beta_0 + \beta_X [\mathbb{E}(X) - \gamma_W \mathbb{E}(W)] = \beta_0 + \beta_X \mathbb{E}(X) - \beta_X \gamma_W \mathbb{E}(W).
 \]</span> Inspecting our work so far, we see that the two alternative expressions for <span class="math inline">\(\delta_0\)</span> will be equal precisely when <span class="math inline">\(\beta_X \gamma_W = \delta_W - \beta_W\)</span>. But re-arranging this gives <span class="math inline">\(\delta_W = \beta_W + \beta_X \gamma_W\)</span>, which we already proved above using the omitted variables bias formula!</p>
 </section>
-<section id="taking-stock" class="level2">
-<h2 class="anchored" data-anchor-id="taking-stock">Taking Stock</h2>
+<section id="taking-stock" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="taking-stock"><span class="header-section-number">5</span> Taking Stock</h2>
 <p>That was a lot of algebra, so let’s spend some time thinking about the results. We showed that <span class="math display">\[
 \begin{aligned}
 Y &amp;= \delta_0 + \beta_X \tilde{X} + (\beta_W W + U)\\
@@ -466,20 +511,15 @@ Y = \delta_0 + \beta_X \tilde{X} + V, \quad \text{where } V \equiv \beta_W W + U
 </div>
 </div>
 </section>
-<section id="the-punchline" class="level2">
-<h2 class="anchored" data-anchor-id="the-punchline">The Punchline</h2>
+<section id="the-punchline" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="the-punchline"><span class="header-section-number">6</span> The Punchline</h2>
 <p>If your goal is <em>merely</em> to learn <span class="math inline">\(\beta_X\)</span>, then either version of the FWL theorem will do the trick and the alternative version is <em>simpler</em> because it only involves one auxiliary regression instead of two. But if you want to ensure that you end up with the same <em>error term</em> as in the original long regression, then you need to use the <em>standard</em> version of the FWL theorem. This is crucial for the purposes of <em>inference</em> because the properties of the error term determine the standard errors of your estimates.</p>
 
 
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Fear not: we’ll return to the first claim soon!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -609,6 +649,231 @@ Y = \delta_0 + \beta_X \tilde{X} + V, \quad \text{where } V \equiv \beta_W W + U
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1014,6 +1279,19 @@ Y = \delta_0 + \beta_X \tilde{X} + V, \quad \text{where } V \equiv \beta_W W + U
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

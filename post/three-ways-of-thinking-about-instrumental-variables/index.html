@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,66 +316,43 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#the-setup" id="toc-the-setup" class="nav-link active" data-scroll-target="#the-setup">The Setup</a></li>
-  <li><a href="#st-perspective-the-iv-approach" id="toc-st-perspective-the-iv-approach" class="nav-link" data-scroll-target="#st-perspective-the-iv-approach">1st Perspective: The IV Approach</a></li>
-  <li><a href="#nd-perspective-the-tsls-approach" id="toc-nd-perspective-the-tsls-approach" class="nav-link" data-scroll-target="#nd-perspective-the-tsls-approach">2nd Perspective: The TSLS Approach</a></li>
-  <li><a href="#rd-perspective-the-control-function-approach" id="toc-rd-perspective-the-control-function-approach" class="nav-link" data-scroll-target="#rd-perspective-the-control-function-approach">3rd Perspective: The Control Function Approach</a></li>
-  <li><a href="#simulating-the-three-approaches" id="toc-simulating-the-three-approaches" class="nav-link" data-scroll-target="#simulating-the-three-approaches">Simulating the Three Approaches</a></li>
-  <li><a href="#epilogue" id="toc-epilogue" class="nav-link" data-scroll-target="#epilogue">Epilogue</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Causal inference &amp; identification</span>
+<span class="eyebrow-item">6 November 2022</span>
+<span class="eyebrow-item">8 min</span>
+
+</p>
 <h1 class="title">Three Ways of Thinking About Instrumental Variables</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">econometrics</div>
-    <div class="quarto-category">causal inference</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 6, 2022</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-setup" id="toc-the-setup"><span class="header-section-number">1</span> The Setup</a></li>
+  <li><a href="#st-perspective-the-iv-approach" id="toc-st-perspective-the-iv-approach"><span class="header-section-number">2</span> 1st Perspective: The IV Approach</a></li>
+  <li><a href="#nd-perspective-the-tsls-approach" id="toc-nd-perspective-the-tsls-approach"><span class="header-section-number">3</span> 2nd Perspective: The TSLS Approach</a></li>
+  <li><a href="#rd-perspective-the-control-function-approach" id="toc-rd-perspective-the-control-function-approach"><span class="header-section-number">4</span> 3rd Perspective: The Control Function Approach</a></li>
+  <li><a href="#simulating-the-three-approaches" id="toc-simulating-the-three-approaches"><span class="header-section-number">5</span> Simulating the Three Approaches</a></li>
+  <li><a href="#epilogue" id="toc-epilogue"><span class="header-section-number">6</span> Epilogue</a></li>
+  </ul>
+</nav>
 <p>In this post we’ll examine a very simple instrumental variables model from three different perspectives: two familiar and one a bit more exotic. While all three yield the same solution in this particular model, they lead in different directions in more complicated examples. Crucially, each gives us a different way of <em>thinking</em> about the problem of endogeneity and how to solve it.</p>
-<section id="the-setup" class="level2">
-<h2 class="anchored" data-anchor-id="the-setup">The Setup</h2>
+<section id="the-setup" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-setup"><span class="header-section-number">1</span> The Setup</h2>
 <p>Consider a simple linear causal model of the form <span class="math inline">\(Y \leftarrow \alpha + \beta X + U\)</span> where <span class="math inline">\(X\)</span> is <strong>endogenous</strong>, i.e.&nbsp;related to the unobserved random variable <span class="math inline">\(U\)</span>. Our goal is to learn <span class="math inline">\(\beta\)</span>, the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>. To take a simple example, suppose that <span class="math inline">\(Y\)</span> is wage and <span class="math inline">\(X\)</span> is years of schooling. Then <span class="math inline">\(\beta\)</span> is the causal effect of one additional year of schooling on a person’s wage. The random variable <span class="math inline">\(U\)</span> is a catchall, representing all <em>unobserved</em> causes of wage, such as ability, family background, and so on. A linear regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> will not allow us to learn <span class="math inline">\(\beta\)</span>. For example, if you’re very smart, you will probably find school easier and stay in school longer. But being smarter likely has <em>its own</em> effect on your wage, separate from years of education. Ability is a <strong>confounder</strong> because it causes both years of schooling and wage.</p>
 <p>Now suppose that <span class="math inline">\(Z\)</span> is an <strong>instrumental variable</strong>: something that is uncorrelated with <span class="math inline">\(U\)</span> (<strong>exogenous</strong>) but correlated with <span class="math inline">\(X\)</span> (<strong>relevant</strong>). For example, <a href="https://youtu.be/NeAkMcgdWxA?t=2044">a very famous paper</a> pointed out that quarter of birth is correlated with years of schooling in the US and argued that it is unrelated to other causes of wages. Finding a good instrumental variable is very hard in practice. Indeed, <a href="https://youtu.be/NeAkMcgdWxA?t=2528">I remain skeptical</a> that quarter of birth is really unrelated to <span class="math inline">\(U\)</span>. But that’s a conversation for another day. For the moment, suppose we have a <em>bona fide</em> exogenous and relevant instrument at our disposal. To make things even simpler, suppose that the true causal effect <span class="math inline">\(\beta\)</span> is <strong>homogeneous</strong>, i.e.&nbsp;the same for everyone.</p>
 </section>
-<section id="st-perspective-the-iv-approach" class="level2">
-<h2 class="anchored" data-anchor-id="st-perspective-the-iv-approach">1st Perspective: The IV Approach</h2>
+<section id="st-perspective-the-iv-approach" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="st-perspective-the-iv-approach"><span class="header-section-number">2</span> 1st Perspective: The IV Approach</h2>
 <blockquote class="blockquote">
 <p>Regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> to find the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>. Rescale it to obtain the causal effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>.</p>
 </blockquote>
@@ -318,8 +362,8 @@ window.Quarto = {
 \beta_{\text{IV}} \equiv \frac{\text{Cov}(Z,Y)}{\text{Cov}(Z,X)} =  \frac{\text{Cov}(Y,Z)/\text{Var}(Z)}{\text{Cov}(X,Z)/\text{Var}(Z)} \equiv \frac{\gamma}{\pi}.
 \]</span> We see that <span class="math inline">\(\beta_{\text{IV}}\)</span> is the ratio of two <strong>linear regression slopes</strong>: the slope <span class="math inline">\(\gamma\)</span> from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(Z\)</span> divided by the slope <span class="math inline">\(\pi\)</span> from a regression of <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. This makes intuitive sense if we think about units. Because <span class="math inline">\(Z\)</span> is unrelated to <span class="math inline">\(U\)</span>, <span class="math inline">\(\gamma\)</span> gives the causal effect of <span class="math inline">\(Z\)</span> on <span class="math inline">\(Y\)</span>. If <span class="math inline">\(Y\)</span> is measured in dollars and <span class="math inline">\(Z\)</span> is measured in miles (e.g.&nbsp;distance to college), then <span class="math inline">\(\gamma\)</span> is measured in dollars per mile. If <span class="math inline">\(X\)</span> is years of schooling, then <span class="math inline">\(\beta\)</span> should be measured in dollars per year. To convert from dollars/mile to dollars/year, we need to multiply by miles/year or equivalently to divide by years/mile. And indeed, <span class="math inline">\(\pi\)</span> is measured in years/mile as required! This is yet another example of my favorite maxim: <strong>most formulas in statistics and econometrics are obvious if you keep track of the units.</strong></p>
 </section>
-<section id="nd-perspective-the-tsls-approach" class="level2">
-<h2 class="anchored" data-anchor-id="nd-perspective-the-tsls-approach">2nd Perspective: The TSLS Approach</h2>
+<section id="nd-perspective-the-tsls-approach" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="nd-perspective-the-tsls-approach"><span class="header-section-number">3</span> 2nd Perspective: The TSLS Approach</h2>
 <blockquote class="blockquote">
 <p>Construct <span class="math inline">\(\tilde{X}\)</span> by using <span class="math inline">\(Z\)</span> to “clean out” the part of <span class="math inline">\(X\)</span> that is correlated with <span class="math inline">\(U\)</span>. Then regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span>.</p>
 </blockquote>
@@ -350,8 +394,8 @@ Y &amp;= \alpha + \beta X + U = \alpha + \beta (\tilde{X} + V) + U\\
 \end{aligned}
 \]</span> a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(\tilde{X}\)</span> recovers the causal effect <span class="math inline">\(\beta\)</span> of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span>.</p>
 </section>
-<section id="rd-perspective-the-control-function-approach" class="level2">
-<h2 class="anchored" data-anchor-id="rd-perspective-the-control-function-approach">3rd Perspective: The Control Function Approach</h2>
+<section id="rd-perspective-the-control-function-approach" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="rd-perspective-the-control-function-approach"><span class="header-section-number">4</span> 3rd Perspective: The Control Function Approach</h2>
 <blockquote class="blockquote">
 <p>Use <span class="math inline">\(Z\)</span> to solve for <span class="math inline">\(V\)</span>, the part of <span class="math inline">\(U\)</span> that is correlated with <span class="math inline">\(X\)</span>. Then regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> controlling for <span class="math inline">\(V\)</span>.</p>
 </blockquote>
@@ -382,8 +426,8 @@ Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
 \]</span> Since <span class="math inline">\(\text{Var}(V) &gt; 0\)</span>, <span class="math inline">\(\lambda\)</span> tell us the <strong>direction of endogeneity</strong> in <span class="math inline">\(X\)</span>. If <span class="math inline">\(\lambda &gt;0\)</span> then <span class="math inline">\(X\)</span> is positively correlated with <span class="math inline">\(U\)</span>, if <span class="math inline">\(\lambda &lt; 0\)</span> then <span class="math inline">\(X\)</span> is negatively correlated with <span class="math inline">\(U\)</span>, and if <span class="math inline">\(\lambda = 0\)</span> then <span class="math inline">\(X\)</span> is exogenous. If <span class="math inline">\(U\)</span> is ability and ability has a positive effect on years of schooling, for example, then <span class="math inline">\(\lambda\)</span> will be positive.</p>
 <p>Now it’s time to address the elephant in the room: <span class="math inline">\(V\)</span> is <strong>unobserved</strong>! It’s all fine and well to say that if <span class="math inline">\(V\)</span> were observed our problems would be solved, but given that it is not in fact observed what are we supposed to do? Here’s where the TSLS first stage regression comes to the rescue. Both <span class="math inline">\(X\)</span> and <span class="math inline">\(Z\)</span> are observed, so we can learn <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\pi\)</span> by regressing <span class="math inline">\(X\)</span> on <span class="math inline">\(Z\)</span>. Given these coefficients, we can simply solve for the unobserved error: <span class="math inline">\(V = X - \delta - \pi Z\)</span>. Like TSLS, the control function approach relies crucially on the first stage regression. But whereas TSLS uses it to construct <span class="math inline">\(\tilde{X} = \delta + \pi Z\)</span>, the control function approach uses it to construct <span class="math inline">\(V = X - \delta - \pi Z\)</span>. We don’t replace <span class="math inline">\(X\)</span> with its exogenous component <span class="math inline">\(\tilde{X}\)</span>; instead we “pull out” the component of <span class="math inline">\(U\)</span> that is correlated with <span class="math inline">\(X\)</span>, namely <span class="math inline">\(V\)</span>. In effect we control for the “omitted variable” <span class="math inline">\(V\)</span>, hence the name <strong>control function</strong>.</p>
 </section>
-<section id="simulating-the-three-approaches" class="level2">
-<h2 class="anchored" data-anchor-id="simulating-the-three-approaches">Simulating the Three Approaches</h2>
+<section id="simulating-the-three-approaches" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="simulating-the-three-approaches"><span class="header-section-number">5</span> Simulating the Three Approaches</h2>
 <p>Perhaps that was all a bit abstract. Let’s make it concrete by simulating some data and actually <em>calculating</em> estimates of <span class="math inline">\(\beta\)</span> using each of the three approaches described above. Because this exercise relies on a sample of data rather than a population, estimates will replace parameters and residuals will replace error terms.</p>
 <p>To begin, we need to simulate <span class="math inline">\(Z\)</span> independently of <span class="math inline">\((U,V)\)</span>. For simplicity I’ll make these standard normal and set the correlation between <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> to 0.5.</p>
 <div class="cell">
@@ -474,8 +518,8 @@ Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
 </div>
 <p>It turns out that in this simple linear model with a single endogenous regressor and a single instrument, the three approaches are <em>numerically equivalent</em>. In other words, they give <em>exactly</em> the same answer. This will not necessarily be true in more complicated models, so be careful!</p>
 </section>
-<section id="epilogue" class="level2">
-<h2 class="anchored" data-anchor-id="epilogue">Epilogue</h2>
+<section id="epilogue" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">6</span> Epilogue</h2>
 <p>It’s time to admit that this post had a secret agenda: to introduce the idea of a control function in the <em>simplest way possible</em>! If you’re interested in learning more about control functions, a canonical example that <em>does not</em> turn out to be identical to IV is the so-called <strong>Heckman Selection Model</strong>, which you can learn more about <a href="https://www.economictricks.com/videos/">here</a>. (Scroll down until you see the heading “Heckman Selection Model.”) The basic logic is similar: to solve an endogeneity problem, use a first-stage regression to estimate an unobserved quantity that “soaks up” the part of the error term that is correlated with your endogenous regressor of interest. If these videos whet your appetite for more control function fun, <a href="http://jhr.uwpress.org/content/50/2/420.short">Wooldridge (2015)</a> provides a helpful overview along with many references to the econometrics literature.</p>
 
 
@@ -611,6 +655,231 @@ Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1016,6 +1285,19 @@ Y = \alpha + \beta X + U = \alpha + \beta X + \lambda V + \epsilon.
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

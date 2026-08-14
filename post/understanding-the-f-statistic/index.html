@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,63 +316,40 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#the-simplest-possible-example" id="toc-the-simplest-possible-example" class="nav-link active" data-scroll-target="#the-simplest-possible-example">The Simplest Possible Example</a></li>
-  <li><a href="#how-much-better-is-the-fit-of-the-unrestricted-regression" id="toc-how-much-better-is-the-fit-of-the-unrestricted-regression" class="nav-link" data-scroll-target="#how-much-better-is-the-fit-of-the-unrestricted-regression">How much better is the fit of the unrestricted regression?</a></li>
-  <li><a href="#sampling-uncertainty" id="toc-sampling-uncertainty" class="nav-link" data-scroll-target="#sampling-uncertainty">Sampling Uncertainty</a></li>
-  <li><a href="#while-were-here-we-might-as-well-carry-out-the-test" id="toc-while-were-here-we-might-as-well-carry-out-the-test" class="nav-link" data-scroll-target="#while-were-here-we-might-as-well-carry-out-the-test">While we’re here we might as well carry out the test!</a></li>
-  <li><a href="#the-bottom-line" id="toc-the-bottom-line" class="nav-link" data-scroll-target="#the-bottom-line">The Bottom Line</a></li>
-  <li><a href="#appendix-code" id="toc-appendix-code" class="nav-link" data-scroll-target="#appendix-code">Appendix: Code</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Teaching &amp; explainers</span>
+<span class="eyebrow-item">15 August 2021</span>
+<span class="eyebrow-item">19 min</span>
+
+</p>
 <h1 class="title">Understanding the F Statistic</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">econometrics</div>
-    <div class="quarto-category">teaching</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 15, 2021</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-simplest-possible-example" id="toc-the-simplest-possible-example"><span class="header-section-number">1</span> The Simplest Possible Example</a></li>
+  <li><a href="#how-much-better-is-the-fit-of-the-unrestricted-regression" id="toc-how-much-better-is-the-fit-of-the-unrestricted-regression"><span class="header-section-number">2</span> How much better is the fit of the unrestricted regression?</a></li>
+  <li><a href="#sampling-uncertainty" id="toc-sampling-uncertainty"><span class="header-section-number">3</span> Sampling Uncertainty</a></li>
+  <li><a href="#while-were-here-we-might-as-well-carry-out-the-test" id="toc-while-were-here-we-might-as-well-carry-out-the-test"><span class="header-section-number">4</span> While we’re here we might as well carry out the test!</a></li>
+  <li><a href="#the-bottom-line" id="toc-the-bottom-line"><span class="header-section-number">5</span> The Bottom Line</a></li>
+  <li><a href="#appendix-code" id="toc-appendix-code"><span class="header-section-number">6</span> Appendix: Code</a></li>
+  </ul>
+</nav>
 <p>The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses. In the simplest case, it can be written as <span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)}\]</span> where <span class="math inline">\(SSR_r\)</span> is the <em>restricted</em> sum of squared residuals, <span class="math inline">\(SSR_{u}\)</span> is the <em>unrestricted</em> sum of squared residuals, <span class="math inline">\(q\)</span> is the number of restrictions, and <span class="math inline">\((n - k - 1)\)</span> is the degrees of freedom of the unrestricted model.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add to a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the <span class="math inline">\(F\)</span> statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even <em>obvious</em>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Specifically, the “simplest case” refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity.</p></div></div><p>In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add to a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the <span class="math inline">\(F\)</span> statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even <em>obvious</em>.</p>
 <p>This is not a post about asymptotic theory, and it is not a post about heteroskedasticity. I will not prove that <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span>-distribution, and I will blithely assume that we inhabit the idealized textbook realm in which all errors are homoskedastic. I will also dodge the question of whether you should even be carrying out an F-test in the first place.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This is a post about understanding what the <span class="math inline">\(F\)</span>-statistic measures and why it takes the form that it does.</p>
-<section id="the-simplest-possible-example" class="level2">
-<h2 class="anchored" data-anchor-id="the-simplest-possible-example">The Simplest Possible Example</h2>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;See <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R-squared, and Other Distractions</a> for an insightful critique.</p></div></div><section id="the-simplest-possible-example" class="level2 page-columns page-full" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-simplest-possible-example"><span class="header-section-number">1</span> The Simplest Possible Example</h2>
 <p>The best way to understand the <span class="math inline">\(F\)</span>-statistic is by looking at an example that’s so simple that there’s no reason to use an <span class="math inline">\(F\)</span>-test in the first place. Here’s a dataset of students’ scores on two introductory statistics midterms that I gave many years ago:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>midterms <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'https://ditraglia.com/econ103/midterms.csv'</span>)</span>
@@ -335,7 +379,7 @@ window.Quarto = {
 </div>
 </div>
 <p>To keep this example as simple as possible, I’ll drop the missing observations.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Health warning: it <em>dangerous</em> to glibly drop missing observations in applied work! The key question is why those nine students missed the second exam. If their reasons for doing so are “as good as randomly assigned,” e.g.&nbsp;a death in the family or an unexpected illness or injury, these observations as <em>missing at random</em> (MAR). In this case, dropping them is statistically innocuous. If instead these students’ reasons for missing the exam are related to their course performance, then dropping their observations could yield a misleading picture of the underlying relationship between midterm scores.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>midterms <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(midterms)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s call student #4 Natalie: she scored 88% on the first midterm but missed the second. Suppose we wanted to predict how well Natalie <em>would have done</em> on the second midterm had she taken it. There are many ways that we could try to make this prediction. One possibility would be to ignore Natalie’s score on the first midterm, and predict that she would have scored 81.4 on the second: the average score among all students who took this exam. Another possibility would be to fit a linear regression to the scores of all students who took <em>both</em> exams and use this to project Natalie’s score on midterm two based on her score on midterm one. If scores on the two exams are correlated, option two seems like a better idea: Natalie outperformed the class average on midterm one by 8.4 or roughly 0.77 standard deviations. It seems reasonable to account for this when predicting her score on the second exam.</p>
@@ -344,7 +388,7 @@ window.Quarto = {
 \]</span> which is simply least squares without a predictor variable.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In contrast, the usual least-squares regression problem is <span class="math display">\[
 \min_{a,b} \sum_{i=1}^n (y_i - a - b x_i)^2
 \]</span> with solutions <span class="math inline">\(\hat{a} = \bar{y} - \hat{b} \bar{x}\)</span> and <span class="math inline">\(\hat{b} = s_{xy} / s_x^2\)</span>, where <span class="math inline">\(s_{xy}\)</span> is the sample covariance of scores on the two midterms and <span class="math inline">\(s_x^2\)</span> is the sample variance of scores on the first midterm. Notice how these two optimization problems are related: the first is a <em>restricted</em> (aka <em>constrained</em>) version of the second with the constraint <span class="math inline">\(b = 0\)</span>. In the discussion below, I will call the first of these the <em>restricted regression</em> and the second the <em>unrestricted regression</em>.</p>
-<p>It’s easy to fit these regressions in R. We’ll start with the restricted:</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;If you’re taking introductory statistics or econometrics it’s a good idea to try to prove this for yourself!</p></div></div><p>It’s easy to fit these regressions in R. We’ll start with the restricted:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>restricted <span class="ot">&lt;-</span> <span class="fu">lm</span>(Midterm2 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> midterms)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(restricted)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -403,10 +447,10 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 </div>
 <p>Because Natalie scored above the mean on the first exam, we predict that she will score above the mean on the second exam.</p>
 </section>
-<section id="how-much-better-is-the-fit-of-the-unrestricted-regression" class="level2">
-<h2 class="anchored" data-anchor-id="how-much-better-is-the-fit-of-the-unrestricted-regression">How much better is the fit of the unrestricted regression?</h2>
+<section id="how-much-better-is-the-fit-of-the-unrestricted-regression" class="level2 page-columns page-full" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="how-much-better-is-the-fit-of-the-unrestricted-regression"><span class="header-section-number">2</span> How much better is the fit of the unrestricted regression?</h2>
 <p>While I didn’t present it in this way, the choice between restricted and unrestricted regressions above could be formulated as a hypothesis test. The restricted regression imposes a zero regression slope, but the unrestricted regression doesn’t. In this case, we can test the restriction that the slope is in fact zero using simple t-test. Based on the t-statistic of 5.33 from above we would easily <em>reject</em> the restriction at any conventional significance level.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
-<p>But there’s another way to carry out the same test. Although it would be overkill in this example, the principles that underlie it can be used to carry out tests in more complicated situations where a simple t-test wouldn’t suffice. Rather than examining the slope estimate from the unrestricted regression, this alternative approach compares the <em>sum of squared residuals</em> (SSR) of the two regressions to see which does a better job of fitting the observed data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> It’s easy to compute the SSR of the two regressions from above using the <code>residuals()</code> function:</p>
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;If you’re familiar with the “trinity” of classical tests (Score/LM, Likelihood Ratio, and Wald), this reasoning amounts to a Wald test: fit the unrestricted model and use the distance between the parameter estimates and their values under the restriction to form a test statistic. If the unrestricted estimates are close enough to the restriction, don’t reject it.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;Again, if you’re familiar with the aforementioned “trinity” of tests, the procedure I’m about to describe amounts to a Likelihood Ratio Test: fit both the restricted and unrestricted models, and compare their maximized sample likelihoods. If the likelihoods are similar, don’t reject the restriction.</p></div></div><p>But there’s another way to carry out the same test. Although it would be overkill in this example, the principles that underlie it can be used to carry out tests in more complicated situations where a simple t-test wouldn’t suffice. Rather than examining the slope estimate from the unrestricted regression, this alternative approach compares the <em>sum of squared residuals</em> (SSR) of the two regressions to see which does a better job of fitting the observed data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> It’s easy to compute the SSR of the two regressions from above using the <code>residuals()</code> function:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SSR_u <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(unrestricted)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>SSR_r <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(restricted)<span class="sc">^</span><span class="dv">2</span>)</span>
@@ -428,7 +472,7 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 </div>
 <p>Notice that the restricted regression line is flat because it does not use scores on the first midterm to predict those on the second. The lower SSR of the unrestricted model reflects the fact that the observations in the <code>midterms</code> dataset are on average <em>closer</em> to a line with slope 0.6 and intercept 32.6 than they are to a line with slope zero and intercept 81.4.</p>
 <p>To understand this picture, it helps to think about the following question: is it possible for the unrestricted regression to have a <em>higher</em> SSR than the restricted one? Recall from above that each of these regressions is the solution to an optimization problem. The difference between them is that the restricted regression imposes a <em>constraint</em> while the unrestricted regression doesn’t. If the best slope for predicting second midterm scores using first midterm scores is zero, the unrestricted regression is free to set <span class="math inline">\(b = 0\)</span>. In this case its estimates would coincide with those of the restricted regression. On the other hand, if the best slope <em>isn’t</em> zero that means some other choice of <span class="math inline">\(b\)</span> by definition results in a lower SSR: linear regression chooses the line whose slope and intercept minimize the squared vertical deviations between the data and the line. The restricted regression is <em>forced</em> to have <span class="math inline">\(b = 0\)</span>, so in this case it must do a worse job fitting the data.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> This reasoning shows that we will <em>always</em> find that the SSR of the restricted model is at least as large as that of the unrestricted model.</p>
-<p>We shouldn’t be surprised to see that the unrestricted regression “fits the data” better than the restricted one: it can’t do otherwise unless the sample correlation between midterm scores is exactly zero. But there is still the question of <em>how much better</em> it fits. Taking differences tells us how much larger the SSR of the restricted model is compared to that of the unrestricted model:</p>
+<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;More generally, imposing a constraint can never result in a <em>better</em> solution to an optimization problem: at best it can leave the optimum unchanged.</p></div></div><p>We shouldn’t be surprised to see that the unrestricted regression “fits the data” better than the restricted one: it can’t do otherwise unless the sample correlation between midterm scores is exactly zero. But there is still the question of <em>how much better</em> it fits. Taking differences tells us how much larger the SSR of the restricted model is compared to that of the unrestricted model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>SSR_r <span class="sc">-</span> SSR_u</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -448,11 +492,11 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 \frac{\text{GDP}_{2021} - \text{GDP}_{1921}}{\text{GDP}_{1921}}
 \]</span> assuming, of course, that both of these figures are corrected for inflation! This is precisely the same reasoning that we used above: the SSR “grows” when we impose a restriction. We want to know how much it grows as a percentage. The answer is 0.41 or equivalently 41%.</p>
 </section>
-<section id="sampling-uncertainty" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-uncertainty">Sampling Uncertainty</h2>
+<section id="sampling-uncertainty" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="sampling-uncertainty"><span class="header-section-number">3</span> Sampling Uncertainty</h2>
 <p>We’ve <em>nearly</em> arrived at the F-statistic. To see what’s missing, we’ll use a bit of algebra to re-write it as <span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)} = \left(\frac{SSR_r - SSR_u}{SSR_u}\right) \left(\frac{n - k - 1}{q}\right).\]</span> We obtained the first factor on the RHS, <span class="math inline">\((SSR_r - SSR_u) / SSR_u\)</span>, simply by reasoning about units and the nature of constrained versus unconstrained optimization problems. Stop for a minute and appreciate how impressive this is: simple intuition has taken us halfway to this rather formidable-looking expression. To understand the second factor, we need to think about sampling uncertainty.</p>
 <p>In the midterms example we found that the restricted regression SSR was 41% larger than the unrestricted one. Is this a big difference or a small one? Units don’t enter into it, because we have already eliminated them. But the <code>midterms</code> dataset only contains information on 71 students. If we merely want to summarize the relationship between test scores for these students, there is no role for statistical inference: summary statistics suffice. Tests and confidence intervals enter the picture when we hope to <em>generalize</em> from an observed sample to the population from which it was drawn. Imagine a large population of introductory statistics students who took my two midterms. Now suppose that we observe a random sample of 71 students from this population. How much information do the observed exam scores for <em>these students</em> provide about the relationship between midterm scores that we <em>in the population</em>?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
-<p>The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population. We can see this in the expression for the standard error of the sample mean: <span class="math inline">\(\text{SE}(\bar{X}) = \sigma_x/\sqrt{n}\)</span>. The larger the sample size, the smaller the standard error, all else equal. Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic. The same reasoning applies to the F-statistic above. The numerator <span class="math inline">\((n - k - 1)\)</span> in the second factor increases with the sample size <span class="math inline">\(n\)</span>. This <em>magnifies</em> the effect of the first factor. An <span class="math inline">\(SSR_r\)</span> that is 41% higher than the <span class="math inline">\(SSR_u\)</span> is “more impressive” evidence when the sample size is <span class="math inline">\(1000\)</span> than when it is <span class="math inline">\(10\)</span>. Small samples are intrinsically more variable than large ones, so we should expect them to turn up anomalous results more frequently. The F-statistic takes this into account.</p>
+<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief.</p></div></div><p>The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population. We can see this in the expression for the standard error of the sample mean: <span class="math inline">\(\text{SE}(\bar{X}) = \sigma_x/\sqrt{n}\)</span>. The larger the sample size, the smaller the standard error, all else equal. Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic. The same reasoning applies to the F-statistic above. The numerator <span class="math inline">\((n - k - 1)\)</span> in the second factor increases with the sample size <span class="math inline">\(n\)</span>. This <em>magnifies</em> the effect of the first factor. An <span class="math inline">\(SSR_r\)</span> that is 41% higher than the <span class="math inline">\(SSR_u\)</span> is “more impressive” evidence when the sample size is <span class="math inline">\(1000\)</span> than when it is <span class="math inline">\(10\)</span>. Small samples are intrinsically more variable than large ones, so we should expect them to turn up anomalous results more frequently. The F-statistic takes this into account.</p>
 <p>So why <span class="math inline">\((n - k - 1)\)</span> rather than <span class="math inline">\(n\)</span>? This is a so-called “degrees of freedom correction.” By estimating <span class="math inline">\(k\)</span> regression slope parameters and <span class="math inline">\(1\)</span> intercept parameter, we “use up” <span class="math inline">\((k + 1)\)</span> of the observations, leaving only <span class="math inline">\((n - k - 1)\)</span> pieces of truly independent information. This is not particularly intuitive. In a stunning departure from my usual advice to introductory statistics and econometrics students, I suggest that you simply memorize this part of the F-statistic. It may help to notice that the same degrees of freedom correction appears in the expression for the standard error of the regression, <span class="math inline">\(SER \equiv \sqrt{SSR/(n - k - 1)}\)</span>, a measure of the average distance that the observed data fall from the regression line.</p>
 <p>The only as-yet-unexplained quantity in the F-test statistic is <span class="math inline">\(q\)</span>. This denotes the <em>number of restrictions</em> imposed by the restricted model. Counting restrictions is the same thing as counting equals signs. In a regression of the form <span class="math inline">\(Y = \beta_0 + \beta_1 X + U\)</span> a restriction of the form <span class="math inline">\(\beta_1 = 1\)</span> gives <span class="math inline">\(q = 1\)</span> because there it takes a single equals sign to assert that <span class="math inline">\(\beta_1\)</span> equals one. More complicated regressions allow more complicated kinds of restrictions. For example, in the regression <span class="math display">\[
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
@@ -471,10 +515,10 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
 </div>
 <p>Even though the restrictions are <em>true</em> in this simulation study, the restricted SSR is 91% larger than the unrestricted SSR purely due to sampling variability. The F-statistic explicitly takes this phenomenon into account via the scaling factor <span class="math inline">\((n - k - 1) / q\)</span>. What matters is not the sample size <em>per se</em>, but the sample size <em>relative</em> to the number of restrictions imposed by the restricted regression.</p>
 </section>
-<section id="while-were-here-we-might-as-well-carry-out-the-test" class="level2">
-<h2 class="anchored" data-anchor-id="while-were-here-we-might-as-well-carry-out-the-test">While we’re here we might as well carry out the test!</h2>
+<section id="while-were-here-we-might-as-well-carry-out-the-test" class="level2 page-columns page-full" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="while-were-here-we-might-as-well-carry-out-the-test"><span class="header-section-number">4</span> While we’re here we might as well carry out the test!</h2>
 <p>Now that we understand why the F-test statistic takes the form that it does, let’s carry out the F-test in each of the two examples from above: <code>midterms</code> and <code>sim_dat</code>. Under the null hypothesis that the constraints imposed by the restricted regression are <em>correct</em>, the F-test statistic follows an <span class="math inline">\(F(q, n-k-1)\)</span> distribution.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> For the <code>midterms</code> dataset our test statistic is</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;Strictly speaking this requires the regression errors to be normally distributed and homoskedastic. If the errors are non-normal but homoskedastic, then the F-statistic is approximately distributed as an <span class="math inline">\(F(q, \infty)\)</span> random variable for large <span class="math inline">\(n\)</span>. Life is much more complicated under heteroskedasticity, but this is a topic for a future post!</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>F_midterms <span class="ot">&lt;-</span> ((SSR_r <span class="sc">-</span> SSR_u) <span class="sc">/</span> SSR_u) <span class="sc">*</span> (<span class="dv">71</span> <span class="sc">-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">1</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>F_midterms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -514,12 +558,12 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
 </div>
 <p>In this case we would <em>fail to reject</em> the restrictions. Indeed, the restrictions are <em>true</em>: my simulation generated regressors that are completely independent of <span class="math inline">\(Y\)</span>!</p>
 </section>
-<section id="the-bottom-line" class="level2">
-<h2 class="anchored" data-anchor-id="the-bottom-line">The Bottom Line</h2>
+<section id="the-bottom-line" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="the-bottom-line"><span class="header-section-number">5</span> The Bottom Line</h2>
 <p>The F-statistic is a product of two factors. The first factor measures how much larger the sum of squared residuals becomes in percentage terms when we impose the restriction. We use a relative comparison to eliminate units from the problem. The second factor accounts for sampling variability. The larger the sample size <span class="math inline">\(n\)</span> relative to the number of restrictions <span class="math inline">\(q\)</span>, the more we “inflate” the value of the first factor. The only thing you need to memorize is the degrees of freedom correction: <span class="math inline">\((n - k - 1)\)</span>.</p>
 </section>
-<section id="appendix-code" class="level2">
-<h2 class="anchored" data-anchor-id="appendix-code">Appendix: Code</h2>
+<section id="appendix-code" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="appendix-code"><span class="header-section-number">6</span> Appendix: Code</h2>
 <p>I used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:</p>
 <p>and the following code to generate the data contained in <code>sim_data</code></p>
 
@@ -527,20 +571,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Specifically, the “simplest case” refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>See <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R-squared, and Other Distractions</a> for an insightful critique.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Health warning: it <em>dangerous</em> to glibly drop missing observations in applied work! The key question is why those nine students missed the second exam. If their reasons for doing so are “as good as randomly assigned,” e.g.&nbsp;a death in the family or an unexpected illness or injury, these observations as <em>missing at random</em> (MAR). In this case, dropping them is statistically innocuous. If instead these students’ reasons for missing the exam are related to their course performance, then dropping their observations could yield a misleading picture of the underlying relationship between midterm scores.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>If you’re taking introductory statistics or econometrics it’s a good idea to try to prove this for yourself!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>If you’re familiar with the “trinity” of classical tests (Score/LM, Likelihood Ratio, and Wald), this reasoning amounts to a Wald test: fit the unrestricted model and use the distance between the parameter estimates and their values under the restriction to form a test statistic. If the unrestricted estimates are close enough to the restriction, don’t reject it.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Again, if you’re familiar with the aforementioned “trinity” of tests, the procedure I’m about to describe amounts to a Likelihood Ratio Test: fit both the restricted and unrestricted models, and compare their maximized sample likelihoods. If the likelihoods are similar, don’t reject the restriction.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>More generally, imposing a constraint can never result in a <em>better</em> solution to an optimization problem: at best it can leave the optimum unchanged.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>Strictly speaking this requires the regression errors to be normally distributed and homoskedastic. If the errors are non-normal but homoskedastic, then the F-statistic is approximately distributed as an <span class="math inline">\(F(q, \infty)\)</span> random variable for large <span class="math inline">\(n\)</span>. Life is much more complicated under heteroskedasticity, but this is a topic for a future post!<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -670,6 +701,231 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1075,6 +1331,19 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

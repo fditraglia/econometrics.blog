@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,88 +316,42 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#two-examples" id="toc-two-examples" class="nav-link" data-scroll-target="#two-examples">Two Examples</a>
-  <ul class="collapse">
-  <li><a href="#example-1---discrete-rvs-xy" id="toc-example-1---discrete-rvs-xy" class="nav-link" data-scroll-target="#example-1---discrete-rvs-xy">Example #1 - Discrete RVs <span class="math inline">\((X,Y)\)</span></a></li>
-  <li><a href="#example-2---continuous-rvs-wz" id="toc-example-2---continuous-rvs-wz" class="nav-link" data-scroll-target="#example-2---continuous-rvs-wz">Example #2 - Continuous RVs <span class="math inline">\((W,Z)\)</span></a></li>
-  </ul></li>
-  <li><a href="#uncorrelatedness" id="toc-uncorrelatedness" class="nav-link" data-scroll-target="#uncorrelatedness">Uncorrelatedness</a>
-  <ul class="collapse">
-  <li><a href="#example-1-x-and-y-are-uncorrelated." id="toc-example-1-x-and-y-are-uncorrelated." class="nav-link" data-scroll-target="#example-1-x-and-y-are-uncorrelated.">Example #1: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated.</a></li>
-  <li><a href="#example-2-w-and-z-are-uncorrelated." id="toc-example-2-w-and-z-are-uncorrelated." class="nav-link" data-scroll-target="#example-2-w-and-z-are-uncorrelated.">Example #2: <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are uncorrelated.</a></li>
-  </ul></li>
-  <li><a href="#conditional-mean-independence" id="toc-conditional-mean-independence" class="nav-link" data-scroll-target="#conditional-mean-independence">Conditional Mean Independence</a>
-  <ul class="collapse">
-  <li><a href="#example-1-x-is-mean-independent-of-y." id="toc-example-1-x-is-mean-independent-of-y." class="nav-link" data-scroll-target="#example-1-x-is-mean-independent-of-y.">Example #1: <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>.</a></li>
-  <li><a href="#example-1-y-is-not-mean-independent-of-x." id="toc-example-1-y-is-not-mean-independent-of-x." class="nav-link" data-scroll-target="#example-1-y-is-not-mean-independent-of-x.">Example #1: <span class="math inline">\(Y\)</span> is <em>NOT</em> mean independent of <span class="math inline">\(X\)</span>.</a></li>
-  <li><a href="#example-2-z-is-not-mean-independent-of-w." id="toc-example-2-z-is-not-mean-independent-of-w." class="nav-link" data-scroll-target="#example-2-z-is-not-mean-independent-of-w.">Example #2: <span class="math inline">\(Z\)</span> is <em>NOT</em> mean independent of <span class="math inline">\(W\)</span>.</a></li>
-  <li><a href="#example-2-w-is-mean-independent-of-z." id="toc-example-2-w-is-mean-independent-of-z." class="nav-link" data-scroll-target="#example-2-w-is-mean-independent-of-z.">Example #2: <span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span>.</a></li>
-  </ul></li>
-  <li><a href="#statistical-independence" id="toc-statistical-independence" class="nav-link" data-scroll-target="#statistical-independence">Statistical Independence</a>
-  <ul class="collapse">
-  <li><a href="#example-1-x-and-y-are-not-independent." id="toc-example-1-x-and-y-are-not-independent." class="nav-link" data-scroll-target="#example-1-x-and-y-are-not-independent.">Example #1: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <em>NOT</em> independent.</a></li>
-  <li><a href="#example-2-w-and-z-are-not-independent." id="toc-example-2-w-and-z-are-not-independent." class="nav-link" data-scroll-target="#example-2-w-and-z-are-not-independent.">Example #2: <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are <em>NOT</em> independent.</a></li>
-  </ul></li>
-  <li><a href="#relating-the-three-properties" id="toc-relating-the-three-properties" class="nav-link" data-scroll-target="#relating-the-three-properties">Relating the Three Properties</a>
-  <ul class="collapse">
-  <li><a href="#uncorrelatedness-and-statistical-independence-are-symmetric" id="toc-uncorrelatedness-and-statistical-independence-are-symmetric" class="nav-link" data-scroll-target="#uncorrelatedness-and-statistical-independence-are-symmetric">Uncorrelatedness and Statistical Independence are Symmetric</a></li>
-  <li><a href="#statistical-independence-implies-conditional-mean-independence" id="toc-statistical-independence-implies-conditional-mean-independence" class="nav-link" data-scroll-target="#statistical-independence-implies-conditional-mean-independence">Statistical Independence Implies Conditional Mean Independence</a></li>
-  <li><a href="#conditional-mean-independence-implies-uncorrelatedness" id="toc-conditional-mean-independence-implies-uncorrelatedness" class="nav-link" data-scroll-target="#conditional-mean-independence-implies-uncorrelatedness">Conditional Mean Independence Implies Uncorrelatedness</a></li>
-  </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Teaching &amp; explainers</span>
+<span class="eyebrow-item">1 January 2023</span>
+<span class="eyebrow-item">14 min</span>
+<span class="eyebrow-item">Part II of II</span>
+</p>
 <h1 class="title">Why Econometrics is Confusing Part II: The Independence Zoo</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">econometrics</div>
-    <div class="quarto-category">teaching</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">January 1, 2023</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites"><span class="header-section-number">1</span> Prerequisites</a></li>
+  <li><a href="#two-examples" id="toc-two-examples"><span class="header-section-number">2</span> Two Examples</a></li>
+  <li><a href="#uncorrelatedness" id="toc-uncorrelatedness"><span class="header-section-number">3</span> Uncorrelatedness</a></li>
+  <li><a href="#conditional-mean-independence" id="toc-conditional-mean-independence"><span class="header-section-number">4</span> Conditional Mean Independence</a></li>
+  <li><a href="#statistical-independence" id="toc-statistical-independence"><span class="header-section-number">5</span> Statistical Independence</a></li>
+  <li><a href="#relating-the-three-properties" id="toc-relating-the-three-properties"><span class="header-section-number">6</span> Relating the Three Properties</a></li>
+  <li><a href="#summary" id="toc-summary"><span class="header-section-number">7</span> Summary</a></li>
+  </ul>
+</nav>
 <p>In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical introductory econometrics course moves back and forth between different notions of dependence, stopping occasionally to mention that they’re not equivalent but never fully explaining why, on the premise that “you’ve certainly already learned this in your introductory probability and statistics course.” I remember finding this extremely frustrating as a student, but only recently managed to translate this frustration into meaningful changes in my own teaching.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Building on some of my recent teaching materials, this post is a field guide to the menagerie–or at least petting zoo–of “dependence” notions that appear regularly in econometrics. We’ll examine each property on its own along with the relationships between them, using the simple examples to build your intuition. Since a picture is worth a thousand words, here’s one that summarizes the entire post:</p>
 <!-- Rendered by TeX Live: latex writes a DVI, dvisvgm turns it into SVG. The
      dvisvgm class option makes pgf emit SVG directly instead of PostScript, so
      no Ghostscript is needed; --no-fonts converts glyphs to outlines, so the
      figure carries no font references. See CLAUDE.md. -->
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;It turns out that teaching well is extremely hard. I am incredibly grateful to those intrepid souls who bravely raise their hand and inform me that no one in the room has any idea what I’m talking about!</p></div></div><div class="cell">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -340,8 +361,8 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<section id="prerequisites" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">1</span> Prerequisites</h2>
 <p>While written at an introductory level, this post assumes basic familiarity with calculations involving discrete and continuous random variables. In particular, I assume that:</p>
 <ul>
 <li>You know the definitions of expected value, variance, covariance, and correlation.</li>
@@ -351,8 +372,8 @@ window.Quarto = {
 </ul>
 <p>If you’re a bit rusty on this material, lectures 7-11 from <a href="http://ditraglia.com/Econ103Public/slides/lecture_slides.pdf">these slides</a> should be helpful. For bivariate, discrete distributions I also suggest watching <a href="https://vimeo.com/119881985">this video</a> from 1:07:00 to the end and <a href="https://vimeo.com/141473625">this other video</a> from 0:00:00 up to the one hour mark.</p>
 </section>
-<section id="two-examples" class="level2">
-<h2 class="anchored" data-anchor-id="two-examples">Two Examples</h2>
+<section id="two-examples" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="two-examples"><span class="header-section-number">2</span> Two Examples</h2>
 <section id="example-1---discrete-rvs-xy" class="level3">
 <h3 class="anchored" data-anchor-id="example-1---discrete-rvs-xy">Example #1 - Discrete RVs <span class="math inline">\((X,Y)\)</span></h3>
 <p>My first example involves two discrete random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> with joint probability mass function <span class="math inline">\(p_{XY}(x,y)\)</span> given by</p>
@@ -408,8 +429,8 @@ $U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need 
 -->
 </section>
 </section>
-<section id="uncorrelatedness" class="level2">
-<h2 class="anchored" data-anchor-id="uncorrelatedness">Uncorrelatedness</h2>
+<section id="uncorrelatedness" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="uncorrelatedness"><span class="header-section-number">3</span> Uncorrelatedness</h2>
 <p>Recall that the correlation between two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is defined as <span class="math display">\[
 \text{Corr}(X,Y) \equiv \frac{\text{Cov}(X,Y)}{\text{SD}(X)\text{SD}(Y)} = \frac{\mathbb{E}[(X - \mu_X)(Y - \mu_Y)]}{\sqrt{\mathbb{E}[(X - \mu_X)^2]\mathbb{E}[(Y - \mu_Y)^2]}}
 \]</span> where <span class="math inline">\(\mu_X \equiv \mathbb{E}(X)\)</span> and <span class="math inline">\(\mu_Y \equiv \mathbb{E}(Y)\)</span>. We say that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>uncorrelated</strong> if <span class="math inline">\(\text{Corr}(X,Y)= 0\)</span>. Unless <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both constants their variances must be positive. This means that the denominator of our expression for <span class="math inline">\(\text{Corr}(X,Y)\)</span> is likewise positive. It follows that <em>zero correlation is the same thing as zero covariance</em>. Correlation is simply covariance <em>rescaled</em> so that the units of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> cancel out and the result always lies between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>.</p>
@@ -425,7 +446,7 @@ $U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need 
 <h3 class="anchored" data-anchor-id="example-1-x-and-y-are-uncorrelated.">Example #1: <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated.</h3>
 <p>In Example #1 from above, <span class="math inline">\(\mathbb{E}[XY]=0\)</span> and <span class="math inline">\(\mathbb{E}(X)\mathbb{E}(Y) = 0 \times 1/3 = 0\)</span> so <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated. Lack of correlation is one possible way in which two random variables can be thought of as “unrelated.” But it is a relatively <em>weak</em> property. Indeed, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are in fact <em>highly dependent</em> in Example #1. For example, if <span class="math inline">\(X=-1\)</span> then we know for sure that <span class="math inline">\(Y=0\)</span>. I simply cooked up the numbers to ensure that <span class="math inline">\(\mathbb{E}[XY]=\mathbb{E}[X]\mathbb{E}[Y]\)</span> in spite of this.</p>
 </section>
-<section id="example-2-w-and-z-are-uncorrelated." class="level3">
+<section id="example-2-w-and-z-are-uncorrelated." class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="example-2-w-and-z-are-uncorrelated.">Example #2: <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are uncorrelated.</h3>
 <p>Because Example #1 is discrete, it can be a bit tricky to think about what it would mean for a dependence relationship to be <em>nonlinear</em>. Here Example #2 can help. As mentioned above, there is clearly a relationship between <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span>. But this relationship is <em>nonlinear</em> in that <span class="math inline">\(Z\)</span> is a <em>quadratic</em> function of <span class="math inline">\(W\)</span>. Since <span class="math inline">\(\mathbb{E}(WZ) = 0\)</span> and <span class="math inline">\(\mathbb{E}(W) \times \mathbb{E}(Z) = 0 \times \mathbb{E}(Z) = 0\)</span>, we see that <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> are <em>uncorrelated</em>. Another way to see this is by simulating some data with the same properties as Example #2</p>
 <div class="cell">
@@ -448,10 +469,10 @@ $U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need 
 </div>
 </div>
 <p>The regression line is flat despite there being an obvious relationship between <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span>. When <span class="math inline">\(W\)</span> is positive, there is a positive relationship between the two RVs; but when <span class="math inline">\(W\)</span> is negative the picture is reverses. The line of best fit “averages out” the increasing and decreasing relationships on either side of zero to give an overall slope of zero.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;I used a small number of simulation draws so it would be easier to see the data in the plot. If you use a larger number of simulations, the correlation will be even closer to zero and the line almost perfectly flat.</p></div></div></section>
 </section>
-</section>
-<section id="conditional-mean-independence" class="level2">
-<h2 class="anchored" data-anchor-id="conditional-mean-independence">Conditional Mean Independence</h2>
+<section id="conditional-mean-independence" class="level2 page-columns page-full" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="conditional-mean-independence"><span class="header-section-number">4</span> Conditional Mean Independence</h2>
 <p>We say that <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> if <span class="math inline">\(\mathbb{E}(Y|X) = \mathbb{E}(Y)\)</span>. In words,</p>
 <blockquote class="blockquote">
 <p><span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span> if the conditional mean of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span> equals the unconditional mean of <span class="math inline">\(Y\)</span>.</p>
@@ -460,7 +481,7 @@ $U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need 
 <p>To better understand the concept of mean independence, let’s quickly review the difference between an unconditional mean and a conditional mean. The unconditional mean <span class="math inline">\(\mathbb{E}(Y)\)</span>, also known as the “expected value” or “expectation” of <span class="math inline">\(Y\)</span>, is a <em>constant number</em>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> If <span class="math inline">\(Y\)</span> is discrete, this is simply the probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>, namely <span class="math display">\[
 \mathbb{E}(Y) = \sum_{\text{all } y} y \cdot p_Y(y).
 \]</span> If <span class="math inline">\(Y\)</span> is continuous, it’s the same idea but with an integral replacing the sum and a probability density <span class="math inline">\(f_Y(y)\)</span> multiplied by <span class="math inline">\(dy\)</span> replacing the probability mass function <span class="math inline">\(p_Y(y)\)</span>. Either way, we’re simply multiplying numbers together and adding up the result. Despite the similarity in notation, the conditional expectation <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a <em>function of <span class="math inline">\(X\)</span></em> that tells us how the mean of <span class="math inline">\(Y\)</span> varies with <span class="math inline">\(X\)</span>. Since <span class="math inline">\(X\)</span> is a random variable, so is <span class="math inline">\(\mathbb{E}(Y|X)\)</span>. If <span class="math inline">\(Y\)</span> is conditionally mean independent of <span class="math inline">\(X\)</span> then <span class="math inline">\(\mathbb{E}(Y|X)\)</span> equals <span class="math inline">\(\mathbb{E}(Y)\)</span>. In words, the mean of <span class="math inline">\(Y\)</span> <em>does not vary with <span class="math inline">\(X\)</span></em>. Regardless of the value that <span class="math inline">\(X\)</span> takes on, the mean of <span class="math inline">\(Y\)</span> is the same: <span class="math inline">\(\mathbb{E}(Y)\)</span>.</p>
-<p>There’s another way to think about this property in terms of <em>prediction</em>. With a bit of calculus, we can show that <span class="math inline">\(\mathbb{E}(Y)\)</span> solves the following optimization problem: <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Throughout this post, I make the tacit assumption that all means–conditional or unconditional–exist and are finite.</p></div></div><p>There’s another way to think about this property in terms of <em>prediction</em>. With a bit of calculus, we can show that <span class="math inline">\(\mathbb{E}(Y)\)</span> solves the following optimization problem: <span class="math display">\[
 \min_{\text{all constants } c} \mathbb{E}[(Y - c)^2].
 \]</span> In other words, <span class="math inline">\(\mathbb{E}(Y)\)</span> is the <em>constant number</em> that is as close as possible to <span class="math inline">\(Y\)</span> on average, where “close” is measured by squared euclidean distance. In this sense, we can think of <span class="math inline">\(\mathbb{E}(Y)\)</span> as our “best guess” of the value that <span class="math inline">\(Y\)</span> will take. Again using a bit of calculus, it turns out that <span class="math inline">\(\mathbb{E}(Y|X)\)</span> solves the following optimization problem: <span class="math display">\[
 \min_{\text{all functions } g} \mathbb{E}[\{Y - g(X) \}^2].
@@ -503,8 +524,8 @@ $U|V=v \sim \text{Normal}(0, 1 + 3v)$ where $V\sim \text{Bernoulli}(1/2)$. Need 
 \]</span> Above we calculated that <span class="math inline">\(\mathbb{E}(W) = 0\)</span>. Therefore, <span class="math inline">\(W\)</span> is mean independent of <span class="math inline">\(Z\)</span>.</p>
 </section>
 </section>
-<section id="statistical-independence" class="level2">
-<h2 class="anchored" data-anchor-id="statistical-independence">Statistical Independence</h2>
+<section id="statistical-independence" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="statistical-independence"><span class="header-section-number">5</span> Statistical Independence</h2>
 <p>When you see the word “independent” without any qualification, this means “statistically independent.” In keeping with this usage, I often write “independent” rather than “statistically independent.” Whichever terminology you prefer, there are three equivalent ways of defining this idea:</p>
 <blockquote class="blockquote">
 <p><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are statistically independent if and only if:</p>
@@ -537,8 +558,8 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
 <p>Again, this one is easy: learning that <span class="math inline">\(W = w\)</span> tells us that <span class="math inline">\(Z = w^2\)</span>. We didn’t know this before, so <span class="math inline">\(W\)</span> and <span class="math inline">\(Z\)</span> cannot be independent.</p>
 </section>
 </section>
-<section id="relating-the-three-properties" class="level2">
-<h2 class="anchored" data-anchor-id="relating-the-three-properties">Relating the Three Properties</h2>
+<section id="relating-the-three-properties" class="level2 page-columns page-full" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="relating-the-three-properties"><span class="header-section-number">6</span> Relating the Three Properties</h2>
 <p>Now that we’ve described uncorrelatedness, mean independence, and statistical independence, we’re ready to see how these properties relate to one another. Let’s start by reviewing what we learned from the examples given above. In example #1:</p>
 <ul>
 <li><span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated</li>
@@ -560,11 +581,11 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
 <li>Mean independence is <strong>NOT SYMMETRIC</strong>: <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, but <span class="math inline">\(Y\)</span> is not mean independent of <span class="math inline">\(X\)</span>.</li>
 </ol>
 <p>Now that we have a handle on what’s <em>not true</em>, let’s see what can be said about correlation, mean independence, and statistical independence.</p>
-<section id="uncorrelatedness-and-statistical-independence-are-symmetric" class="level3">
+<section id="uncorrelatedness-and-statistical-independence-are-symmetric" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="uncorrelatedness-and-statistical-independence-are-symmetric">Uncorrelatedness and Statistical Independence are Symmetric</h3>
 <p>In the equality <span class="math inline">\(\mathbb{E}(XY) = \mathbb{E}(X) \mathbb{E}(Y)\)</span>, nothing changes if we swap the roles of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>; this statement is equivalent to <span class="math inline">\(\mathbb{E}(YX) = \mathbb{E}(Y) \mathbb{E}(X)\)</span>. This shows that uncorrelatedness is <em>symmetric</em>. The same goes for statistical independence: we showed that <span class="math inline">\(p_{Y|X} = p_Y\)</span> is equivalent to <span class="math inline">\(p_{X|Y} = p_X\)</span> above. In contrast, mean independence is not symmetric: <span class="math inline">\(X\)</span> can be mean independent of <span class="math inline">\(Y\)</span> without <span class="math inline">\(Y\)</span> being mean independent of <span class="math inline">\(X\)</span>.</p>
 <p>Here’s an analogy: uncorrelatedness and independence are like the relation “being biological siblings.” If <span class="math inline">\(X\)</span> is the sibling of <span class="math inline">\(Y\)</span>, then <span class="math inline">\(Y\)</span> must be the sibling of <span class="math inline">\(X\)</span> because “being siblings” is defined as “having the same parents.” In contrast, mean independence is like the relation “being in love.” Sadly, it’s possible for <span class="math inline">\(X\)</span> to be in love with <span class="math inline">\(Y\)</span> despite <span class="math inline">\(Y\)</span> not being in love with <span class="math inline">\(X\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
-</section>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;But on the plus side, we got a lot of great pop songs out of the deal!</p></div></div></section>
 <section id="statistical-independence-implies-conditional-mean-independence" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-independence-implies-conditional-mean-independence">Statistical Independence Implies Conditional Mean Independence</h3>
 <p>Statistical independence is the “strongest” of the three properties: it implies both mean independence and uncorrelatedness. We’ll show this in two steps. In the first step, we’ll show that statistical independence implies mean independence. In the second step we’ll show that mean independence implies uncorrelatedness. Then we’ll bring this overly-long blog post to a close! Suppose that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are discrete random variables. (For the continuous case, replace sums with integrals.) If <span class="math inline">\(X\)</span> is statistically independent of <span class="math inline">\(Y\)</span>, then <span class="math inline">\(p_{Y|X} = p_Y\)</span> and <span class="math inline">\(p_{X|Y} = p_X\)</span>. Hence, <span class="math display">\[
@@ -584,8 +605,8 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
 \]</span> Therefore, if either <span class="math inline">\(X\)</span> is mean independent of <span class="math inline">\(Y\)</span>, or <span class="math inline">\(Y\)</span> is mean independent of <span class="math inline">\(X\)</span>, or both, then <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are uncorrelated. Since statistical independence implies mean independence, it follows that statistical independence implies uncorrelatedness. And we’re finally done!</p>
 </section>
 </section>
-<section id="summary" class="level2">
-<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<section id="summary" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="summary"><span class="header-section-number">7</span> Summary</h2>
 <p>In this post we have shown that:</p>
 <ul>
 <li>Statistical Independence <span class="math inline">\(\implies\)</span> Mean Independence <span class="math inline">\(\implies\)</span> Uncorrelatedness.</li>
@@ -599,15 +620,7 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>It turns out that teaching well is extremely hard. I am incredibly grateful to those intrepid souls who bravely raise their hand and inform me that no one in the room has any idea what I’m talking about!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>I used a small number of simulation draws so it would be easier to see the data in the plot. If you use a larger number of simulations, the correlation will be even closer to zero and the line almost perfectly flat.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Throughout this post, I make the tacit assumption that all means–conditional or unconditional–exist and are finite.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>But on the plus side, we got a lot of great pop songs out of the deal!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -737,6 +750,231 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1142,6 +1380,19 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

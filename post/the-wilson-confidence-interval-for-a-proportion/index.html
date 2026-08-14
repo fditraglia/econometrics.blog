@@ -73,6 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -82,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -110,9 +111,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -131,43 +135,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -220,23 +291,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -249,68 +316,46 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#tests-and-cis-two-sides-of-the-same-coin" id="toc-tests-and-cis-two-sides-of-the-same-coin" class="nav-link active" data-scroll-target="#tests-and-cis-two-sides-of-the-same-coin">Tests and CIs – Two Sides of the Same Coin</a></li>
-  <li><a href="#how-to-confuse-your-introductory-statistics-students" id="toc-how-to-confuse-your-introductory-statistics-students" class="nav-link" data-scroll-target="#how-to-confuse-your-introductory-statistics-students">How to Confuse Your Introductory Statistics Students</a></li>
-  <li><a href="#should-we-teach-the-wald-test-instead" id="toc-should-we-teach-the-wald-test-instead" class="nav-link" data-scroll-target="#should-we-teach-the-wald-test-instead">Should we teach the Wald test instead?</a></li>
-  <li><a href="#inverting-the-score-test" id="toc-inverting-the-score-test" class="nav-link" data-scroll-target="#inverting-the-score-test">Inverting the Score Test</a></li>
-  <li><a href="#understanding-the-wilson-interval" id="toc-understanding-the-wilson-interval" class="nav-link" data-scroll-target="#understanding-the-wilson-interval">Understanding the Wilson Interval</a></li>
-  <li><a href="#comparing-the-wald-and-wilson-intervals" id="toc-comparing-the-wald-and-wilson-intervals" class="nav-link" data-scroll-target="#comparing-the-wald-and-wilson-intervals">Comparing the Wald and Wilson Intervals</a>
-  <ul class="collapse">
-  <li><a href="#wald-can-collapse-to-a-single-point-wilson-cant" id="toc-wald-can-collapse-to-a-single-point-wilson-cant" class="nav-link" data-scroll-target="#wald-can-collapse-to-a-single-point-wilson-cant">Wald Can Collapse to a Single Point; Wilson Can’t</a></li>
-  <li><a href="#wald-can-include-impossible-values-wilson-cant" id="toc-wald-can-include-impossible-values-wilson-cant" class="nav-link" data-scroll-target="#wald-can-include-impossible-values-wilson-cant">Wald Can Include Impossible Values; Wilson Can’t</a></li>
-  </ul></li>
-  <li><a href="#more-to-come-on-inference-for-a-proportion" id="toc-more-to-come-on-inference-for-a-proportion" class="nav-link" data-scroll-target="#more-to-come-on-inference-for-a-proportion">More to Come on Inference for a Proportion!</a></li>
-  <li><a href="#appendix-r-code" id="toc-appendix-r-code" class="nav-link" data-scroll-target="#appendix-r-code">Appendix: R Code</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Inference &amp; uncertainty</span>
+<span class="eyebrow-item">5 February 2022</span>
+<span class="eyebrow-item">20 min</span>
+
+</p>
 <h1 class="title">The Wilson Confidence Interval for a Proportion</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">statistics</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 5, 2022</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tests-and-cis-two-sides-of-the-same-coin" id="toc-tests-and-cis-two-sides-of-the-same-coin"><span class="header-section-number">1</span> Tests and CIs – Two Sides of the Same Coin</a></li>
+  <li><a href="#how-to-confuse-your-introductory-statistics-students" id="toc-how-to-confuse-your-introductory-statistics-students"><span class="header-section-number">2</span> How to Confuse Your Introductory Statistics Students</a></li>
+  <li><a href="#should-we-teach-the-wald-test-instead" id="toc-should-we-teach-the-wald-test-instead"><span class="header-section-number">3</span> Should we teach the Wald test instead?</a></li>
+  <li><a href="#inverting-the-score-test" id="toc-inverting-the-score-test"><span class="header-section-number">4</span> Inverting the Score Test</a></li>
+  <li><a href="#understanding-the-wilson-interval" id="toc-understanding-the-wilson-interval"><span class="header-section-number">5</span> Understanding the Wilson Interval</a></li>
+  <li><a href="#comparing-the-wald-and-wilson-intervals" id="toc-comparing-the-wald-and-wilson-intervals"><span class="header-section-number">6</span> Comparing the Wald and Wilson Intervals</a>
+  <ul>
+  <li><a href="#wald-can-collapse-to-a-single-point-wilson-cant" id="toc-wald-can-collapse-to-a-single-point-wilson-cant"><span class="header-section-number">6.1</span> Wald Can Collapse to a Single Point; Wilson Can’t</a></li>
+  <li><a href="#wald-can-include-impossible-values-wilson-cant" id="toc-wald-can-include-impossible-values-wilson-cant"><span class="header-section-number">6.2</span> Wald Can Include Impossible Values; Wilson Can’t</a></li>
+  </ul></li>
+  <li><a href="#more-to-come-on-inference-for-a-proportion" id="toc-more-to-come-on-inference-for-a-proportion"><span class="header-section-number">7</span> More to Come on Inference for a Proportion!</a></li>
+  <li><a href="#appendix-r-code" id="toc-appendix-r-code"><span class="header-section-number">8</span> Appendix: R Code</a></li>
+  </ul>
+</nav>
 <p>This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in practice!) In the <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">first part</a>, I discussed the serious problems with the “textbook” approach, and outlined a simple hack that works amazingly well in practice: the <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550">Agresti-Coull confidence interval</a>.</p>
 <p>Somewhat unsatisfyingly, my earlier post gave no indication of where the Agresti-Coull interval comes from, how to construct it when you want a confidence level <em>other than</em> 95%, and why it works. In this post I’ll fill in some of the gaps by discussing <em>yet another</em> confidence interval for a proportion: the <em>Wilson interval</em>, so-called because it first appeared in <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1927.10502953?journalCode=uasa20">Wilson (1927)</a>. While it’s not usually taught in introductory courses, it easily could be. Not only does the Wilson interval perform extremely well in practice, it packs a powerful pedagogical punch by illustrating the idea of “inverting a hypothesis test.” Spoiler alert: the Agresti-Coull interval is a rough-and-ready approximation to the Wilson interval.</p>
 <p>To understand the Wilson interval, we first need to remember a key fact about statistical inference: hypothesis testing and confidence intervals are two sides of the same coin. We can use a test to create a confidence interval, and vice-versa. In case you’re feeling a bit rusty on this point, let me begin by refreshing your memory with the simplest possible example. If this is old hat to you, skip ahead to the next section.</p>
-<section id="tests-and-cis-two-sides-of-the-same-coin" class="level1">
-<h1>Tests and CIs – Two Sides of the Same Coin</h1>
+<section id="tests-and-cis-two-sides-of-the-same-coin" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Tests and CIs – Two Sides of the Same Coin</h1>
 <p>Suppose that we observe a random sample <span class="math inline">\(X_1, \dots, X_n\)</span> from a normal population with unknown mean <span class="math inline">\(\mu\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. Under these assumptions, the sample mean <span class="math inline">\(\bar{X}_n \equiv \left(\frac{1}{n} \sum_{i=1}^n X_i\right)\)</span> follows a <span class="math inline">\(N(\mu, \sigma^2/n)\)</span> distribution. Centering and standardizing, <span class="math display">\[ \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \sim N(0,1).\]</span> Now, suppose we want to test <span class="math inline">\(H_0\colon \mu = \mu_0\)</span> against the two-sided alternative <span class="math inline">\(H_1\colon \mu \neq \mu_0\)</span> at the 5% significance level. If <span class="math inline">\(\mu = \mu_0\)</span>, then the test statistic <span class="math display">\[T_n \equiv \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}}\]</span> follows a standard normal distribution. If <span class="math inline">\(\mu \neq \mu_0\)</span>, then <span class="math inline">\(T_n\)</span> does not follow a standard normal distribution. To carry out the test, we reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n|\)</span> is greater than <span class="math inline">\(1.96\)</span>, the <span class="math inline">\((1 - \alpha/2)\)</span> quantile of a standard normal distribution for <span class="math inline">\(\alpha = 0.05\)</span>. To put it another way, we <em>fail to reject</em> <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|T_n| \leq 1.96\)</span>. So for what values of <span class="math inline">\(\mu_0\)</span> will we fail to reject? By the definition of absolute value and the definition of <span class="math inline">\(T_n\)</span> from above, <span class="math inline">\(|T_n| \leq 1.96\)</span> is equivalent to <span class="math display">\[
 - 1.96 \leq \frac{\bar{X}_n - \mu_0}{\sigma/\sqrt{n}} \leq 1.96.
 \]</span> Re-arranging, this in turn is equivalent to <span class="math display">\[
@@ -318,8 +363,8 @@ window.Quarto = {
 \]</span> This tells us that the values of <span class="math inline">\(\mu_0\)</span> we will <em>fail to reject</em> are precisely those that lie in the interval <span class="math inline">\(\bar{X} \pm 1.96 \times \sigma/\sqrt{n}\)</span>. Does this look familiar? It should: it’s the usual 95% confidence interval for the mean of a normal population with known variance. The 95% confidence interval corresponds exactly to the set of values <span class="math inline">\(\mu_0\)</span> that we <em>fail to reject</em> at the 5% level.</p>
 <p>This example is a special case a more general result. If you give me a <span class="math inline">\((1 - \alpha)\times 100\%\)</span> confidence interval for a parameter <span class="math inline">\(\theta\)</span>, I can use it to test <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> against <span class="math inline">\(H_1 \colon \theta \neq \theta_0\)</span>. All I have to do is check whether <span class="math inline">\(\theta_0\)</span> lies inside the confidence interval, in which case I fail to reject, or outside, in which case I reject. Conversely, if you give me a two-sided test of <span class="math inline">\(H_0\colon \theta = \theta_0\)</span> with significance level <span class="math inline">\(\alpha\)</span>, I can use it to construct a <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(\theta\)</span>. All I have to do is collect the values of <span class="math inline">\(\theta_0\)</span> that are <em>not rejected</em>. This procedure is called <em>inverting a test</em>.</p>
 </section>
-<section id="how-to-confuse-your-introductory-statistics-students" class="level1">
-<h1>How to Confuse Your Introductory Statistics Students</h1>
+<section id="how-to-confuse-your-introductory-statistics-students" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> How to Confuse Your Introductory Statistics Students</h1>
 <p>Around the same time as we teach students the duality between testing and confidence intervals–you can use a confidence interval to carry out a test or a test to construct a confidence interval–we throw a wrench into the works. The most commonly-presented test for a population proportion <span class="math inline">\(p\)</span> does <em>not</em> coincide with the most commonly-presented confidence interval for <span class="math inline">\(p\)</span>. To quote from page 355 of <a href="https://imai.fas.harvard.edu/">Kosuke Imai’s</a> fantastic textbook <a href="https://press.princeton.edu/books/hardcover/9780691167039/quantitative-social-science">Quantitative Social Science: An Introduction</a></p>
 <blockquote class="blockquote">
 <p>the standard error used for confidence intervals is different from the standard error used for hypothesis testing. This is because the latter standard error is derived under the null hypothesis … whereas the standard error for confidence intervals is computed using the estimated proportion.</p>
@@ -351,8 +396,8 @@ window.Quarto = {
 </div>
 <p>The test says reject <span class="math inline">\(H_0\colon p = 0.07\)</span> and the confidence interval says don’t. Upon encountering this example, your students decide that statistics is a tangled mess of contradictions, despair of ever making sense of it, and resign themselves to simply memorizing the requisite formulas for the exam.</p>
 </section>
-<section id="should-we-teach-the-wald-test-instead" class="level1">
-<h1>Should we teach the Wald test instead?</h1>
+<section id="should-we-teach-the-wald-test-instead" class="level1 page-columns page-full" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Should we teach the Wald test instead?</h1>
 <p>How can we dig our way out of this mess? One idea is to <em>use a different test</em>, one that agrees with the Wald confidence interval. If we had used <span class="math inline">\(\widehat{\text{SE}}\)</span> rather than <span class="math inline">\(\text{SE}_0\)</span> to test <span class="math inline">\(H_0\colon p = 0.07\)</span> above, our test statistic would have been</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">abs</span>((p_hat <span class="sc">-</span> p0) <span class="sc">/</span> SE_hat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -362,7 +407,7 @@ window.Quarto = {
 </div>
 <p>which is clearly less than 1.96. Thus we would fail to reject <span class="math inline">\(H_0\colon p = 0.07\)</span> exactly as the Wald confidence interval instructed us above. This procedure is called the <em>Wald test</em> for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">the Wald confidence interval is terrible and you should never use it</a>. Because the Wald test is equivalent to checking whether <span class="math inline">\(p_0\)</span> lies inside the Wald confidence interval, it inherits all of the latter’s defects.</p>
 <p>Indeed, compared to the score test, the Wald test is a disaster, as I’ll now show. Suppose we carry out a 5% test. If the null is true, we should reject it 5% of the time. Because the Wald and Score tests are both based on an approximation provided by the <a href="../../post/thirty-isn-t-the-magic-number/">central limit theorem</a>, we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5%. Nevertheless, we’d expect them to at least be <em>fairly close</em> to the nominal value of 5%. The following plot shows the <em>actual</em> type I error rates of the score and Wald tests, over a range of values for the true population proportion <span class="math inline">\(p\)</span> with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5%.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="cell" data-layout-align="center">
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For the R code used to generate these plots, see the Appendix at the end of this post.</p></div></div><div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -388,8 +433,8 @@ window.Quarto = {
 <p>The score test isn’t perfect: if <span class="math inline">\(p\)</span> is extremely close to zero or one, its actual type I error rate can be appreciably higher than its nominal type I error rate: as much as 10% compared to 5% when <span class="math inline">\(n = 25\)</span>. But in general, its performance is good. In contrast, the Wald test is absolutely terrible: its nominal type I error rate is systematically higher than 5% even when <span class="math inline">\(n\)</span> is not especially small and <span class="math inline">\(p\)</span> is not especially close to zero or one.</p>
 <p>Granted, teaching the Wald test alongside the Wald interval would reduce confusion in introductory statistics courses. But it would also equip students with lousy tools for real-world inference. There is a better way: rather than teaching the <em>test</em> that corresponds to the Wald interval, we could teach the <em>confidence interval</em> that corresponds to the score test.</p>
 </section>
-<section id="inverting-the-score-test" class="level1">
-<h1>Inverting the Score Test</h1>
+<section id="inverting-the-score-test" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Inverting the Score Test</h1>
 <p>Suppose we collect all values <span class="math inline">\(p_0\)</span> that the score test does <em>not reject</em> at the 5% level. If the score test is working well–if its nominal type I error rate is close to 5%–the resulting set of values <span class="math inline">\(p_0\)</span> will be an approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence interval for <span class="math inline">\(p\)</span>. Why is this so? Suppose that <span class="math inline">\(p_0\)</span> is the true population proportion. Then an interval constructed in this way will cover <span class="math inline">\(p_0\)</span> <em>precisely when</em> the score test does not reject <span class="math inline">\(H_0\colon p = p_0\)</span>. This occurs with probability <span class="math inline">\((1 - \alpha)\)</span>. Because the score test is much more accurate than the Wald test, the confidence interval that we obtain by inverting it way will be much more accurate than the Wald interval. This interval is called the <em>score interval</em> or the <em>Wilson interval</em>.</p>
 <p>So let’s do it: let’s <em>invert</em> the score test. Our goal is to find all values <span class="math inline">\(p_0\)</span> such that <span class="math inline">\(|(\widehat{p} - p_0)/\text{SE}_0|\leq c\)</span> where <span class="math inline">\(c\)</span> is the normal critical value for a two-sided test with significance level <span class="math inline">\(\alpha\)</span>. Squaring both sides of the inequality and substituting the definition of <span class="math inline">\(\text{SE}_0\)</span> from above gives <span class="math display">\[
 (\widehat{p} - p_0)^2 \leq c^2 \left[ \frac{p_0(1 - p_0)}{n}\right].
@@ -471,8 +516,8 @@ sample estimates:
 </div>
 </div>
 </section>
-<section id="understanding-the-wilson-interval" class="level1">
-<h1>Understanding the Wilson Interval</h1>
+<section id="understanding-the-wilson-interval" class="level1 page-columns page-full" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Understanding the Wilson Interval</h1>
 <p>You could stop reading here and simply use the code from above to construct the Wilson interval. But computing is only half the battle: we want to <em>understand</em> our measures of uncertainty. While the Wilson interval may look somewhat strange, there’s actually some very simple intuition behind it. It amounts to a <em>compromise</em> between the sample proportion <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\(1/2\)</span>.</p>
 <p>The Wald estimator is centered around <span class="math inline">\(\widehat{p}\)</span>, but the Wilson interval is not. Manipulating our expression from the previous section, we find that the midpoint of the Wilson interval is <span class="math display">\[
 \begin{aligned}
@@ -490,17 +535,17 @@ sample estimates:
 &amp;= \frac{1}{\widetilde{n}} \left[\omega \widehat{p}(1 - \widehat{p}) + (1 - \omega) \frac{1}{2} \cdot \frac{1}{2}\right]
 \end{aligned}
 \]</span> defining <span class="math inline">\(\widetilde{n} = n + c^2\)</span>. To make sense of this result, recall that <span class="math inline">\(\widehat{\text{SE}}^2\)</span>, the quantity that is used to construct the Wald interval, is a ratio of two terms: <span class="math inline">\(\widehat{p}(1 - \widehat{p})\)</span> is the usual estimate of the <em>population variance</em> based on iid samples from a Bernoulli distribution and <span class="math inline">\(n\)</span> is the sample size. Similarly, <span class="math inline">\(\widetilde{\text{SE}}^2\)</span> is a ratio of two terms. The first is a <em>weighted average</em> of the population variance estimator and <span class="math inline">\(1/4\)</span>, the population variance under the assumption that <span class="math inline">\(p = 1/2\)</span>. Once again, the Wilson interval “pulls” away from extremes. In this case it pulls away from extreme estimates of the population variance towards the <em>largest possible</em> population variance: <span class="math inline">\(1/4\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> We divide this by the sample size <em>augmented</em> by <span class="math inline">\(c^2\)</span>, a strictly positive quantity that depends on the confidence level.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<p>To make this more concrete, consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Using this approximation we find that <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post.</p></div><div id="fn4"><p><sup>4</sup>&nbsp;As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%”.</p></div></div><p>To make this more concrete, consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Using this approximation we find that <span class="math display">\[
 \widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
 \]</span> which is <em>precisely</em> the midpoint of the <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">Agresti-Coull confidence interval</a>. And while <span class="math display">\[
 \widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
 \]</span> is slightly different from the quantity that appears in the Agresti-Coull interval, <span class="math inline">\(\widetilde{p}(1 - \widetilde{p})/\widetilde{n}\)</span>, the two expressions give very similar results in practice. The Agresti-Coull interval is nothing more than a rough-and-ready approximation to the 95% Wilson interval. This not only provides some intuition for the Wilson interval, it shows us how to construct an Agresti-Coull interval with a confidence level that differs from 95%: just construct the Wilson interval!</p>
 </section>
-<section id="comparing-the-wald-and-wilson-intervals" class="level1">
-<h1>Comparing the Wald and Wilson Intervals</h1>
+<section id="comparing-the-wald-and-wilson-intervals" class="level1 page-columns page-full" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Comparing the Wald and Wilson Intervals</h1>
 <p>Another way of understanding the Wilson interval is to ask how it will differ from the Wald interval when computed from the <em>same dataset</em>. In large samples, these two intervals will be quite similar. This is because <span class="math inline">\(\omega \rightarrow 1\)</span> as <span class="math inline">\(n \rightarrow \infty\)</span>. Using the expressions from the preceding section, this implies that <span class="math inline">\(\widehat{p} \approx \widetilde{p}\)</span> and <span class="math inline">\(\widehat{\text{SE}} \approx \widetilde{\text{SE}}\)</span> for very large sample sizes. For smaller values of <span class="math inline">\(n\)</span>, however, the two intervals can differ markedly. To make a long story short, the Wilson interval gives a much more reasonable description of our uncertainty about <span class="math inline">\(p\)</span> for any sample size. Wilson, unlike Wald, is always an <em>interval</em>; it cannot collapse to a single point. Moreover, unlike the Wald interval, the Wilson interval is always bounded below by zero and above by one.</p>
-<section id="wald-can-collapse-to-a-single-point-wilson-cant" class="level2">
-<h2 class="anchored" data-anchor-id="wald-can-collapse-to-a-single-point-wilson-cant">Wald Can Collapse to a Single Point; Wilson Can’t</h2>
+<section id="wald-can-collapse-to-a-single-point-wilson-cant" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="wald-can-collapse-to-a-single-point-wilson-cant"><span class="header-section-number">6.1</span> Wald Can Collapse to a Single Point; Wilson Can’t</h2>
 <p>A strange property of the Wald interval is that its width can be zero. Suppose that <span class="math inline">\(\widehat{p} = 0\)</span>, i.e.&nbsp;that we observe zero successes. In this case, regardless of sample size and regardless of confidence level, the Wald interval only contains a single point: zero <span class="math display">\[
 \widehat{p} \pm c \sqrt{\widehat{p}(1 - \widehat{p})/n} = 0 \pm c \times \sqrt{0(1 - 0)/n} = \{0 \}.
 \]</span> This is clearly insane. If we observe zero successes in a sample of ten observations, it is reasonable to suspect that <span class="math inline">\(p\)</span> is small, but ridiculous to conclude that it must be zero. We encounter a similarly absurd conclusion if <span class="math inline">\(\widehat{p} = 1\)</span>. In contrast, the Wilson interval can never collapse to a single point. Using the expression from the preceding section, we see that its width is given by <span class="math display">\[
@@ -509,8 +554,8 @@ sample estimates:
 2c \left(\frac{n}{n + c^2}\right) \times \sqrt{\frac{c^2}{4n^2}} = \left(\frac{c^2}{n + c^2}\right) = (1 - \omega).
 \]</span> Compared to the Wald interval, this is quite reasonable. A sample proportion of zero (or one) conveys much more information when <span class="math inline">\(n\)</span> is large than when <span class="math inline">\(n\)</span> is small. Accordingly, the Wilson interval is shorter for large values of <span class="math inline">\(n\)</span>. Similarly, higher confidence levels should demand wider intervals at a fixed sample size. The Wilson interval, unlike the Wald, retains this property even when <span class="math inline">\(\widehat{p}\)</span> equals zero or one.</p>
 </section>
-<section id="wald-can-include-impossible-values-wilson-cant" class="level2">
-<h2 class="anchored" data-anchor-id="wald-can-include-impossible-values-wilson-cant">Wald Can Include Impossible Values; Wilson Can’t</h2>
+<section id="wald-can-include-impossible-values-wilson-cant" class="level2 page-columns page-full" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="wald-can-include-impossible-values-wilson-cant"><span class="header-section-number">6.2</span> Wald Can Include Impossible Values; Wilson Can’t</h2>
 <p>A population proportion necessarily lies in the interval <span class="math inline">\([0,1]\)</span>, so it would make sense that any confidence interval for <span class="math inline">\(p\)</span> should as well. An awkward fact about the Wald interval is that it can extend <em>beyond</em> zero or one. In contrast, the Wilson interval <em>always</em> lies within <span class="math inline">\([0,1]\)</span>. For example, suppose that we observe two successes in a sample of size 10. Then the 95% Wald confidence interval is approximately [-0.05, 0.45] while the corresponding Wilson interval is [0.06, 0.51]. Similarly, if we observe eight successes in ten trials, the 95% Wald interval is approximately [0.55, 1.05] while the Wilson interval is [0.49, 0.94].</p>
 <p>With a bit of algebra we can show that the Wald interval will include negative values whenever <span class="math inline">\(\widehat{p}\)</span> is less than <span class="math inline">\((1 - \omega) \equiv c^2/(n + c^2)\)</span>. Why is this so? The lower confidence limit of the Wald interval is negative if and only if <span class="math inline">\(\widehat{p} &lt; c \times \widehat{\text{SE}}\)</span>. Substituting the definition of <span class="math inline">\(\widehat{\text{SE}}\)</span> and re-arranging, this is equivalent to <span class="math display">\[
 \begin{aligned}
@@ -524,7 +569,7 @@ n(1 - \omega) &amp;&lt; \sum_{i=1}^n X_i &lt; n \omega\\
 \left\lceil n\left(\frac{c^2}{n + c^2} \right)\right\rceil &amp;\leq \sum_{i=1}^n X_i \leq \left\lfloor n \left( \frac{n}{n + c^2}\right) \right\rfloor
 \end{aligned}
 \]</span> where <span class="math inline">\(\lceil \cdot \rceil\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceiling</a> function and <span class="math inline">\(\lfloor \cdot \rfloor\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> function.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Using this inequality, we can calculate the minimum and maximum number of successes in <span class="math inline">\(n\)</span> trials for which a 95% Wald interval will lie inside the range <span class="math inline">\([0,1]\)</span> as follows:</p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">20</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>omega <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="st">"n"</span> <span class="ot">=</span> n,  </span>
@@ -566,12 +611,12 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
 \]</span> Now, if we introduce the change of variables <span class="math inline">\(\widehat{q} \equiv 1 - \widehat{p}\)</span>, we obtain <em>exactly</em> the same inequality as we did above when studying the lower confidence limit, only with <span class="math inline">\(\widehat{q}\)</span> in place of <span class="math inline">\(\widehat{p}\)</span>. This is because <span class="math inline">\(\widehat{\text{SE}}^2\)</span> is <em>symmetric</em> in <span class="math inline">\(\widehat{p}\)</span> and <span class="math inline">\((1 - \widehat{p})\)</span>. Since we’ve reduced our problem to one we’ve already solved, we’re done!</p>
 </section>
 </section>
-<section id="more-to-come-on-inference-for-a-proportion" class="level1">
-<h1>More to Come on Inference for a Proportion!</h1>
+<section id="more-to-come-on-inference-for-a-proportion" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> More to Come on Inference for a Proportion!</h1>
 <p>This has been a post of epic proportions, pun very much intended. Amazingly, we have yet to fully exhaust this seemingly trivial problem. In a future post I will explore <em>yet another</em> approach to inference: the likelihood ratio test and its corresponding confidence interval. This will complete the classical “trinity” of tests for maximum likelihood estimation: Wald, Score (Lagrange Multiplier), and Likelihood Ratio. In yet another future post, I will revisit this problem from a Bayesian perspective, uncovering many unexpected connections along the way. Until then, be sure to maintain a sense of proportion in all your inferences and <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">never use the Wald confidence interval for a proportion</a>.</p>
 </section>
-<section id="appendix-r-code" class="level1">
-<h1>Appendix: R Code</h1>
+<section id="appendix-r-code" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Appendix: R Code</h1>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>get_test_size <span class="ot">&lt;-</span> <span class="cf">function</span>(p_true, n, test, <span class="at">alpha =</span> <span class="fl">0.05</span>) {</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the size of a hypothesis test for a population proportion  </span></span>
@@ -615,16 +660,7 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>For the R code used to generate these plots, see the Appendix at the end of this post.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%”.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -754,6 +790,231 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1159,6 +1420,19 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

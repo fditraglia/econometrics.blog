@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Puzzles, intuitions, and sundry economic tricks.">
 
 <title>econometrics.blog</title>
 <style>
@@ -36,6 +37,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-listing/list.min.js"></script>
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
@@ -47,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -87,7 +89,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-date','listing-title','listing-subtitle','listing-description','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-date-modified-sort'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
       
-      searchColumns: ["listing-project","listing-website","listing-format","listing-knitr","listing-freeze","listing-engines","listing-language","listing-comments","listing-author","listing-title","listing-date","listing-categories","listing-tags","listing-path","listing-outputHref","listing-date-modified","listing-description","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-subtitle","listing-reference-location","listing-execute"],
+      searchColumns: ["listing-project","listing-website","listing-format","listing-knitr","listing-freeze","listing-engines","listing-language","listing-comments","listing-author","listing-date-format","listing-filters","listing-title","listing-date","listing-subject","listing-categories","listing-tags","listing-path","listing-outputHref","listing-date-modified","listing-description","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-subtitle","listing-series","listing-series-label","listing-series-position","listing-execute","listing-reference-location"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -104,9 +106,12 @@ ul.task-list li input[type="checkbox"] {
     }
   })
   </script>
-<link rel="preload" href="./fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="./fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="./fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="./fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -125,43 +130,110 @@ ul.task-list li input[type="checkbox"] {
   src: url(./fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(./fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(./fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(./fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(./fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -214,23 +286,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="./index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -254,6 +322,11 @@ window.Quarto = {
 <h1 class="title">econometrics.blog</h1>
 </div>
 
+<div>
+  <div class="description">
+    Puzzles, intuitions, and sundry economic tricks.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -273,742 +346,710 @@ window.Quarto = {
 
 
 <div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
+<div class="home-hero" data-indexes="0" data-categories="c3RhdGlzdGljcyUyQ3B1enpsZXI=">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Latest — 06 AUG 2026</p>
+    <h2 class="hero-title anchored"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">Econometrics Puzzler #3: I've Got the Power</a></h2>
+    <div class="hero-description listing-description"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">Today’s challenge is to do a power calculation <em>in your head</em>. No paper, no pencils, no normal tables, and no statistical software packages are allowed!</a></div>
+  </div>
+  
+</div>
+
+<div class="home-contents-head">
+  <h2 class="home-contents-title anchored" id="contents">Contents</h2>
+  <div class="view-toggle" role="group" aria-label="Arrange the contents">
+    <button type="button" class="toggle-subject active" aria-pressed="true">By subject</button>
+    <button type="button" class="toggle-date" aria-pressed="false">By date</button>
+  </div>
+</div>
+
+<div class="view-by-subject">
+
+  <section class="subject-section">
+    <div class="subject-head">
+      <span class="subject-numeral">I.</span>
+      <h3 class="subject-title anchored">Causal inference &amp; identification</h3>
+      <span class="subject-rule"></span>
+      <span class="subject-count" data-total="7">7</span>
+    </div>
+    
+    <div class="post-line" data-indexes="16,6" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="post-line-title"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a> <span class="series-suffix"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">&amp; Part II</a></span></span>
+      <span class="post-line-years">2023, 2025</span>
+    </div>
+    
+    <div class="post-line" data-indexes="11" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="post-line-title"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a></span>
+      <span class="post-line-years">2024</span>
+    </div>
+    
+    <div class="post-line" data-indexes="22" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="post-line-title"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a></span>
+      <span class="post-line-years">2022</span>
+    </div>
+    
+    <div class="post-line" data-indexes="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==">
+      <span class="post-line-title"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="30" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==">
+      <span class="post-line-title"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="post-line-title"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    
+    <button type="button" class="more-toggle">two more</button>
+    
+  </section>
+
+  <section class="subject-section">
+    <div class="subject-head">
+      <span class="subject-numeral">II.</span>
+      <h3 class="subject-title anchored">Inference &amp; uncertainty</h3>
+      <span class="subject-rule"></span>
+      <span class="subject-count" data-total="6">6</span>
+    </div>
+    
+    <div class="post-line" data-indexes="5,4" data-categories="c3RhdGlzdGljcw==">
+      <span class="post-line-title"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a> <span class="series-suffix"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">&amp; Part II</a></span></span>
+      <span class="post-line-years">2025</span>
+    </div>
+    
+    <div class="post-line" data-indexes="10" data-categories="c3RhdGlzdGljcw==">
+      <span class="post-line-title"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a></span>
+      <span class="post-line-years">2024</span>
+    </div>
+    
+    <div class="post-line" data-indexes="20" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==">
+      <span class="post-line-title"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling's Approximation</a></span>
+      <span class="post-line-years">2022</span>
+    </div>
+    
+    <div class="post-line" data-indexes="25" data-categories="c3RhdGlzdGljcw==">
+      <span class="post-line-title"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a></span>
+      <span class="post-line-years">2022</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="28" data-categories="c3RhdGlzdGljcw==">
+      <span class="post-line-title"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don't Use the Textbook CI for a Proportion</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    
+    <button type="button" class="more-toggle">one more</button>
+    
+  </section>
+
+  <section class="subject-section">
+    <div class="subject-head">
+      <span class="subject-numeral">III.</span>
+      <h3 class="subject-title anchored">Econometric theory</h3>
+      <span class="subject-rule"></span>
+      <span class="subject-count" data-total="4">4</span>
+    </div>
+    
+    <div class="post-line" data-indexes="7" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="post-line-title"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a></span>
+      <span class="post-line-years">2025</span>
+    </div>
+    
+    <div class="post-line" data-indexes="14" data-categories="dGltZSUyMHNlcmllcw==">
+      <span class="post-line-title"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a></span>
+      <span class="post-line-years">2024</span>
+    </div>
+    
+    <div class="post-line" data-indexes="21" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="post-line-title"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a></span>
+      <span class="post-line-years">2022</span>
+    </div>
+    
+    <div class="post-line" data-indexes="24" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="post-line-title"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a></span>
+      <span class="post-line-years">2022</span>
+    </div>
+    
+    
+  </section>
+
+  <section class="subject-section">
+    <div class="subject-head">
+      <span class="subject-numeral">IV.</span>
+      <h3 class="subject-title anchored">Teaching &amp; explainers</h3>
+      <span class="subject-rule"></span>
+      <span class="subject-count" data-total="8">8</span>
+    </div>
+    
+    <div class="post-line" data-indexes="12" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n">
+      <span class="post-line-title"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a></span>
+      <span class="post-line-years">2024</span>
+    </div>
+    
+    <div class="post-line" data-indexes="13" data-categories="dGVhY2hpbmc=">
+      <span class="post-line-title"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a></span>
+      <span class="post-line-years">2024</span>
+    </div>
+    
+    <div class="post-line" data-indexes="18" data-categories="c3RhdGlzdGljcw==">
+      <span class="post-line-title"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a></span>
+      <span class="post-line-years">2023</span>
+    </div>
+    
+    <div class="post-line" data-indexes="23,19" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=">
+      <span class="post-line-title"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing</a> <span class="series-suffix">Parts <a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">1</a> &amp; <a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">II</a></span></span>
+      <span class="post-line-years">2022, 2023</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="31" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=">
+      <span class="post-line-title"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="33" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=">
+      <span class="post-line-title"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="34" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n">
+      <span class="post-line-title"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn't the magic number</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    
+    <button type="button" class="more-toggle">three more</button>
+    
+  </section>
+
+  <section class="subject-section">
+    <div class="subject-head">
+      <span class="subject-numeral">V.</span>
+      <h3 class="subject-title anchored">Computing &amp; applied work</h3>
+      <span class="subject-rule"></span>
+      <span class="subject-count" data-total="7">7</span>
+    </div>
+    
+    <div class="post-line" data-indexes="27,1" data-categories="Y29tcHV0aW5n">
+      <span class="post-line-title"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis</a> <span class="series-suffix">Parts <a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">1</a> &amp; <a href="./post/complex-step-differentiation/index.html" class="no-external">2</a></span></span>
+      <span class="post-line-years">2021, 2026</span>
+    </div>
+    
+    <div class="post-line" data-indexes="17" data-categories="Y29tcHV0aW5n">
+      <span class="post-line-title"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a></span>
+      <span class="post-line-years">2023</span>
+    </div>
+    
+    <div class="post-line" data-indexes="26" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=">
+      <span class="post-line-title"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a></span>
+      <span class="post-line-years">2021</span>
+    </div>
+    
+    <div class="post-line" data-indexes="36" data-categories="YXBwbGllZA==">
+      <span class="post-line-title"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a></span>
+      <span class="post-line-years">2020</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="37" data-categories="YXBwbGllZA==">
+      <span class="post-line-title"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a></span>
+      <span class="post-line-years">2020</span>
+    </div>
+    
+    <div class="post-line more-line" data-indexes="38" data-categories="YXBwbGllZA==">
+      <span class="post-line-title"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a></span>
+      <span class="post-line-years">2020</span>
+    </div>
+    
+    
+    <button type="button" class="more-toggle">two more</button>
+    
+  </section>
+
+  <div class="puzzler-block" data-indexes="0,8,9" data-categories="cHV6emxlcg==">
+    <span class="puzzler-count">3</span>
+    <div class="puzzler-body">
+      <p class="puzzler-label">The puzzlers</p>
+      <p class="puzzler-text">Short problems that test econometric intuition. Read the
+      question, think, then open the fold.
+      <em><a href="#category=puzzler" class="puzzler-so-far no-external">Three so far.</a></em></p>
+    </div>
+  </div>
+</div>
+
+<div class="view-by-date">
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2026</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="4">4</span>
+    </div>
+    
+    <div class="date-line" data-indexes="0" data-categories="c3RhdGlzdGljcyUyQ3B1enpsZXI=">
+      <span class="date-line-date">06 AUG</span>
+      <span class="date-line-title"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">Econometrics Puzzler #3: I've Got the Power</a></span>
+      <span class="date-line-time">6 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="1" data-categories="Y29tcHV0aW5n">
+      <span class="date-line-date">26 APR</span>
+      <span class="date-line-title"><a href="./post/complex-step-differentiation/index.html" class="no-external">Complex Step Differentiation</a></span>
+      <span class="date-line-time">7 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="2" data-categories="bWV0YQ==">
+      <span class="date-line-date">09 APR</span>
+      <span class="date-line-title"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">A Makeover for econometrics.blog</a></span>
+      <span class="date-line-time">1 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="3" data-categories="bWV0YQ==">
+      <span class="date-line-date">15 MAR</span>
+      <span class="date-line-title"><a href="./post/chris-sims-rip/index.html" class="no-external">Chris Sims - RIP</a></span>
+      <span class="date-line-time">3 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2025</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="6">6</span>
+    </div>
+    
+    <div class="date-line" data-indexes="4" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">22 NOV</span>
+      <span class="date-line-title"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">Overlapping Confidence Intervals: Part II</a></span>
+      <span class="date-line-time">11 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="5" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">15 NOV</span>
+      <span class="date-line-title"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a></span>
+      <span class="date-line-time">13 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="6" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="date-line-date">28 AUG</span>
+      <span class="date-line-title"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">A Good Instrument is a Bad Control: Part II</a></span>
+      <span class="date-line-time">10 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="7" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="date-line-date">14 AUG</span>
+      <span class="date-line-title"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a></span>
+      <span class="date-line-time">10 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="8" data-categories="ZWNvbm9tZXRyaWNzJTJDcHV6emxlcg==">
+      <span class="date-line-date">24 JUL</span>
+      <span class="date-line-title"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a></span>
+      <span class="date-line-time">3 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="9" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDcHV6emxlcg==">
+      <span class="date-line-date">13 JUL</span>
+      <span class="date-line-title"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">Econometrics Puzzler #1: To Instrument or Not?</a></span>
+      <span class="date-line-time">7 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2024</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="6">6</span>
+    </div>
+    
+    <div class="date-line" data-indexes="10" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">10 AUG</span>
+      <span class="date-line-title"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a></span>
+      <span class="date-line-time">37 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="11" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="date-line-date">02 AUG</span>
+      <span class="date-line-title"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a></span>
+      <span class="date-line-time">24 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="12" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n">
+      <span class="date-line-date">25 JUL</span>
+      <span class="date-line-title"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a></span>
+      <span class="date-line-time">9 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="13" data-categories="dGVhY2hpbmc=">
+      <span class="date-line-date">20 JUL</span>
+      <span class="date-line-title"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a></span>
+      <span class="date-line-time">13 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="14" data-categories="dGltZSUyMHNlcmllcw==">
+      <span class="date-line-date">15 JUL</span>
+      <span class="date-line-title"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a></span>
+      <span class="date-line-time">8 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="15" data-categories="bWV0YQ==">
+      <span class="date-line-date">14 JUL</span>
+      <span class="date-line-title"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">The Return of econometrics.blog!</a></span>
+      <span class="date-line-time">2 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2023</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="4">4</span>
+    </div>
+    
+    <div class="date-line" data-indexes="16" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="date-line-date">29 JUN</span>
+      <span class="date-line-title"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a></span>
+      <span class="date-line-time">9 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="17" data-categories="Y29tcHV0aW5n">
+      <span class="date-line-date">19 APR</span>
+      <span class="date-line-title"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a></span>
+      <span class="date-line-time">2 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="18" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">07 JAN</span>
+      <span class="date-line-title"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a></span>
+      <span class="date-line-time">1 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="19" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=">
+      <span class="date-line-date">01 JAN</span>
+      <span class="date-line-title"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">Why Econometrics is Confusing Part II: The Independence Zoo</a></span>
+      <span class="date-line-time">20 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2022</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="6">6</span>
+    </div>
+    
+    <div class="date-line" data-indexes="20" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==">
+      <span class="date-line-date">18 NOV</span>
+      <span class="date-line-title"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling's Approximation</a></span>
+      <span class="date-line-time">7 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="21" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="date-line-date">12 NOV</span>
+      <span class="date-line-title"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a></span>
+      <span class="date-line-time">6 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="22" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="date-line-date">06 NOV</span>
+      <span class="date-line-title"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a></span>
+      <span class="date-line-time">11 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="23" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=">
+      <span class="date-line-date">24 JUL</span>
+      <span class="date-line-title"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing Part 1: The Error Term</a></span>
+      <span class="date-line-time">5 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="24" data-categories="ZWNvbm9tZXRyaWNz">
+      <span class="date-line-date">14 MAR</span>
+      <span class="date-line-title"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a></span>
+      <span class="date-line-time">12 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="25" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">05 FEB</span>
+      <span class="date-line-title"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a></span>
+      <span class="date-line-time">24 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2021</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="10">10</span>
+    </div>
+    
+    <div class="date-line" data-indexes="26" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=">
+      <span class="date-line-date">31 DEC</span>
+      <span class="date-line-title"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a></span>
+      <span class="date-line-time">14 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="27" data-categories="Y29tcHV0aW5n">
+      <span class="date-line-date">29 OCT</span>
+      <span class="date-line-title"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis - Part 1</a></span>
+      <span class="date-line-time">8 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="28" data-categories="c3RhdGlzdGljcw==">
+      <span class="date-line-date">04 OCT</span>
+      <span class="date-line-title"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don't Use the Textbook CI for a Proportion</a></span>
+      <span class="date-line-time">11 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==">
+      <span class="date-line-date">30 AUG</span>
+      <span class="date-line-title"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a></span>
+      <span class="date-line-time">16 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="30" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==">
+      <span class="date-line-date">23 AUG</span>
+      <span class="date-line-title"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a></span>
+      <span class="date-line-time">5 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="31" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=">
+      <span class="date-line-date">15 AUG</span>
+      <span class="date-line-title"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a></span>
+      <span class="date-line-time">20 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl">
+      <span class="date-line-date">08 AUG</span>
+      <span class="date-line-title"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a></span>
+      <span class="date-line-time">6 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="33" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=">
+      <span class="date-line-date">01 AUG</span>
+      <span class="date-line-title"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a></span>
+      <span class="date-line-time">8 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="34" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n">
+      <span class="date-line-date">08 MAY</span>
+      <span class="date-line-title"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn't the magic number</a></span>
+      <span class="date-line-time">15 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="35" data-categories="bWV0YQ==">
+      <span class="date-line-date">01 APR</span>
+      <span class="date-line-title"><a href="./post/econometricians-anonymous/index.html" class="no-external">Econometricians Anonymous</a></span>
+      <span class="date-line-time">4 min</span>
+    </div>
+    
+  </section>
+
+  <section class="year-section">
+    <div class="year-head">
+      <h3 class="year-title anchored">2020</h3>
+      <span class="year-rule"></span>
+      <span class="year-count" data-total="3">3</span>
+    </div>
+    
+    <div class="date-line" data-indexes="36" data-categories="YXBwbGllZA==">
+      <span class="date-line-date">13 MAY</span>
+      <span class="date-line-title"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a></span>
+      <span class="date-line-time">3 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="37" data-categories="YXBwbGllZA==">
+      <span class="date-line-date">13 MAY</span>
+      <span class="date-line-title"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a></span>
+      <span class="date-line-time">5 min</span>
+    </div>
+    
+    <div class="date-line" data-indexes="38" data-categories="YXBwbGllZA==">
+      <span class="date-line-date">04 MAY</span>
+      <span class="date-line-title"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a></span>
+      <span class="date-line-time">3 min</span>
+    </div>
+    
+  </section>
+
+</div>
+
+<div class="home-margin-source">
+  <div class="home-margin">
+    <p class="home-margin-count">39 posts since 2020</p>
+    <p class="home-margin-description">Puzzles, intuitions, and sundry economic tricks.</p>
+    <p class="home-margin-also-label">Also</p>
+    <ul class="home-margin-also">
+      <li><a href="#category=puzzler" onclick="window.quartoListingCategory('cHV6emxlcg=='); return false;">Puzzlers <span class="also-count">3</span></a></li>
+      <li><a href="#category=meta" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">Odds &amp; ends <span class="also-count">4</span></a></li>
+    </ul>
+  </div>
+</div>
+
 <div class="list quarto-listing-default">
-<div class="quarto-post" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3B1enpsZXI=" data-listing-date-sort="1785974400000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 6, 2026</span>
-<span class="listing-reading-time">6 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('cHV6emxlcg=='); return false;">puzzler</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">Econometrics Puzzler #3: I've Got the Power</a></h3>
-
-<div class="delink listing-description"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">
-Today’s challenge is to do a power calculation <em>in your head</em>. No paper, no pencils, no normal tables, and no statistical software packages are allowed!
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="1" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1777161600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Apr 26, 2026</span>
-<span class="listing-reading-time">7 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/complex-step-differentiation/index.html" class="no-external">Complex Step Differentiation</a></h3>
-
-<div class="listing-subtitle"><a href="./post/complex-step-differentiation/index.html" class="no-external">Street Fighting Numerical Analysis - Part 2</a></div>
-
-<div class="delink listing-description"><a href="./post/complex-step-differentiation/index.html" class="no-external">
-Sometimes we need a good approximation to the derivative <span class="math inline">\(f'(x)\)</span> of a real-valued function <span class="math inline">\(f\)</span> at some real value <span class="math inline">\(x\)</span>. So here’s a fun fact that you may not know. If <span class="math inline">\(…</span><span class="math inline"></span><span class="math display"></span><span class="math inline"></span><span class="math inline"></span><strong></strong>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="2" data-categories="bWV0YQ==" data-listing-date-sort="1775692800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Apr 9, 2026</span>
-<span class="listing-reading-time">1 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">A Makeover for econometrics.blog</a></h3>
-
-<div class="delink listing-description"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">
-Today econometrics.blog got a long-overdue update from blogdown to Quarto. Thanks to Claude Code, the transition was seamless: all existing links are preserved, along with…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="3" data-categories="bWV0YQ==" data-listing-date-sort="1773532800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Mar 15, 2026</span>
-<span class="listing-reading-time">3 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/chris-sims-rip/index.html" class="no-external">Chris Sims - RIP</a></h3>
-
-<div class="delink listing-description"><a href="./post/chris-sims-rip/index.html" class="no-external">
-I was saddened to hear of Chris Sims’s passing yesterday. Although I’m not a macroeconometrician, his work has strongly influenced the way I think about econometrics. I…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="4" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763769600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Nov 22, 2025</span>
-<span class="listing-reading-time">11 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">Overlapping Confidence Intervals: Part II</a></h3>
-
-<div class="delink listing-description"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">
-In my earlier post on Overlapping Confidence Intervals I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means…<em></em><em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="5" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763164800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Nov 15, 2025</span>
-<span class="listing-reading-time">13 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a></h3>
-
-<div class="delink listing-description"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">
-Perhaps you’ve seen a claim like this in an applied paper: “the estimated effect for Group A is statistically significant, but the estimated effect for Group B is not; this…<em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="6" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1756339200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 28, 2025</span>
-<span class="listing-reading-time">10 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">A Good Instrument is a Bad Control: Part II</a></h3>
-
-<div class="delink listing-description"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">
-At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called “Bad Control”.<sup>1</sup> A…<em></em><em></em><em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="7" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1755129600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 14, 2025</span>
-<span class="listing-reading-time">10 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a></h3>
-
-<div class="delink listing-description"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">
-The result that I prefer to call Yule’s Rule, more commonly known as the “Frisch-Waugh-Lovell (FWL) theorem”, shows how to calculate the regression slope coefficient for <strong>one…</strong><strong></strong><em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="8" data-categories="ZWNvbm9tZXRyaWNzJTJDcHV6emxlcg==" data-listing-date-sort="1753315200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 24, 2025</span>
-<span class="listing-reading-time">3 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('cHV6emxlcg=='); return false;">puzzler</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a></h3>
-
-<div class="delink listing-description"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">
-Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a <em>second</em> regression of…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="9" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDcHV6emxlcg==" data-listing-date-sort="1752364800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 13, 2025</span>
-<span class="listing-reading-time">7 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('cHV6emxlcg=='); return false;">puzzler</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">Econometrics Puzzler #1: To Instrument or Not?</a></h3>
-
-<div class="delink listing-description"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">
-Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition. Here’s the format: I’ll…<sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="10" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1723248000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 10, 2024</span>
-<span class="listing-reading-time">37 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a></h3>
-
-<div class="delink listing-description"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">
-If you study enough econometrics or statistics, you’ll eventually hear someone mention “Stein’s Paradox” or the “James-Stein Estimator”. You’ve probably learned in your…<em></em><sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="11" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1722556800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 2, 2024</span>
-<span class="listing-reading-time">24 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a></h3>
-
-<div class="delink listing-description"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">
-By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear…<em></em><sup></sup><em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="12" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1721865600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 25, 2024</span>
-<span class="listing-reading-time">9 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a></h3>
-
-<div class="delink listing-description"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">
-Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability. Imagine that you’re developing a diagnostic…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="13" data-categories="dGVhY2hpbmc=" data-listing-date-sort="1721433600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 20, 2024</span>
-<span class="listing-reading-time">13 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a></h3>
-
-<div class="delink listing-description"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">
-Reading and understanding econometrics papers can be hard work. Most published articles, even review articles, are written by specialists for specialists. Unless you’re…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="14" data-categories="dGltZSUyMHNlcmllcw==" data-listing-date-sort="1721001600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 15, 2024</span>
-<span class="listing-reading-time">8 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGltZSUyMHNlcmllcw=='); return false;">time series</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a></h3>
-
-<div class="delink listing-description"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">
-As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by Sims &amp; Uhlig…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="15" data-categories="bWV0YQ==" data-listing-date-sort="1720915200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 14, 2024</span>
-<span class="listing-reading-time">2 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">The Return of econometrics.blog!</a></h3>
-
-<div class="delink listing-description"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">
-After a year-long hiatus, I’m excited to return to regular blogging about econometrics! I have a long list of posts that I’m eager to write, and I hope you’ll find them…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="16" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1687996800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jun 29, 2023</span>
-<span class="listing-reading-time">9 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a></h3>
-
-<div class="delink listing-description"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">
-Here’s a puzzle for you. What will happen if we regress some outcome of interest on <em>both</em> an endogenous regressor <em>and</em> a valid instrument for that regressor? I hadn’t thought…<sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="17" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1681862400000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Apr 19, 2023</span>
-<span class="listing-reading-time">2 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a></h3>
-
-<div class="delink listing-description"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">
-R’s formula syntax is extremely powerful but can be confusing for beginners.<sup>1</sup> This post is a quick reference covering all of the symbols that have a “special” meaning inside…<code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="18" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1673049600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jan 7, 2023</span>
-<span class="listing-reading-time">1 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a></h3>
-
-<div class="delink listing-description"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">
-To do well in an econometrics or statistics course at any level, you need to have a large number of simple properties of random variables at your fingertips. Some years back…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="19" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1672531200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jan 1, 2023</span>
-<span class="listing-reading-time">20 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">Why Econometrics is Confusing Part II: The Independence Zoo</a></h3>
-
-<div class="delink listing-description"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">
-In econometrics it’s absolutely crucial to keep track of which things are <em>dependent</em> and which are <em>independent</em>. To make this as confusing as possible for students, a typical…<sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="20" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==" data-listing-date-sort="1668729600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Nov 18, 2022</span>
-<span class="listing-reading-time">7 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling's Approximation</a></h3>
-
-<div class="delink listing-description"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">
-The Poisson distribution is the most famous probability model for <em>counts</em>, non-negative integer values. Many real-world phenomena are well approximated by this distribution…<span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><span class="math display"></span><span class="math inline"></span><em></em><span class="math inline"></span>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="21" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1668211200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Nov 12, 2022</span>
-<span class="listing-reading-time">6 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a></h3>
-
-<div class="delink listing-description"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">
-If you study enough econometrics, you will eventually come across an asymptotic argument in which some parameter is assumed to <em>change with sample size</em>. This peculiar notion…<sup></sup><em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="22" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1667692800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Nov 6, 2022</span>
-<span class="listing-reading-time">11 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a></h3>
-
-<div class="delink listing-description"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">
-In this post we’ll examine a very simple instrumental variables model from three different perspectives: two familiar and one a bit more exotic. While all three yield the…<em></em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="23" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1658620800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Jul 24, 2022</span>
-<span class="listing-reading-time">5 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing Part 1: The Error Term</a></h3>
-
-<div class="delink listing-description"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">
-“Suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span>.” A sentence like this is bound to come up dozens of times in an introductory econometrics course, but if I had my way it would be…<span class="math inline"></span><span class="math inline"></span>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="24" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1647216000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Mar 14, 2022</span>
-<span class="listing-reading-time">12 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a></h3>
-
-<div class="delink listing-description"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">
-Have you got a ruler handy? Fantastic! Then hold out your right hand, extend your thumb and little finger as far as they’ll go, and measure the distance in centimeters…<em></em><sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="25" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1644019200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Feb 5, 2022</span>
-<span class="listing-reading-time">24 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a></h3>
-
-<div class="delink listing-description"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">
-This is the second in a series of posts about how to construct a confidence interval for a proportion. (Simple problems sometimes turn out to be surprisingly complicated in…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="26" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=" data-listing-date-sort="1640908800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Dec 31, 2021</span>
-<span class="listing-reading-time">14 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a></h3>
-
-<div class="delink listing-description"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">
-
-Sorry <span class="citation" data-cites="UniofOxford">@UniofOxford</span>, but this is wildly misleading. Students who choose to reply to a vaccination survey are likely very different from those who choose not to reply. If…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="27" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1635465600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Oct 29, 2021</span>
-<span class="listing-reading-time">8 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y29tcHV0aW5n'); return false;">computing</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis - Part 1</a></h3>
-
-<div class="delink listing-description"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">
-Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training in numerical analysis and…<em></em><sup></sup><code></code>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="28" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1633305600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Oct 4, 2021</span>
-<span class="listing-reading-time">11 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don't Use the Textbook CI for a Proportion</a></h3>
-
-<div class="delink listing-description"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">
-In a previous post I showed an example in which the “textbook” confidence interval for a proportion performs poorly despite a fairly large sample size. My aim in that post…<span class="math inline"></span>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1630281600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 30, 2021</span>
-<span class="listing-reading-time">16 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a></h3>
-
-<div class="delink listing-description"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">
-Many outcomes of interest in economics are binary. For example, we may want to learn how employment status <span class="math inline">\(Y^*\)</span> varies with demographics <span class="math inline">\(X\)</span>, where <span class="math inline">\(Y^*=1\)</span> means…<span class="math inline"></span><span class="math inline"></span><span class="math inline"></span>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="30" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1629676800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 23, 2021</span>
-<span class="listing-reading-time">5 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWVhc3VyZW1lbnQlMjBlcnJvcg=='); return false;">measurement error</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a></h3>
-
-<div class="delink listing-description"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">
-Pop Quiz: If <span class="math inline">\(D^*\)</span> and <span class="math inline">\(D\)</span> are binary random variables and <span class="math inline">\(D\)</span> is a noisy measure of <span class="math inline">\(D^*\)</span>, is it possible for the measurement error <span class="math inline">\(W \equiv D - D^*\)</span> to be <em>classi…</em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="31" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1628985600000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 15, 2021</span>
-<span class="listing-reading-time">20 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('ZWNvbm9tZXRyaWNz'); return false;">econometrics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a></h3>
-
-<div class="delink listing-description"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">
-The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses. In the simplest case, it can be written as <span class="math display">\[F \equiv…</span><span class="math inline"></span><em></em><span class="math inline"></span><em></em><span class="math inline"></span><span class="math inline"></span><sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1628380800000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 8, 2021</span>
-<span class="listing-reading-time">6 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a></h3>
-
-<div class="delink listing-description"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">
-On a recent exam I asked students to extend the logic of propensity score weighting to handle a treatment that takes on <em>three</em> rather than two values: basically a…<em></em><span class="math display"></span><span class="math inline"></span><span class="math inline"></span><span class="math inline"></span><sup></sup>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="33" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=" data-listing-date-sort="1627776000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Aug 1, 2021</span>
-<span class="listing-reading-time">8 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('Y2F1c2FsJTIwaW5mZXJlbmNl'); return false;">causal inference</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a></h3>
-
-<div class="delink listing-description"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">
-<em>The following is a piece I wrote for the LMH News, based on a general interest webinar that I gave in November of 2020. If this post inspires you to learn more about causal…</em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="34" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1620432000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">May 8, 2021</span>
-<span class="listing-reading-time">15 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('c3RhdGlzdGljcw=='); return false;">statistics</span>
-
-<span class="listing-category" onclick="window.quartoListingCategory('dGVhY2hpbmc='); return false;">teaching</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn't the magic number</a></h3>
-
-<div class="delink listing-description"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">
-The simplest version of the central limit theorem (CLT) says that if <span class="math inline">\(X_1, \dots, X_n\)</span> are iid random variables with mean <span class="math inline">\(\mu\)</span> and finite variance <span class="math inline">\(\sigma^2\)</span>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="35" data-categories="bWV0YQ==" data-listing-date-sort="1617235200000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">Apr 1, 2021</span>
-<span class="listing-reading-time">4 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/econometricians-anonymous/index.html" class="no-external">Econometricians Anonymous</a></h3>
-
-<div class="delink listing-description"><a href="./post/econometricians-anonymous/index.html" class="no-external">
-<em>Some years back, I wrote a monologue for the Economics Department Skit Night at UPenn. It was a niche venue, granted, but the crowd seemed to enjoy my contribution. In honor…</em>
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="36" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">May 13, 2020</span>
-<span class="listing-reading-time">3 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a></h3>
-
-<div class="delink listing-description"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">
-Since my previous post, the Office for National Statistics has posted updated data on weekly deaths, and we’ve updated rcovidUK accordingly. Here’s where things stand:
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="37" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">May 13, 2020</span>
-<span class="listing-reading-time">5 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a></h3>
-
-<div class="delink listing-description"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">
-In an earlier post I looked at regional differences in the effects of Covid-19 by calculating excess deaths in each week of 2020 relative to an average of the preceding five…
-</a></div>
-</div>
-</div>
-<div class="quarto-post" data-index="38" data-categories="YXBwbGllZA==" data-listing-date-sort="1588550400000">
-<div class="body">
-<div class="listing-meta">
-<span class="listing-date">May 4, 2020</span>
-<span class="listing-reading-time">3 min</span>
-<span class="listing-categories">
-
-<span class="listing-category" onclick="window.quartoListingCategory('YXBwbGllZA=='); return false;">applied</span>
-
-</span>
-</div>
-<h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a></h3>
-
-<div class="delink listing-description"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">
-To get a better idea of the impact of Covid19 in the UK, Dan Mead and I put together an R package rcovidUK with weekly deaths in England and Wales, taken from the Office for…
-</a></div>
-</div>
-</div>
+
+  <div class="quarto-post" data-index="0" data-categories="c3RhdGlzdGljcyUyQ3B1enpsZXI=" data-listing-date-sort="1785974400000">
+    <h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-3-ive-got-the-power/index.html" class="no-external">Econometrics Puzzler #3: I've Got the Power</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="1" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1777161600000">
+    <h3 class="no-anchor listing-title"><a href="./post/complex-step-differentiation/index.html" class="no-external">Complex Step Differentiation</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="2" data-categories="bWV0YQ==" data-listing-date-sort="1775692800000">
+    <h3 class="no-anchor listing-title"><a href="./post/makeover-for-econometrics-blog/index.html" class="no-external">A Makeover for econometrics.blog</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="3" data-categories="bWV0YQ==" data-listing-date-sort="1773532800000">
+    <h3 class="no-anchor listing-title"><a href="./post/chris-sims-rip/index.html" class="no-external">Chris Sims - RIP</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="4" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763769600000">
+    <h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals-part-ii/index.html" class="no-external">Overlapping Confidence Intervals: Part II</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="5" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1763164800000">
+    <h3 class="no-anchor listing-title"><a href="./post/overlapping-confidence-intervals/index.html" class="no-external">Overlapping Confidence Intervals</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="6" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1756339200000">
+    <h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="no-external">A Good Instrument is a Bad Control: Part II</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="7" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1755129600000">
+    <h3 class="no-anchor listing-title"><a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="no-external">Two FWL Theorems for the Price of One</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="8" data-categories="ZWNvbm9tZXRyaWNzJTJDcHV6emxlcg==" data-listing-date-sort="1753315200000">
+    <h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="no-external">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="9" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDcHV6emxlcg==" data-listing-date-sort="1752364800000">
+    <h3 class="no-anchor listing-title"><a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="no-external">Econometrics Puzzler #1: To Instrument or Not?</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="10" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1723248000000">
+    <h3 class="no-anchor listing-title"><a href="./post/not-quite-the-james-stein-estimator/index.html" class="no-external">Not Quite the James-Stein Estimator</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="11" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1722556800000">
+    <h3 class="no-anchor listing-title"><a href="./post/how-to-do-regression-adjustment/index.html" class="no-external">How to Do Regression Adjustment</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="12" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1721865600000">
+    <h3 class="no-anchor listing-title"><a href="./post/is-it-better-to-improve-sensitivity-or-specificity/index.html" class="no-external">Is it better to improve sensitivity or specificity?</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="13" data-categories="dGVhY2hpbmc=" data-listing-date-sort="1721433600000">
+    <h3 class="no-anchor listing-title"><a href="./post/how-to-read-an-econometrics-paper/index.html" class="no-external">How to Read an Econometrics Paper</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="14" data-categories="dGltZSUyMHNlcmllcw==" data-listing-date-sort="1721001600000">
+    <h3 class="no-anchor listing-title"><a href="./post/sims-and-uhlig-1991-replication/index.html" class="no-external">Sims and Uhlig (1991) Replication</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="15" data-categories="bWV0YQ==" data-listing-date-sort="1720915200000">
+    <h3 class="no-anchor listing-title"><a href="./post/the-return-of-econometrics-blog/index.html" class="no-external">The Return of econometrics.blog!</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="16" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1687996800000">
+    <h3 class="no-anchor listing-title"><a href="./post/a-good-instrument-is-a-bad-control/index.html" class="no-external">A Good Instrument is a Bad Control</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="17" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1681862400000">
+    <h3 class="no-anchor listing-title"><a href="./post/the-r-formula-cheatsheet/index.html" class="no-external">The R Formula Cheatsheet</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="18" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1673049600000">
+    <h3 class="no-anchor listing-title"><a href="./post/random-variables-cheatsheet/index.html" class="no-external">Random Variables Cheatsheet</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="19" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1672531200000">
+    <h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-ii-the-independence-zoo/index.html" class="no-external">Why Econometrics is Confusing Part II: The Independence Zoo</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="20" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==" data-listing-date-sort="1668729600000">
+    <h3 class="no-anchor listing-title"><a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="no-external">From the Poisson Distribution to Stirling's Approximation</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="21" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1668211200000">
+    <h3 class="no-anchor listing-title"><a href="./post/local-asymptotics-the-simplest-possible-example/index.html" class="no-external">Local Asymptotics: The Simplest Possible Example</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="22" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1667692800000">
+    <h3 class="no-anchor listing-title"><a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="no-external">Three Ways of Thinking About Instrumental Variables</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="23" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1658620800000">
+    <h3 class="no-anchor listing-title"><a href="./post/why-econometrics-is-confusing-part-1-the-error-term/index.html" class="no-external">Why Econometrics is Confusing Part 1: The Error Term</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="24" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1647216000000">
+    <h3 class="no-anchor listing-title"><a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="no-external">A New Way of Looking at Least Squares</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="25" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1644019200000">
+    <h3 class="no-anchor listing-title"><a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="no-external">The Wilson Confidence Interval for a Proportion</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="26" data-categories="c3RhdGlzdGljcyUyQ2FwcGxpZWQ=" data-listing-date-sort="1640908800000">
+    <h3 class="no-anchor listing-title"><a href="./post/lessons-from-the-oxford-vaccination-survey/index.html" class="no-external">Lessons from the Oxford Vaccination Survey</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="27" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1635465600000">
+    <h3 class="no-anchor listing-title"><a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="no-external">Street Fighting Numerical Analysis - Part 1</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="28" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1633305600000">
+    <h3 class="no-anchor listing-title"><a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="no-external">Don't Use the Textbook CI for a Proportion</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="29" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1630281600000">
+    <h3 class="no-anchor listing-title"><a href="./post/regressions-with-a-mis-measured-binary-outcome/index.html" class="no-external">Regressions with a Mis-measured, Binary Outcome</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="30" data-categories="bWVhc3VyZW1lbnQlMjBlcnJvcg==" data-listing-date-sort="1629676800000">
+    <h3 class="no-anchor listing-title"><a href="./post/beyond-classical-measurement-error/index.html" class="no-external">Beyond Classical Measurement Error</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="31" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1628985600000">
+    <h3 class="no-anchor listing-title"><a href="./post/understanding-the-f-statistic/index.html" class="no-external">Understanding the F Statistic</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="32" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1628380800000">
+    <h3 class="no-anchor listing-title"><a href="./post/misunderstanding-selection-on-observables/index.html" class="no-external">(Mis)understanding Selection on Observables</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="33" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNlJTJDdGVhY2hpbmc=" data-listing-date-sort="1627776000000">
+    <h3 class="no-anchor listing-title"><a href="./post/untangling-cause-and-effect-without-experiments/index.html" class="no-external">Untangling Cause and Effect Without Experiments</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="34" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1620432000000">
+    <h3 class="no-anchor listing-title"><a href="./post/thirty-isn-t-the-magic-number/index.html" class="no-external">Thirty isn't the magic number</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="35" data-categories="bWV0YQ==" data-listing-date-sort="1617235200000">
+    <h3 class="no-anchor listing-title"><a href="./post/econometricians-anonymous/index.html" class="no-external">Econometricians Anonymous</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="36" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
+    <h3 class="no-anchor listing-title"><a href="./post/past-the-peak-excess-deaths-in-england-and-wales/index.html" class="no-external">Past the Peak? Excess Deaths in England and Wales</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="37" data-categories="YXBwbGllZA==" data-listing-date-sort="1589328000000">
+    <h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-are-concentrated-among-older-men/index.html" class="no-external">UK Excess Deaths by Age Group and Sex</a></h3>
+  </div>
+
+  <div class="quarto-post" data-index="38" data-categories="YXBwbGllZA==" data-listing-date-sort="1588550400000">
+    <h3 class="no-anchor listing-title"><a href="./post/uk-excess-deaths-by-region/index.html" class="no-external">Excess Deaths in England and Wales</a></h3>
+  </div>
+
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->
@@ -1141,6 +1182,231 @@ To get a better idea of the impact of Covid19 in the UK, Dan Mead and I put toge
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1544,6 +1810,19 @@ To get a better idea of the impact of Covid19 in the UK, Dan Mead and I put toge
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="./index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 

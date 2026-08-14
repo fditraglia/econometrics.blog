@@ -38,6 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -47,7 +48,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-fed9ed016b12ae4adb43aab18a31ff24.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,9 +76,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/source-serif-4-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
+/* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
+   carry their own embedded subsets (fonts/subset/) and never read these. */
 /* latin-ext */
 @font-face {
   font-family: 'JetBrains Mono';
@@ -96,43 +100,110 @@ ul.task-list li input[type="checkbox"] {
   src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+/* EB Garamond -- body text: 400, 600, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
-  font-style: italic;
-  font-weight: 200 900;
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-italic.woff2) format('woff2');
+  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
 /* latin-ext */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-ext-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
 @font-face {
-  font-family: 'Source Serif 4';
+  font-family: 'Libre Caslon Text';
   font-style: normal;
-  font-weight: 200 900;
+  font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/source-serif-4-latin-normal.woff2) format('woff2');
+  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Libre Caslon Text';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -185,23 +256,19 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">Contents</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../#category=puzzler"> 
+<span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fditraglia/econometrics.blog"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml"> 
+<span class="menu-text">Feed</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -214,58 +281,35 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#what-we-know-about-the-survey" id="toc-what-we-know-about-the-survey" class="nav-link active" data-scroll-target="#what-we-know-about-the-survey">What We Know About the Survey</a></li>
-  <li><a href="#how-oxford-interpreted-the-results" id="toc-how-oxford-interpreted-the-results" class="nav-link" data-scroll-target="#how-oxford-interpreted-the-results">How Oxford Interpreted the Results</a></li>
-  <li><a href="#worst-case-bounds-for-the-proportion-vaccinated" id="toc-worst-case-bounds-for-the-proportion-vaccinated" class="nav-link" data-scroll-target="#worst-case-bounds-for-the-proportion-vaccinated">Worst-Case Bounds for the Proportion Vaccinated</a></li>
-  <li><a href="#missing-completely-at-random" id="toc-missing-completely-at-random" class="nav-link" data-scroll-target="#missing-completely-at-random">Missing (Completely) at Random?</a></li>
-  <li><a href="#designing-a-better-survey" id="toc-designing-a-better-survey" class="nav-link" data-scroll-target="#designing-a-better-survey">Designing a Better Survey</a></li>
-  <li><a href="#a-new-years-resolution" id="toc-a-new-years-resolution" class="nav-link" data-scroll-target="#a-new-years-resolution">A New Year’s Resolution</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<p class="post-eyebrow">
+<span class="eyebrow-item">Computing &amp; applied work</span>
+<span class="eyebrow-item">31 December 2021</span>
+<span class="eyebrow-item">14 min</span>
+
+</p>
 <h1 class="title">Lessons from the Oxford Vaccination Survey</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">statistics</div>
-    <div class="quarto-category">applied</div>
-  </div>
-  </div>
-
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Francis J. DiTraglia </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">December 31, 2021</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
+</div>
 </header>
 
-
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-we-know-about-the-survey" id="toc-what-we-know-about-the-survey"><span class="header-section-number">1</span> What We Know About the Survey</a></li>
+  <li><a href="#how-oxford-interpreted-the-results" id="toc-how-oxford-interpreted-the-results"><span class="header-section-number">2</span> How Oxford Interpreted the Results</a></li>
+  <li><a href="#worst-case-bounds-for-the-proportion-vaccinated" id="toc-worst-case-bounds-for-the-proportion-vaccinated"><span class="header-section-number">3</span> Worst-Case Bounds for the Proportion Vaccinated</a></li>
+  <li><a href="#missing-completely-at-random" id="toc-missing-completely-at-random"><span class="header-section-number">4</span> Missing (Completely) at Random?</a></li>
+  <li><a href="#designing-a-better-survey" id="toc-designing-a-better-survey"><span class="header-section-number">5</span> Designing a Better Survey</a></li>
+  <li><a href="#a-new-years-resolution" id="toc-a-new-years-resolution"><span class="header-section-number">6</span> A New Year’s Resolution</a></li>
+  </ul>
+</nav>
 Back in November a colleague pointed me to a website describing the recent <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey">COVID-19 Student Vaccination Survey</a> carried out by my employer, the University of Oxford. At the time I briefly tweeted my concerns at the University:
 <blockquote class="twitter-tweet blockquote">
 <p lang="en" dir="ltr">
@@ -275,12 +319,12 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
 </blockquote>
 <script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <p>but never received a response. In this post, armed with far more than 280 characters, I’ll explain what went wrong in the Oxford Vaccination Survey and suggest some ways of doing better next time.</p>
-<section id="what-we-know-about-the-survey" class="level1">
-<h1>What We Know About the Survey</h1>
+<section id="what-we-know-about-the-survey" class="level1 page-columns page-full" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> What We Know About the Survey</h1>
 <p>While the <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey">university website</a> doesn’t provide detailed information on the survey’s methodology, it does allow us to establish a few key facts. First: this was not in fact a survey; it was a <em>census</em>.</p>
-<blockquote class="blockquote">
+<div class="page-columns page-full"><blockquote class="blockquote">
 <p>All students were invited to complete the COVID-19 Student Vaccination Survey in 3rd and 4th Weeks of Michaelmas term.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This very short form asked students to confirm their COVID-19 vaccination status.</p>
-</blockquote>
+</blockquote><div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For those of you who live outside the Oxford bubble, “in 3rd and 4th Weeks of Michaelmas term” means in the last week of October and first week of November 2021.</p></div></div></div>
 <p>Surveys use a sample to learn about a population. Pollsters don’t ask all American voters if they approve of Biden; they ask a <em>small subset</em> of voters, using a carefully-designed sampling scheme. A census, on the other hand, attempts to reach each person in the target population. This is how the Oxford Vaccination “Survey” was conducted.</p>
 <p>Second: roughly half of Oxford students chose not to respond:</p>
 <blockquote class="blockquote">
@@ -291,8 +335,8 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
 <p>A total of 98% of respondents reported that they were vaccinated (95% fully and 3% partially).</p>
 </blockquote>
 </section>
-<section id="how-oxford-interpreted-the-results" class="level1">
-<h1>How Oxford Interpreted the Results</h1>
+<section id="how-oxford-interpreted-the-results" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> How Oxford Interpreted the Results</h1>
 <p>Their <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey">headline conclusion</a> was that “the survey indicated that the vast majority of students are now vaccinated.” Further down, under the FAQs, they added the following clarification:</p>
 <blockquote class="blockquote">
 <p><strong>Given that the response rate was 50%, how can you be sure that the vaccination rate reflects the whole student population?</strong></p>
@@ -301,48 +345,38 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
 <p>This is wrong. First, the response rates for other “surveys of this type” are irrelevant: what matters is what we can learn <em>from this dataset</em> given the observed response rate and the reasons why students chose not to respond. It seems quite implausible that the vaccination rate among respondents reflects the whole student population. If, as I suspect, conscientious students are both more likely to be vaccinated and more likely to respond to a questionnaire, the 95% figure is almost certainly too high. Second, statistical tests and confidence intervals are designed to quantify <em>sampling error</em>: non-systematic differences in vaccination rates in the sample compared to the population that arise when a sample is drawn at random. But the problem here is <em>non-sampling error</em>: students who respond are likely different in their rate of vaccination from those who do not. This kind of systematic difference between sample and population is not accounted for in a confidence interval or statistical test. In light of this, we cannot conclude that “the vast majority of Oxford students are either fully or partially vaccinated.”</p>
 <p>So what <em>can</em> we conclude? It depends on what we’re willing to assume. I’ll start off by considering the worst case: suppose we’re not willing to assume <em>anything</em> about the reasons why some students chose not to respond.</p>
 </section>
-<section id="worst-case-bounds-for-the-proportion-vaccinated" class="level1">
-<h1>Worst-Case Bounds for the Proportion Vaccinated</h1>
+<section id="worst-case-bounds-for-the-proportion-vaccinated" class="level1 page-columns page-full" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Worst-Case Bounds for the Proportion Vaccinated</h1>
 <p>I have a bowl containing 100 balls; <span class="math inline">\(W\)</span> of them are white and the rest are black. I remove 50 balls from the bowl and lay them on the table so you can see them all at once. Of these, 49 are white and 1 is black. What can you conclude about <span class="math inline">\(W\)</span>? The answer depends crucially on <em>how I chose which balls to show you</em>.</p>
 <p>If I drew the balls at random, then you can use standard statistical tools–hypothesis testing, confidence intervals, a Bayesian posterior distribution–to make inferences about <span class="math inline">\(W\)</span>. Random sampling ensures that the balls you see before you on the table are <em>representative</em> of the balls that remain in the bowl. This creates an inferential link between what you can observe and what you can’t, and allows you to quantify uncertainty about <span class="math inline">\(W\)</span> using the language of probability.</p>
 <p>But what if you know <em>nothing</em> about how I chose which balls to show you? Perhaps I decided to show you all of the white balls in the urn; or perhaps I decided to show you all of the black balls: you have no idea. In this case the inferential link between what you can see on the table and what remains in the bowl is broken and the familiar tools of statistical inference cannot be directly applied. Unless you are willing to take a stand of some kind on how I chose which balls to remove from the urn, all that you can conclude about <span class="math inline">\(W\)</span> is that it must be at least 49 and no more than 99. Based on an observed fraction of 49/50 white balls on the table, you can conclude only that between 49/100 and 99/100 of the balls in the bowl are white.</p>
 <p>Now replace 100 balls in the bowl with 25820 students in the university, 50 balls on the table with 12729 respondents to the questionnaire, and 49 white balls on the table with 12475 vaccinated students among those who responded.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Suppose for simplicity that everyone who responds to the questionnaire does so truthfully. (We’ll revisit this below.) Unless we know something about how and why respondents decided to respond, all we can infer from this information is that no fewer than 12475 and no more than 25566 Oxford students have been vaccinated. Expressed as a proportion, this works out to between 48% and 99% of students at Oxford with at least one COVID-19 vaccination.</p>
-<p>While this result, [0.48, 0.99], looks superficially similar to a confidence interval, it’s a completely different animal. A confidence interval contains the values of an unknown quantity that are “consistent with the data” in a precise sense.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> As explained above, confidence intervals quantify uncertainty arising from <em>sampling error</em>. But our uncertainty in the vaccine example does <em>not</em> come from random sampling: it comes from <em>missing data</em>. In effect, we have a complete census of the kind of Oxford student who fills out COVID-19 vaccination questionnaires. What we lack is any data whatsoever on the kind of Oxford student who <em>doesn’t reply</em>. Each point in the interval [0.48, 0.99] corresponds to a different assumption about the relative vaccination rates of respondents compared to non-respondents (the fraction of white balls on the table compared to the fraction remaining in the bowl).</p>
+<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;These are my approximations based on the information taken from the <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey">survey website</a> and <a href="https://www.ox.ac.uk/about/facts-and-figures/student-numbers">student numbers for the University of Oxford</a>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;A 95% confidence interval for an unknown proportion <span class="math inline">\(p\)</span> contains the values of <span class="math inline">\(p\)</span> that we cannot reject based on a hypothesis test with significance level <span class="math inline">\(0.05\)</span>.</p></div></div><p>While this result, [0.48, 0.99], looks superficially similar to a confidence interval, it’s a completely different animal. A confidence interval contains the values of an unknown quantity that are “consistent with the data” in a precise sense.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> As explained above, confidence intervals quantify uncertainty arising from <em>sampling error</em>. But our uncertainty in the vaccine example does <em>not</em> come from random sampling: it comes from <em>missing data</em>. In effect, we have a complete census of the kind of Oxford student who fills out COVID-19 vaccination questionnaires. What we lack is any data whatsoever on the kind of Oxford student who <em>doesn’t reply</em>. Each point in the interval [0.48, 0.99] corresponds to a different assumption about the relative vaccination rates of respondents compared to non-respondents (the fraction of white balls on the table compared to the fraction remaining in the bowl).</p>
 <p>Besides reporting the rather pessimistic bound [0.48, 0.99], is there anything more that we can say about the share of vaccinated Oxford students? Yes, but only if we’re willing to make some assumptions.</p>
 </section>
-<section id="missing-completely-at-random" class="level1">
-<h1>Missing (Completely) at Random?</h1>
+<section id="missing-completely-at-random" class="level1 page-columns page-full" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Missing (Completely) at Random?</h1>
 <p>Let’s start with the strongest possible assumption: data that are <em>missing completely at random</em> (MCAR). In the vaccination example, MCAR amounts to assuming that students who respond are representative of students who do not respond. In the language of my balls-and-bowl example, MCAR would hold if the 50 balls on the table were drawn from the bowl at random. Under MCAR, we can effectively ignore the problem of non-response and report an estimate of 95% vaccine coverage among Oxford students. But while it’s logically <em>possible</em> for the MCAR assumption to hold in this example, it’s not very plausible. As I mentioned above, it seems likely that more conscientious students will both be more likely to get vaccinated and to reply to a questionnaire. If so, MCAR fails.</p>
 <p>More plausible than MCAR is the assumption of data that are <em>missing at random</em> (MAR). This idea is best illustrated with an example. Suppose that there are <em>four kinds of balls</em> in the bowl: large white balls, large black balls, small white balls, and small black balls. We’re not interested in the size of the balls; we only want to know how many are white and how many are black. As before, I draw 50 balls from the bowl at random and lay them on the table. Unfortunately, small balls tend to sink to the bottom of the bowl so I’m disproportionately likely to draw a large ball. In this case, the balls you can see on the table are no longer representative of the balls in the bowl: there are probably <em>too many</em> large balls on the table.</p>
 <p>To make progress we need an assumption. Suppose that, after accounting for size, the chance that a I draw a <em>particular ball</em> doesn’t depend on its color. Under this assumption the <em>large balls</em> on the table are representative of the large balls that remain in the bowl. Similarly, the <em>small balls</em> on the table are representative of the small balls that remain in the bowl. This is precisely the MAR assumption: conditional on something we know (the size of a ball), the data we can observe (balls on the table) are representative of the missing data (balls in the bowl). MCAR does not hold because the 50 balls on the table are <em>not</em> representative of the 50 balls that remain in the urn (large balls are disproportionately likely to be drawn). They only become representative <em>after</em> we account for size.</p>
 <p>So how might the MAR assumption allow us to learn more in the vaccination example? From the figures on page 85 of this <a href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1041447/Weekly_Flu_and_COVID-19_report_w50.pdf">HSA report</a> we see that, within each UK age group, females are more likely to be vaccinated than males. Suppose that this holds among Oxford students as well. If there is any difference between survey response rates for male and female students, MCAR fails and the 95% estimated vaccination rate will be unreliable. But suppose we are willing to assume that female respondents are representative of female non-respondents. In this case, the share of vaccinated female <em>respondents</em> is a good estimate of the share of vaccinated female <em>students</em>, and similarly for male respondents. Because we know that 49% of Oxford students are female, we can use this information to calculate a good estimate of the overall share of vaccinated students.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> If MAR conditional on sex seems like too strong an assumption, perhaps you’d be willing to assume that female <em>undergraduates from the UK</em> who respond are representative of all female undergraduates from the UK. After all: overseas students are <em>almost certainly</em> vaccinated, given government travel restrictions. In this case we’d form eight groups (male/female <span class="math inline">\(\times\)</span> overseas/home <span class="math inline">\(\times\)</span> undergrad/post-grad), estimate the share of vaccination separately for each group using the data for respondents. To obtain an overall estimate for the share of vaccinated students, we’d simply average the estimates for each “type” of students, weighting by their respective shares in the Oxford student body. This approach of re-weighting estimates for particular groups is called <em>post-stratification</em> and is widely used in political polling.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The assumption that underlies it is MAR: conditional on characteristics we can observe, whether a person responds to the survey or not is “as good as random,” i.e.&nbsp;unrelated to the question we ask in our poll.</p>
-<p>So does MAR hold in our vaccination example? Perhaps not. Getting vaccinated is widely viewed as a pro-social act. The phenomenon of <a href="https://en.wikipedia.org/wiki/Social-desirability_bias">social desirability bias</a> suggests that people who are not vaccinated may be less likely to respond <em>even after</em> conditioning on their observed characteristics. If so MAR will not hold. Even so, I would put <em>much more faith</em> in results that used post-stratification to adjust for observed characteristics like sex and home/overseas that are plausibly related to both response rates and vaccination status. Depending on the precise nature of the data that Oxford collected, it’s possible that this analysis could still be carried out.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;I computed the share of female students from the University statistics posted at this url: <a href="https://www.ox.ac.uk/about/facts-and-figures/student-numbers" class="uri">https://www.ox.ac.uk/about/facts-and-figures/student-numbers</a>.</p></div><div id="fn5"><p><sup>5</sup>&nbsp;An example I particularly enjoy is <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.708.7828&amp;rep=rep1&amp;type=pdf">this paper</a> by Andrew Gelman and co-authors.</p></div></div><p>So does MAR hold in our vaccination example? Perhaps not. Getting vaccinated is widely viewed as a pro-social act. The phenomenon of <a href="https://en.wikipedia.org/wiki/Social-desirability_bias">social desirability bias</a> suggests that people who are not vaccinated may be less likely to respond <em>even after</em> conditioning on their observed characteristics. If so MAR will not hold. Even so, I would put <em>much more faith</em> in results that used post-stratification to adjust for observed characteristics like sex and home/overseas that are plausibly related to both response rates and vaccination status. Depending on the precise nature of the data that Oxford collected, it’s possible that this analysis could still be carried out.</p>
 </section>
-<section id="designing-a-better-survey" class="level1">
-<h1>Designing a Better Survey</h1>
+<section id="designing-a-better-survey" class="level1 page-columns page-full" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Designing a Better Survey</h1>
 <p>There’s an old saying (often attributed to Fisher) that calling in a statistician after you’ve collected your data is like calling in a doctor after a loved one has died: all she can do is perform a post-mortem; it’s too late to save the patient. So how could Oxford do a better job <em>the next time</em> that they want to carry out a survey?</p>
 <p>One of the key lessons of statistics is that a relatively small sample can still provide reliable inferences about the population provided that the sample is drawn at random. Rather than contacting all students, choose a random sample and focus on <em>maximizing the response rate</em>. There are several ways to do this. First is multi-mode surveys: send an email in addition to a letter in addition to a text message. Second is incentives: perhaps offer a gift card upon receipt of the completed survey. In spite of your best efforts, inevitably some people <em>still</em> won’t reply. This is where two-stage sampling can help: take a second random sample of the non-respondents and contact these people a second time. As long as you reach a <em>representative</em> sample of non-respondents, it doesn’t matter if you reach them all. If some non-response remains, try to adjust for it using post-stratification.</p>
 <p>All of the discussion thus far has assumed that respondents answer truthfully. But social desirability bias might also lead people to mis-represent their true vaccination status. This is a much harder problem to solve, but ensuring privacy can help. Posting a <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey/privacy-policy">detailed privacy policy</a> is a helpful first step, but students may still be suspicious when a government regulator asks their university to gather potentially sensitive data about them. <a href="https://graemeblair.com/papers/randresp.pdf">Randomized response methods</a> address this concern by designing surveys in which it is <em>impossible</em> for researchers or anyone with whom they share data to infer individual responses. How does this work? In the simplest possible example, I give you a coin and tell you to flip it in secret. I instruct you to answer the survey truthfully if you flip heads, and to simply check “NO I AM NOT VACCINATED” if you flip tails. When I read the survey, I have no way of knowing if you haven’t been vaccinated or merely flipped tails. In spite of this, it’s <em>still</em> possible to construct a reliable estimator of the share of people who are vaccinated.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
-</section>
-<section id="a-new-years-resolution" class="level1">
-<h1>A New Year’s Resolution</h1>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;If you’re studying introductory probability and statistics, see if you can figure out how. It’s a great practice exam question!</p></div></div></section>
+<section id="a-new-years-resolution" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> A New Year’s Resolution</h1>
 <p>Numbers are only valuable when they tell us something meaningful about the world. If we care enough to ask the question, we should care enough to do a good job answering it. While statistical inference and modeling can be extremely valuable tools for learning about the world, what matters most is collecting good, clean data. May you be blessed with 100% response rates in 2022. If you’re not, make it your new year’s resolution to do something about it!</p>
 
 
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>For those of you who live outside the Oxford bubble, “in 3rd and 4th Weeks of Michaelmas term” means in the last week of October and first week of November 2021.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>These are my approximations based on the information taken from the <a href="https://www.ox.ac.uk/coronavirus/students/vaccination-survey">survey website</a> and <a href="https://www.ox.ac.uk/about/facts-and-figures/student-numbers">student numbers for the University of Oxford</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>A 95% confidence interval for an unknown proportion <span class="math inline">\(p\)</span> contains the values of <span class="math inline">\(p\)</span> that we cannot reject based on a hypothesis test with significance level <span class="math inline">\(0.05\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>I computed the share of female students from the University statistics posted at this url: <a href="https://www.ox.ac.uk/about/facts-and-figures/student-numbers" class="uri">https://www.ox.ac.uk/about/facts-and-figures/student-numbers</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>An example I particularly enjoy is <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.708.7828&amp;rep=rep1&amp;type=pdf">this paper</a> by Andrew Gelman and co-authors.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>If you’re studying introductory probability and statistics, see if you can figure out how. It’s a great practice exam question!<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script>
 // Shrink display equations that are wider than the text column.
 //
@@ -472,6 +506,231 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
   } else {
     run();
   }
+})();
+</script>
+<script>
+// Theme behaviors: the wordmark split, and the homepage's two-view contents.
+// Everything here is progressive enhancement -- with JavaScript disabled the
+// page shows the full subject view and a plain wordmark, and loses only the
+// toggle, the "five more" folding and the live category filter.
+(function () {
+  document.documentElement.classList.add('js');
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  // ---- margin notes: sit level with their markers ----
+  // Quarto aligns a margin footnote with the top of the paragraph that cites
+  // it, so a note citing the last sentence of a long paragraph appears well
+  // before the passage it belongs to. This slides each note down to its own
+  // marker, keeping notes in order and never overlapping. Offsets are
+  // position: relative, so nothing else on the page moves.
+  function alignMarginNotes() {
+    var notes = [].slice.call(
+      document.querySelectorAll('.column-margin div[id^="fn"]'));
+    if (!notes.length) return;
+    var main = document.querySelector('main');
+    var lastBottom = -Infinity;
+    notes.forEach(function (note) {
+      note.style.top = '';
+      var m = note.id.match(/^fn(\d+)$/);
+      var marker = m && document.getElementById('fnref' + m[1]);
+      if (!marker) return;
+      var rect = note.getBoundingClientRect();
+      // Only when the note actually sits in the margin column; on narrow
+      // screens Quarto folds it into the body flow, which needs no help.
+      if (main && rect.left < main.getBoundingClientRect().left +
+                  (document.querySelector('main p') || main).clientWidth * 0.8) {
+        return;
+      }
+      var naturalTop = rect.top + window.scrollY;
+      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var target = Math.max(markerTop, lastBottom + 14);
+      note.style.position = 'relative';
+      note.style.top = (target - naturalTop) + 'px';
+      lastBottom = target + rect.height;
+    });
+  }
+
+  function scheduleAlign() {
+    alignMarginNotes();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignMarginNotes);
+    }
+    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
+      MathJax.startup.promise.then(function () {
+        setTimeout(alignMarginNotes, 50);
+      });
+    }
+    window.addEventListener('load', alignMarginNotes);
+    var t;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(alignMarginNotes, 150);
+    });
+  }
+
+  ready(function () {
+    scheduleAlign();
+
+    // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
+    var brand = document.querySelector('.navbar-brand .navbar-title') ||
+                document.querySelector('.navbar-brand');
+    if (brand && brand.textContent.indexOf('.blog') !== -1 &&
+        !brand.querySelector('.brand-tld')) {
+      brand.innerHTML = brand.textContent.replace(
+        '.blog', '<span class="brand-tld">.blog</span>');
+    }
+
+    // Everything below is homepage-only.
+    var subjectView = document.querySelector('.view-by-subject');
+    if (!subjectView) return;
+
+    // ---- margin block: move it into the margin sidebar, above the filter ----
+    var marginSource = document.querySelector('.home-margin-source .home-margin');
+    var sidebar = document.getElementById('quarto-margin-sidebar');
+    if (marginSource && sidebar) {
+      sidebar.insertBefore(marginSource, sidebar.firstChild);
+    }
+
+    // ---- category filter list: retitle and set the counts in mono ----
+    var catTitle = document.querySelector('.quarto-listing-category-title');
+    if (catTitle) catTitle.textContent = 'Filter';
+    [].slice.call(document.querySelectorAll('.quarto-listing-category .category'))
+      .forEach(function (el) {
+        var m = el.textContent.match(/^(.*?)\s*\((\d+)\)\s*$/);
+        if (m) {
+          el.textContent = '';
+          el.appendChild(document.createTextNode(m[1] + ' '));
+          var n = document.createElement('span');
+          n.className = 'cat-count';
+          n.textContent = m[2];
+          el.appendChild(n);
+        }
+      });
+
+    // ---- hero: keep only the first sentence of the excerpt ----
+    // _listing-tidy.html has already stripped any half-truncated math; it
+    // registered its DOMContentLoaded listener first, so it has run by now.
+    var heroDesc = document.querySelector('.hero-description a');
+    if (heroDesc) {
+      var text = heroDesc.textContent.trim();
+      var m = text.match(/^[\s\S]*?[.?!](?=\s|$)/);
+      if (m && m[0].length > 40) heroDesc.textContent = m[0];
+    }
+
+    // ---- view toggle ----
+    var KEY = 'econblog-home-view';
+    var btnSubject = document.querySelector('.view-toggle .toggle-subject');
+    var btnDate = document.querySelector('.view-toggle .toggle-date');
+
+    function setView(view, persist) {
+      document.body.classList.toggle('home-view-date', view === 'date');
+      if (btnSubject && btnDate) {
+        btnSubject.classList.toggle('active', view !== 'date');
+        btnSubject.setAttribute('aria-pressed', view !== 'date');
+        btnDate.classList.toggle('active', view === 'date');
+        btnDate.setAttribute('aria-pressed', view === 'date');
+      }
+      if (persist) {
+        try { localStorage.setItem(KEY, view); } catch (e) {}
+      }
+    }
+
+    if (btnSubject && btnDate) {
+      btnSubject.addEventListener('click', function () { setView('subject', true); });
+      btnDate.addEventListener('click', function () { setView('date', true); });
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+      if (stored === 'date') setView('date', false);
+    }
+
+    // ---- "five more": collapse long sections down to four lines ----
+    var sections = [].slice.call(document.querySelectorAll('.subject-section'));
+    sections.forEach(function (sec) {
+      if (!sec.querySelector('.more-line')) return;
+      sec.classList.add('section-collapsed');
+      var btn = sec.querySelector('.more-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          sec.classList.remove('section-collapsed');
+        });
+      }
+    });
+
+    // ---- category filter adapter ----
+    // Quarto's filter drives List.js, whose items are the hidden stubs. This
+    // mirrors the stubs' visibility onto the lines of both views, the hero
+    // and the puzzler block, all of which carry data-indexes.
+    var targets = [].slice.call(
+      document.querySelectorAll('[data-indexes]'));
+
+    function currentHashCategory() {
+      var m = (location.hash || '').match(/category=([^&]*)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function applyFilter(list) {
+      var total = list.items.length;
+      var visible = {};
+      list.visibleItems.forEach(function (it) {
+        visible[String(it.values().index)] = true;
+      });
+      var filtering = list.visibleItems.length < total;
+
+      targets.forEach(function (el) {
+        var idxs = el.getAttribute('data-indexes').split(',');
+        var shown = idxs.some(function (i) { return visible[i]; });
+        el.classList.toggle('filtered-out', !shown);
+      });
+
+      // Recount each section from its visible lines; hide emptied sections.
+      [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
+        .forEach(function (sec) {
+          var n = 0;
+          [].slice.call(sec.querySelectorAll('[data-indexes]:not(.filtered-out)'))
+            .forEach(function (line) {
+              n += line.getAttribute('data-indexes').split(',').length;
+            });
+          var count = sec.querySelector('.subject-count, .year-count');
+          if (count) {
+            count.textContent = filtering ? n : count.getAttribute('data-total');
+          }
+          sec.classList.toggle('filtered-out', n === 0);
+          // A match hidden behind "five more" would be invisible, so an
+          // active filter expands every section; clearing it re-collapses.
+          if (sec.querySelector('.more-line')) {
+            sec.classList.toggle('section-collapsed', !filtering);
+          }
+        });
+
+      // Puzzlers and meta notes have no subject-view lines of their own, so
+      // those filters read best in the date view.
+      var cat = currentHashCategory();
+      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
+        setView('date', false);
+      }
+    }
+
+    // The List instance is created by an inline script and the filter can be
+    // applied from the URL hash slightly later, so attach when it appears.
+    var tries = 0;
+    (function attach() {
+      var lists = window['quarto-listings'];
+      var list = lists && lists['listing-listing'];
+      if (!list) {
+        if (++tries < 100) setTimeout(attach, 50);
+        return;
+      }
+      list.on('updated', function () { applyFilter(list); });
+      applyFilter(list);
+    })();
+  });
 })();
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
@@ -877,6 +1136,19 @@ Sorry <a href="https://twitter.com/UniofOxford?ref_src=twsrc%5Etfw"><span class=
 <script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 <script data-goatcounter="https://econometrics.goatcounter.com/count" async="" src="//gc.zgo.at/count.js"></script>
 
 
