@@ -938,11 +938,6 @@ c^2 \equiv \sum_{j=1}^p \mu_j^2.
     var targets = [].slice.call(
       document.querySelectorAll('[data-indexes]'));
 
-    function currentHashCategory() {
-      var m = (location.hash || '').match(/category=([^&]*)/);
-      return m ? decodeURIComponent(m[1]) : '';
-    }
-
     function applyFilter(list) {
       var total = list.items.length;
       var visible = {};
@@ -976,13 +971,6 @@ c^2 \equiv \sum_{j=1}^p \mu_j^2.
             sec.classList.toggle('section-collapsed', !filtering);
           }
         });
-
-      // Puzzlers and meta notes have no subject-view lines of their own, so
-      // those filters read best in the date view.
-      var cat = currentHashCategory();
-      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
-        setView('date', false);
-      }
     }
 
     // The List instance is created by an inline script and the filter can be

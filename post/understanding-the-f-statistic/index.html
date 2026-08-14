@@ -865,11 +865,6 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
     var targets = [].slice.call(
       document.querySelectorAll('[data-indexes]'));
 
-    function currentHashCategory() {
-      var m = (location.hash || '').match(/category=([^&]*)/);
-      return m ? decodeURIComponent(m[1]) : '';
-    }
-
     function applyFilter(list) {
       var total = list.items.length;
       var visible = {};
@@ -903,13 +898,6 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
             sec.classList.toggle('section-collapsed', !filtering);
           }
         });
-
-      // Puzzlers and meta notes have no subject-view lines of their own, so
-      // those filters read best in the date view.
-      var cat = currentHashCategory();
-      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
-        setView('date', false);
-      }
     }
 
     // The List instance is created by an inline script and the filter can be

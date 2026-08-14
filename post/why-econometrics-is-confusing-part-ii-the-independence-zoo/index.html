@@ -914,11 +914,6 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
     var targets = [].slice.call(
       document.querySelectorAll('[data-indexes]'));
 
-    function currentHashCategory() {
-      var m = (location.hash || '').match(/category=([^&]*)/);
-      return m ? decodeURIComponent(m[1]) : '';
-    }
-
     function applyFilter(list) {
       var total = list.items.length;
       var visible = {};
@@ -952,13 +947,6 @@ p_{X|Y}(x|y) \equiv \frac{p_{XY}(x,y)}{p_Y(y)} = p_X(x).
             sec.classList.toggle('section-collapsed', !filtering);
           }
         });
-
-      // Puzzlers and meta notes have no subject-view lines of their own, so
-      // those filters read best in the date view.
-      var cat = currentHashCategory();
-      if (filtering && (cat === 'puzzler' || cat === 'meta')) {
-        setView('date', false);
-      }
     }
 
     // The List instance is created by an inline script and the filter can be
