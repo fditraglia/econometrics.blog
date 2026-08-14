@@ -906,11 +906,25 @@ body.home-view-date {
   }
 }
 
+// A multi-part series renders as a group: the series name as an unlinked
+// label, then one indented, fully clickable line per part.
+.series-group { padding: 0.28rem 0; }
+
+.series-name {
+  font-size: $font-size-base * 0.95;
+  line-height: 1.35;
+  color: $ink;
+}
+
+.series-group .post-line {
+  padding: 0.14rem 0 0.14rem 1.5rem;
+}
+
 // "five more": an italic line that expands a long section. The template marks
-// every entry past the fourth with .more-line and renders them all, so the
-// no-JS page shows everything; _theme.html adds .section-collapsed and wires
-// the toggle.
-.js .section-collapsed .post-line.more-line { display: none; }
+// every entry past the fourth with .more-line (a single line or a whole
+// series group) and renders them all, so the no-JS page shows everything;
+// _theme.html adds .section-collapsed and wires the toggle.
+.js .section-collapsed .more-line { display: none; }
 
 .more-toggle {
   display: none;

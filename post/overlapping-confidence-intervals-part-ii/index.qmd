@@ -5,6 +5,7 @@ date: '2025-11-22'
 subject: 'Inference & uncertainty'
 series: 'Overlapping Confidence Intervals'
 series-label: 'Part II'
+series-part-title: 'Correlated estimates and the law of cosines'
 series-position: 'Part II of II'
 categories:
 - statistics

@@ -1,11 +1,12 @@
 ---
-title: Street Fighting Numerical Analysis - Part 1
+title: Street Fighting Numerical Analysis - Part I
 author: Francis J. DiTraglia
 date: '2021-10-29'
 subject: 'Computing & applied work'
 series: 'Street Fighting Numerical Analysis'
-series-label: 'Part 1'
-series-position: 'Part 1 of 2'
+series-label: 'Part I'
+series-part-title: "Floating point, or why 0.2 × 20 isn't 4"
+series-position: 'Part I of II'
 categories:
 - computing
 tags:

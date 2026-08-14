@@ -197,6 +197,13 @@
         el.classList.toggle('filtered-out', !shown);
       });
 
+      // A series group's label goes when every one of its parts is gone.
+      [].slice.call(document.querySelectorAll('.series-group'))
+        .forEach(function (g) {
+          var any = g.querySelector('[data-indexes]:not(.filtered-out)');
+          g.classList.toggle('filtered-out', !any);
+        });
+
       // Recount each section from its visible lines; hide emptied sections.
       [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
         .forEach(function (sec) {

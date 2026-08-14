@@ -5,6 +5,7 @@ date: '2025-08-28'
 subject: 'Causal inference & identification'
 series: 'A Good Instrument is a Bad Control'
 series-label: 'Part II'
+series-part-title: 'The general result, with simulations'
 series-position: 'Part II of II'
 categories:
 - econometrics

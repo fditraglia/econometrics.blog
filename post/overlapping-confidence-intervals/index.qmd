@@ -5,6 +5,7 @@ date: '2025-11-15'
 subject: 'Inference & uncertainty'
 series: 'Overlapping Confidence Intervals'
 series-label: 'Part I'
+series-part-title: "What overlap does and doesn't tell you"
 series-position: 'Part I of II'
 categories:
 - statistics

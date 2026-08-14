@@ -5,6 +5,7 @@ date: '2023-01-01'
 subject: 'Teaching & explainers'
 series: 'Why Econometrics is Confusing'
 series-label: 'Part II'
+series-part-title: 'The Independence Zoo'
 series-position: 'Part II of II'
 categories:
 - econometrics

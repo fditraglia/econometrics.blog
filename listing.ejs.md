@@ -68,35 +68,21 @@ const firstYear = Math.min.apply(null, all.map(yearOf));
 const puzzlers = all.filter((it) => cats(it).includes("puzzler"));
 const notes = all.filter((it) => cats(it).includes("meta"));
 
-// One line per post, or per series. A line remembers which item indexes it
-// stands for so the category filter can hide it.
-const lineFor = (group) => {
+// One entry per post, or per series. A series renders as a group: the series
+// name as an unlinked label, then one clearly clickable line per part
+// ("Part I — short title", from the series-part-title field). Every line
+// carries its own item index so the category filter can hide it.
+const entryFor = (group) => {
   group.sort((a, b) => epoch(a) - epoch(b)); // parts in order of publication
-  const first = group[0];
-  const idxs = group.map((it) => it.__idx).join(",");
-  const allCats = [...new Set(group.flatMap(cats))];
-  const years = [...new Set(group.map(yearOf))].join(", ");
-  let html = "";
+  const sortEpoch = epoch(group[group.length - 1]);
   if (group.length === 1) {
-    html = `<a href="${first.path}" class="no-external">${esc(first.title)}</a>`;
-  } else if (first.series && first.title === first.series) {
-    // "A Good Instrument is a Bad Control <em>& Part II</em>"
-    const rest = group.slice(1).map((it) =>
-      `<a href="${it.path}" class="no-external">&amp; ${esc(it["series-label"] || "Part II")}</a>`).join(" ");
-    html = `<a href="${first.path}" class="no-external">${esc(first.series)}</a> <span class="series-suffix">${rest}</span>`;
-  } else {
-    // "Street Fighting Numerical Analysis <em>Parts 1 & 2</em>"
-    const nums = group.map((it) =>
-      `<a href="${it.path}" class="no-external">${esc(String(it["series-label"] || "").replace(/^Part\s+/, ""))}</a>`);
-    const seq = nums.length === 2 ? nums.join(" &amp; ")
-      : nums.slice(0, -1).join(", ") + " &amp; " + nums[nums.length - 1];
-    html = `<a href="${first.path}" class="no-external">${esc(first.series)}</a> <span class="series-suffix">Parts ${seq}</span>`;
+    return { type: "single", it: group[0], sortEpoch };
   }
-  return { html, years, idxs, cats: allCats, sortEpoch: epoch(group[group.length - 1]) };
+  return { type: "series", name: group[0].series, parts: group, sortEpoch };
 };
 
 // Build each subject section: group its posts, fold series together, newest
-// line first.
+// entry first.
 const sections = SECTIONS.map(({ label, numeral }) => {
   const posts = all.filter((it) => it.subject === label);
   const bySeries = new Map();
@@ -109,15 +95,12 @@ const sections = SECTIONS.map(({ label, numeral }) => {
       groups.push([it]);
     }
   }
-  const lines = groups.map(lineFor).sort((a, b) => b.sortEpoch - a.sortEpoch);
-  return { label, numeral, posts, lines };
+  const entries = groups.map(entryFor).sort((a, b) => b.sortEpoch - a.sortEpoch);
+  return { label, numeral, posts, entries };
 });
 
 // Date view: years, newest first.
 const years = [...new Set(all.map(yearOf))].sort((a, b) => b - a);
-
-const lineAttrs = (l) =>
-  `data-indexes="${l.idxs}" data-categories="${b64(l.cats.join(","))}"`;
 %>
 
 ```{=html}
@@ -161,14 +144,27 @@ const lineAttrs = (l) =>
       <span class="subject-rule"></span>
       <span class="subject-count" data-total="<%= sec.posts.length %>"><%= sec.posts.length %></span>
     </div>
-    <% sec.lines.forEach(function (l, i) { %>
-    <div class="post-line<%= i >= 4 ? ' more-line' : '' %>" <%= lineAttrs(l) %>>
-      <span class="post-line-title"><%= l.html %></span>
-      <span class="post-line-years"><%= l.years %></span>
+    <% sec.entries.forEach(function (e, i) {
+         const more = i >= 4 ? ' more-line' : ''; %>
+    <% if (e.type === 'single') { %>
+    <div class="post-line<%= more %>" data-indexes="<%= e.it.__idx %>" data-categories="<%= b64(cats(e.it).join(',')) %>">
+      <span class="post-line-title"><a href="<%= e.it.path %>" class="no-external"><%= esc(e.it.title) %></a></span>
+      <span class="post-line-years"><%= yearOf(e.it) %></span>
     </div>
+    <% } else { %>
+    <div class="series-group<%= more %>">
+      <div class="series-name"><%= esc(e.name) %></div>
+      <% e.parts.forEach(function (it) { %>
+      <div class="post-line series-part" data-indexes="<%= it.__idx %>" data-categories="<%= b64(cats(it).join(',')) %>">
+        <span class="post-line-title"><a href="<%= it.path %>" class="no-external"><span class="part-label"><%= esc(it['series-label'] || '') %></span> &mdash; <%= esc(it['series-part-title'] || it.title) %></a></span>
+        <span class="post-line-years"><%= yearOf(it) %></span>
+      </div>
+      <% }); %>
+    </div>
+    <% } %>
     <% }); %>
-    <% if (sec.lines.length > 4) { %>
-    <button type="button" class="more-toggle"><%= numWord(sec.lines.length - 4) %> more</button>
+    <% if (sec.entries.length > 4) { %>
+    <button type="button" class="more-toggle"><%= numWord(sec.entries.length - 4) %> more</button>
     <% } %>
   </section>
 <% }); %>

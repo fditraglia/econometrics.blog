@@ -1,12 +1,13 @@
 ---
 title: "Complex Step Differentiation"
-subtitle: "Street Fighting Numerical Analysis - Part 2"
+subtitle: "Street Fighting Numerical Analysis - Part II"
 author: Francis J. DiTraglia
 date: '2026-04-26'
 subject: 'Computing & applied work'
 series: 'Street Fighting Numerical Analysis'
-series-label: 'Part 2'
-series-position: 'Part 2 of 2'
+series-label: 'Part II'
+series-part-title: 'Complex step differentiation'
+series-position: 'Part II of II'
 categories:
 - computing
 tags:

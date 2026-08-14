@@ -1,11 +1,12 @@
 ---
-title: 'Why Econometrics is Confusing Part 1: The Error Term'
+title: 'Why Econometrics is Confusing Part I: The Error Term'
 author: Francis J. DiTraglia
 date: '2022-07-24'
 subject: 'Teaching & explainers'
 series: 'Why Econometrics is Confusing'
-series-label: 'Part 1'
-series-position: 'Part 1 of 2'
+series-label: 'Part I'
+series-part-title: 'The Error Term'
+series-position: 'Part I of II'
 categories:
 - econometrics
 - teaching

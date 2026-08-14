@@ -5,6 +5,7 @@ date: '2023-06-29'
 subject: 'Causal inference & identification'
 series: 'A Good Instrument is a Bad Control'
 series-label: 'Part I'
+series-part-title: 'Why controlling for an instrument backfires'
 series-position: 'Part I of II'
 categories:
 - econometrics
