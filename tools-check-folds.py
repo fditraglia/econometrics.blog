@@ -19,9 +19,16 @@ that begins before the fold ends inside it, so its notes are carried inside too
 the opposite failure and just as broken. A `## Solution` heading immediately
 above the fold is what prevents it.
 
-Neither `quarto render` nor tools-check-layout.py can see either fault, hence
-this check: for every footnote on a page with a fold, the marker and the note
-must be on the same side of it.
+`reference-location: margin` is a third way to leak: Quarto hoists margin
+notes out of the fold's collapse container so the page grid can place them,
+which leaves a note cited inside a closed fold sitting readable in the margin
+beside it. Margin footnotes render as div[id^="fn"] rather than li[id^="fn"],
+so the probe selects both; an early version looked only at list items and
+reported a leaking page as clean.
+
+Neither `quarto render` nor tools-check-layout.py can see any of these faults,
+hence this check: for every footnote on a page with a fold, the marker and the
+note must be on the same side of it.
 
 Exits non-zero when they are not, naming the note and which way it went.
 """
@@ -36,7 +43,8 @@ PROBE = """() => {
   const fold = document.querySelector('.callout.solution');
   if (!fold) return null;
   const out = [];
-  document.querySelectorAll('li[id^="fn"]').forEach(note => {
+  document.querySelectorAll('li[id^="fn"], div[id^="fn"]').forEach(note => {
+    if (/^fnref/.test(note.id)) return;  // a marker, not a note
     const marker = document.querySelector('a[href="#' + note.id + '"]');
     out.push({
       id: note.id,
