@@ -123,7 +123,7 @@ Footnotes in a puzzler are ordinary margin footnotes, like every other post — 
 Four things to know before adding one:
 
 - **Headings inside a fold stay out of the table of contents**, so a section title cannot give the answer away. This is Quarto's behavior, not something the CSS arranges.
-- **Run `uv run tools-check-folds.py` after rendering.** It opens each fold-bearing page twice — fold shut, fold open — and fails unless every note is readable exactly when its marker is readable. This is what catches a leaked solution or a dangling marker; nothing else does.
+- **Run `uv run tools-check-folds.py` when the fold structure changes.** It opens each fold-bearing page twice — fold shut, fold open — and fails unless every note is readable exactly when its marker is readable. This is what catches a leaked solution or a dangling marker; nothing else does. It is only worth running when something it can actually see has changed: adding or removing a fold, moving where one starts or ends, adding or removing a footnote inside or after a fold, or editing the fold and margin-note rules in `custom.scss`. Editing prose or code *inside* an existing fold cannot move a fold boundary or a footnote marker, so do not re-run it for wording changes — it takes a while and the answer cannot differ.
 - **`tools-check-layout.py` cannot see inside a closed fold.** After adding one, open it and check for sideways scroll at 390px separately.
 - **Render the post directly** (`quarto render post/slug/index.qmd`) after editing it — see the freeze warning above.
 
