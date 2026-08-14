@@ -312,8 +312,8 @@ window.Quarto = {
     \mathbb{E}[Y_0|D,X] = \mathbb{E}[Y_0|X] \quad \text{and} \quad
     \mathbb{E}[Y_1|D,X] = \mathbb{E}[Y_1|X]
 \]</span> where <span class="math inline">\((Y_0, Y_1)\)</span> are the <a href="https://expl.ai/QHUAVRV">potential outcomes</a> corresponding to a binary treatment <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> is a vector of observed covariates.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Since more than a handful of students made the same mistakes, it seemed like a good opportunity for a short post.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For more details see my <a href="https://www.treatment-effects.com/">lecture notes on treatment effects</a></p></div></div><section id="two-misconceptions" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Two Misconceptions</h1>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For more details see my <a href="https://www.treatment-effects.com/">lecture notes on treatment effects</a></p></div></div><section id="two-misconceptions" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="two-misconceptions"><span class="header-section-number">1</span> Two Misconceptions</h2>
 <p>The following two statements about selection on observables are <em>false</em>:</p>
 <blockquote class="blockquote">
 <ol type="1">
@@ -323,8 +323,8 @@ window.Quarto = {
 </blockquote>
 <p>If you’ve studied treatment effects, pause for a moment and see if you can figure out what’s wrong with each of them before reading further.</p>
 </section>
-<section id="the-first-misconception" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> The First Misconception</h1>
+<section id="the-first-misconception" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-first-misconception"><span class="header-section-number">2</span> The First Misconception</h2>
 <p>The first statement:</p>
 <blockquote class="blockquote">
 <p>Under selection on observables, if I know the value of someone’s covariate vector <span class="math inline">\(X\)</span>, then learning her treatment status <span class="math inline">\(D\)</span> provides no additional information about the average value of her observed outcome <span class="math inline">\(Y\)</span>.</p>
@@ -359,8 +359,8 @@ X)] = \mathbb{E}[\text{ATE}(X)] = 0
 </blockquote>
 <p>This is a correct verbal statement of the mean exclusion restriction <span class="math inline">\(\mathbb{E}(Y_0|D,X) = \mathbb{E}(Y_0|X)\)</span> and <span class="math inline">\(\mathbb{E}(Y_1|D,X) = \mathbb{E}(Y_1|X)\)</span>.</p>
 </section>
-<section id="the-second-misconception" class="level1 page-columns page-full" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> The Second Misconception</h1>
+<section id="the-second-misconception" class="level2 page-columns page-full" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-second-misconception"><span class="header-section-number">3</span> The Second Misconception</h2>
 <p>And this leads nicely to the second misconception:</p>
 <blockquote class="blockquote">
 <p>Selection on observables requires the treatment <span class="math inline">\(D\)</span> and potential outcomes <span class="math inline">\((Y_0,Y_1)\)</span> to be conditionally independent given covariates <span class="math inline">\(X\)</span>.</p>
@@ -398,8 +398,8 @@ Y_1 &amp;= \alpha_1 + X'\beta_1 + U_1 \\
 </blockquote>
 <p>Conditional independence implies conditional mean independence, but the converse is false.</p>
 </section>
-<section id="epilogue" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Epilogue</h1>
+<section id="epilogue" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">4</span> Epilogue</h2>
 <p>So what’s the moral here? First, it’s crucial to distinguish between the <em>observed</em> outcome <span class="math inline">\(Y\)</span> and the <em>potential outcomes</em> <span class="math inline">\((Y_0, Y_1)\)</span>. Second, the various notions of “unrelatedness” between random variables—independence, conditional mean independence, and uncorrelatedness—can be confusing. Be sure to pay attention to exactly which condition is used and why. In a future post, I’ll have more to say about the relationships between these notions.</p>
 
 

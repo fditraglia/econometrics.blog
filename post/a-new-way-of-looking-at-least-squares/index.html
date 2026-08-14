@@ -377,8 +377,8 @@ window.Quarto = {
   40.943127    1.266961 </code></pre>
 </div>
 </div>
-<section id="where-does-the-regression-line-come-from" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Where does the regression line come from?</h1>
+<section id="where-does-the-regression-line-come-from" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="where-does-the-regression-line-come-from"><span class="header-section-number">1</span> Where does the regression line come from?</h2>
 <p>If you’ve taken an introductory statistics or econometrics course, you most likely learned that the least squares regression line <span class="math inline">\(\widehat{\alpha} + \widehat{\beta} x\)</span> minimizes the <em>sum of squared vertical deviations</em> by solving the optimization problem <span class="math display">\[
 \min_{\alpha, \beta} \sum_{i=1}^n (y_i - \alpha - \beta x_i)^2.
 \]</span> You probably also learned that the solution is given by <span class="math display">\[
@@ -400,8 +400,8 @@ window.Quarto = {
 </div>
 <p>This is all perfectly correct, and an entirely reasonable way of looking at the problem. But I’d now like to suggest a <em>completely different</em> way of looking at regression. Why bother? The more different ways we have of understanding an idea or method, the more deeply we understand how it works, when it works, and when it is likely to fail. So bear with me while I take you on what might at first appear to be a poorly-motivated computational detour. I promise that there’s a payoff at the end!</p>
 </section>
-<section id="a-crazy-idea" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> A Crazy Idea</h1>
+<section id="a-crazy-idea" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="a-crazy-idea"><span class="header-section-number">2</span> A Crazy Idea</h2>
 <p>There is a unique line that passes through any two distinct points in a plane. So here’s a crazy idea: let’s form every unique pair of <em>students</em> from my height and handspan dataset. To understand what I have in mind, consider a small subset of the data, call it <code>test</code></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,]</span>
@@ -458,8 +458,8 @@ window.Quarto = {
 </div>
 <p>Something interesting is going on here, but it’s not clear what. To learn more, it would be helpful to play with more than three points. But doing this by hand would be extremely tedious. Time to write a function!</p>
 </section>
-<section id="all-pairs-of-students" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> All Pairs of Students</h1>
+<section id="all-pairs-of-students" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="all-pairs-of-students"><span class="header-section-number">3</span> All Pairs of Students</h2>
 <p>The following function generates all unique pairs of elements taken from a vector <code>x</code> and stores them in a matrix:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>make_pairs <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
@@ -525,8 +525,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="i-just-calculated-52975-slopes." class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> I just calculated 52,975 slopes.</h1>
+<section id="i-just-calculated-52975-slopes." class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="i-just-calculated-52975-slopes."><span class="header-section-number">4</span> I just calculated 52,975 slopes.</h2>
 <p>Corresponding to each row of <code>regression_pairs</code> is a slope. We can calculate and summarize them as follows, using the <code>dplyr</code> package from the <code>tidyverse</code> to make things easier to read:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -584,8 +584,8 @@ window.Quarto = {
 </div>
 <p>This is tantalizingly close to the slope of the regression line from above: 1.266961. But it’s still <em>slightly off</em>.</p>
 </section>
-<section id="not-all-slopes-are-created-equal" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Not All Slopes are Created Equal</h1>
+<section id="not-all-slopes-are-created-equal" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="not-all-slopes-are-created-equal"><span class="header-section-number">5</span> Not All Slopes are Created Equal</h2>
 <p>The median handspan in my dataset is 21.5. Let’s take a closer look at the heights of students whose handspans are <em>close</em> to this value:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(height <span class="sc">~</span> handspan, dat, <span class="at">subset =</span> handspan <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">21</span>, <span class="fl">21.5</span>, <span class="dv">22</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

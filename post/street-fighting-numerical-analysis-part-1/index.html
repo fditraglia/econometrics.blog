@@ -345,8 +345,8 @@ window.Quarto = {
   </ul>
 </nav>
 <p>Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training in numerical analysis and computer science. This means that we often learn things <em>the hard way</em>: by making boneheaded mistakes and spending hours browsing <a href="https://stackoverflow.com/">stackoverflow</a> to try to figure out what went wrong. In preparation for my upcoming course on <a href="https://empirical-methods.com">Empirical Research Methods</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I’ve started trying to collect and organize the various nuggets of computational wisdom that I’ve picked up over the years. This post is the first of several that I plan to write on that theme. Its origin is an enigmatic bug that I detected in a seemingly trivial line of my R code involving <code>rep()</code>.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Content coming soon!</p></div></div><section id="is-r-broken" class="level1 page-columns page-full" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Is R broken?</h1>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Content coming soon!</p></div></div><section id="is-r-broken" class="level2 page-columns page-full" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="is-r-broken"><span class="header-section-number">1</span> Is R broken?</h2>
 <p>For no particular reason, let’s use the R function <code>rep()</code> to print out the string <code>"econometrics.blog"</code> four times:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">"econometrics.blog"</span>, <span class="at">times =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -387,8 +387,8 @@ window.Quarto = {
 </div>
 <p>Clearly using open-source software like R is a bad idea and I should switch to STATA.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Health warning: this sentence is satire. The author does not condone the use of STATA or other closed-source statistical packages.</p></div></div></section>
-<section id="numeric-types-in-r" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Numeric Types in R</h1>
+<section id="numeric-types-in-r" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="numeric-types-in-r"><span class="header-section-number">2</span> Numeric Types in R</h2>
 <p>Because R is a <a href="https://en.wikipedia.org/wiki/Type_system#DYNAMIC">dynamically-typed</a> programming language, we can almost always ignore the question of precisely how it stores numeric values “under the hood.” In fact R has <em>two</em> numeric types: integer and double. Integers are rare in practice. The operator <code>:</code> returns an integer vector</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
@@ -500,8 +500,8 @@ window.Quarto = {
 </div>
 <p>To find out <em>why</em> these values aren’t equal, we need to learn a bit more about how computers approximate real numbers using doubles.</p>
 </section>
-<section id="what-you-see-isnt-always-what-you-get." class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> What you see isn’t always what you get.</h1>
+<section id="what-you-see-isnt-always-what-you-get." class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="what-you-see-isnt-always-what-you-get."><span class="header-section-number">3</span> What you see isn’t always what you get.</h2>
 <p>R has various handy built-in constants, including <span class="math inline">\(\pi\)</span></p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -547,8 +547,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="which-decimals-have-an-exact-representation" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Which decimals have an exact representation?</h1>
+<section id="which-decimals-have-an-exact-representation" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="which-decimals-have-an-exact-representation"><span class="header-section-number">4</span> Which decimals have an exact representation?</h2>
 <p>The fraction <code>1/3</code> lacks a finite decimal expansion. You might guess that R would simply store <code>1/3</code> as a zero, followed by a decimal, followed by a large number of <code>3</code>s. But in fact it does not:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -574,8 +574,8 @@ window.Quarto = {
 <p>The reason why <code>1/3</code> lacks a terminating decimal expansion is that it can’t be written as a counting number divided by a power of ten. In other words, we can’t find values <span class="math inline">\(m, n \in \mathbb{N}\)</span> such that <span class="math inline">\(m/10^n\)</span> equals <span class="math inline">\(1/3\)</span>. In contrast, <code>3/4</code> has a finite decimal expansion because it equals <code>75/100</code>, corresponding to <span class="math inline">\(m = 75\)</span> and <span class="math inline">\(n = 2\)</span>. Of course I’ve left off a crucial qualification: wherever I wrote “finite decimal expansion” above, I should have added “in base 10.” <em>The same number could have a terminating decimal expansion in one base and not in another.</em></p>
 <p>Although R displays numbers on the screen in base 10, it represents and computes with them in binary. So the question becomes: which values have a terminating decimal expansion in base 2? To find out, simply replace <code>10</code> with <code>2</code> in the expression from above. A rational number has a terminating decimal expansion base 2 if it can be written as <span class="math inline">\(m/2^n\)</span> for some <span class="math inline">\(m, n \in \mathbb{N}\)</span>. Since <code>1/4</code> equals <span class="math inline">\(1/2^2\)</span>, it has an exact representation. Since <code>3/4</code> can be written as <code>3/2^2</code> it <em>also</em> has an exact representation. In contrast, <code>1/5</code> lacks an exact representation because there are no natural numbers <span class="math inline">\(m,n\)</span> such that <span class="math inline">\(5 = 2^n/m\)</span>. We can get <em>close</em> by making <span class="math inline">\(n\)</span> large and choosing <span class="math inline">\(m\)</span> carefully, but we can never satisfy this equation exactly.</p>
 </section>
-<section id="take-home-lesson" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Take-home Lesson</h1>
+<section id="take-home-lesson" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="take-home-lesson"><span class="header-section-number">5</span> Take-home Lesson</h2>
 <p>High-level programming languages like R and Python are extremely convenient: they allow us to focus on the big picture rather than writing line after line of boilerplate code. But we should never forget that computers <em>cannot</em> represent all numeric values with perfect accuracy. Sometimes this matters. In R, coercing from integer to double is safe but the reverse can be risky, as we have gleaned from a deceptively simple example involving <code>rep()</code>. To learn more about the subtleties of R, I highly recommend <a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> by Patrick Burns and <a href="https://adv-r.hadley.nz/">Advanced R</a> by Hadley Wickham. Despite what you may have heard, R is quite a capable language, but it does have some quirks!</p>
 
 

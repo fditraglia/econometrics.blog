@@ -347,22 +347,22 @@ window.Quarto = {
 </nav>
 <p>In a <a href="../../post/thirty-isn-t-the-magic-number/">previous post</a> I showed an example in which the “textbook” confidence interval for a proportion performs poorly despite a fairly large sample size. My aim in that post was to convince you that the oft-repeated advice concerning <span class="math inline">\(n &gt; 30\)</span> and the central limit theorem is worthless. Today I’d like to convince you of something even more subversive: the textbook confidence interval for a proportion is absolutely terrible and you should never use it or teach it under any circumstances. Fortunately there’s a simple fix. For a 95% interval, simply add four “fake” observations to your dataset, two successes and two failures, and then follow the textbook recipe for this “artificially augmented” dataset.</p>
 <p>This post draws on two very approachable papers from around the turn of the millennium: <a href="https://www.tandfonline.com/doi/abs/10.1080/00031305.1998.10480550">Agresti &amp; Coull (1998)</a> and <a href="https://projecteuclid.org/journals/statistical-science/volume-16/issue-2/Interval-Estimation-for-a-Binomial-Proportion/10.1214/ss/1009213286.full">Brown, Cai, &amp; DasGupta (2001)</a>. More theoretically-inclined readers may also enjoy a companion paper to the latter reference: <a href="https://projecteuclid.org/journals/annals-of-statistics/volume-30/issue-1/Confidence-Intervals-for-a-binomial-proportion-and-asymptotic-expansions/10.1214/aos/1015362189.full">Brown, Cai, &amp; DasGupta (2002)</a>.</p>
-<section id="the-wald-confidence-interval" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> The Wald Confidence Interval</h1>
+<section id="the-wald-confidence-interval" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-wald-confidence-interval"><span class="header-section-number">1</span> The Wald Confidence Interval</h2>
 <p>This is what you learned in your introductory statistics course: it’s the textbook interval I alluded to above. Let <span class="math inline">\(X_1, ..., X_n \sim \text{iid Bernoulli}(p)\)</span> and define <span class="math inline">\(\widehat{p} = \sum_{i=1}^n X_i/n\)</span>. By the central limit theorem <span class="math display">\[
 \frac{\widehat{p} - p}{\sqrt{\widehat{p}(1 - \widehat{p})/n}} \rightarrow_d N(0,1)
 \]</span> leading to the so-called “Wald” 95% confidence interval for a population proportion: <span class="math display">\[
 \widehat{p} \pm 1.96 \times \sqrt{\frac{\widehat{p}(1- \widehat{p})}{n}}.
 \]</span></p>
 </section>
-<section id="an-obvious-objection-to-the-wald-interval" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> An Obvious Objection to the Wald Interval</h1>
+<section id="an-obvious-objection-to-the-wald-interval" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="an-obvious-objection-to-the-wald-interval"><span class="header-section-number">2</span> An Obvious Objection to the Wald Interval</h2>
 <p>Suppose we want to estimate the proportion of Trump voters in Berkeley California. We decide to carry out a poll of 25 randomly-sampled Berkeley residents and find that none of them voted for Trump. Then <span class="math inline">\(\widehat{p} = 0\)</span> and the Wald confidence interval is <span class="math display">\[
 0 \pm 1.96 \times \sqrt{0 \times (1 - 0) / 25}
 \]</span> in other words <span class="math inline">\([0, 0]\)</span>. Clearly this is absurd: unless there are literally <em>zero</em> Trump voters in Berkeley, we can be <em>certain</em> that this interval does not contain the true population parameter. A similar problem would emerge if we instead tried to estimate the proportion of Biden voters in Berkeley: if <span class="math inline">\(\widehat{p} = 1\)</span> then our confidence interval would be <span class="math inline">\([1,1]\)</span>. This too is absurd. More broadly, the Wald confidence interval is extremely poorly behaved in situations where <span class="math inline">\(p\)</span> is close to zero or one. You may have encountered a suggestion that <span class="math inline">\(np(1-p)\)</span> should be at least 5 for the Wald interval to perform well. There’s something to this advice, as we’ll see below, but it’s not sufficient. More to the point: we don’t <em>know</em> <span class="math inline">\(p\)</span> in practice so there is no way to apply this rule!</p>
 </section>
-<section id="the-agresti-coull-interval" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> The Agresti-Coull Interval</h1>
+<section id="the-agresti-coull-interval" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-agresti-coull-interval"><span class="header-section-number">3</span> The Agresti-Coull Interval</h2>
 <p>Here’s a quick and dirty fix that is surprisingly effective. Simply add four “fake” observations to the dataset: two zeros (failures) and two ones (successes). The 95% Agresti-Coull confidence interval is constructed in exactly the same way as 95% Wald interval only using this “artificially augmented” dataset rather than the original one. In other words, if the sample size is <span class="math inline">\(n\)</span> and the sample proportion is <span class="math inline">\(\widehat{p}\)</span>, then Agresti-Coull interval is constructed from <span class="math inline">\(\widetilde{n} = n + 4\)</span> and <span class="math display">\[
 \widetilde{p} \equiv \frac{n \widehat{p} + 2}{n + 4} = \frac{\left(\sum_{i=1}^n X_i\right) + 0 + 0 + 1 + 1}{n + 4}
 \]</span> yielding <span class="math display">\[
@@ -379,8 +379,8 @@ window.Quarto = {
 0.07 \pm 1.96 \times \sqrt{\frac{0.07 \times (1 - 0.07)}{29}} = [-0.02, 0.16].
 \]</span> Of course a proportion can’t be negative, so we would report <span class="math inline">\([0, 0.16]\)</span>. This seems like a much more reasonable summary of our uncertainty than reporting an interval of <span class="math inline">\([0,0]\)</span>, but does it really work? Does adding fake data really improve things?</p>
 </section>
-<section id="comparing-the-wald-and-agresti-coull-intervals" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Comparing the Wald and Agresti-Coull Intervals</h1>
+<section id="comparing-the-wald-and-agresti-coull-intervals" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="comparing-the-wald-and-agresti-coull-intervals"><span class="header-section-number">4</span> Comparing the Wald and Agresti-Coull Intervals</h2>
 <p>To answer the question raised at the end of the last paragraph, let’s use R to calculate the <em>coverage probability</em> of the Wald and Agresti-Coull intervals for a range of values of the sample size <span class="math inline">\(n\)</span> and true population proportion <span class="math inline">\(p\)</span>. In other words, let’s see how often these intervals <em>actually</em> contain the true population parameter <span class="math inline">\(p\)</span>. If they are bona fide 95% confidence intervals, this should occur with probability close to 0.95. One way to carry out this exercise is via Monte Carlo simulation: repeatedly drawing randomly generated datasets and counting the proportion of our resulting confidence intervals that contain the true value of <span class="math inline">\(p\)</span>. In this example, however, it turns out that there’s a quick and easy way to calculate <em>exact</em> coverage probabilities using the R function <code>dbinom</code>. For full details, see the R code appendix at the end of the post.</p>
 <p>To begin, let’s compare the two confidence intervals over a grid of values for the true population proportion <span class="math inline">\(p\)</span> while holding the sample size <span class="math inline">\(n\)</span> fixed. When <span class="math inline">\(n = 25\)</span> we obtain the following:</p>
 <div class="cell">
@@ -428,12 +428,12 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="conclusion" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
+<section id="conclusion" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">5</span> Conclusion</h2>
 <p>Friends don’t let friends use the Wald interval for a proportion. Fortunately there’s a simple alternative when you’re after a 95% confidence interval: add two successes and two failures to your dataset, then proceed as normal. I encourage you to use my R code to test out different values of <span class="math inline">\(p\)</span> and <span class="math inline">\(n\)</span>, making your own comparisons of the Wald and Agresti-Coull intervals. In a future post, I’ll show you where the Agresti-Coull interval comes from, why it works so well, and how to generalize it to construct 90%, 99% and indeed arbitrary <span class="math inline">\((1 - \alpha) \times 100\%\)</span> confidence intervals.</p>
 </section>
-<section id="r-code-appendix" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> R Code Appendix</h1>
+<section id="r-code-appendix" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="r-code-appendix"><span class="header-section-number">6</span> R Code Appendix</h2>
 <p>I wrote four R functions to generate the plots shown above: <code>get_Wald_coverage()</code> and <code>get_AC_coverage()</code> calculate the coverage probabilities of the Wald and Agresti-Coull confidence intervals, while <code>plot_n_comparison()</code> and <code>plot_p_comparison()</code> construct the plots comparing coverage probabilities across different values of the sample size <span class="math inline">\(n\)</span> and true population proportion <span class="math inline">\(p\)</span>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>get_Wald_coverage <span class="ot">&lt;-</span> <span class="cf">function</span>(p, n) {</span>
