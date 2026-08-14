@@ -18,14 +18,18 @@
 // five section labels here must match those fields exactly. Series collapse
 // onto one line via the `series:` / `series-label:` fields.
 
-const SUBJECTS = [
-  "Causal inference & identification",
-  "Inference & uncertainty",
-  "Econometric theory",
-  "Teaching & explainers",
-  "Computing & applied work",
+// Five numbered subjects and an appendix. A puzzler lives in its topical
+// section like any other post (the puzzler block below presents them again
+// as a set); the odds and ends get the appendix, marked "A." rather than a
+// roman numeral so it reads as an annex to the five, not a sixth subject.
+const SECTIONS = [
+  { label: "Causal inference & identification", numeral: "I" },
+  { label: "Inference & uncertainty", numeral: "II" },
+  { label: "Econometric theory", numeral: "III" },
+  { label: "Teaching & explainers", numeral: "IV" },
+  { label: "Computing & applied work", numeral: "V" },
+  { label: "Odds & ends", numeral: "A" },
 ];
-const ROMAN = ["I", "II", "III", "IV", "V"];
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
                 "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven",
@@ -93,7 +97,7 @@ const lineFor = (group) => {
 
 // Build each subject section: group its posts, fold series together, newest
 // line first.
-const sections = SUBJECTS.map((label, s) => {
+const sections = SECTIONS.map(({ label, numeral }) => {
   const posts = all.filter((it) => it.subject === label);
   const bySeries = new Map();
   const groups = [];
@@ -106,7 +110,7 @@ const sections = SUBJECTS.map((label, s) => {
     }
   }
   const lines = groups.map(lineFor).sort((a, b) => b.sortEpoch - a.sortEpoch);
-  return { label, numeral: ROMAN[s], posts, lines };
+  return { label, numeral, posts, lines };
 });
 
 // Date view: years, newest first.

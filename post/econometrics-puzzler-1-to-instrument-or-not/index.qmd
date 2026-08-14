@@ -2,7 +2,8 @@
 title: 'Econometrics Puzzler #1: To Instrument or Not?'
 author: Francis J. DiTraglia
 date: '2025-07-13'
-subject: 'Puzzler No. 1'
+subject: 'Causal inference & identification'
+eyebrow: 'Puzzler No. 1'
 categories:
 - econometrics
 - causal inference

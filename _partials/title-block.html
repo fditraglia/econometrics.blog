@@ -1,7 +1,7 @@
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <p class="post-eyebrow">
-$if(subject)$<span class="eyebrow-item">$subject$</span>$endif$
+$if(eyebrow)$<span class="eyebrow-item">$eyebrow$</span>$elseif(subject)$<span class="eyebrow-item">$subject$</span>$endif$
 $if(date)$<span class="eyebrow-item">$date$</span>$endif$
 $if(reading-time)$<span class="eyebrow-item">$reading-time$</span>$endif$
 $if(series-position)$<span class="eyebrow-item">$series-position$</span>$endif$

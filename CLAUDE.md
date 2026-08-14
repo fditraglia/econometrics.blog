@@ -35,7 +35,7 @@ tags:
 ---
 ```
 
-`subject` places the post on the home page's by-subject view and leads the metadata line above the title. The five values for topical posts, which must match `listing.ejs.md` exactly: `Causal inference & identification`, `Inference & uncertainty`, `Econometric theory`, `Teaching & explainers`, `Computing & applied work`. Puzzlers take `Puzzler No. N` and meta posts take `Odds & ends`; both sit outside the five sections.
+`subject` places the post on the home page's by-subject view and, by default, leads the metadata line above the title. The values, which must match `listing.ejs.md` exactly: the five numbered subjects `Causal inference & identification`, `Inference & uncertainty`, `Econometric theory`, `Teaching & explainers`, `Computing & applied work`, plus the appendix `Odds & ends` (rendered with an "A." in place of a roman numeral) for meta posts. Puzzlers take the topical subject they belong to — they are listed there like any other post AND presented as a set in the puzzler block — and add `eyebrow: 'Puzzler No. N'`, which replaces the subject in the metadata line only.
 
 Posts in a multi-part series carry three more fields, e.g. the second part of a pair:
 ```yaml

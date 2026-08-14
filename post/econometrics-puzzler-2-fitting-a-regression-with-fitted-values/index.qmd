@@ -2,7 +2,8 @@
 title: 'Econometrics Puzzler #2: Fitting a Regression with Fitted Values'
 author: Francis J. DiTraglia
 date: '2025-07-24'
-subject: 'Puzzler No. 2'
+subject: 'Econometric theory'
+eyebrow: 'Puzzler No. 2'
 categories:
 - econometrics
 - puzzler
