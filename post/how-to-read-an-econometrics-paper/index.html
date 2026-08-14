@@ -48,7 +48,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-78c875ace8d5d9f5362d11956095888f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-b06b28dc1287d0c02efca9a066ef50ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -673,6 +673,13 @@ ul.task-list li input[type="checkbox"] {
         var shown = idxs.some(function (i) { return visible[i]; });
         el.classList.toggle('filtered-out', !shown);
       });
+
+      // A series group's label goes when every one of its parts is gone.
+      [].slice.call(document.querySelectorAll('.series-group'))
+        .forEach(function (g) {
+          var any = g.querySelector('[data-indexes]:not(.filtered-out)');
+          g.classList.toggle('filtered-out', !any);
+        });
 
       // Recount each section from its visible lines; hide emptied sections.
       [].slice.call(document.querySelectorAll('.subject-section, .year-section'))
