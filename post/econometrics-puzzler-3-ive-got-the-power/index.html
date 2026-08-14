@@ -48,7 +48,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-50629501dae61165add7f283a0d15abc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-78c875ace8d5d9f5362d11956095888f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -284,7 +284,7 @@ window.Quarto = {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -309,7 +309,7 @@ window.Quarto = {
 <p>Suppose you observe <span class="math inline">\(n\)</span> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <span class="math inline">\(\sigma^2\)</span>, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <span class="math inline">\(H_0\colon \mu_1 = \mu_2\)</span>, against the two-sided alternative with significance level <span class="math inline">\(\alpha = 0.05\)</span>. How many observations <span class="math inline">\(n\)</span> do you need from each population so that the approximate power of your test will be 0.8?</p>
 <p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\mu_1\)</span>, and <span class="math inline">\(\mu_2\)</span>.</p>
 <p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
-<section id="solution" class="level2" data-number="1">
+<section id="solution" class="level2 page-columns page-full" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="solution"><span class="header-section-number">1</span> Solution</h2>
 <div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -334,12 +334,6 @@ n = 16 s^2 / d^2
 <p>Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives <span class="math display">\[
 n = \frac{16}{\Delta^2}, \quad \Delta \equiv \frac{\mu_1 - \mu_2}{\sigma}
 \]</span> The quantity that I have called <span class="math inline">\(\Delta\)</span> is a unitless measure of <em>effect size</em>: it compares the difference between populations, <span class="math inline">\(\mu_1 - \mu_2\)</span>, to the variability within each population, <span class="math inline">\(\sigma\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Notice that the sample size required is inversely proportional to the <em>square</em> of the effect size. This means that very large samples are needed to detect small effects. For <span class="math inline">\(\Delta = 1\)</span> (a large effect size) we only need 16 observations per group but for <span class="math inline">\(\Delta = 0.1\)</span> (a very small effect size) we need a whopping 1600 observations per group!</p>
-<aside id="footnotes" class="footnotes footnotes-end-of-section" role="doc-footnote">
-<hr>
-<ol>
-<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <span class="math inline">\(d\)</span></a>. Be careful not to confuse it with the <span class="math inline">\(d\)</span> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <span class="math inline">\(\mu_1 - \mu_2\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</aside>
 </section>
 <section id="why-does-it-work" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="why-does-it-work"><span class="header-section-number">3</span> Why does it work?</h2>
@@ -367,20 +361,14 @@ n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[
 \]</span> We obtain Lehr’s rule by rounding <span class="math inline">\(15.7\)</span> up to <span class="math inline">\(16\)</span>.</p>
 <p>Now what about that <span class="math inline">\(\mathbb{P}(T &lt; - c)\)</span> term we discarded above? Is it really negligible? Substituting <span class="math inline">\(c = 1.96\)</span> and <span class="math inline">\(\Phi^{-1}(1 - \text{Power}) = -0.84\)</span> into our intermediate step while solving for <span class="math inline">\(n\)</span> above gives <span class="math inline">\(\Delta \sqrt{n/2} = 1.96 + 0.84 = 2.8\)</span>. This automatically holds for any value of <span class="math inline">\(\Delta\)</span> since Lehr’s rule automatically increases <span class="math inline">\(n\)</span> to offset a smaller effect size. Thus, the discarded term equals <span class="math inline">\(\Phi(-1.96 - 2.8) = \Phi(-4.76) \approx 10^{-6}\)</span> so it is perfectly safe to neglect it!</p>
 <p>Notice that we used two approximations in this derivation, but both of them are <em>conservative</em>. In other words, Lehr’s rule slightly <em>overstates</em> the required sample size to achieve 80% power in this example.</p>
-<aside id="footnotes-2" class="footnotes footnotes-end-of-section" role="doc-footnote">
-<hr>
-<ol start="2">
-<li id="fn2"><p>To see why substitute <span class="math inline">\(-\Delta\)</span> in place of <span class="math inline">\(\Delta\)</span> and use the symmetry of the normal distribution. In particular, apply <span class="math inline">\(\Phi(-x) = 1 - \Phi(x)\)</span> <em>twice</em>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
-</aside>
 </section>
 </div>
 </div>
 </div>
 
 
-</section>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.</p></div></div><div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;To see why substitute <span class="math inline">\(-\Delta\)</span> in place of <span class="math inline">\(\Delta\)</span> and use the symmetry of the normal distribution. In particular, apply <span class="math inline">\(\Phi(-x) = 1 - \Phi(x)\)</span> <em>twice</em>.</p></div></div><div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <span class="math inline">\(d\)</span></a>. Be careful not to confuse it with the <span class="math inline">\(d\)</span> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <span class="math inline">\(\mu_1 - \mu_2\)</span>.</p></div></div></section>
+
 
 </main> <!-- /main -->
 <script>
@@ -541,12 +529,27 @@ n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[
       document.querySelectorAll('.column-margin div[id^="fn"]'));
     if (!notes.length) return;
     var main = document.querySelector('main');
-    var lastBottom = -Infinity;
+    // Pair each note with its marker and order by the marker's position in
+    // the text -- Quarto hoists a fold's notes out in reverse DOM order, so
+    // document order of the notes cannot be trusted for stacking.
+    var pairs = [];
     notes.forEach(function (note) {
       note.style.top = '';
       var m = note.id.match(/^fn(\d+)$/);
       var marker = m && document.getElementById('fnref' + m[1]);
       if (!marker) return;
+      // Notes belonging to a closed solution fold are display:none (and so
+      // are their markers); they get aligned when the fold opens.
+      if (!note.offsetParent || !marker.offsetParent) return;
+      pairs.push({ note: note, marker: marker });
+    });
+    pairs.sort(function (a, b) {
+      return a.marker.getBoundingClientRect().top -
+             b.marker.getBoundingClientRect().top;
+    });
+    var lastBottom = -Infinity;
+    pairs.forEach(function (pair) {
+      var note = pair.note;
       var rect = note.getBoundingClientRect();
       // Only when the note actually sits in the margin column; on narrow
       // screens Quarto folds it into the body flow, which needs no help.
@@ -555,7 +558,7 @@ n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[
         return;
       }
       var naturalTop = rect.top + window.scrollY;
-      var markerTop = marker.getBoundingClientRect().top + window.scrollY;
+      var markerTop = pair.marker.getBoundingClientRect().top + window.scrollY;
       var target = Math.max(markerTop, lastBottom + 14);
       note.style.position = 'relative';
       note.style.top = (target - naturalTop) + 'px';
@@ -579,6 +582,14 @@ n \approx 2 \left[\frac{1.96 - \Phi^{-1}(0.2)}{\Delta} \right]^2 \approx 2\left[
       clearTimeout(t);
       t = setTimeout(alignMarginNotes, 150);
     });
+    // A solution fold reveals its margin notes when it opens; align them
+    // once the collapse animation has finished.
+    [].slice.call(document.querySelectorAll('.callout-header'))
+      .forEach(function (h) {
+        h.addEventListener('click', function () {
+          setTimeout(alignMarginNotes, 450);
+        });
+      });
   }
 
   ready(function () {

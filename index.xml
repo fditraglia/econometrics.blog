@@ -24,7 +24,7 @@
 <p>Suppose you observe <img src="https://latex.codecogs.com/png.latex?n"> independent draws from each of two normally distributed populations. For simplicity, assume that both populations have a common variance <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, assumed known. You plan to carry out a test of the null hypothesis that the population means are equal, <img src="https://latex.codecogs.com/png.latex?H_0%5Ccolon%20%5Cmu_1%20=%20%5Cmu_2">, against the two-sided alternative with significance level <img src="https://latex.codecogs.com/png.latex?%5Calpha%20=%200.05">. How many observations <img src="https://latex.codecogs.com/png.latex?n"> do you need from each population so that the approximate power of your test will be 0.8?</p>
 <p>In case it’s been a while since you’ve thought about power calculations, remember that statistical power is the probability of rejecting the null <em>given that it is false</em>. As such, your answer will depend on <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2">, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1">, and <img src="https://latex.codecogs.com/png.latex?%5Cmu_2">.</p>
 <p>Until a few months ago, I would have protested that this puzzler is completely unfair. How am I supposed to invert the normal CDF in my head?! But it turns out that, at least in this special case, there is a simple and accurate approximation that’s worth committing to memory. Before I show it to you, take out a pencil and paper — the ban is lifted for this part — and see if you can discover it for yourself.</p>
-<section id="solution" class="level2" data-number="1">
+<section id="solution" class="level2 page-columns page-full" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="solution"><span class="header-section-number">1</span> Solution</h2>
 <div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -45,12 +45,6 @@
 <p>For a two-sample, two-tailed t-test with alpha level 0.05, the following relation yields an approximate power of 0.80 <img src="https://latex.codecogs.com/png.latex?%0An%20=%2016%20s%5E2%20/%20d%5E2%0A"></p>
 </blockquote>
 <p>Re-writing this expression slightly to match the notation from above and make it slightly easier to remember gives <img src="https://latex.codecogs.com/png.latex?%0An%20=%20%5Cfrac%7B16%7D%7B%5CDelta%5E2%7D,%20%5Cquad%20%5CDelta%20%5Cequiv%20%5Cfrac%7B%5Cmu_1%20-%20%5Cmu_2%7D%7B%5Csigma%7D%0A"> The quantity that I have called <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is a unitless measure of <em>effect size</em>: it compares the difference between populations, <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">, to the variability within each population, <img src="https://latex.codecogs.com/png.latex?%5Csigma">.<sup>1</sup> Notice that the sample size required is inversely proportional to the <em>square</em> of the effect size. This means that very large samples are needed to detect small effects. For <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%201"> (a large effect size) we only need 16 observations per group but for <img src="https://latex.codecogs.com/png.latex?%5CDelta%20=%200.1"> (a very small effect size) we need a whopping 1600 observations per group!</p>
-<aside id="footnotes" class="footnotes footnotes-end-of-section">
-<hr>
-<ol>
-<li id="fn1"><p>This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <img src="https://latex.codecogs.com/png.latex?d"></a>. Be careful not to confuse it with the <img src="https://latex.codecogs.com/png.latex?d"> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">.↩︎</p></li>
-</ol>
-</aside>
 </section>
 <section id="why-does-it-work" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="why-does-it-work"><span class="header-section-number">3</span> Why does it work?</h2>
@@ -58,20 +52,14 @@
 <p>Now comes the approximation. The second term on the right hand side of our expression for <img src="https://latex.codecogs.com/png.latex?1%20-%20%5Ctext%7BPower%7D"> is <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-c)">. Since <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is <em>positive</em>, this is the probability of rejecting the null <em>in the wrong direction</em>. In other words, it is the probability of rejecting <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20=%20%5Cmu_2"> when <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20%3E%20%5Cmu_2"> by observing a test statistic that takes on a large <em>negative</em> value. We will approximate this probability by <strong>setting it equal to zero</strong>. For a test with a reasonable amount of power–remember that we are targeting 80% power–this is a very good approximation.<sup>3</sup> If you worry that there’s something circular in my logic here, fear not: we will return to this point at the end! But for the moment, we will assume that it’s safe to write <img src="https://latex.codecogs.com/png.latex?%0A1%20-%20%5Ctext%7BPower%7D%20%5Capprox%20%5CPhi(c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D)%20.%0A"> Applying the standard normal quantile function <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D"> to both sides gives <img src="https://latex.codecogs.com/png.latex?%0A%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20%20%5Capprox%20c%20-%20%5CDelta%20%5Csqrt%7Bn%20/%202%7D%0A"> and rearranging the result gives <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7Bc%20-%20%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%7D%7B%5CDelta%7D%5Cright%5D%5E2.%0A"> Finally, substituting <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BPower%7D%20=%200.8"> and <img src="https://latex.codecogs.com/png.latex?c%20=%201.96">, <img src="https://latex.codecogs.com/png.latex?%0An%20%5Capprox%202%20%5Cleft%5B%5Cfrac%7B1.96%20-%20%5CPhi%5E%7B-1%7D(0.2)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%202%5Cleft%5B%20%5Cfrac%7B1.96%20-%20(-0.84)%7D%7B%5CDelta%7D%20%5Cright%5D%5E2%20%5Capprox%20%5Cfrac%7B15.7%7D%7B%5CDelta%5E2%7D.%0A"> We obtain Lehr’s rule by rounding <img src="https://latex.codecogs.com/png.latex?15.7"> up to <img src="https://latex.codecogs.com/png.latex?16">.</p>
 <p>Now what about that <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BP%7D(T%20%3C%20-%20c)"> term we discarded above? Is it really negligible? Substituting <img src="https://latex.codecogs.com/png.latex?c%20=%201.96"> and <img src="https://latex.codecogs.com/png.latex?%5CPhi%5E%7B-1%7D(1%20-%20%5Ctext%7BPower%7D)%20=%20-0.84"> into our intermediate step while solving for <img src="https://latex.codecogs.com/png.latex?n"> above gives <img src="https://latex.codecogs.com/png.latex?%5CDelta%20%5Csqrt%7Bn/2%7D%20=%201.96%20+%200.84%20=%202.8">. This automatically holds for any value of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> since Lehr’s rule automatically increases <img src="https://latex.codecogs.com/png.latex?n"> to offset a smaller effect size. Thus, the discarded term equals <img src="https://latex.codecogs.com/png.latex?%5CPhi(-1.96%20-%202.8)%20=%20%5CPhi(-4.76)%20%5Capprox%2010%5E%7B-6%7D"> so it is perfectly safe to neglect it!</p>
 <p>Notice that we used two approximations in this derivation, but both of them are <em>conservative</em>. In other words, Lehr’s rule slightly <em>overstates</em> the required sample size to achieve 80% power in this example.</p>
-<aside id="footnotes-2" class="footnotes footnotes-end-of-section">
-<hr>
-<ol start="2">
-<li id="fn2"><p>To see why substitute <img src="https://latex.codecogs.com/png.latex?-%5CDelta"> in place of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> and use the symmetry of the normal distribution. In particular, apply <img src="https://latex.codecogs.com/png.latex?%5CPhi(-x)%20=%201%20-%20%5CPhi(x)"> <em>twice</em>.↩︎</p></li>
-<li id="fn3"><p>For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.↩︎</p></li>
-</ol>
-</aside>
 </section>
 </div>
 </div>
 </div>
 
 
-</section>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;For a test with low power, on the other hand, rejections <em>in the wrong direction</em> present a serious problem, leading to the notion of a “Type S” error as described by <a href="https://ditraglia.com/erm/Gelman-Carlin-2014.pdf">Gelman &amp; Carlin (2014)</a>.</p></div></div><div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;To see why substitute <img src="https://latex.codecogs.com/png.latex?-%5CDelta"> in place of <img src="https://latex.codecogs.com/png.latex?%5CDelta"> and use the symmetry of the normal distribution. In particular, apply <img src="https://latex.codecogs.com/png.latex?%5CPhi(-x)%20=%201%20-%20%5CPhi(x)"> <em>twice</em>.</p></div></div><div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;This is the population version of <a href="https://en.wikipedia.org/wiki/Effect_size#Cohen%27s_d">Cohen’s <img src="https://latex.codecogs.com/png.latex?d"></a>. Be careful not to confuse it with the <img src="https://latex.codecogs.com/png.latex?d"> in Lehr’s formula, which rather confusingly denotes the <em>raw</em> difference of means <img src="https://latex.codecogs.com/png.latex?%5Cmu_1%20-%20%5Cmu_2">.</p></div></div></section>
+
 
  ]]></description>
   <category>statistics</category>
@@ -1694,10 +1682,10 @@ font-style: inherit;">1</span>]</span></code></pre></div></div>
 
 
 <p>Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a <em>second</em> regression of the outcome variable on the fitted values, what will I get? For extra credit: how will the R-squared from the second regression compare to that from the first regression?</p>
-<section id="example-height-and-handspan" class="level2" data-number="1">
+<section id="example-height-and-handspan" class="level2 page-columns page-full" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="example-height-and-handspan"><span class="header-section-number">1</span> Example: Height and Handspan</h2>
 <p>Here’s a simple example: a regression of height, measured in inches, on handspan, measured in centimeters.<sup>1</sup></p>
-<div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;In case you don’t know what handspan is: stretch out your dominant hand, and measure from the tip of your thumb to the tip of your pinky finger. This is your handspan. I collected this dataset from many years of <a href="https://ditraglia.com/Econ103Public">Econ 103</a> classes at UPenn.</p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(tidyverse)</span>
@@ -1840,12 +1828,6 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 </div>
 </div>
 <p>The R-squared values from the two regressions are <em>identical</em>! Surprised? Now’s your last chance to think it through on your own before I give my solution.</p>
-<aside id="footnotes" class="footnotes footnotes-end-of-section">
-<hr>
-<ol>
-<li id="fn1"><p>In case you don’t know what handspan is: stretch out your dominant hand, and measure from the tip of your thumb to the tip of your pinky finger. This is your handspan. I collected this dataset from many years of <a href="https://ditraglia.com/Econ103Public">Econ 103</a> classes at UPenn.↩︎</p></li>
-</ol>
-</aside>
 </section>
 <section id="solution" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="solution"><span class="header-section-number">2</span> Solution</h2>
@@ -1871,6 +1853,7 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 
 </section>
 
+
  ]]></description>
   <category>econometrics</category>
   <category>puzzler</category>
@@ -1886,20 +1869,13 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 
 
 
-<p>Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition. Here’s the format: I’ll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you’ll find them both challenging and enlightening. Today we’ll revisit everyone’s favorite example: Angrist &amp; Krueger’s 1991 paper on the returns to education.<sup>1</sup></p>
-<section id="to-instrument-or-not-to-instrument" class="level2" data-number="1">
+<p>Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition.<sup>1</sup> Here’s the format: I’ll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you’ll find them both challenging and enlightening. Today we’ll revisit everyone’s favorite example: Angrist &amp; Krueger’s 1991 paper on the returns to education.<sup>2</sup></p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;When I wrote this puzzler, it was literally the first in the series, but now it’s only <em>technically</em> the first: I realized that an <a href="../../post/is-it-better-to-improve-sensitivity-or-specificity/">older post</a> was really a puzzler in disguise and decided to bring it into the series as “puzzler zero”!</p></div><div id="fn2"><p><sup>2</sup>&nbsp;I’m sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.</p></div></div><section id="to-instrument-or-not-to-instrument" class="level2 page-columns page-full" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="to-instrument-or-not-to-instrument"><span class="header-section-number">1</span> To Instrument or Not to Instrument?</h2>
-<p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <img src="https://latex.codecogs.com/png.latex?Y_i"> and years of schooling <img src="https://latex.codecogs.com/png.latex?X_i">. I could use an OLS regression of <img src="https://latex.codecogs.com/png.latex?Y"> on <img src="https://latex.codecogs.com/png.latex?X"> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background. Fortunately, I also have a valid and relevant instrument: quarter of birth <img src="https://latex.codecogs.com/png.latex?Z_i"> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<sup>2</sup></p>
-<p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
-<aside id="footnotes" class="footnotes footnotes-end-of-section">
-<hr>
-<ol>
-<li id="fn1"><p>I’m sick of this example too, but the point of this puzzler is to get you thinking about instrumental variables; using an example that most people know will get us to the punch line faster.↩︎</p></li>
-<li id="fn2"><p>If you’re unfamiliar with this example check out my <a href="https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&amp;t=2034">video overview</a>, including some discussion of why quarter of birth might <em>not</em> really be exogenous after all!↩︎</p></li>
-</ol>
-</aside>
+<p>Suppose I want to predict someone’s wage as accurately as possible using a linear model–that is, I want my predictions to be as close as they can be to the actual wages. (In fact we will predict the <em>log</em> of wage.) I observe a representative sample of workers that includes their log wage <img src="https://latex.codecogs.com/png.latex?Y_i"> and years of schooling <img src="https://latex.codecogs.com/png.latex?X_i">. I could use an OLS regression of <img src="https://latex.codecogs.com/png.latex?Y"> on <img src="https://latex.codecogs.com/png.latex?X"> to make my predictions, but years of schooling are the classic example of an endogenous regressor; they’re correlated with myriad unobserved causes of wages, like “ability” and family background. Fortunately, I also have a valid and relevant instrument: quarter of birth <img src="https://latex.codecogs.com/png.latex?Z_i"> is correlated with years of schooling and (supposedly) uncorrelated with unobserved causes of wage.<sup>3</sup></p>
+<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;If you’re unfamiliar with this example check out my <a href="https://youtu.be/NeAkMcgdWxA?si=XHsvGG5aPMNvMUfs&amp;t=2034">video overview</a>, including some discussion of why quarter of birth might <em>not</em> really be exogenous after all!</p></div></div><p>So here’s the question: <strong>to get the best possible predictions of wage from the information I have, should I run OLS or IV?</strong> More specifically, let’s use mean squared error (MSE) as our measure of “best”. To borrow a term from <a href="https://www.3blue1brown.com/">Grant Sanderson</a>, “pause and ponder” before reading further.</p>
 </section>
-<section id="solution" class="level2" data-number="2">
+<section id="solution" class="level2 page-columns page-full" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="solution"><span class="header-section-number">2</span> Solution</h2>
 <div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -1915,7 +1891,7 @@ font-style: inherit;">glance</span>(reg2)</span></code></pre></div></div>
 <div class="callout-body-container callout-body">
 <section id="taking-it-to-the-data" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="taking-it-to-the-data"><span class="header-section-number">3</span> Taking it to the Data</h2>
-<p>The Angrist &amp; Krueger (1991) dataset is available from Michal Kolesár’s <a href="https://github.com/kolesarm/ManyIV?tab=readme-ov-file"><code>ManyIV</code> R package</a>.<sup>3</sup> Here I’ll restrict attention to people born in the first or fourth quarter of the year. The instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:</p>
+<p>The Angrist &amp; Krueger (1991) dataset is available from Michal Kolesár’s <a href="https://github.com/kolesarm/ManyIV?tab=readme-ov-file"><code>ManyIV</code> R package</a>.<sup>4</sup> Here I’ll restrict attention to people born in the first or fourth quarter of the year. The instrument is a dummy variable for being born in the fourth quarter, relative to being born in the first quarter:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -2113,7 +2089,7 @@ font-style: inherit;">2</span>] <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">*</span> x) </span></code></pre></div></div>
 </div>
-<p>Of course we actually <em>do</em> know the wages of everyone in <code>dat_test</code>; this is the column <code>y</code>. So we can now compare our predictions against the truth.<sup>4</sup> A common measure of predictive quality is mean squared error (MSE), the average squared difference between the truth and our predictions. Because it squares the difference between the truth and our prediction, MSE penalizes larger errors more than smaller ones. While there are other ways to measure prediction error, MSE is a common choice and one that will play a key role in the rest of this post. And the winner is … <strong>OLS</strong>! Because it has a lower MSE, the predictions from the OLS model are, on average, closer to the true wages than the predictions from the IV model:</p>
+<p>Of course we actually <em>do</em> know the wages of everyone in <code>dat_test</code>; this is the column <code>y</code>. So we can now compare our predictions against the truth.<sup>5</sup> A common measure of predictive quality is mean squared error (MSE), the average squared difference between the truth and our predictions. Because it squares the difference between the truth and our prediction, MSE penalizes larger errors more than smaller ones. While there are other ways to measure prediction error, MSE is a common choice and one that will play a key role in the rest of this post. And the winner is … <strong>OLS</strong>! Because it has a lower MSE, the predictions from the OLS model are, on average, closer to the true wages than the predictions from the IV model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">dat_test <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2150,13 +2126,6 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 </div>
 </div>
 <p>OLS beats IV by a small but appreciable margin. (The relatively small difference in this case reflects the fact that IV and OLS estimates are fairly similar in this example.) It turns out that this <em>isn’t a fluke</em>. The same will be true in <em>any example</em>. Unless the instrument is perfectly correlated with the endogenous regressor, OLS will always have a lower predictive MSE than IV.</p>
-<aside id="footnotes-2" class="footnotes footnotes-end-of-section">
-<hr>
-<ol start="3">
-<li id="fn3"><p>You can install this package using the <a href="https://cran.r-project.org/web/packages/remotes/index.html"><code>remotes</code></a> package, which is a convenient way to install packages from GitHub.↩︎</p></li>
-<li id="fn4"><p>It’s crucial that we used one dataset to <em>estimate</em> our models and a <em>different</em> one to evaluate their predictive performance to avoid a problem called “overfitting”. This issue calls for a post of its own, but if you want a preview check out this blog post on <a href="https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html">Goodhart’s law</a>.↩︎</p></li>
-</ol>
-</aside>
 </section>
 <section id="whats-really-going-on-here" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="whats-really-going-on-here"><span class="header-section-number">4</span> What’s really going on here?</h2>
@@ -2164,13 +2133,7 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 </section>
 <section id="a-red-herring-the-bias-variance-tradeoff" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="a-red-herring-the-bias-variance-tradeoff"><span class="header-section-number">5</span> A Red Herring: The Bias-Variance Tradeoff</h2>
-<p>Students sometimes answer this question by invoking the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a>, pointing out that “OLS is biased but has a lower variance than IV, so it could have a lower MSE.” This is correct, but misses the deeper point. They’re thinking about bias in estimating the <em>causal parameter</em>.<sup>5</sup> But, again, the point here is that this isn’t relevant when prediction is our goal. When ML researchers discuss the bias-variance tradeoff in predictive settings, they mean something entirely different: bias of a linear predictive model relative to the true conditional mean function. OLS gives the best linear approximation to <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5BY%7CX%5D">, so it’s what we want in this example, since I stipulated we’d be working with linear models.</p>
-<aside id="footnotes-3" class="footnotes footnotes-end-of-section">
-<hr>
-<ol start="5">
-<li id="fn5"><p>When our goal is to learn the causal parameter, this bias-variance tradeoff becomes relevant. I even <a href="https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html">wrote a paper</a>!↩︎</p></li>
-</ol>
-</aside>
+<p>Students sometimes answer this question by invoking the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">bias-variance tradeoff</a>, pointing out that “OLS is biased but has a lower variance than IV, so it could have a lower MSE.” This is correct, but misses the deeper point. They’re thinking about bias in estimating the <em>causal parameter</em>.<sup>6</sup> But, again, the point here is that this isn’t relevant when prediction is our goal. When ML researchers discuss the bias-variance tradeoff in predictive settings, they mean something entirely different: bias of a linear predictive model relative to the true conditional mean function. OLS gives the best linear approximation to <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D%5BY%7CX%5D">, so it’s what we want in this example, since I stipulated we’d be working with linear models.</p>
 </section>
 <section id="take-home-message" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="take-home-message"><span class="header-section-number">6</span> Take Home Message</h2>
@@ -2181,7 +2144,8 @@ font-style: inherit;">2</span>))</span></code></pre></div></div>
 </div>
 
 
-</section>
+<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;When our goal is to learn the causal parameter, this bias-variance tradeoff becomes relevant. I even <a href="https://ideas.repec.org/a/eee/econom/v195y2016i2p187-208.html">wrote a paper</a>!</p></div></div><div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;It’s crucial that we used one dataset to <em>estimate</em> our models and a <em>different</em> one to evaluate their predictive performance to avoid a problem called “overfitting”. This issue calls for a post of its own, but if you want a preview check out this blog post on <a href="https://sohl-dickstein.github.io/2022/11/06/strong-Goodhart.html">Goodhart’s law</a>.</p></div></div><div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;You can install this package using the <a href="https://cran.r-project.org/web/packages/remotes/index.html"><code>remotes</code></a> package, which is a convenient way to install packages from GitHub.</p></div></div></section>
+
 
  ]]></description>
   <category>econometrics</category>
@@ -3625,7 +3589,7 @@ Coefficients:
   <pubDate>Fri, 02 Aug 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>Is it better to improve sensitivity or specificity?</title>
+  <title>Econometrics Puzzler #0: Is it Better to Improve Sensitivity or Specificity?</title>
   <dc:creator>Francis J. DiTraglia</dc:creator>
   <link>https://www.econometrics.blog/post/is-it-better-to-improve-sensitivity-or-specificity/</link>
   <description><![CDATA[ 
@@ -3633,17 +3597,13 @@ Coefficients:
 
 
 
-<p>Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability. Imagine that you’re developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test’s <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity or its specificity</a>. If your goal is to maximize the <a href="https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values">positive predictive value (PPV)</a> of your test, i.e.&nbsp;the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?</p>
-<section id="an-open-invitation" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="an-open-invitation"><span class="header-section-number">1</span> An Open Invitation</h2>
-<p>If you’re still hungry for more Bayes’ Theorem after reading this post, then why not join the <em>Summer of Bayes 2024</em> online reading group? If you’d like to be added to the mailing list, just send an email to <code>bayes [at] user.sent.as</code>. Recordings of past sessions along with slides and other materials are available to group members via the Summer of Bayes discussion board. And now back to your regularly-scheduled blog content…</p>
-</section>
-<section id="odds-arent-so-odd" class="level2 page-columns page-full" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="odds-arent-so-odd"><span class="header-section-number">2</span> Odds aren’t so odd!</h2>
+<p>Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability.<sup>1</sup> Imagine that you’re developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test’s <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity or its specificity</a>. If your goal is to maximize the <a href="https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values">positive predictive value (PPV)</a> of your test, i.e.&nbsp;the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve?</p>
+<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;<em>What follows started life as a regular post, but I later realized it was a puzzler in disguise! To keep the numbering of the other puzzlers unchanged, I have retroactively dubbed this one “puzzler zero”.</em></p></div></div><section id="odds-arent-so-odd" class="level2 page-columns page-full" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="odds-arent-so-odd"><span class="header-section-number">1</span> Odds aren’t so odd!</h2>
 <p>While I give you a few minutes to pause and ponder this question, here’s a brief rant on the topic of odds. If you’re anything like me, the first time you encountered odds, you thought to yourself</p>
 <div class="page-columns page-full"><blockquote class="blockquote">
-<p>What is this $*@%^!? Why would anyone want to spoil a perfectly good probability by dividing it by one minus itself?“<sup>1</sup></p>
-</blockquote><div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;I know first-hand that this sentiment is shared by at least one distinguished professor of probability theory, so at least I’m not completely alone in my earlier view of things!</p></div></div></div>
+<p>What is this $*@%^!? Why would anyone want to spoil a perfectly good probability by dividing it by one minus itself?“<sup>2</sup></p>
+</blockquote><div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;I know first-hand that this sentiment is shared by at least one distinguished professor of probability theory, so at least I’m not completely alone in my earlier view of things!</p></div></div></div>
 <p>But it’s time to take the red pill and see the world as it really is: <strong>the only reason you prefer to think in terms of probabilities rather than odds is because you’ve been brainwashed by the educational system</strong>. Of course I exaggerate slightly, but the point is that odds are just as natural as probabilities; we’re just not as accustomed to working with them. In many situations in probability, statistics, and econometrics, it turns out that working with odds (or their logarithm) makes life <em>much</em> simpler, as I will try to convince you with a simple example.</p>
 <p>First we need to define odds. Consider some event <img src="https://latex.codecogs.com/png.latex?A"> with probability <img src="https://latex.codecogs.com/png.latex?p"> of occurring. Then we say that the <strong>odds</strong> of <img src="https://latex.codecogs.com/png.latex?A"> are <img src="https://latex.codecogs.com/png.latex?p/(1%20-%20p)">. For example, if <img src="https://latex.codecogs.com/png.latex?p%20=%201/3"> then the event <img src="https://latex.codecogs.com/png.latex?A"> is equivalent to drawing a red ball from an urn that contains one red and two blue balls: the probability gives the <em>ratio of red balls to total balls</em>. The odds of <img src="https://latex.codecogs.com/png.latex?A">, on the other hand, equal <img src="https://latex.codecogs.com/png.latex?1/2">: odds give the <em>ratio of red balls to blue balls</em>. Since probabilities are between 0 and 1, odds are between 0 and <img src="https://latex.codecogs.com/png.latex?%5Cinfty">. Odds of 0 mean that the event is impossible, while odds of <img src="https://latex.codecogs.com/png.latex?%5Cinfty"> mean that the event is certain. Odds of 1 mean that the event is just as likely to occur as not to occur.</p>
 <p>Now here’s an example that you’ve surely seen before:</p>
@@ -3654,15 +3614,30 @@ Coefficients:
 <p>In contrast, working with odds makes this problem a snap. The key point is that <img src="https://latex.codecogs.com/png.latex?P(B%7C+)"> and <img src="https://latex.codecogs.com/png.latex?P(B%5EC%7C+)"> have the same denominator, namely <img src="https://latex.codecogs.com/png.latex?P(+)">: <img src="https://latex.codecogs.com/png.latex?%0AP(B%20%7C%20+)%20=%20%5Cfrac%7BP(+%7CB)P(B)%7D%7BP(+)%7D,%20%5Cquad%0AP(B%5EC%20%7C%20+)%20=%20%5Cfrac%7BP(+%7CB%5EC)P(B%5EC)%7D%7BP(+)%7D%0A"> Notice that <img src="https://latex.codecogs.com/png.latex?P(+)"> was the “complicated” term in <img src="https://latex.codecogs.com/png.latex?P(B%7C+)">; the numerator was simple. Since the odds of <img src="https://latex.codecogs.com/png.latex?B"> given <img src="https://latex.codecogs.com/png.latex?(+)"> is defined as the ratio of <img src="https://latex.codecogs.com/png.latex?P(B%7C+)"> to <img src="https://latex.codecogs.com/png.latex?P(B%5EC%7C+)">, the denominator cancels and we’re left with <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BOdds%7D(B%7C+)%20%5Cequiv%20%5Cfrac%7BP(B%7C+)%7D%7BP(B%5EC%7C+)%7D%20=%20%5Cfrac%7BP(+%7CB)%7D%7BP(+%7CB%5EC)%7D%20%5Ctimes%20%5Cfrac%7BP(B)%7D%7BP(B%5EC)%7D.%0A"> In other words, the <em>posterior odds</em> of <img src="https://latex.codecogs.com/png.latex?B"> equal the <em>likelihood ratio</em>, <img src="https://latex.codecogs.com/png.latex?P(+%7CB)/P(+%7CB%5EC)">, multiplied by the <em>prior odds</em> of <img src="https://latex.codecogs.com/png.latex?B">, <img src="https://latex.codecogs.com/png.latex?P(B)/P(B%5EC)">: <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BPosterior%20Odds%7D%20=%20%5Ctext%7B(Likelihood%20Ratio)%7D%20%5Ctimes%20%5Ctext%7B(Prior%20Odds)%7D.%0A"> Now we can easily solve the original problem in our head. The prior odds are 1/99 while the likelihood ratio is 95/2. Rounding these to 0.01 and 50 respectively, we find that the posterior odds are around 1/2. This means that Alice’s chance of having breast cancer is roughly equivalent to the chance of drawing a red ball from an urn with one red and two blue balls. There’s no need to convert this back to a probability since we can already answer the question: it’s considerably more likely that Alice <em>does not</em> have breast cancer. But if you insist, odds of 1/2 give a probability of 1/3, so in spite of rounding and calculating in our heads we’re within 0.3% of the exact answer!</p>
 <p>Repeat after me: <strong>odds are on a multiplicative scale</strong>. This is their key virtue and the reason why they make it so easy to explore variations on the original problem. If one in a thousand women has breast cancer, the prior odds become 1/999 so we simply divide our previous result by 10, giving posterior odds of around 1/20. If we instead changed the sensitivity from 95% to 99% and the specificity from 98% to 95%, then the likelihood ratio would change from <img src="https://latex.codecogs.com/png.latex?95/2%20%5Capprox%2050"> to <img src="https://latex.codecogs.com/png.latex?99/5%20%5Capprox%2020">.</p>
 </section>
-<section id="the-solution" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="the-solution"><span class="header-section-number">3</span> The Solution</h2>
+<section id="solution" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="solution"><span class="header-section-number">2</span> Solution</h2>
+<div class="solution callout callout-style-simple callout-note no-icon callout-titled" title="Solution">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Have I given you enough time to come up with your own solution? Fantastic! In case you hadn’t already guessed, that little digression about odds served an important purpose: my solution will use odds rather than probabilities. Our goal is to increase the positive predictive value (PPV) of the test, namely <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BPPV%7D%20%5Cequiv%20P(%5Ctext%7BHas%20Disease%7D%7C%5Ctext%7BTest%20Positive%7D),%0A"> by as much as possible, either by improving the test’s sensitivity <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BSensitivity%7D%20%5Cequiv%20P(%5Ctext%7BTest%20Positive%7D%20%7C%20%5Ctext%7BHas%20Disease%7D)%0A"> or its specificity <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BSpecificity%7D%20%5Cequiv%20P(%5Ctext%7BTest%20Negative%7D%20%7C%20%5Ctext%7BDoesn't%20Have%20Disease%7D).%0A"> To answer this question, we’ll start by substituting these definitions into the odds form of Bayes’ Theorem introduced above, yielding <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BPosterior%20Odds%7D%20=%20%5Cfrac%7B%5Ctext%7BPPV%7D%7D%7B1%20-%20%5Ctext%7BPPV%7D%7D%20=%20%5Cfrac%7B%5Ctext%7BSensitivity%7D%7D%7B1%20-%20%5Ctext%7BSpecificity%7D%7D%20%5Ctimes%20%5Ctext%7BPrior%20Odds%7D.%0A"> This expression makes it clear that increasing either the sensitivity or specificity of the test increases the posterior odds. And because the PPV is a <em>strictly increasing</em> function of the posterior odds, namely <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BPPV%7D%20=%20%5Cfrac%7B%5Ctext%7BPosterior%20Odds%7D%7D%7B1%20+%20%5Ctext%7BPosterior%20Odds%7D%7D,%0A"> this also increases the PPV. So now the question is: which of these two possibilities gives us the most bang for our buck? A natural idea would be to compare the <em>marginal effect</em> of increasing sensitivity by a small amount to the marginal effect of increasing specificity by the same amount. We can do this by comparing the <em>partial derivatives</em> of the PPV with respect to sensitivity and specificity. But, again, the PPV is an <em>increasing</em> function of the posterior odds, so we can simplify our task by comparing the <em>derivatives</em> of the posterior odds with respect to sensitivity and specificity. By the chain rule, any claim about the relative magnitudes of these derivatives computed for the odds will also hold for the PPV.</p>
 <p>But why stop with the odds? We can simplify our task even further by comparing the <em>derivatives</em> of the <em>logarithm</em> of the posterior odds with respect to sensitivity and specificity. This is because the logarithm is, again, an <em>increasing transformation</em> of the odds. Since <img src="https://latex.codecogs.com/png.latex?%0A%5Clog(%5Ctext%7BPosterior%20Odds%7D)%20=%20%5Clog(%5Ctext%7BSensitivity%7D)%20-%20%5Clog(1%20-%20%5Ctext%7BSpecificity%7D)%20%20+%20%5Clog(%5Ctext%7BPrior%20Odds%7D).%0A"> our required derivatives are <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cpartial%20%5Clog(%5Ctext%7BPosterior%20Odds%7D)%7D%7B%5Cpartial%20%5Ctext%7BSensitivity%7D%7D%20=%20%5Cfrac%7B1%7D%7B%5Ctext%7BSensitivity%7D%7D%20%5Cquad%20%5Ctext%7Band%7D%20%5Cquad%20%5Cfrac%7B%5Cpartial%20%5Clog(%5Ctext%7BPosterior%20Odds%7D)%7D%7B%5Cpartial%20%5Ctext%7BSpecificity%7D%7D%20=%20%5Cfrac%7B1%7D%7B1%20-%20%5Ctext%7BSpecificity%7D%7D.%0A"> Now for the punchline: the ratio of the derivative with respect to specificity divided by that with respect to sensitivity is <img src="https://latex.codecogs.com/png.latex?%0A%5Cfrac%7B%5Cpartial%20%5Clog(%5Ctext%7BPosterior%20Odds%7D)/%5Cpartial%20%5Ctext%7BSpecificity%7D%7D%7B%5Cpartial%20%5Clog(%5Ctext%7BPosterior%20Odds%7D)/%5Cpartial%20%5Ctext%7BSensitivity%7D%7D%20=%20%5Cfrac%7B1/(1%20-%20%5Ctext%7BSpecificity%7D)%7D%7B1/%5Ctext%7BSensitivity%7D%7D%20=%20%5Cfrac%7B%5Ctext%7BSensitivity%7D%7D%7B1%20-%20%5Ctext%7BSpecificity%7D%7D%0A"> and this is <em>precisely the likelihood ratio</em> from the odds form of Bayes’ Theorem! Hence, <strong>whenever the likelihood ratio is greater than one we’d prefer to increase the test’s specificity; whenever it’s less than one we’d prefer to increase the sensitivity.</strong> If the likelihood ratio is equal to one, then it doesn’t matter which we choose.</p>
 <p>Case closed, right? Well not quite. We can say a bit more by thinking about what it <em>means</em> for the likelihood ratio to be greater than or less than one. Examining the odds form of Bayes’ Theorem from above, we see that a likelihood ratio less than one means that our posterior probability that a person is sick <em>falls</em> when she tests positive. In other words, this corresponds to a test that is <em>worse than useless</em>: it’s actually <em>misleading</em>. In contrast, a likelihood ratio greater than one means that the test is <em>informative</em>: a positive test result increases our belief that the person is sick. Any real-world diagnostic test will have a likelihood ratio greater than one. Indeed, if we <em>had</em> such an actively mis-leading test, we could easily convert it into an informative one by simply reversing the test’s outcome: if someone tests positive, we tell them they’re negative, and vice versa. This reversal would result in a likelihood ratio greater than one. Therefore, in all cases–whether we start with an informative test or reverse a misleading one–<strong>we should prefer to increase the test’s specificity</strong>.</p>
-</section>
-<section id="epilogue" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">4</span> Epilogue</h2>
+<section id="epilogue" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">3</span> Epilogue</h2>
 <p>Of course, this exercise is predicated upon the assumption that we want to maximize the PPV and that we can freely adjust both the test’s sensitivity and its specificity. In practice, one or more of these assumptions might not hold. Indeed, PPV is not the be all and end all of diagnostic testing. A full accounting would need to consider the relative costs of false positives and false negatives along with the prevalence of the disease. Still, I hope this exercise gives you a flavor of the power of odds for simplifying complex problems in probability and statistics.</p>
+</section>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -3671,6 +3646,7 @@ Coefficients:
  ]]></description>
   <category>statistics</category>
   <category>teaching</category>
+  <category>puzzler</category>
   <guid>https://www.econometrics.blog/post/is-it-better-to-improve-sensitivity-or-specificity/</guid>
   <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
 </item>
