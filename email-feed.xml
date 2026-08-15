@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>econometrics.blog</title>
+<link>https://www.econometrics.blog/email-feed.html</link>
+<atom:link href="https://www.econometrics.blog/email-feed.xml" rel="self" type="application/rss+xml"/>
+<description>Opening paragraphs only. This feed exists so Buttondown can build the subscriber email; readers want /index.xml.</description>
+<generator>quarto-1.10.18</generator>
+<lastBuildDate>Fri, 14 Aug 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Econometrics Puzzler #4: Rescaling the Reduced Form</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/econometrics-puzzler-4-rescaling-the-reduced-form/</link>
+  <description><![CDATA[ Consider the simplest textbook instrumental variables (IV) model with one endogenous regressor <img src="https://latex.codecogs.com/png.latex?X"> and a single valid instrument <img src="https://latex.codecogs.com/png.latex?Z">. You are given the estimated slope coefficient <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cgamma%7D"> from the reduced form regression of <img src="https://latex.codecogs.com/png.latex?Y"> on <img src="https://latex.codecogs.com/png.latex?Z"> along with its standard error <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSE%7D(%5Chat%7B%5Cgamma%7D)">. You are also given the estimated slope coefficient <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cpi%7D"> from the first stage regression of <img src="https://latex.codecogs.com/png.latex?X"> on <img src="https://latex.codecogs.com/png.latex?Z">. The IV estimate equals <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cgamma%7D/%20%5Chat%7B%5Cpi%7D">. Does its standard error equal <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BSE%7D(%5Chat%7B%5Cgamma%7D)/%5Chat%7B%5Cpi%7D">? ]]></description>
+  <category>econometrics</category>
+  <category>causal inference</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/econometrics-puzzler-4-rescaling-the-reduced-form/</guid>
+  <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Econometrics Puzzler #3: I’ve Got the Power</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/econometrics-puzzler-3-ive-got-the-power/</link>
+  <description><![CDATA[ Today’s challenge is to do a power calculation <em>in your head</em>. No paper, no pencils, no normal tables, and no statistical software packages are allowed! ]]></description>
+  <category>statistics</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/econometrics-puzzler-3-ive-got-the-power/</guid>
+  <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Complex Step Differentiation</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/complex-step-differentiation/</link>
+  <description><![CDATA[ Sometimes we need a good approximation to the derivative <img src="https://latex.codecogs.com/png.latex?f'(x)"> of a real-valued function <img src="https://latex.codecogs.com/png.latex?f"> at some real value <img src="https://latex.codecogs.com/png.latex?x">. So here’s a fun fact that you may not know. If <img src="https://latex.codecogs.com/png.latex?%5CDelta"> is a small positive number and <img src="https://latex.codecogs.com/png.latex?f"> can be evaluated at a complex argument, then <img src="https://latex.codecogs.com/png.latex?%0Af'(x)%20%5Capprox%20%5Cfrac%7B%5Ctext%7BIm%7D%5Bf(x%20+%20%5CDelta%20i)%5D%7D%7B%5CDelta%7D%0A"> where <img src="https://latex.codecogs.com/png.latex?i"> is the imaginary unit and <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BIm%7D(z)"> denotes the imaginary part of a complex number. This unexpected but highly accurate approximation is called <strong>complex step differentiation</strong>. The method dates back to <a href="https://epubs.siam.org/doi/10.1137/0704019">Lyness and Moler (1967)</a>; <a href="https://researchrepository.wvu.edu/faculty_publications/426/">Squire and Trapp (1998)</a> give a concise modern exposition. ]]></description>
+  <category>computing</category>
+  <guid>https://www.econometrics.blog/post/complex-step-differentiation/</guid>
+  <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>A Makeover for econometrics.blog</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/makeover-for-econometrics-blog/</link>
+  <description><![CDATA[ Today <a href="https://www.econometrics.blog/">econometrics.blog</a> got a long-overdue update from <a href="https://yihui.org/blogdown/">blogdown</a> to <a href="https://quarto.org">Quarto</a>. Thanks to <a href="https://www.anthropic.com/product/claude-code">Claude Code</a>, the transition was seamless: all existing links are preserved, along with the <a href="https://utteranc.es">Utterances</a> comment sections. ]]></description>
+  <category>meta</category>
+  <guid>https://www.econometrics.blog/post/makeover-for-econometrics-blog/</guid>
+  <pubDate>Thu, 09 Apr 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Chris Sims - RIP</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/chris-sims-rip/</link>
+  <description><![CDATA[ I was saddened to hear of Chris Sims’s passing yesterday. Although I’m not a macroeconometrician, his work has strongly influenced the way I think about econometrics. I covered his famous <a href="https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/">helicopter tour</a> paper on this blog a while back. Some of my other favorites are unpublished notes or slides from his <a href="https://www.princeton.edu/~sims">website</a>, many of them with a philosophical bent. <a href="http://sims.princeton.edu/yftp/IV/IV.pdf">Thinking about instrumental variables</a> is a paper I read in grad school that really clarified why things can go so badly wrong in IV estimation. I read <a href="http://sims.princeton.edu/yftp/UndrstndgNnBsns/GewekeBookChpter.pdf">Understanding Non-Bayesians</a> for the first time a couple of years ago and wished I had read it sooner. It articulates a view of Bayesian econometrics that I find particularly compelling. <a href="http://sims.princeton.edu/yftp/WassermanExmpl/WassermanR4a.pdf">Robins-Wasserman, Round N</a> and <a href="http://sims.princeton.edu/yftp/SharpEmet/SharpEmet.pdf">Sharp Econometrics</a> have also shaped the approach I’m taking in some <a href="https://laurayuliu.com/research/BDML_DL/BDML.pdf">recent work with Laura Liu</a>. ]]></description>
+  <category>meta</category>
+  <guid>https://www.econometrics.blog/post/chris-sims-rip/</guid>
+  <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Overlapping Confidence Intervals: Part II</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/overlapping-confidence-intervals-part-ii/</link>
+  <description><![CDATA[ In my earlier post on <a href="https://www.econometrics.blog/post/overlapping-confidence-intervals/">Overlapping Confidence Intervals</a> I asked what we can learn from the overlap, or lack thereof, between confidence intervals for two population means constructed using independent samples. To recap: if the individual confidence intervals for groups A and B <em>do not</em> overlap, there must be a statistically significant difference between the population means for the two groups. In other words, the interval for the difference of means will not include zero. If the individual intervals <em>do overlap</em>, on the other hand, anything goes. The interval for the difference of means may or may not include zero. Indeed, it’s even possible for the individual intervals for both A and B to include zero while the interval for their difference does not! ]]></description>
+  <category>statistics</category>
+  <guid>https://www.econometrics.blog/post/overlapping-confidence-intervals-part-ii/</guid>
+  <pubDate>Sat, 22 Nov 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Overlapping Confidence Intervals</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/overlapping-confidence-intervals/</link>
+  <description><![CDATA[ Perhaps you’ve seen a claim like this in an applied paper: “the estimated effect for Group A is statistically significant, but the estimated effect for Group B is not; this treatment helps As but not Bs.” But this reasoning is <em>flawed</em>. ]]></description>
+  <category>statistics</category>
+  <guid>https://www.econometrics.blog/post/overlapping-confidence-intervals/</guid>
+  <pubDate>Sat, 15 Nov 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>A Good Instrument is a Bad Control: Part II</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control-part-ii/</link>
+  <description><![CDATA[ At a recent seminar dinner the conversation drifted to causal inference, and I mentioned my dream of one day producing a Lady Gaga parody music video called “Bad Control”.<sup>1</sup> A lively discussion of bad controls ensued, during which I offered one of my favorite examples: <a href="https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/">a good instrument is a bad control</a>. To summarize that earlier post: including a valid instrumental variable as a <em>control</em> variable can only amplify the bias on the coefficient for our endogenous regressor of interest. When used as a control, the instrument “soaks up” the good (exogenous) variation in the endogenous regressor, leaving behind only the bad (endogenous) variation. This is the opposite of what happens in an instrumental variables regression, where we use the instrument to <em>extract</em> only the good variation in the endogenous regressor. More generally, a “bad control” is a covariate that we <em>shouldn’t adjust for</em> when using a <a href="https://www.econometrics.blog/post/how-to-do-regression-adjustment/">selection-on-observables</a> approach to causal inference. ]]></description>
+  <category>econometrics</category>
+  <category>causal inference</category>
+  <guid>https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control-part-ii/</guid>
+  <pubDate>Thu, 28 Aug 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Two FWL Theorems for the Price of One</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/two-fwl-theorems-for-the-price-of-one/</link>
+  <description><![CDATA[ The result that I prefer to call <a href="https://www.econometrics.blog/post/how-to-do-regression-adjustment/#fnref2">Yule’s Rule</a>, more commonly known as the “Frisch-Waugh-Lovell (FWL) theorem”, shows how to calculate the regression slope coefficient for <strong>one predictor</strong> by carrying out additional “auxiliary” regressions that adjust for <strong>all other predictors</strong>. You’ve probably encountered this result if you’ve studied introductory econometrics. But it may surprise you to learn that there are actually <em>two</em> variants of the FWL theorem, each with its pros and cons. Today we’ll take a look at the less familiar version and then circle back to understand what makes the more familiar one a textbook staple. ]]></description>
+  <category>econometrics</category>
+  <guid>https://www.econometrics.blog/post/two-fwl-theorems-for-the-price-of-one/</guid>
+  <pubDate>Thu, 14 Aug 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Econometrics Puzzler #2: Fitting a Regression with Fitted Values</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/</link>
+  <description><![CDATA[ Suppose I run a simple linear regression of an outcome variable on a predictor variable. If I save the fitted values from this regression and then run a <em>second</em> regression of the outcome variable on the fitted values, what will I get? For extra credit: how will the R-squared from the second regression compare to that from the first regression? ]]></description>
+  <category>econometrics</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/</guid>
+  <pubDate>Thu, 24 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Econometrics Puzzler #1: To Instrument or Not?</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/econometrics-puzzler-1-to-instrument-or-not/</link>
+  <description><![CDATA[ Welcome to the first installment of the <em>Econometrics Puzzler</em>, a new series of shorter posts that will test and strengthen your econometric intuition.<sup>1</sup> Here’s the format: I’ll pose a question that requires only introductory econometrics knowledge, but has an unexpected answer. The idea is for you to ponder the question before reading my solution. Many of these questions are based on common misconceptions that come up year-after-year in my econometrics teaching. I hope you’ll find them both challenging and enlightening. Today we’ll revisit everyone’s favorite example: Angrist &amp; Krueger’s 1991 paper on the returns to education.<sup>2</sup> ]]></description>
+  <category>econometrics</category>
+  <category>causal inference</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/econometrics-puzzler-1-to-instrument-or-not/</guid>
+  <pubDate>Sun, 13 Jul 2025 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Not Quite the James-Stein Estimator</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/</link>
+  <description><![CDATA[ If you study enough econometrics or statistics, you’ll eventually hear someone mention “Stein’s Paradox” or the <a href="https://en.wikipedia.org/wiki/James%E2%80%93Stein_estimator">“James-Stein Estimator”</a>. You’ve probably learned in your introductory econometrics course that ordinary least squares (OLS) is the <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem">best linear unbiased estimator</a> (BLUE) in a linear regression model under the Gauss-Markov assumptions. The stipulations “linear” and “unbiased” are crucial here. If we remove them, it’s possible to do better–maybe even <em>much better</em>–than OLS.<sup>1</sup> Stein’s paradox is a famous example of this phenomenon, one that created much consternation among statisticians and fellow-travelers when it was first pointed out by <a href="https://en.wikipedia.org/wiki/Charles_M._Stein">Charles Stein</a> in the mid-1950s. The example is interesting in its own right, but also has deep connections to ideas in Bayesian inference and machine learning making it much more than a mere curiosity. ]]></description>
+  <category>statistics</category>
+  <guid>https://www.econometrics.blog/post/not-quite-the-james-stein-estimator/</guid>
+  <pubDate>Sat, 10 Aug 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>How to Do Regression Adjustment</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/how-to-do-regression-adjustment/</link>
+  <description><![CDATA[ By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter <em>regression adjustment</em>, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a “good control” that will help us learn the causal effect of interest or a “bad control” that will only make things worse.<sup>1</sup> Another, and the topic of today’s post, is how to actually <em>implement</em> regression adjustment after we’ve decided which covariates to adjust for. ]]></description>
+  <category>causal inference</category>
+  <guid>https://www.econometrics.blog/post/how-to-do-regression-adjustment/</guid>
+  <pubDate>Fri, 02 Aug 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Econometrics Puzzler #0: Is it Better to Improve Sensitivity or Specificity?</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/is-it-better-to-improve-sensitivity-or-specificity/</link>
+  <description><![CDATA[ Here’s a slightly unusual exercise on the topic of Bayes’ Theorem for those of you teaching or studying introductory probability.<sup>1</sup> Imagine that you’re developing a diagnostic test for a disease. The test is very simple: it either comes back positive or negative. You have a choice between slightly increasing either your test’s <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity">sensitivity or its specificity</a>. If your goal is to maximize the <a href="https://en.wikipedia.org/wiki/Positive_and_negative_predictive_values">positive predictive value (PPV)</a> of your test, i.e.&nbsp;the probability that a patient has the disease given that the test comes back positive, which test characteristic should you choose to improve? ]]></description>
+  <category>statistics</category>
+  <category>teaching</category>
+  <category>puzzler</category>
+  <guid>https://www.econometrics.blog/post/is-it-better-to-improve-sensitivity-or-specificity/</guid>
+  <pubDate>Thu, 25 Jul 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>How to Read an Econometrics Paper</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/how-to-read-an-econometrics-paper/</link>
+  <description><![CDATA[ Reading and understanding econometrics papers can be hard work. Most published articles, even review articles, are written by specialists for specialists. Unless you’re already familiar with the literature, it can be a real uphill battle to make it through a recent paper. In grad school I remember our professors repeatedly admonishing me and the rest of the cohort to “read the papers!” But when I did my best to follow this advice, I nearly always felt like I was banging my head against a wall. ]]></description>
+  <category>teaching</category>
+  <guid>https://www.econometrics.blog/post/how-to-read-an-econometrics-paper/</guid>
+  <pubDate>Sat, 20 Jul 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Sims and Uhlig (1991) Replication</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/</link>
+  <description><![CDATA[ As a teaser for our upcoming (2024-07-23) virtual reading group session on Bayesian macro / time series econometrics, this post replicates a classic paper by <a href="https://ideas.repec.org/a/ecm/emetrp/v59y1991i6p1591-99.html">Sims &amp; Uhlig (1991)</a> contrasting Bayesian and Frequentist inferences for a unit root. In the post I’ll focus on explaining and implementing the authors’ simulation design. In the reading group session (and possibly a future post) we’ll talk more about the paper’s implications for the Bayesian-Frequentist debate and relate it to more recent work by <a href="https://ideas.repec.org/a/taf/jnlasa/v111y2016i515p1233-1241.html">Mueller &amp; Norets (2016)</a>. We’ll also be joined by special guest <a href="https://web.sas.upenn.edu/schorf/">Frank Schorfheide</a> who will help guide us through the recent literature on Bayesian approaches to VARs, including <a href="https://ideas.repec.org/a/tpr/restat/v97y2015i2p436-451.html">Giannone et al (2015)</a> and <a href="https://ideas.repec.org/a/taf/jnlasa/v114y2019i526p565-580.html">(2019)</a>. If you’re an Oxford student or staff member, you can sign up for the reading group <a href="https://edstem.org/us/join/6j2hay">here</a>. Otherwise, send me an email and I’ll add you manually. ]]></description>
+  <category>time series</category>
+  <guid>https://www.econometrics.blog/post/sims-and-uhlig-1991-replication/</guid>
+  <pubDate>Mon, 15 Jul 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>The Return of econometrics.blog!</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/the-return-of-econometrics-blog/</link>
+  <description><![CDATA[ After a year-long hiatus, I’m excited to return to regular blogging about econometrics! I have a long list of posts that I’m eager to write, and I hope you’ll find them interesting. To whet your appetite, here’s a preview of some of the topics I plan to cover in the coming weeks: ]]></description>
+  <category>meta</category>
+  <guid>https://www.econometrics.blog/post/the-return-of-econometrics-blog/</guid>
+  <pubDate>Sun, 14 Jul 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>A Good Instrument is a Bad Control</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/</link>
+  <description><![CDATA[ Here’s a puzzle for you. What will happen if we regress some outcome of interest on <em>both</em> an endogenous regressor <em>and</em> a valid instrument for that regressor? I hadn’t thought about this question until 2018, when one of my undergraduate students asked it during class. If memory serves, my off-the-cuff answer left much to be desired.<sup>1</sup> Five years later I’m finally ready to give a fully satisfactory answer; better late than never I suppose! ]]></description>
+  <category>econometrics</category>
+  <category>causal inference</category>
+  <guid>https://www.econometrics.blog/post/a-good-instrument-is-a-bad-control/</guid>
+  <pubDate>Thu, 29 Jun 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>The R Formula Cheatsheet</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/the-r-formula-cheatsheet/</link>
+  <description><![CDATA[ R’s formula syntax is extremely powerful but can be confusing for beginners.<sup>1</sup> This post is a quick reference covering all of the symbols that have a “special” meaning inside of an R formula: <code>~, +, ., -, 1, :, *, ^</code>, and <code>I()</code>. You may never use some of these in practice, but it’s nice to know that they exist. It was many years before I realized that I could simply type <code>y ~ x * z</code> instead of the lengthier <code>y ~ x + z + x:z</code>, for example. While R formulas crop up in a variety of places, they are probably most familiar as the first argument of <code>lm()</code>. For this reason, my verbal explanations assume a simple linear regression setting in which we hope to predict <code>y</code> using a number of regressors <code>x</code>, <code>z</code>, and <code>w</code>. ]]></description>
+  <category>computing</category>
+  <guid>https://www.econometrics.blog/post/the-r-formula-cheatsheet/</guid>
+  <pubDate>Wed, 19 Apr 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Random Variables Cheatsheet</title>
+  <dc:creator>Francis J. DiTraglia</dc:creator>
+  <link>https://www.econometrics.blog/post/random-variables-cheatsheet/</link>
+  <description><![CDATA[ To do well in an econometrics or statistics course at any level, you need to have a large number of simple properties of random variables at your fingertips. Some years back I made a handout containing the most important properties for my undergraduate students at the University of Pennsylvania. In the hopes that this might be of use to others, I’ve released an <a href="https://github.com/fditraglia/random-variables-cheatsheet/blob/main/random-variables-cheatsheet.pdf">updated pdf on github</a>. You can fork the repository <a href="https://github.com/fditraglia/random-variables-cheatsheet">here</a>. If you spot any errors or want to suggest any additions, feel free to raise an <a href="https://github.com/fditraglia/random-variables-cheatsheet/issues">issue</a> or send me a <a href="https://github.com/fditraglia/random-variables-cheatsheet/pulls">pull request</a>. ]]></description>
+  <category>statistics</category>
+  <guid>https://www.econometrics.blog/post/random-variables-cheatsheet/</guid>
+  <pubDate>Sat, 07 Jan 2023 00:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>
