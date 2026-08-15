@@ -72,11 +72,12 @@ def pages():
         path = SITE / page / "index.html"
         if path.exists():
             yield path
-    # Unlisted, but it renders a table and tables are what overflow narrow
-    # screens; nothing else would catch it.
-    r_feed = SITE / "r-feed.html"
-    if r_feed.exists():
-        yield r_feed
+    # Unlisted utility pages sit at the site root (r-feed, email-feed). They
+    # are globbed rather than named so a new one is covered automatically:
+    # each renders a table, and tables are what overflow narrow screens.
+    for path in sorted(SITE.glob("*.html")):
+        if path.name != "index.html":
+            yield path
 
 
 def main():
