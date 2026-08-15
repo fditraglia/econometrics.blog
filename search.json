@@ -494,7 +494,7 @@
     "href": "subscribe/index.html",
     "title": "Subscribe",
     "section": "",
-    "text": "I post every month or two: puzzles, intuitions, and the occasional simulation. If you would like an email when something new appears, leave your address below. You will get a note about new posts and nothing else, and every message carries a one-click unsubscribe link.\nYou will be asked to confirm the address before anything is sent, so check for a confirmation email after signing up.\n\n  Email address\n  \n  Subscribe\n\nIf you would rather use a feed reader, there is an RSS feed covering every post, and a second feed carrying only the posts that use R."
+    "text": "If you’d like to receive an email whenever a new post appears on econometrics.blog, you can subscribe below. New posts are the only thing this list is ever used for.\nYou’ll be asked to confirm your address first, so look for a confirmation email after you sign up. Nothing is sent until you click the link in it, and every email after that carries a one-click unsubscribe link.\n\n  Email address\n  \n  Subscribe\n\nIf you would rather use a feed reader, there is an RSS feed covering every post, and a second feed carrying only the posts that use R."
   },
   {
     "objectID": "about/index.html",
@@ -963,7 +963,7 @@
     "href": "post/understanding-the-f-statistic/index.html#appendix-code",
     "title": "Understanding the F Statistic",
     "section": "6 Appendix: Code",
-    "text": "6 Appendix: Code\nI used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:\nand the following code to generate the data contained in sim_data"
+    "text": "6 Appendix: Code\nI used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:\n\npar(mfrow = c(1, 2))\nplot(Midterm2 ~ Midterm1, data = midterms, main = 'Unrestricted', pch = 20)\nabline(coef(unrestricted), lwd = 2, col = 'blue')\nwith(midterms, segments(x0 = Midterm1, y0 = Midterm2, \n                        x1 = Midterm1, y1 = fitted(unrestricted),\n                        col = 'blue', lty = 2, lwd = 1))\ntext(90, 50, bquote(SSR == .(round(SSR_u))))\nplot(Midterm2 ~ Midterm1, data = midterms, main = 'Restricted', pch = 20)\nwith(midterms, segments(x0 = Midterm1, y0 = Midterm2, \n                        x1 = Midterm1, y1 = fitted(restricted),\n                        col = 'red', lty = 2, lwd = 1))\nabline(h = coef(restricted), lwd = 2, col = 'red')\ntext(90, 50, bquote(SSR == .(round(SSR_r))))\npar(mfrow = c(1,1))\n\nand the following code to generate the data contained in sim_data\n\nset.seed(3817)\nn &lt;- 100\nq &lt;- 50\ny &lt;- 0.5 + rnorm(n)\nx &lt;- matrix(rnorm(n * q), n, q)\ncolnames(x) &lt;- paste0('x', 1:q)\nsim_dat &lt;- data.frame(x, y)"
   },
   {
     "objectID": "post/not-quite-the-james-stein-estimator/index.html",

@@ -8702,7 +8702,226 @@ font-style: inherit;">49</span>)</span></code></pre></div></div>
 <section id="appendix-code" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="appendix-code"><span class="header-section-number">6</span> Appendix: Code</h2>
 <p>I used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span>
+<span id="cb32-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(Midterm2 <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> midterms, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Unrestricted'</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>)</span>
+<span id="cb32-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abline</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(unrestricted), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'blue'</span>)</span>
+<span id="cb32-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(midterms, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">segments</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x0 =</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y0 =</span> Midterm2, </span>
+<span id="cb32-5">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x1 =</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y1 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fitted</span>(unrestricted),</span>
+<span id="cb32-6">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'blue'</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lty =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb32-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">text</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">90</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bquote</span>(SSR <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> .(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(SSR_u))))</span>
+<span id="cb32-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(Midterm2 <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> midterms, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'Restricted'</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>)</span>
+<span id="cb32-9"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(midterms, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">segments</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x0 =</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y0 =</span> Midterm2, </span>
+<span id="cb32-10">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x1 =</span> Midterm1, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y1 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">fitted</span>(restricted),</span>
+<span id="cb32-11">                        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'red'</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lty =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb32-12"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abline</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">h =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(restricted), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lwd =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'red'</span>)</span>
+<span id="cb32-13"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">text</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">90</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bquote</span>(SSR <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> .(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(SSR_r))))</span>
+<span id="cb32-14"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mfrow =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span></code></pre></div></div>
+</div>
 <p>and the following code to generate the data contained in <code>sim_data</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3817</span>)</span>
+<span id="cb33-2">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span></span>
+<span id="cb33-3">q <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">50</span></span>
+<span id="cb33-4">y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n)</span>
+<span id="cb33-5">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(n <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> q), n, q)</span>
+<span id="cb33-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">colnames</span>(x) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'x'</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span>q)</span>
+<span id="cb33-7">sim_dat <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(x, y)</span></code></pre></div></div>
+</div>
 
 
 </section>

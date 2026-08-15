@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-2a4fed2efe4849af544a11819cf92978.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e1614845376523c5055f683e225d3c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -904,10 +904,14 @@ Y &amp;= \alpha + \beta X + U = \alpha + \beta (\pi_0 + \pi_Z Z + V) + U\\
 
     var block = document.createElement('div');
     block.className = 'subscribe-block';
+    // No eyebrow label above this. "Subscribe" as a heading and "Subscribe"
+    // on the button are the same word in the same mono vermilion, so the two
+    // were indistinguishable and nothing marked which one was clickable. The
+    // sentence does the heading's job, and the button is then the only
+    // accented thing in the block.
     block.innerHTML =
-      '<p class="subscribe-eyebrow">Subscribe</p>' +
-      '<p class="subscribe-pitch">New posts by email. Nothing else, and one ' +
-      'click to stop.</p>' +
+      '<p class="subscribe-pitch">An email whenever a new post appears, and ' +
+      'nothing else.</p>' +
       '<form class="subscribe-form" method="post" target="_blank" ' +
       'action="https://buttondown.com/api/emails/embed-subscribe/fditraglia">' +
       '<label for="bd-email-post">Email address</label>' +
