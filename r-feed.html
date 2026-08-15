@@ -6,10 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Francis J. DiTraglia">
-<meta name="dcterms.date" content="2021-10-29">
+<meta name="description" content="Posts from econometrics.blog that use R: simulations, numerical methods, and statistical computing.">
 
-<title>Street Fighting Numerical Analysis - Part I – econometrics.blog</title>
+<title>R Posts – econometrics.blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,62 +27,29 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../favicon.png" rel="icon" type="image/png">
-<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b06b28dc1287d0c02efca9a066ef50ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-b06b28dc1287d0c02efca9a066ef50ca.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -111,9 +77,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link rel="preload" href="../../fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
-<link rel="preload" href="../../fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
-<link rel="preload" href="../../fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-r-posts .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-r-posts'] = new List('listing-r-posts', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<link rel="preload" href="./fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="./fonts/libre-caslon-text-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin="">
+<link rel="preload" href="./fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin="">
 <style>
 /* All faces are self-hosted so no reader IPs go to Google. The R-figure SVGs
    carry their own embedded subsets (fonts/subset/) and never read these. */
@@ -123,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400 700;
   font-display: swap;
-  src: url(../../fonts/jetbrains-mono-latin-ext-normal.woff2) format('woff2');
+  src: url(./fonts/jetbrains-mono-latin-ext-normal.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -132,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400 700;
   font-display: swap;
-  src: url(../../fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
+  src: url(./fonts/jetbrains-mono-latin-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 /* EB Garamond -- body text: 400, 600, 400 italic */
@@ -142,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-ext-400-normal.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -150,7 +145,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-ext-600-normal.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -158,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -167,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -175,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-600-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -183,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
+  src: url(./fonts/eb-garamond-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 /* Libre Caslon Text -- titles, headings, masthead: 400, 700, 400 italic */
@@ -193,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-ext-400-normal.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -201,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-ext-700-normal.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
@@ -209,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-ext-400-italic.woff2) format('woff2');
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 /* latin */
@@ -218,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -226,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-700-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
@@ -234,11 +229,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(../../fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
+  src: url(./fonts/libre-caslon-text-latin-400-italic.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 </style>
-<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
@@ -270,16 +265,16 @@ window.Quarto = {
 };
 </script>
 
-</head>
+<link rel="alternate" type="application/rss+xml" title="econometrics.blog" href="r-feed.xml" data-external="1"></head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
+    <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">econometrics.blog</span>
     </a>
   </div>
@@ -290,19 +285,19 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../index.html"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Contents</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../#category=puzzler"> 
+    <a class="nav-link" href="./#category=puzzler"> 
 <span class="menu-text">Puzzlers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../about/index.html"> 
+    <a class="nav-link" href="./about/index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml"> 
+    <a class="nav-link" href="./index.xml"> 
 <span class="menu-text">Feed</span></a>
   </li>  
 </ul>
@@ -316,270 +311,309 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-    </div>
+    
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<p class="post-eyebrow">
-<span class="eyebrow-item">Computing &amp; applied work</span>
-<span class="eyebrow-item">29 October 2021</span>
-<span class="eyebrow-item">8 min</span>
-<span class="eyebrow-item">Part I of II</span>
-</p>
-<h1 class="title">Street Fighting Numerical Analysis - Part I</h1>
+<h1 class="title">R Posts</h1>
 </div>
+
+<div>
+  <div class="description">
+    Posts from econometrics.blog that use R: simulations, numerical methods, and statistical computing.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
 </header>
 
-<nav id="TOC" role="doc-toc">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#is-r-broken" id="toc-is-r-broken"><span class="header-section-number">1</span> Is R broken?</a></li>
-  <li><a href="#numeric-types-in-r" id="toc-numeric-types-in-r"><span class="header-section-number">2</span> Numeric Types in R</a></li>
-  <li><a href="#what-you-see-isnt-always-what-you-get." id="toc-what-you-see-isnt-always-what-you-get."><span class="header-section-number">3</span> What you see isn’t always what you get.</a></li>
-  <li><a href="#which-decimals-have-an-exact-representation" id="toc-which-decimals-have-an-exact-representation"><span class="header-section-number">4</span> Which decimals have an exact representation?</a></li>
-  <li><a href="#take-home-lesson" id="toc-take-home-lesson"><span class="header-section-number">5</span> Take-home Lesson</a></li>
-  </ul>
-</nav>
-<p>Computing is a crucial part of modern applied and theoretical econometrics but most economists, myself included, have little if any formal training in numerical analysis and computer science. This means that we often learn things <em>the hard way</em>: by making boneheaded mistakes and spending hours browsing <a href="https://stackoverflow.com/">stackoverflow</a> to try to figure out what went wrong. In preparation for my upcoming course on <a href="https://empirical-methods.com">Empirical Research Methods</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> I’ve started trying to collect and organize the various nuggets of computational wisdom that I’ve picked up over the years. This post is the first of several that I plan to write on that theme. Its origin is an enigmatic bug that I detected in a seemingly trivial line of my R code involving <code>rep()</code>.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Content coming soon!</p></div></div><section id="is-r-broken" class="level2 page-columns page-full" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="is-r-broken"><span class="header-section-number">1</span> Is R broken?</h2>
-<p>For no particular reason, let’s use the R function <code>rep()</code> to print out the string <code>"econometrics.blog"</code> four times:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">"econometrics.blog"</span>, <span class="at">times =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "econometrics.blog" "econometrics.blog" "econometrics.blog"
-[4] "econometrics.blog"</code></pre>
+
+<p>These are the posts on <a href=".">econometrics.blog</a> that use R. They are collected here as a feed for <a href="https://www.r-bloggers.com/">R-bloggers</a>; the <a href="./index.xml">main feed</a> carries everything.</p>
+<div id="listing-r-posts" class="quarto-listing quarto-listing-container-table">
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+
+<th>
+Date
+</th>
+
+<th>
+Title
+</th>
+
+<th>
+Reading Time
+</th>
+
+</tr>
+</thead>
+<tbody class="list">
+
+<tr data-index="0" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDcHV6emxlcg==" data-listing-date-sort="1786665600000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1168" data-listing-title-sort="Econometrics Puzzler #4: Rescaling the Reduced Form" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 14, 2026</span>
+</td>
+<td>
+<a href="./post/econometrics-puzzler-4-rescaling-the-reduced-form/index.html" class="title listing-title">Econometrics Puzzler #4: Rescaling the Reduced Form</a>
+</td>
+<td>
+<span class="listing-reading-time">6 min</span>
+</td>
+
+</tr>
+
+<tr data-index="1" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1777161600000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1344" data-listing-title-sort="Complex Step Differentiation" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Apr 26, 2026</span>
+</td>
+<td>
+<a href="./post/complex-step-differentiation/index.html" class="title listing-title">Complex Step Differentiation</a>
+</td>
+<td>
+<span class="listing-reading-time">7 min</span>
+</td>
+
+</tr>
+
+<tr data-index="2" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1756339200000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1937" data-listing-title-sort="A Good Instrument is a Bad Control: Part II" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 28, 2025</span>
+</td>
+<td>
+<a href="./post/a-good-instrument-is-a-bad-control-part-ii/index.html" class="title listing-title">A Good Instrument is a Bad Control: Part II</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+
+</tr>
+
+<tr data-index="3" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1755129600000" data-listing-file-modified-sort="1786819607657" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1888" data-listing-title-sort="Two FWL Theorems for the Price of One" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 14, 2025</span>
+</td>
+<td>
+<a href="./post/two-fwl-theorems-for-the-price-of-one/index.html" class="title listing-title">Two FWL Theorems for the Price of One</a>
+</td>
+<td>
+<span class="listing-reading-time">10 min</span>
+</td>
+
+</tr>
+
+<tr data-index="4" data-categories="ZWNvbm9tZXRyaWNzJTJDcHV6emxlcg==" data-listing-date-sort="1753315200000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="451" data-listing-title-sort="Econometrics Puzzler #2: Fitting a Regression with Fitted Values" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Jul 24, 2025</span>
+</td>
+<td>
+<a href="./post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values/index.html" class="title listing-title">Econometrics Puzzler #2: Fitting a Regression with Fitted Values</a>
+</td>
+<td>
+<span class="listing-reading-time">3 min</span>
+</td>
+
+</tr>
+
+<tr data-index="5" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNlJTJDcHV6emxlcg==" data-listing-date-sort="1752364800000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1330" data-listing-title-sort="Econometrics Puzzler #1: To Instrument or Not?" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Jul 13, 2025</span>
+</td>
+<td>
+<a href="./post/econometrics-puzzler-1-to-instrument-or-not/index.html" class="title listing-title">Econometrics Puzzler #1: To Instrument or Not?</a>
+</td>
+<td>
+<span class="listing-reading-time">7 min</span>
+</td>
+
+</tr>
+
+<tr data-index="6" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1723248000000" data-listing-file-modified-sort="1786819607656" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="37" data-listing-word-count-sort="7363" data-listing-title-sort="Not Quite the James-Stein Estimator" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 10, 2024</span>
+</td>
+<td>
+<a href="./post/not-quite-the-james-stein-estimator/index.html" class="title listing-title">Not Quite the James-Stein Estimator</a>
+</td>
+<td>
+<span class="listing-reading-time">37 min</span>
+</td>
+
+</tr>
+
+<tr data-index="7" data-categories="Y2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1722556800000" data-listing-file-modified-sort="1786819607655" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4639" data-listing-title-sort="How to Do Regression Adjustment" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 2, 2024</span>
+</td>
+<td>
+<a href="./post/how-to-do-regression-adjustment/index.html" class="title listing-title">How to Do Regression Adjustment</a>
+</td>
+<td>
+<span class="listing-reading-time">24 min</span>
+</td>
+
+</tr>
+
+<tr data-index="8" data-categories="dGltZSUyMHNlcmllcw==" data-listing-date-sort="1721001600000" data-listing-file-modified-sort="1786819607656" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1479" data-listing-title-sort="Sims and Uhlig (1991) Replication" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Jul 15, 2024</span>
+</td>
+<td>
+<a href="./post/sims-and-uhlig-1991-replication/index.html" class="title listing-title">Sims and Uhlig (1991) Replication</a>
+</td>
+<td>
+<span class="listing-reading-time">8 min</span>
+</td>
+
+</tr>
+
+<tr data-index="9" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1687996800000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1650" data-listing-title-sort="A Good Instrument is a Bad Control" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Jun 29, 2023</span>
+</td>
+<td>
+<a href="./post/a-good-instrument-is-a-bad-control/index.html" class="title listing-title">A Good Instrument is a Bad Control</a>
+</td>
+<td>
+<span class="listing-reading-time">9 min</span>
+</td>
+
+</tr>
+
+<tr data-index="10" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1681862400000" data-listing-file-modified-sort="1786819607657" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="368" data-listing-title-sort="The R Formula Cheatsheet" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Apr 19, 2023</span>
+</td>
+<td>
+<a href="./post/the-r-formula-cheatsheet/index.html" class="title listing-title">The R Formula Cheatsheet</a>
+</td>
+<td>
+<span class="listing-reading-time">2 min</span>
+</td>
+
+</tr>
+
+<tr data-index="11" data-categories="c3RhdGlzdGljcyUyQ2NvbXB1dGluZw==" data-listing-date-sort="1668729600000" data-listing-file-modified-sort="1786819607655" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1280" data-listing-title-sort="From the Poisson Distribution to Stirling's Approximation" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Nov 18, 2022</span>
+</td>
+<td>
+<a href="./post/from-the-poisson-distribution-to-stirling-s-approximation/index.html" class="title listing-title">From the Poisson Distribution to Stirling’s Approximation</a>
+</td>
+<td>
+<span class="listing-reading-time">7 min</span>
+</td>
+
+</tr>
+
+<tr data-index="12" data-categories="ZWNvbm9tZXRyaWNzJTJDY2F1c2FsJTIwaW5mZXJlbmNl" data-listing-date-sort="1667692800000" data-listing-file-modified-sort="1786819607657" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2048" data-listing-title-sort="Three Ways of Thinking About Instrumental Variables" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Nov 6, 2022</span>
+</td>
+<td>
+<a href="./post/three-ways-of-thinking-about-instrumental-variables/index.html" class="title listing-title">Three Ways of Thinking About Instrumental Variables</a>
+</td>
+<td>
+<span class="listing-reading-time">11 min</span>
+</td>
+
+</tr>
+
+<tr data-index="13" data-categories="ZWNvbm9tZXRyaWNz" data-listing-date-sort="1647216000000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2316" data-listing-title-sort="A New Way of Looking at Least Squares" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Mar 14, 2022</span>
+</td>
+<td>
+<a href="./post/a-new-way-of-looking-at-least-squares/index.html" class="title listing-title">A New Way of Looking at Least Squares</a>
+</td>
+<td>
+<span class="listing-reading-time">12 min</span>
+</td>
+
+</tr>
+
+<tr data-index="14" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1644019200000" data-listing-file-modified-sort="1786819607657" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4747" data-listing-title-sort="The Wilson Confidence Interval for a Proportion" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Feb 5, 2022</span>
+</td>
+<td>
+<a href="./post/the-wilson-confidence-interval-for-a-proportion/index.html" class="title listing-title">The Wilson Confidence Interval for a Proportion</a>
+</td>
+<td>
+<span class="listing-reading-time">24 min</span>
+</td>
+
+</tr>
+
+<tr data-index="15" data-categories="Y29tcHV0aW5n" data-listing-date-sort="1635465600000" data-listing-file-modified-sort="1786819607656" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500" data-listing-title-sort="Street Fighting Numerical Analysis - Part I" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Oct 29, 2021</span>
+</td>
+<td>
+<a href="./post/street-fighting-numerical-analysis-part-1/index.html" class="title listing-title">Street Fighting Numerical Analysis - Part I</a>
+</td>
+<td>
+<span class="listing-reading-time">8 min</span>
+</td>
+
+</tr>
+
+<tr data-index="16" data-categories="c3RhdGlzdGljcw==" data-listing-date-sort="1633305600000" data-listing-file-modified-sort="1786819607654" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2162" data-listing-title-sort="Don't Use the Textbook CI for a Proportion" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Oct 4, 2021</span>
+</td>
+<td>
+<a href="./post/don-t-use-the-textbook-ci-for-a-proportion/index.html" class="title listing-title">Don’t Use the Textbook CI for a Proportion</a>
+</td>
+<td>
+<span class="listing-reading-time">11 min</span>
+</td>
+
+</tr>
+
+<tr data-index="17" data-categories="ZWNvbm9tZXRyaWNzJTJDdGVhY2hpbmc=" data-listing-date-sort="1628985600000" data-listing-file-modified-sort="1786819607658" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="20" data-listing-word-count-sort="3874" data-listing-title-sort="Understanding the F Statistic" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">Aug 15, 2021</span>
+</td>
+<td>
+<a href="./post/understanding-the-f-statistic/index.html" class="title listing-title">Understanding the F Statistic</a>
+</td>
+<td>
+<span class="listing-reading-time">20 min</span>
+</td>
+
+</tr>
+
+<tr data-index="18" data-categories="c3RhdGlzdGljcyUyQ3RlYWNoaW5n" data-listing-date-sort="1620432000000" data-listing-file-modified-sort="1786819607657" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="15" data-listing-word-count-sort="2986" data-listing-title-sort="Thirty isn't the magic number" data-listing-filename-sort="index.qmd">
+<td>
+<span class="listing-date">May 8, 2021</span>
+</td>
+<td>
+<a href="./post/thirty-isn-t-the-magic-number/index.html" class="title listing-title">Thirty isn’t the magic number</a>
+</td>
+<td>
+<span class="listing-reading-time">15 min</span>
+</td>
+
+</tr>
+
+</tbody>
+</table>
+<div class="listing-no-matching d-none">No matching items</div>
 </div>
-</div>
-<p>Since 0.2 multiplied by 20 equals 4, it comes as no surprise that replacing <code>times = 4</code> with <code>times = 0.2 * 20</code> gives the same result:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">"econometrics.blog"</span>, <span class="at">times =</span> <span class="fl">0.2</span> <span class="sc">*</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "econometrics.blog" "econometrics.blog" "econometrics.blog"
-[4] "econometrics.blog"</code></pre>
-</div>
-</div>
-<p>Now let’s try <code>times = (1 - 0.8) * 20</code> instead. Since 0.2 equals (1 - 0.8) this couldn’t possibly make a difference, could it? Distressingly, it does: we obtain only <em>three</em> copies of <code>"econometrics.blog"</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">"econometrics.blog"</span>, <span class="at">times =</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>) <span class="sc">*</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "econometrics.blog" "econometrics.blog" "econometrics.blog"</code></pre>
-</div>
-</div>
-<p>What on earth is going on here? Has R made some kind of mistake? Let’s try a sanity check. First we’ll calculate <code>(1 - 0.8) * 20</code> and call it <code>x</code>. Then we’ll check that <code>x</code> really does equal four:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>) <span class="sc">*</span> <span class="dv">20</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<p>What a relief: surely setting <code>times = x</code> should give us four copies of <code>"econometrics.blog"</code>. Alas, it does not:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">'econometrics.blog'</span>, <span class="at">times =</span> x) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "econometrics.blog" "econometrics.blog" "econometrics.blog"</code></pre>
-</div>
-</div>
-<p>Clearly using open-source software like R is a bad idea and I should switch to STATA.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Health warning: this sentence is satire. The author does not condone the use of STATA or other closed-source statistical packages.</p></div></div></section>
-<section id="numeric-types-in-r" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="numeric-types-in-r"><span class="header-section-number">2</span> Numeric Types in R</h2>
-<p>Because R is a <a href="https://en.wikipedia.org/wiki/Type_system#DYNAMIC">dynamically-typed</a> programming language, we can almost always ignore the question of precisely how it stores numeric values “under the hood.” In fact R has <em>two</em> numeric types: integer and double. Integers are rare in practice. The operator <code>:</code> returns an integer vector</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "integer"</code></pre>
-</div>
-</div>
-<p>and the length of a vector is always an integer</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "integer"</code></pre>
-</div>
-</div>
-<p>but nearly every other numeric value you encounter in R will be stored as a double, i.e.&nbsp;a double precision <a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">floating point number</a>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="fl">4.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="fu">cos</span>(<span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-</div>
-<p>To <em>force</em> R to store a value as an integer rather than double, we can either append an <code>L</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="dv">4</span>L</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "integer"</code></pre>
-</div>
-</div>
-<p>or <em>coerce</em>, i.e.&nbsp;convert, a double to an integer using <code>as.integer()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(a)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(b)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "integer"</code></pre>
-</div>
-</div>
-<p>The trade-off between integers and doubles is between precision and range. Calculations carried out with integers are always <em>exact</em>, but integers can only be used to represent a fairly limited number of values. Calculations with doubles, on the other hand, are not <em>always</em> exact, but doubles can store a much larger range of values, including decimals.</p>
-<p>This post isn’t the right place to delve into the details of floating point numbers, of which doubles are an instance, but there are two points worth emphasizing. First, it’s generally safe to store a value that is “truly” an integer, e.g.&nbsp;<code>4</code>, as double. As explained in the help file <code>integer {base}</code></p>
-<blockquote class="blockquote">
-<p>current implementations of R use 32-bit integers for integer vectors, so the range of representable integers is restricted to about +/-2*10^9: doubles can hold much larger integers exactly.</p>
-</blockquote>
-<p>This explains why you may never have encountered the <code>L</code> suffix in the wild. Because doubles can represent very large integers <em>exactly</em>, calculations with whole numbers stored as doubles will also be exact. Notice that R automatically converts integers that are “too big” into doubles:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">999999999</span>L</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "integer"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">9999999999</span>L</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-</div>
-<p>While converting integers to doubles in innocuous, you need to be <em>careful</em> when converting doubles to integers. This turns out to be the root of our problem with <code>rep()</code> from above. Both <code>0.2 * 20</code> and <code>(1 - 0.8) * 20</code> are doubles, and both <em>appear</em> to equal <code>4</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">0.2</span> <span class="sc">*</span> <span class="dv">20</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "double"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>) <span class="sc">*</span> <span class="dv">20</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<p>But <code>x</code> and <code>y</code> are coerced to <em>different</em> integer values:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.integer</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.integer</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3</code></pre>
-</div>
-</div>
-<p>The function <code>rep()</code> expects its second argument <code>times</code> to be an integer. If we supply a double instead, then <code>rep()</code> makes a conversion in the same way as the function <code>as.integer()</code>, namely by <em>truncating</em>. Far down in the help file for <code>rep()</code> we find this crucial caveat:</p>
-<blockquote class="blockquote">
-<p>Non-integer values of <code>times</code> will be truncated towards zero. If times is a computed quantity it is prudent to add a small fuzz or use <code>round()</code>.</p>
-</blockquote>
-<p>But wait: aren’t <code>x</code> and <code>y</code> <em>precisely equal</em> to each other? How can one truncate to <code>4</code> while the other truncates to <code>3</code>? As it turns out, appearances can be deceiving:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(x, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-</div>
-<p>To find out <em>why</em> these values aren’t equal, we need to learn a bit more about how computers approximate real numbers using doubles.</p>
-</section>
-<section id="what-you-see-isnt-always-what-you-get." class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="what-you-see-isnt-always-what-you-get."><span class="header-section-number">3</span> What you see isn’t always what you get.</h2>
-<p>R has various handy built-in constants, including <span class="math inline">\(\pi\)</span></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.141593</code></pre>
-</div>
-</div>
-<p>Notwithstanding <a href="https://en.wikipedia.org/wiki/Indiana_Pi_Bill">bill number 246</a> of the 1897 sitting of the Indiana General Assembly, <span class="math inline">\(\pi\)</span> is an irrational number. By default, however, R only shows us a small number of its digits. To display twenty digits of <span class="math inline">\(\pi\)</span>, we can specify the argument <code>digits</code> to the function <code>print()</code> like so</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pi, <span class="at">digits =</span> <span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.141592653589793116</code></pre>
-</div>
-</div>
-<p>To see <em>even more</em> digits, we can use the function <code>sprintf()</code>. Let’s try to display 60 digits of <span class="math inline">\(\pi\)</span>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.60f"</span>, pi)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "3.141592653589793115997963468544185161590576171875000000000000"</code></pre>
-</div>
-</div>
-<p>Why do the last twelve decimal points display as zero? The answer is that computers cannot represent real numbers to infinite precision. At some point, the remaining digits of <span class="math inline">\(\pi\)</span> get chopped off, and we’re left with an approximation that’s more than sufficient for any practical application.</p>
-<p>At first glance, the number 0.8 seems nothing like <span class="math inline">\(\pi\)</span>. It is, after all, a rational number: 4/5. But <code>sprintf()</code> reveals that there’s more here than meets the eye:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="fl">0.8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "0.800000000000000044408920985006261616945266723632812500"</code></pre>
-</div>
-</div>
-<p>The fraction 4/5 cannot be represented exactly as a double; it can only be <em>approximated</em>. The same is true of 1/5. Because <code>0.2</code> and <code>0.8</code> can only be represented approximately, <code>1 - 0.8</code> and <code>0.2</code> turn out <em>not</em> to be equal from the computer’s perspective:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>, <span class="fl">0.2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] FALSE</code></pre>
-</div>
-</div>
-<p>This in turn explains why <code>(1 - 0.8) * 20</code> and <code>0.2 * 20</code> truncate to different integer values:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="dv">20</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>, <span class="fl">0.2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "3.999999999999999111821580299874767661094665527343750000"
-[2] "4.000000000000000000000000000000000000000000000000000000"</code></pre>
-</div>
-</div>
-</section>
-<section id="which-decimals-have-an-exact-representation" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="which-decimals-have-an-exact-representation"><span class="header-section-number">4</span> Which decimals have an exact representation?</h2>
-<p>The fraction <code>1/3</code> lacks a finite decimal expansion. You might guess that R would simply store <code>1/3</code> as a zero, followed by a decimal, followed by a large number of <code>3</code>s. But in fact it does not:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "0.333333333333333314829616256247390992939472198486328125"</code></pre>
-</div>
-</div>
-<p>Every digit from the <code>1</code> onward is <em>wrong</em>. The fraction <code>1/10</code>, on the other hand, clearly <em>does</em> have a finite decimal expansion, <code>0.1</code>, but R gets this one wrong as well:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "0.100000000000000005551115123125782702118158340454101562"</code></pre>
-</div>
-</div>
-<p>At the same time, it handles <code>1/4</code> with perfect accuracy:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"%.54f"</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "0.250000000000000000000000000000000000000000000000000000"</code></pre>
-</div>
-</div>
-<p>What’s going on? Here’s a clue: the fraction <code>1/32</code> can also be represented exactly as a double. See if you can figure out why before reading further.</p>
-<p>The reason why <code>1/3</code> lacks a terminating decimal expansion is that it can’t be written as a counting number divided by a power of ten. In other words, we can’t find values <span class="math inline">\(m, n \in \mathbb{N}\)</span> such that <span class="math inline">\(m/10^n\)</span> equals <span class="math inline">\(1/3\)</span>. In contrast, <code>3/4</code> has a finite decimal expansion because it equals <code>75/100</code>, corresponding to <span class="math inline">\(m = 75\)</span> and <span class="math inline">\(n = 2\)</span>. Of course I’ve left off a crucial qualification: wherever I wrote “finite decimal expansion” above, I should have added “in base 10.” <em>The same number could have a terminating decimal expansion in one base and not in another.</em></p>
-<p>Although R displays numbers on the screen in base 10, it represents and computes with them in binary. So the question becomes: which values have a terminating decimal expansion in base 2? To find out, simply replace <code>10</code> with <code>2</code> in the expression from above. A rational number has a terminating decimal expansion base 2 if it can be written as <span class="math inline">\(m/2^n\)</span> for some <span class="math inline">\(m, n \in \mathbb{N}\)</span>. Since <code>1/4</code> equals <span class="math inline">\(1/2^2\)</span>, it has an exact representation. Since <code>3/4</code> can be written as <code>3/2^2</code> it <em>also</em> has an exact representation. In contrast, <code>1/5</code> lacks an exact representation because there are no natural numbers <span class="math inline">\(m,n\)</span> such that <span class="math inline">\(5 = 2^n/m\)</span>. We can get <em>close</em> by making <span class="math inline">\(n\)</span> large and choosing <span class="math inline">\(m\)</span> carefully, but we can never satisfy this equation exactly.</p>
-</section>
-<section id="take-home-lesson" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="take-home-lesson"><span class="header-section-number">5</span> Take-home Lesson</h2>
-<p>High-level programming languages like R and Python are extremely convenient: they allow us to focus on the big picture rather than writing line after line of boilerplate code. But we should never forget that computers <em>cannot</em> represent all numeric values with perfect accuracy. Sometimes this matters. In R, coercing from integer to double is safe but the reverse can be risky, as we have gleaned from a deceptively simple example involving <code>rep()</code>. To learn more about the subtleties of R, I highly recommend <a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> by Patrick Burns and <a href="https://adv-r.hadley.nz/">Advanced R</a> by Hadley Wickham. Despite what you may have heard, R is quite a capable language, but it does have some quirks!</p>
 
 
-</section>
 
 
 </main> <!-- /main -->
@@ -1357,8 +1391,6 @@ window.Quarto = {
     }
   });
   </script>
-<script src="https://utteranc.es/client.js" repo="fditraglia/econometrics.blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
-</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -1366,7 +1398,7 @@ window.Quarto = {
       &nbsp;
     </div>   
     <div class="nav-footer-center">
-<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="../../index.xml">Feed</a> &nbsp;·&nbsp; <a href="https://www.r-bloggers.com/">R-bloggers</a></p>
+<p>© 2020–2026 Francis J. DiTraglia &nbsp;·&nbsp; <a href="https://github.com/fditraglia/econometrics.blog">Source on GitHub</a> &nbsp;·&nbsp; <a href="./index.xml">Feed</a> &nbsp;·&nbsp; <a href="https://www.r-bloggers.com/">R-bloggers</a></p>
 </div>
     <div class="nav-footer-right">
       &nbsp;
