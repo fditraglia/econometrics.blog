@@ -7,7 +7,11 @@ listing:
   template: listing.ejs.md
   fields: [date, title, subtitle, description, categories, reading-time]
   categories: true
-  feed: true
+  feed:
+    type: full
+    # Quarto's default cap is 20, which silently hid half the archive from
+    # anyone subscribing to this feed.
+    items: 100
   date-format: "MMM D, YYYY"
   # Show every post on one page. Quarto's default of 25 would paginate the
   # 38 posts, and a Bootstrap pagination widget sits badly in this layout.
