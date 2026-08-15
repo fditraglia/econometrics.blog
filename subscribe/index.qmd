@@ -1,0 +1,21 @@
+---
+title: "Subscribe"
+comments: false
+toc: false
+---
+
+I post every month or two: puzzles, intuitions, and the occasional simulation. If you would like an email when something new appears, leave your address below. You will get a note about new posts and nothing else, and every message carries a one-click unsubscribe link.
+
+You will be asked to confirm the address before anything is sent, so check for a confirmation email after signing up.
+
+```{=html}
+<form class="subscribe-form" method="post" target="_blank"
+      action="https://buttondown.com/api/emails/embed-subscribe/fditraglia">
+  <label for="bd-email">Email address</label>
+  <input type="email" name="email" id="bd-email"
+         placeholder="you@example.com" autocomplete="email" required>
+  <button type="submit">Subscribe</button>
+</form>
+```
+
+If you would rather use a feed reader, there is an [RSS feed](/index.xml) covering every post, and a [second feed](/r-feed.xml) carrying only the posts that use R.

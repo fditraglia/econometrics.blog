@@ -6,10 +6,12 @@ project:
     - about/index.qmd
     # Unlisted: generates the R-only feed submitted to R-bloggers.
     - r-feed.qmd
+    - subscribe/index.qmd
     - post/
   resources:
     - fonts/
     - apple-touch-icon.png
+    - icon.svg
   # Quarto leaves cross-post links in the feeds page-relative, which breaks
   # them wherever a feed item is republished. Standard library only, so CI
   # needs nothing installed.
@@ -30,6 +32,8 @@ website:
         text: Puzzlers
       - href: about/index.qmd
         text: About
+      - href: subscribe/index.qmd
+        text: Subscribe
       - href: index.xml
         text: Feed
   page-footer:
@@ -54,6 +58,11 @@ format:
       - _fonts.html
       - text: |
           <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+          <!-- Declared alongside the PNG rather than instead of it: browsers
+               that understand SVG favicons take this one, which carries a
+               prefers-color-scheme rule so the mark does not sit in a dark tab
+               strip as a bright cream square. Safari falls back to the PNG. -->
+          <link rel="icon" type="image/svg+xml" href="/icon.svg">
 
     include-after-body:
       - text: |

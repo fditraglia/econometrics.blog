@@ -68,9 +68,10 @@ def pages():
         sys.exit("No _site/ found. Run `quarto render` first.")
     yield index
     yield from sorted(SITE.glob("post/*/index.html"))
-    about = SITE / "about" / "index.html"
-    if about.exists():
-        yield about
+    for page in ("about", "subscribe"):
+        path = SITE / page / "index.html"
+        if path.exists():
+            yield path
     # Unlisted, but it renders a table and tables are what overflow narrow
     # screens; nothing else would catch it.
     r_feed = SITE / "r-feed.html"
@@ -80,6 +81,17 @@ def pages():
 
 def main():
     targets = list(pages())
+    # Optional filters: `uv run tools-check-layout.py subscribe r-feed` checks
+    # only pages whose path contains one of those strings. A full run is 40-odd
+    # pages at five widths with a wait on each, which is minutes; after adding
+    # or restyling a single page that is a lot of work to confirm one result.
+    # Filter then, and run the whole thing before pushing.
+    if len(sys.argv) > 1:
+        wanted = sys.argv[1:]
+        targets = [p for p in targets if any(w in str(p) for w in wanted)]
+        if not targets:
+            sys.exit(f"No rendered page matched: {' '.join(wanted)}")
+        print(f"Checking {len(targets)} of the site's pages ({' '.join(wanted)}).")
     failures = []
     with sync_playwright() as pw:
         browser = pw.chromium.launch()

@@ -241,3 +241,43 @@
   });
 })();
 </script>
+
+<script>
+// A subscribe form at the end of every post, above the comments.
+//
+// Quarto has no hook meaning "end of the article body": include-after-body
+// lands below the page footer, and an include in each post would touch all
+// forty of them and invalidate _freeze for every one. So the block is appended
+// here, the same DOM-editing approach this file already uses to move the
+// margin block into the sidebar and to wire the home page's views. Utterances
+// injects the comment thread after </main>, so appending to the article body
+// puts this above the comments without having to find them.
+//
+// With JavaScript off nothing appears, which is acceptable for a nicety; the
+// /subscribe/ page carries the same form as ordinary markup and always works.
+(function () {
+  if (location.pathname.indexOf('/post/') === -1) return;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var main = document.querySelector('main#quarto-document-content')
+            || document.querySelector('main.content')
+            || document.querySelector('main');
+    if (!main || main.querySelector('.subscribe-block')) return;
+
+    var block = document.createElement('div');
+    block.className = 'subscribe-block';
+    block.innerHTML =
+      '<p class="subscribe-eyebrow">Subscribe</p>' +
+      '<p class="subscribe-pitch">New posts by email. Nothing else, and one ' +
+      'click to stop.</p>' +
+      '<form class="subscribe-form" method="post" target="_blank" ' +
+      'action="https://buttondown.com/api/emails/embed-subscribe/fditraglia">' +
+      '<label for="bd-email-post">Email address</label>' +
+      '<input type="email" name="email" id="bd-email-post" ' +
+      'placeholder="you@example.com" autocomplete="email" required>' +
+      '<button type="submit">Subscribe</button>' +
+      '</form>';
+    main.appendChild(block);
+  });
+})();
+</script>
