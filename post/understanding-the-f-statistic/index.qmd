@@ -302,13 +302,13 @@ The first factor measures how much larger the sum of squared residuals becomes i
 ## Appendix: Code
 I used the following code to generate my plot comparing the SSR of the restricted and unrestricted regression models in the midterm exams dataset from above:
 ```{r}
-#| label: SSRplot-code
+#| label: SSRplot
 #| eval: false
 #| message: false
 ```
 and the following code to generate the data contained in `sim_data`
 ```{r}
-#| label: simStudy-code
+#| label: simStudy
 #| eval: false
 #| message: false
 ```

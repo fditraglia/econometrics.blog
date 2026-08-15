@@ -266,10 +266,14 @@
 
     var block = document.createElement('div');
     block.className = 'subscribe-block';
+    // No eyebrow label above this. "Subscribe" as a heading and "Subscribe"
+    // on the button are the same word in the same mono vermilion, so the two
+    // were indistinguishable and nothing marked which one was clickable. The
+    // sentence does the heading's job, and the button is then the only
+    // accented thing in the block.
     block.innerHTML =
-      '<p class="subscribe-eyebrow">Subscribe</p>' +
-      '<p class="subscribe-pitch">New posts by email. Nothing else, and one ' +
-      'click to stop.</p>' +
+      '<p class="subscribe-pitch">An email whenever a new post appears, and ' +
+      'nothing else.</p>' +
       '<form class="subscribe-form" method="post" target="_blank" ' +
       'action="https://buttondown.com/api/emails/embed-subscribe/fditraglia">' +
       '<label for="bd-email-post">Email address</label>' +

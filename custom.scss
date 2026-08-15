@@ -1369,16 +1369,10 @@ body.home-view-date {
   margin: 3.2rem 0 1rem;
   padding: 1.2rem 0 1.6rem;
 
-  .subscribe-eyebrow {
-    font-family: $font-family-monospace;
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: $vermilion;
-    margin: 0 0 0.5rem;
-  }
-
+  // Deliberately no eyebrow label: it read "Subscribe" in the same mono
+  // vermilion as the button, so the heading and the control were
+  // indistinguishable. The pitch line heads the block instead, which leaves
+  // the button as the only accented element and therefore the obvious target.
   .subscribe-pitch {
     margin: 0;
     font-size: 0.95rem;
