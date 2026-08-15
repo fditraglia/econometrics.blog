@@ -4,6 +4,8 @@ project:
   render:
     - index.qmd
     - about/index.qmd
+    # Unlisted: generates the R-only feed submitted to R-bloggers.
+    - r-feed.qmd
     - post/
   resources:
     - fonts/
@@ -26,7 +28,9 @@ website:
       - href: index.xml
         text: Feed
   page-footer:
-    center: "&copy; 2020&ndash;2026 Francis J. DiTraglia &nbsp;&middot;&nbsp; [Source on GitHub](https://github.com/fditraglia/econometrics.blog) &nbsp;&middot;&nbsp; [Feed](/index.xml)"
+    # The R-bloggers link is a condition of being aggregated there: "Link to
+    # R-bloggers from your blogroll (sidebar), and/or from a post."
+    center: "&copy; 2020&ndash;2026 Francis J. DiTraglia &nbsp;&middot;&nbsp; [Source on GitHub](https://github.com/fditraglia/econometrics.blog) &nbsp;&middot;&nbsp; [Feed](/index.xml) &nbsp;&middot;&nbsp; [R-bloggers](https://www.r-bloggers.com/)"
   comments:
     utterances:
       repo: fditraglia/econometrics.blog-comments

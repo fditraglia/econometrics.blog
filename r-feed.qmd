@@ -1,0 +1,69 @@
+---
+title: "R Posts"
+description: "Posts from econometrics.blog that use R: simulations, numerical methods, and statistical computing."
+listing:
+  id: r-posts
+  type: table
+  # A hand-maintained subset of the blog. R-bloggers requires a feed that is
+  # only about R, and most posts here are pure econometric theory. Listing the
+  # posts here rather than flagging them in their own front matter keeps
+  # `_freeze/` intact: freeze keys on .qmd source, so adding a field to 19
+  # posts would force all of them to re-execute.
+  #
+  # This page lives at the project root, not in a subdirectory, because Quarto
+  # resolves `contents:` paths against the listing page's own directory. A
+  # leading slash is not a workable escape: expandGlob() resolves it against
+  # the project directory to test for a directory, then passes the still
+  # slash-prefixed glob on to be matched as an absolute filesystem path, so it
+  # matches nothing and the feed silently comes out empty.
+  contents:
+    - post/street-fighting-numerical-analysis-part-1
+    - post/complex-step-differentiation
+    - post/a-new-way-of-looking-at-least-squares
+    - post/thirty-isn-t-the-magic-number
+    - post/understanding-the-f-statistic
+    - post/how-to-do-regression-adjustment
+    - post/sims-and-uhlig-1991-replication
+    - post/three-ways-of-thinking-about-instrumental-variables
+    - post/two-fwl-theorems-for-the-price-of-one
+    - post/the-wilson-confidence-interval-for-a-proportion
+    - post/from-the-poisson-distribution-to-stirling-s-approximation
+    - post/econometrics-puzzler-1-to-instrument-or-not
+    - post/econometrics-puzzler-2-fitting-a-regression-with-fitted-values
+    - post/a-good-instrument-is-a-bad-control
+    - post/a-good-instrument-is-a-bad-control-part-ii
+    - post/econometrics-puzzler-4-rescaling-the-reduced-form
+    - post/not-quite-the-james-stein-estimator
+    - post/the-r-formula-cheatsheet
+    - post/don-t-use-the-textbook-ci-for-a-proportion
+  sort: "date desc"
+  fields: [date, title, reading-time]
+  # `type: table` turns both of these on by default. Neither is styled here:
+  # the filter box is a stock Bootstrap input on the cream paper, and the sort
+  # links put default-blue anchors inside the vermilion mono header row.
+  sort-ui: false
+  filter-ui: false
+  feed:
+    # R-bloggers requires full post content rather than excerpts. This is
+    # already the default, but it is the setting whose failure is invisible.
+    type: full
+    # Quarto's default cap is 20. That fits the 19 posts listed today, so
+    # without this the 21st R post would silently push the oldest out of the
+    # feed and R-bloggers would never see it.
+    items: 100
+  date-format: "MMM D, YYYY"
+  # All of them on one page; the pagination widget sits badly in this layout.
+  page-size: 50
+# `type: table` rather than the default listing: custom.scss hides
+# `.list.quarto-listing-default` site-wide to keep the home page's stub list
+# out of sight, and a default listing here would match that rule and vanish.
+toc: false
+comments: false
+# Unlisted: nothing on the site links here, so keep it out of site search too.
+search: false
+---
+
+These are the posts on [econometrics.blog](/) that use R. They are collected here as a feed for [R-bloggers](https://www.r-bloggers.com/); the [main feed](/index.xml) carries everything.
+
+::: {#r-posts}
+:::

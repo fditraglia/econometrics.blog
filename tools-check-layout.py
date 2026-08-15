@@ -71,6 +71,11 @@ def pages():
     about = SITE / "about" / "index.html"
     if about.exists():
         yield about
+    # Unlisted, but it renders a table and tables are what overflow narrow
+    # screens; nothing else would catch it.
+    r_feed = SITE / "r-feed.html"
+    if r_feed.exists():
+        yield r_feed
 
 
 def main():

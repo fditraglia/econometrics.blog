@@ -49,6 +49,7 @@ The home page renders a series as a group: the series name as an unlinked label,
 ### Site Structure
 - `index.qmd` — Homepage (post listing)
 - `about/index.qmd` — About page (URL: `/about/`)
+- `r-feed.qmd` — Unlisted page whose only job is to generate the R-only feed for R-bloggers (see below)
 - `post/` — All blog posts
 - `_quarto.yml` — Site configuration
 - `custom.scss` — Theme customization (currently empty, uses cosmo)
@@ -75,13 +76,14 @@ The home page renders a series as a group: the series name as an unlinked label,
    ```
    ````
 5. Mathematical notation: inline `$...$`, display `$$...$$`. Use `\begin{aligned}` not `\begin{align*}` inside `$$...$$`.
-6. When done: stop preview (Ctrl+C), then:
+6. If the post shows R code a reader can see, add one line for it to the `contents:` list in `r-feed.qmd` (see "Keeping the R-bloggers feed current" below).
+7. When done: stop preview (Ctrl+C), then:
    ```
    git add post/my-new-post/ _freeze/
    git commit -m "New post: my new post"
    git push
    ```
-7. GitHub Actions builds and deploys automatically (~1 minute)
+8. GitHub Actions builds and deploys automatically (~1 minute)
 
 ### Edit an existing post
 Same pattern: `quarto preview` → edit → stop → `git add` → commit → push. Prose-only edits don't touch `_freeze/`; code edits do.
@@ -130,6 +132,26 @@ Four things to know before adding one:
 ### R conventions
 Use tidyverse: native pipe `|>`, anonymous functions `\(x)`, dplyr verbs, ggplot2.
 
+### Keeping the R-bloggers feed current
+
+The site publishes two feeds. `/index.xml` comes from the homepage listing and carries every post. `/r-feed.xml` comes from `r-feed.qmd` and carries only posts that use R; that is the one [R-bloggers](https://www.r-bloggers.com/) subscribes to, because they require a feed that is "ONLY about R" and most posts here are pure econometric theory. The site's reciprocal link back to them, which is a condition of staying listed, is in the footer in `_quarto.yml`.
+
+**The list is hand-maintained.** After publishing a post that shows R code, add its path to the `contents:` list in `r-feed.qmd` or it will never reach R-bloggers. The test for inclusion is R code the *reader* sees: a post whose only chunks are `include: false` or `echo: false` figure generation does not qualify, and neither does a long theory post with one incidental chunk. Code in a collapsed appendix does count.
+
+Four things about that file are easy to get wrong:
+
+- **It must stay at the project root.** Quarto resolves `contents:` paths against the listing page's own directory, and a leading slash does not escape that: `expandGlob()` resolves the slash against the project directory when testing for a directory, then hands the still slash-prefixed glob on to be matched as an absolute filesystem path. It matches nothing, and the feed renders with zero items and no error. Moving this page into a subdirectory silently empties the feed.
+- **The list lives here rather than in post front matter on purpose.** Filtering on a per-post frontmatter flag also works, but `_freeze/` keys on `.qmd` source, so flagging 19 posts would force all 19 to re-execute their R — including the ones needing `ManyIV`, `ggdag` and `tictoc`. Do not "tidy" this into per-post flags.
+- **It uses `type: table` deliberately, with `sort-ui` and `filter-ui` off.** `custom.scss` hides `.list.quarto-listing-default` site-wide to keep the homepage's stub list out of sight. Quarto's default listing template emits exactly those two classes together, so switching this page to the default type would render it invisible while the feed kept working. The table type in turn switches on a filter box and sortable headers by default, neither of which is styled for this site.
+- **`feed: items: 100` is set on purpose.** Quarto's default cap is 20, which fits the 19 posts listed today; the 21st would silently push the oldest out of the feed.
+
+Always run a full `quarto render` before pushing a feed change, never `quarto render r-feed.qmd`. Quarto assembles a full-content feed by reading each post's already-rendered `_site/post/<slug>/index.html`, so a single-file render against a cleaned `_site` writes an `.xml` full of raw `{B4F502887207:...}` placeholders and reports no error. Then check:
+
+```
+grep -c '<item>' _site/r-feed.xml        # expected number of posts; 0 means the paths did not match
+grep -c 'B4F502887207' _site/r-feed.xml  # must be 0; nonzero means unfilled placeholders
+```
+
 ## Build and Development Commands
 
 ### Local preview
@@ -149,7 +171,7 @@ uv run tools-check-layout.py
 
 It needs browsers that uv does not install; once per machine run `uv run --with playwright playwright install chromium webkit`. Overflow is detected by scrolling the page and reading `window.scrollX` back, rather than by comparing `scrollWidth` to `clientWidth`, which reports content inside a scrolling box as an overflow when that is the intended behavior.
 
-All 41 pages pass at all four widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
+All 43 pages pass at all four widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
 
 ### Deployment
 Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
