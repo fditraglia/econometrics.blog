@@ -6,6 +6,7 @@ project:
     - about/index.qmd
     # Unlisted: generates the R-only feed submitted to R-bloggers.
     - r-feed.qmd
+    - email-feed.qmd
     - subscribe/index.qmd
     - post/
   resources:

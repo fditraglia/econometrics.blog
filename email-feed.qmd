@@ -1,0 +1,29 @@
+---
+title: "Email Feed"
+description: "Opening paragraphs only. This feed exists so Buttondown can build the subscriber email; readers want /index.xml."
+listing:
+  id: email-posts
+  type: table
+  contents: post
+  sort: "date desc"
+  fields: [date, title]
+  feed:
+    # The point of this third feed. `partial` puts only each post's first
+    # paragraph in the entry, so the subscriber email is an opening plus a link
+    # rather than the whole post. Emailing the full text would send puzzler
+    # solutions unfolded -- the fold is CSS, which mail clients do not load --
+    # along with equations as CodeCogs images and figures as SVGs that some
+    # clients will not render.
+    #
+    # /index.xml stays `full` for feed readers and /r-feed.xml stays `full`
+    # because R-bloggers requires it. Nothing here replaces either.
+    type: partial
+    items: 20
+  page-size: 50
+toc: false
+comments: false
+# Unlisted, like r-feed.qmd: nothing links here, so keep it out of site search.
+search: false
+---
+
+This feed carries the opening paragraph of each post, and exists so that [Buttondown](https://buttondown.com/) can build the email sent to subscribers. If you are reading feeds directly you want the [main feed](/index.xml), which carries every post in full, or the [R feed](/r-feed.xml).
