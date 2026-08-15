@@ -145,6 +145,8 @@ Four things about that file are easy to get wrong:
 - **It uses `type: table` deliberately, with `sort-ui` and `filter-ui` off.** `custom.scss` hides `.list.quarto-listing-default` site-wide to keep the homepage's stub list out of sight. Quarto's default listing template emits exactly those two classes together, so switching this page to the default type would render it invisible while the feed kept working. The table type in turn switches on a filter box and sortable headers by default, neither of which is styled for this site.
 - **`feed: items: 100` is set on purpose.** Quarto's default cap is 20, which fits the 19 posts listed today; the 21st would silently push the oldest out of the feed.
 
+**Links in the feeds are fixed up after rendering.** Quarto makes image sources absolute when it builds a feed and strips same-page anchors, but leaves links to other posts in the page-relative form it emits (`../../post/slug/`). Those resolve against the republisher's domain once an aggregator rehosts the item, so they 404 — about a third of the posts here link to a previous post. `tools-absolutize-feed-links.py` rewrites them, and `project: post-render` in `_quarto.yml` runs it at the end of every render. It uses only the standard library, so CI needs nothing installed, and it is idempotent, so re-running is harmless. There is no Quarto setting for this and no version has changed it; a Lua filter cannot do it either, because the feed content is assembled after rendering from the finished HTML.
+
 Always run a full `quarto render` before pushing a feed change, never `quarto render r-feed.qmd`. Quarto assembles a full-content feed by reading each post's already-rendered `_site/post/<slug>/index.html`, so a single-file render against a cleaned `_site` writes an `.xml` full of raw `{B4F502887207:...}` placeholders and reports no error. Then check:
 
 ```
@@ -163,7 +165,7 @@ quarto render post/my-post/index.qmd   # render one post
 
 ### Layout check
 
-`tools-check-layout.py` loads every rendered page at 390, 768 and 1200px and fails if any of them scrolls sideways, naming the widest element that is not inside a scrolling container. Run it after `quarto render` when changing anything in `custom.scss`:
+`tools-check-layout.py` loads every rendered page at 360, 390, 768, 900 and 1200px and fails if any of them scrolls sideways, naming the widest element that is not inside a scrolling container. Run it after `quarto render` when changing anything in `custom.scss`:
 
 ```
 uv run tools-check-layout.py
@@ -171,7 +173,7 @@ uv run tools-check-layout.py
 
 It needs browsers that uv does not install; once per machine run `uv run --with playwright playwright install chromium webkit`. Overflow is detected by scrolling the page and reading `window.scrollX` back, rather than by comparing `scrollWidth` to `clientWidth`, which reports content inside a scrolling box as an overflow when that is the intended behavior.
 
-All 43 pages pass at all four widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
+All 43 pages pass at all five widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
 
 ### Deployment
 Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
@@ -186,7 +188,8 @@ gh run view <run-id> --log-failed   # if a run failed
 
 ## Configuration
 
-- `_quarto.yml` — main site config (theme, navbar, comments, analytics, freeze)
+- `_quarto.yml` — main site config (theme, navbar, comments, analytics, freeze, post-render)
+- `tools-absolutize-feed-links.py` — post-render step; rewrites relative links in the feeds (see below)
 - `post/_metadata.yml` — post-wide defaults (author, freeze)
 - `custom.scss` — theme overrides on top of cosmo (typography, color, layout, chrome)
 - `fonts/` — self-hosted woff2 files; `_fonts.html` declares the `@font-face` rules

@@ -107,7 +107,7 @@ For example, male deaths in the 45-64 age group were `r get_excess_prop('Men', '
 
 You can replicate the plot from above by running this R code: 
 ```{r}
-#| label: plot-code
+#| label: plot
 #| eval: false
 #| message: false
 ```

@@ -29,7 +29,7 @@ SITE = pathlib.Path(__file__).parent / "_site"
 # 390 is a common phone; 768 is where Quarto would reveal the table of contents;
 # 900 is where this site does reveal it, and where the page grid is still wider
 # than the screen for a post using `column: page`; 1200 is a laptop.
-WIDTHS = (390, 768, 900, 1200)
+WIDTHS = (360, 390, 768, 900, 1200)
 
 PROBE = """() => {
   window.scrollTo(500, 0);

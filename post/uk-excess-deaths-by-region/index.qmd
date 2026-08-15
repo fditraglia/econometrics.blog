@@ -69,7 +69,7 @@ For each point on the red curve, we have added simple error bars: $\pm 2 \times 
 The blue curve depicts weekly deaths in 2020.
 From week 12 or 13, depending on region, we see a dramatic uptick in deaths across England and Wales, well outside the two standard error bars. R source code for this plot follows below.
 ```{r}
-#| label: plot-code
+#| label: plot
 #| eval: false
 #| message: false
 ```

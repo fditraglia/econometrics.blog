@@ -63,7 +63,7 @@ comments: false
 search: false
 ---
 
-These are the posts on [econometrics.blog](/) that use R. They are collected here as a feed for [R-bloggers](https://www.r-bloggers.com/); the [main feed](/index.xml) carries everything.
+A post appears here if it shows R code a reader can see and learn from, which rules out most of the econometric theory on the blog. This list feeds [R-bloggers](https://www.r-bloggers.com/); the [main feed](/index.xml) carries every post.
 
 ::: {#r-posts}
 :::

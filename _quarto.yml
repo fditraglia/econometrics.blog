@@ -10,6 +10,11 @@ project:
   resources:
     - fonts/
     - apple-touch-icon.png
+  # Quarto leaves cross-post links in the feeds page-relative, which breaks
+  # them wherever a feed item is republished. Standard library only, so CI
+  # needs nothing installed.
+  post-render:
+    - python3 tools-absolutize-feed-links.py
 
 website:
   title: "econometrics.blog"

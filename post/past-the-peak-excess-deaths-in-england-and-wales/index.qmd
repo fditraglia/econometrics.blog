@@ -71,7 +71,7 @@ We had hoped to include data from Scotland in this update, but it turns out that
 
 If you'd like to replicate our plots, the R code is as follows:
 ```{r}
-#| label: plot-code
+#| label: plot
 #| eval: false
 #| message: false
 ```
