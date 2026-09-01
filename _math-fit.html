@@ -45,6 +45,12 @@
       console.log('[math-fit] ' + hitFloor.length +
                   ' equation(s) still overflow at the ' + FLOOR + ' floor', hitFloor);
     }
+    // Rescaling equations changes their heights, which moves everything
+    // below them -- including margin-note markers. Announce the pass so the
+    // aligner in _theme.html can re-run against the settled geometry; both
+    // scripts debounce resize independently, so without this signal the
+    // aligner can fire first and pin notes to positions that no longer exist.
+    window.dispatchEvent(new Event('math-fit:done'));
   }
 
   function whenMathReady(cb) {

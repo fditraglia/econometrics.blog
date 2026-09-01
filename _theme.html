@@ -73,6 +73,10 @@
       });
     }
     window.addEventListener('load', alignMarginNotes);
+    // _math-fit.html dispatches this after every fitting pass. Equation
+    // sizes just changed, so the markers may have moved out from under the
+    // notes; realign against the new geometry.
+    window.addEventListener('math-fit:done', alignMarginNotes);
     var t;
     window.addEventListener('resize', function () {
       clearTimeout(t);
@@ -90,6 +94,13 @@
 
   ready(function () {
     scheduleAlign();
+
+    // Quarto copies a callout's title into an HTML title attribute on the
+    // callout div, so the browser shows a native "Solution" tooltip whenever
+    // the mouse rests anywhere over an open fold. The visible header (and
+    // its screen-reader text) already carry the label; drop the attribute.
+    [].slice.call(document.querySelectorAll('.callout[title]'))
+      .forEach(function (el) { el.removeAttribute('title'); });
 
     // ---- wordmark: "econometrics" upright, ".blog" italic vermilion ----
     var brand = document.querySelector('.navbar-brand .navbar-title') ||

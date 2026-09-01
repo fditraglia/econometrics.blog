@@ -655,6 +655,20 @@ nav[role="doc-toc"].toc-left, #quarto-margin-sidebar nav[role="doc-toc"] {
   display: none;
 }
 
+// Quarto's layoutMarginEls (quarto.js) re-runs on every body-height change
+// and pushes any margin element that sits above the previous one in DOM
+// order down with an inline margin-top. The theme's aligner in _theme.html
+// positions notes in MARKER order (Quarto hoists a fold's notes out in
+// reverse DOM order) and prevents overlap itself, so Quarto's pass would
+// "fix" a correctly placed note by shoving it below its later-in-DOM
+// sibling -- and it runs after the aligner, with nothing realigning behind
+// it. A stylesheet !important beats an inline style, so this pins the
+// notes' margin and leaves their placement entirely to the aligner. Only
+// footnotes are pinned; figure captions and asides keep Quarto's behavior.
+.column-margin > div[id^="fn"] {
+  margin-top: 0 !important;
+}
+
 // ---------------------------------------------------------- footnotes --
 
 // Footnotes on this blog often carry real argument, not just citations, so
