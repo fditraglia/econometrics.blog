@@ -16,6 +16,12 @@ jobs:
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          # Pinned to the version installed locally, so CI renders match the
+          # local renders that built _freeze/. Upgrade deliberately: bump this
+          # and the local install together, then render and run both checks
+          # (see CLAUDE.md, Deployment).
+          version: 1.10.18
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2

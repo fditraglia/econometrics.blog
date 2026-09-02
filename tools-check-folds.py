@@ -23,18 +23,52 @@ marker leaks the solution, and a visible marker with a hidden note points at
 nothing. The check runs twice per page, once with the fold shut and once
 after opening it.
 
+A third pass guards note POSITION, not just visibility. Three scripts touch
+where a margin note sits: Quarto's layoutMarginEls (re-runs on any body-
+height change), the aligner in _theme.html (marker-ordered, the one that
+must win), and _math-fit.html (rescales equations, moving every marker
+below them). A 2026-09-01 bug scattered a fold's notes after any window
+resize -- fresh loads were always clean, so no static check could see it.
+With the fold open, this pass resizes the viewport 1440 -> 1000 -> 1440
+(crossing the width where _math-fit rescales and Quarto's pass fires) and
+then asserts the aligner's contract: notes in marker order, each level with
+its marker or 14px below the previous note, within 2px.
+
 Notes are matched as li[id^="fn"] and div[id^="fn"]: pandoc renders end-of-
 section notes as list items and margin notes as divs. An early version
 looked only at list items and reported a leaking page as clean.
 
 Exits non-zero on any violation, naming the note and which way it went.
 """
+import functools
+import http.server
 import pathlib
 import sys
+import threading
 
 from playwright.sync_api import sync_playwright
 
 SITE = pathlib.Path(__file__).parent / "_site"
+
+
+class QuietHandler(http.server.SimpleHTTPRequestHandler):
+    def log_message(self, *args):
+        pass
+
+
+def serve_site():
+    """Serve _site/ over local HTTP on an ephemeral port.
+
+    Chromium refuses to load quarto.js from a file:// page (it is a module
+    script, blocked by CORS), so under file:// Quarto's layoutMarginEls
+    never runs -- the very actor the alignment pass exists to guard against.
+    The visibility passes don't care, but the check must exercise the page
+    with all of its scripts, as production does.
+    """
+    handler = functools.partial(QuietHandler, directory=str(SITE))
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server
 
 PROBE = """() => {
   const fold = document.querySelector('.callout.solution');
@@ -43,7 +77,11 @@ PROBE = """() => {
   const out = [];
   document.querySelectorAll('li[id^="fn"], div[id^="fn"]').forEach(note => {
     if (/^fnref/.test(note.id)) return;  // a marker, not a note
-    const marker = document.querySelector('a[href="#' + note.id + '"]');
+    // Look the marker up by id: quarto.js rewrites footnote hrefs from
+    // "#fn1" to absolute URLs at runtime, so matching on href breaks once
+    // the page's scripts have run. href$= is kept as a fallback.
+    const marker = document.getElementById('fnref' + note.id.slice(2)) ||
+                   document.querySelector('a[href$="#' + note.id + '"]');
     out.push({
       id: note.id,
       noteVisible: visible(note),
@@ -53,6 +91,43 @@ PROBE = """() => {
   });
   return out;
 }"""
+
+# Mirrors the aligner in _theme.html: pair each margin note with its marker,
+# skip notes folded into the body flow (narrow screens), sort by marker
+# position, and compute the target the aligner should have set -- level with
+# the marker, or 14px below the previous note, whichever is lower.
+ALIGN_PROBE = r"""() => {
+  const main = document.querySelector('main');
+  const textLeft = main.getBoundingClientRect().left;
+  const textWidth = (document.querySelector('main p') || main).clientWidth;
+  const pairs = [];
+  document.querySelectorAll('.column-margin div[id^="fn"]').forEach(note => {
+    const m = note.id.match(/^fn(\d+)$/);
+    const marker = m && document.getElementById('fnref' + m[1]);
+    if (!marker || !note.offsetParent || !marker.offsetParent) return;
+    const nr = note.getBoundingClientRect();
+    if (nr.left < textLeft + textWidth * 0.8) return;  // note is in body flow
+    pairs.push({
+      id: note.id,
+      text: note.textContent.trim().slice(0, 60),
+      noteTop: nr.top + window.scrollY,
+      height: nr.height,
+      markerTop: marker.getBoundingClientRect().top + window.scrollY,
+    });
+  });
+  pairs.sort((a, b) => a.markerTop - b.markerTop);
+  const out = [];
+  let lastBottom = -Infinity;
+  for (const p of pairs) {
+    const expected = Math.max(p.markerTop, lastBottom + 14);
+    out.push({id: p.id, text: p.text,
+              expected: Math.round(expected), actual: Math.round(p.noteTop)});
+    lastBottom = expected + p.height;
+  }
+  return out;
+}"""
+
+ALIGN_TOLERANCE = 2  # px
 
 
 def collect(notes, state, failures, path):
@@ -73,12 +148,15 @@ def main():
         sys.exit("No _site/ found. Run `quarto render` first.")
 
     pages = sorted(SITE.glob("post/*/index.html"))
+    server = serve_site()
+    port = server.server_address[1]
     folds, failures = 0, []
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
-        page = browser.new_page()
+        page = browser.new_page(viewport={"width": 1440, "height": 900})
         for path in pages:
-            page.goto(path.as_uri(), wait_until="networkidle")
+            page.goto(f"http://127.0.0.1:{port}/post/{path.parent.name}/",
+                      wait_until="networkidle")
             page.wait_for_timeout(500)
             notes = page.evaluate(PROBE)
             if notes is None:
@@ -90,7 +168,19 @@ def main():
                 header.click()
             page.wait_for_timeout(700)  # Bootstrap collapse animation
             collect(page.evaluate(PROBE), "fold open", failures, path)
+            # Resize round-trip, then check the notes still sit where the
+            # aligner's contract says. 800ms per step lets the debounced
+            # resize handlers (aligner, _math-fit, Quarto) all finish.
+            for width in (1000, 1440):
+                page.set_viewport_size({"width": width, "height": 900})
+                page.wait_for_timeout(800)
+            for row in page.evaluate(ALIGN_PROBE):
+                if abs(row["expected"] - row["actual"]) > ALIGN_TOLERANCE:
+                    failures.append((path, row,
+                        f"sits at {row['actual']}px, expected {row['expected']}px "
+                        "(after resize round-trip) -- the aligner lost to a later layout pass"))
         browser.close()
+    server.shutdown()
 
     for path, note, problem in failures:
         print(f"{path.parent.name}: {note['id']} {problem}")
