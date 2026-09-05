@@ -1455,11 +1455,13 @@ body.home-view-date {
   .subject-head .subject-title { white-space: normal; }
 }
 
-// A post using `column: page`, as overlapping-confidence-intervals-part-ii does
-// for one figure, gets `main.content.page-full` spanning screen-start to
-// screen-end. Below 992px those tracks total 934px, wider than the screen,
-// because Quarto keeps the margin-sidebar tracks whether or not a sidebar is
-// shown. The page then scrolled sideways from 768px up to about 934px.
+// Quarto marks the main of any page with margin or page-wide content as
+// `main.content.page-full`, spanning screen-start to screen-end. Margin
+// footnotes count, so every post carries the class, not just the one with a
+// `column: page` figure (overlapping-confidence-intervals-part-ii). Below 992px
+// those tracks total 934px, wider than the screen, because Quarto keeps the
+// margin-sidebar tracks whether or not a sidebar is shown. The page then
+// scrolled sideways from 768px up to about 934px.
 //
 // Below 992px there is no room for a page-wide figure in any case, so give that
 // main the ordinary body column and a single content track, and let the figure
@@ -1481,5 +1483,17 @@ body.home-view-date {
   main.content.page-full > *,
   main.content.page-full .page-columns > * {
     grid-column: 1 / -1 !important;
+  }
+
+  // The rule above also carries every hoisted margin note into the body
+  // column, but Quarto still gives its container the 1em height it uses to
+  // keep margin notes from opening a grid row of their own, and only restores
+  // the natural height below 768px. In this band the notes therefore sat
+  // between paragraphs in a 1em-tall box and the next paragraph ran straight
+  // over them (seen on the James-Stein post at about 830px on 2026-09-05).
+  // Restore the height here, as Quarto's own toc-left layout does.
+  main.content.page-full .column-margin.no-row-height {
+    height: initial;
+    overflow: initial;
   }
 }
