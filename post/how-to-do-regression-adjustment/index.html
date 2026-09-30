@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-698d30ae8ec9bf73ceb3cf0b04d766a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e67dc420c8a575ff6a8184f4ee0838de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -357,7 +357,7 @@ window.Quarto = {
   </ul>
 </nav>
 <p>By the end of a typical introductory econometrics course students have become accustomed to the idea of “controlling” for covariates by adding them to the end of a linear regression model. But this familiarity can sometimes cause confusion when students later encounter <em>regression adjustment</em>, a widely-used approach to causal inference under the selection-on-observables assumption. While regression adjustment is simple in theory, the finer points of how and when to apply it in practice are much more subtle. One of these finer points is how to tell whether a particular covariate is a “good control” that will help us learn the causal effect of interest or a “bad control” that will only make things worse.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Another, and the topic of today’s post, is how to actually <em>implement</em> regression adjustment after we’ve decided which covariates to adjust for.</p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;See <a href="../../post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books.</p></div></div><p>The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you’re a bit rusty on these points, you might find it helpful to glance at the first half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">lecture slides</a> along with this series of <a href="https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&amp;si=zqxf9LmexMh0cL2E">short videos</a>. If you’re still hungry for more after this, you might also enjoy this <a href="../../post/misunderstanding-selection-on-observables/">earlier post</a> from <a href="https://econometrics.blog">econometrics.blog</a> on common misunderstandings about the selection-on-observables assumption.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1" data-note-refs="fnref1"><p><sup>1</sup>&nbsp;See <a href="../../post/a-good-instrument-is-a-bad-control/">this post</a> for a prototypical example of a “bad control” and the second half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">slides</a> for some general discussion of “bad controls.” These <a href="https://ditraglia.com/erm/15-selection-on-observables.pdf">alternative slides</a> from my <a href="https://ditraglia.com/erm/">core ERM</a> course cover similar ground but make a more explicit connection to good and bad advice about bad controls that one encounters in introductory econometrics books. <a href="#fnref1" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>The pre-requisites for this post are a basic understanding of selection-on-observables and regression adjustment. If you’re a bit rusty on these points, you might find it helpful to glance at the first half of my <a href="https://www.treatment-effects.com/02-selection-on-observables.pdf">lecture slides</a> along with this series of <a href="https://youtube.com/playlist?list=PLi6qbNWpQUeM1kKYjqq36aY5WQ1Zn-I6E&amp;si=zqxf9LmexMh0cL2E">short videos</a>. If you’re still hungry for more after this, you might also enjoy this <a href="../../post/misunderstanding-selection-on-observables/">earlier post</a> from <a href="https://econometrics.blog">econometrics.blog</a> on common misunderstandings about the selection-on-observables assumption.</p>
 <section id="a-quick-review" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="a-quick-review"><span class="header-section-number">1</span> A Quick Review</h2>
 <p>Consider a binary treatment <span class="math inline">\(D\)</span> and an observed outcome <span class="math inline">\(Y\)</span>. Let <span class="math inline">\((Y_0, Y_1)\)</span> be the <a href="https://youtu.be/EXgOSj7GdSs?si=0Nhx5p2GwJHH3d69">potential outcomes</a> corresponding to the treatment <span class="math inline">\(D\)</span>. Our goal is to learn the average treatment effect <span class="math inline">\(\text{ATE} \equiv \mathbb{E}(Y_1 - Y_0)\)</span> but, unless <span class="math inline">\(D\)</span> is randomly assigned, using the difference of observed means <span class="math inline">\(\mathbb{E}(Y|D=1) - \mathbb{E}(Y|D=0)\)</span> to estimate the ATE in general <a href="https://youtu.be/zbgN0GLolFo?si=aYH_huGqezsWIuUv">won’t work</a>. The idea of <strong>selection-on-observables</strong> is that <span class="math inline">\(D\)</span> might be “as good as randomly assigned” after we adjust for a collection of observed covariates <span class="math inline">\(X\)</span>.</p>
@@ -451,17 +451,17 @@ D = \gamma_0 + \gamma_1 X + \tilde{D}, \quad \mathbb{E}(\tilde{D}) = \mathbb{E}(
 \]</span> where we introduce the shorthand <span class="math display">\[
 w(x) \equiv \frac{p(x) \cdot \pi(x)[1 - \pi(x)]}{\sum_{\text{all } k} p(k) \cdot \pi(k)[1 - \pi(k)]}.
 \]</span> In other words, the coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span> and <span class="math inline">\(X\)</span> excluding the interaction term <span class="math inline">\(DX\)</span> gives a <strong>weighted average</strong> of the conditional average treatment effects for the different values of <span class="math inline">\(X\)</span>. The weights are between zero and one and sum to one. Because <span class="math inline">\(w(x)\)</span> is increasing in <span class="math inline">\(p(x)\)</span>, values of <span class="math inline">\(X\)</span> that are <em>more common</em> are given more weight just as they are in the ATE. But since <span class="math inline">\(w(x)\)</span> is <em>also</em> increasing in <span class="math inline">\(\pi(x)[1 - \pi(x)]\)</span>, values of <span class="math inline">\(X\)</span> for which <span class="math inline">\(\pi(x)\)</span> is closer to 0.5 are given more weight, <em>unlike</em> in the ATE. As such, we could describe <span class="math inline">\(\alpha_1\)</span> as a <em>variance-weighted average</em> of the conditional average treatment effects.</p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://ideas.repec.org/p/arx/papers/2307.00369.html">make fetch happen</a>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;If you want the standard error of <span class="math inline">\(\beta\)</span> and not just the point estimate, then replace <span class="math inline">\(Y\)</span> with the residual from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>.</p></div></div><p>In general, the weighted average <span class="math inline">\(\alpha_1\)</span> will <em>not</em> coincide with the ATE, although there are two special cases where it will. The first case is when <span class="math inline">\(\text{CATE}(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, i.e.&nbsp;treatment effects are <em>homogeneous</em>. In this case <span class="math inline">\(\beta_3 = 0\)</span> so there <em>is no interaction term in the conditional mean function</em>! The second is when <span class="math inline">\(\pi(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, in which case the probability of treatment does not depend on <span class="math inline">\(X\)</span>, so we don’t need to adjust for <span class="math inline">\(X\)</span> in the first place!</p>
+<div class="no-row-height column-margin column-container"><div id="fn2" data-note-refs="fnref2"><p><sup>2</sup>&nbsp;Call it “Frisch-Waugh-Lovell” if you must, but I will continue trying to <a href="https://ideas.repec.org/p/arx/papers/2307.00369.html">make fetch happen</a>. <a href="#fnref2" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn3" data-note-refs="fnref3"><p><sup>3</sup>&nbsp;If you want the standard error of <span class="math inline">\(\beta\)</span> and not just the point estimate, then replace <span class="math inline">\(Y\)</span> with the residual from a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>. <a href="#fnref3" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>In general, the weighted average <span class="math inline">\(\alpha_1\)</span> will <em>not</em> coincide with the ATE, although there are two special cases where it will. The first case is when <span class="math inline">\(\text{CATE}(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, i.e.&nbsp;treatment effects are <em>homogeneous</em>. In this case <span class="math inline">\(\beta_3 = 0\)</span> so there <em>is no interaction term in the conditional mean function</em>! The second is when <span class="math inline">\(\pi(X)\)</span> does not depend on <span class="math inline">\(X\)</span>, in which case the probability of treatment does not depend on <span class="math inline">\(X\)</span>, so we don’t need to adjust for <span class="math inline">\(X\)</span> in the first place!</p>
 </section>
 <section id="what-about-the-general-case" class="level2 page-columns page-full" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="what-about-the-general-case"><span class="header-section-number">5</span> What about the general case?</h2>
 <p>All of the above derivations assumed that <span class="math inline">\(X\)</span> is one-dimensional and binary. So how much of this still applies more generally? First, if <span class="math inline">\(X\)</span> is a vector of binary variables representing categories like sex, race etc., everything goes through <em>exactly</em> as above.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> All that changes is that <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span> and <span class="math inline">\(p = \mathbb{E}(X)\)</span> become vectors. The coefficient on <span class="math inline">\(D\)</span> in a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(D\)</span>, <span class="math inline">\(X\)</span> and the interaction <span class="math inline">\(D \tilde{X}\)</span> is still the ATE, and the coefficient on <span class="math inline">\(D\)</span> in a regression that <em>excludes</em> the interaction term is still a weighted average of CATEs that does <em>not in general</em> equal the ATE.</p>
-<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;This is a nice homework exercise to test your understanding of the post!</p></div><div id="fn5"><p><sup>5</sup>&nbsp;If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day!</p></div></div><p>So whenever the covariates you need to adjust for are categorical, this post has you covered.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> But what if some of our covariates are continuous? In this case things are a bit more complicated, but all of the results from above still go through if we’re willing to assume that the conditional mean functions <span class="math inline">\(\mathbb{E}(Y|D=0, X)\)</span>, <span class="math inline">\(\mathbb{E}(Y|D=1,X)\)</span> and <span class="math inline">\(\mathbb{E}(D|X)\)</span> are linear in <span class="math inline">\(X\)</span>. This is undoubtedly a strong assumption, but not perhaps as strong as it seems. For example, <span class="math inline">\(X\)</span> could include logs, squares or other functions of some underlying continuous covariates, e.g.&nbsp;age or years of experience. In this case, the weighted average interpretation of the coefficient on <span class="math inline">\(D\)</span> in a regression that excludes the interaction term still holds but now involves an integral rather than a sum.</p>
+<div class="no-row-height column-margin column-container"><div id="fn4" data-note-refs="fnref4"><p><sup>4</sup>&nbsp;This is a nice homework exercise to test your understanding of the post! <a href="#fnref4" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn5" data-note-refs="fnref5"><p><sup>5</sup>&nbsp;If you have a very <em>large</em> number of categories things are still fine <em>in theory</em> but can break down in practice, since you’ll typically have very few observations in each “cell” corresponding to the different values of the categorical variables. But this is a topic for another day! <a href="#fnref5" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>So whenever the covariates you need to adjust for are categorical, this post has you covered.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> But what if some of our covariates are continuous? In this case things are a bit more complicated, but all of the results from above still go through if we’re willing to assume that the conditional mean functions <span class="math inline">\(\mathbb{E}(Y|D=0, X)\)</span>, <span class="math inline">\(\mathbb{E}(Y|D=1,X)\)</span> and <span class="math inline">\(\mathbb{E}(D|X)\)</span> are linear in <span class="math inline">\(X\)</span>. This is undoubtedly a strong assumption, but not perhaps as strong as it seems. For example, <span class="math inline">\(X\)</span> could include logs, squares or other functions of some underlying continuous covariates, e.g.&nbsp;age or years of experience. In this case, the weighted average interpretation of the coefficient on <span class="math inline">\(D\)</span> in a regression that excludes the interaction term still holds but now involves an integral rather than a sum.</p>
 </section>
 <section id="does-it-really-work-an-empirical-example" class="level2 page-columns page-full" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="does-it-really-work-an-empirical-example"><span class="header-section-number">6</span> Does it really work? An Empirical Example</h2>
 <p>But perhaps you don’t trust my algebra.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> To assuage your fears, let’s take this to the data! The following example is based on <a href="https://www.almendron.com/tribuna/wp-content/uploads/2018/04/electoral-effects-of-biased-media-russian-television-in-ukraine.pdf">Peisakhin &amp; Rozenas (2018) - Electoral Effects of Biased Media: Russian Television in Ukraine</a>. I’ve adapted it from Llaudet and Imai’s fantastic book <a href="https://press.princeton.edu/books/hardcover/9780691199429/data-analysis-for-social-science">Data Analysis for Social Science</a>, the perfect holiday or birthday gift for the budding social scientist in your life.</p>
-<div class="no-row-height column-margin column-container"><div id="fn6"><p><sup>6</sup>&nbsp;I certainly don’t!</p></div></div><p>Here’s a bit of background. In the lead-up to Ukraine’s 2014 parliamentary election, Russian state-controlled TV mounted a fierce media campaign against the Ukrainian government. Ukrainians who lived near the border with Russia could <em>potentially</em> receive Russian TV signals. Did receiving these signals <em>cause</em> them to support pro-Russia parties in the election? To answer this question, we’ll use a dataset called <code>precincts</code> that contains aggregate election results in precincts close to the Russian border:</p>
+<div class="no-row-height column-margin column-container"><div id="fn6" data-note-refs="fnref6"><p><sup>6</sup>&nbsp;I certainly don’t! <a href="#fnref6" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>Here’s a bit of background. In the lead-up to Ukraine’s 2014 parliamentary election, Russian state-controlled TV mounted a fierce media campaign against the Ukrainian government. Ukrainians who lived near the border with Russia could <em>potentially</em> receive Russian TV signals. Did receiving these signals <em>cause</em> them to support pro-Russia parties in the election? To answer this question, we’ll use a dataset called <code>precincts</code> that contains aggregate election results in precincts close to the Russian border:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>precincts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">'https://ditraglia.com/data/UA_precincts.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -571,7 +571,7 @@ w(x) \equiv \frac{p(x) \cdot \pi(x)[1 - \pi(x)]}{\sum_{\text{all } k} p(k) \cdot
 <section id="computing-the-ate-the-easy-way" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="computing-the-ate-the-easy-way">Computing the ATE the Easy Way</h3>
 <p>And now the easy way, using the two regressions described above<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;If you’re rusty on R’s formula syntax, you may find my <a href="../../post/the-r-formula-cheatsheet/">cheat sheet</a> helpful.</p></div></div><div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn7" data-note-refs="fnref7"><p><sup>7</sup>&nbsp;If you’re rusty on R’s formula syntax, you may find my <a href="../../post/the-r-formula-cheatsheet/">cheat sheet</a> helpful. <a href="#fnref7" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct Xtilde = X - mean(X) </span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> dat <span class="sc">|&gt;</span> </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Xtilde =</span> X <span class="sc">-</span> <span class="fu">mean</span>(X))</span>
@@ -704,7 +704,7 @@ Coefficients:
 <span class="math display">\[
 \alpha_1 \equiv \frac{\text{Cov}(Y, \tilde{D})}{\text{Var}(\tilde{D})}= \frac{\mathbb{E}[\text{Cov}(Y, D|X)]}{\mathbb{E}[\text{Var}(D|X)]}
 \]</span> in this example. Note that this does <em>not</em> hold in general: it relies on the fact that <span class="math inline">\(\mathbb{E}(\tilde{D}|X)=0\)</span>, which holds in our example because <span class="math inline">\(\mathbb{E}(D|X) = \gamma_0 + \gamma_1 X\)</span> given that <span class="math inline">\(X\)</span> is binary.</p>
-<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;An unconditional expectation like <span class="math inline">\(\mathbb{E}(Y)\)</span> is a constant: it’s a probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>. In contrast, a conditional expectation like <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a random variable: it’s our “best guess” of <span class="math inline">\(Y\)</span> based on observing <span class="math inline">\(X\)</span>, where “best” means “minimum mean-squared error”. See <a href="https://youtu.be/CbsZHNQX54s?si=MN80w00yj1W5yDmX">this video</a> for some more details on conditional expectation.</p></div><div id="fn9"><p><sup>9</sup>&nbsp;In general, a population linear regression gives the best linear approximation of the conditional mean, but when the conditional mean is in fact linear, the two coincide. The reason these coincide in our example is that we can write <span class="math inline">\(\mathbb{E}[D|X] = X \mathbb{E}(D|X=1) + (1 - X) \mathbb{E}(D|X=0)\)</span>. There are only two values that <span class="math inline">\(X\)</span> can take, and we are simply “picking out” the average value of <span class="math inline">\(D\)</span> in each case. But we can re-arrange this to take precisely the form <span class="math inline">\(\delta + \kappa X\)</span> defining <span class="math inline">\(\delta = \mathbb{E}(D|X=0)\)</span> and <span class="math inline">\(\kappa = \mathbb{E}(D|X=1) - \mathbb{E}(D|X=0)\)</span>.</p></div></div><p>We’re very nearly finished. All that remains is to simplify the numerator. To do this, we’ll use the equality <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn8" data-note-refs="fnref8"><p><sup>8</sup>&nbsp;An unconditional expectation like <span class="math inline">\(\mathbb{E}(Y)\)</span> is a constant: it’s a probability-weighted average of all possible realizations of <span class="math inline">\(Y\)</span>. In contrast, a conditional expectation like <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a random variable: it’s our “best guess” of <span class="math inline">\(Y\)</span> based on observing <span class="math inline">\(X\)</span>, where “best” means “minimum mean-squared error”. See <a href="https://youtu.be/CbsZHNQX54s?si=MN80w00yj1W5yDmX">this video</a> for some more details on conditional expectation. <a href="#fnref8" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn9" data-note-refs="fnref9"><p><sup>9</sup>&nbsp;In general, a population linear regression gives the best linear approximation of the conditional mean, but when the conditional mean is in fact linear, the two coincide. The reason these coincide in our example is that we can write <span class="math inline">\(\mathbb{E}[D|X] = X \mathbb{E}(D|X=1) + (1 - X) \mathbb{E}(D|X=0)\)</span>. There are only two values that <span class="math inline">\(X\)</span> can take, and we are simply “picking out” the average value of <span class="math inline">\(D\)</span> in each case. But we can re-arrange this to take precisely the form <span class="math inline">\(\delta + \kappa X\)</span> defining <span class="math inline">\(\delta = \mathbb{E}(D|X=0)\)</span> and <span class="math inline">\(\kappa = \mathbb{E}(D|X=1) - \mathbb{E}(D|X=0)\)</span>. <a href="#fnref9" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>We’re very nearly finished. All that remains is to simplify the numerator. To do this, we’ll use the equality <span class="math display">\[
 Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
 \]</span> where <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|D, X)\)</span> satisfies <span class="math inline">\(\mathbb{E}(U|D,X) = 0\)</span> <a href="../../post/why-econometrics-is-confusing-part-1-the-error-term/">by construction</a>. This allows us to write <span class="math display">\[
 \begin{aligned}
@@ -776,7 +776,7 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
     }
     // Rescaling equations changes their heights, which moves everything
     // below them -- including margin-note markers. Announce the pass so the
-    // aligner in _theme.html can re-run against the settled geometry; both
+    // aligner in _notes.html can re-run against the settled geometry; both
     // scripts debounce resize independently, so without this signal the
     // aligner can fire first and pin notes to positions that no longer exist.
     window.dispatchEvent(new Event('math-fit:done'));
@@ -807,6 +807,89 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
     // element and it bubbles to the document.
     document.addEventListener('shown.bs.collapse', schedule);
   });
+})();
+</script>
+<script>
+// Margin-note visibility and wide-screen alignment.
+//
+// tools-normalize-notes.py has already put the notes in reference order and
+// given each one data-note-refs, the IDs of the markers that cite it. This
+// script shows a note whenever one of those markers is visible, so a note cited
+// inside a closed solution fold stays hidden until the fold opens. It also
+// keeps the fold button's label and aria-label in step with its state.
+//
+// When --margin-notes-active (set in custom.scss, alongside the grid
+// breakpoint) is 1, notes sit in the margin and each is moved level with its
+// marker, pushed down 14px below the previous note if they would collide. At
+// narrower widths the notes are in the text flow and left alone.
+//
+// Alignment must run after anything that moves a marker: a resize, font
+// loading, a fold finishing its animation, and _math-fit.html rescaling
+// equations (it dispatches math-fit:done). It listens for each of these events,
+// plus a ResizeObserver on main, instead of guessing animation durations. A
+// misplaced note shows up only after a resize, never on a fresh load, which is
+// why the check scripts test resizes.
+(function () {
+  function ready() {
+    var notes = Array.from(document.querySelectorAll('[data-note-refs]'));
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pairs = notes.map(function (note) {
+      return {note: note, markers: note.dataset.noteRefs.split(' ').map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean)};
+    });
+    function visible(el) { return el.getClientRects().length > 0; }
+
+    function align() {
+      var active = [];
+      pairs.forEach(function (pair) {
+        var marker = pair.markers.find(visible);
+        pair.note.hidden = !marker;
+        pair.note.style.top = '';
+        if (marker) active.push({note: pair.note, marker: marker});
+      });
+      document.querySelectorAll('.callout.solution .callout-header').forEach(function (header) {
+        var opened = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-label', opened ? 'Hide solution' : 'Reveal solution');
+        header.querySelector('.callout-title-container').textContent = opened ? 'Hide' : 'Click to reveal';
+      });
+      // The breakpoint is declared in CSS alongside the grid fallback.
+      if (getComputedStyle(main).getPropertyValue('--margin-notes-active').trim() !== '1') return;
+      active.sort(function (a, b) {
+        return a.marker.compareDocumentPosition(b.marker) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+      var lastBottom = -Infinity;
+      active.forEach(function (pair) {
+        var rect = pair.note.getBoundingClientRect();
+        var target = Math.max(pair.marker.getBoundingClientRect().top, lastBottom + 14);
+        pair.note.style.top = (target - rect.top) + 'px';
+        lastBottom = target + rect.height;
+      });
+    }
+
+    var pending = false;
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; align(); });
+    }
+    align();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    window.addEventListener('math-fit:done', schedule);
+    // Use completion events, not a guessed duration of the animation.
+    document.addEventListener('shown.bs.collapse', schedule);
+    document.addEventListener('hidden.bs.collapse', schedule);
+    if (document.fonts) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(main);
+      notes.forEach(function (note) { observer.observe(note); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
 })();
 </script>
 <script>
@@ -880,87 +963,7 @@ Y = \beta_0 + \beta_1 D + \beta_2 X + \beta_3 DX + U
     }
   }
 
-  // ---- margin notes: sit level with their markers ----
-  // Quarto aligns a margin footnote with the top of the paragraph that cites
-  // it, so a note citing the last sentence of a long paragraph appears well
-  // before the passage it belongs to. This slides each note down to its own
-  // marker, keeping notes in order and never overlapping. Offsets are
-  // position: relative, so nothing else on the page moves.
-  function alignMarginNotes() {
-    var notes = [].slice.call(
-      document.querySelectorAll('.column-margin div[id^="fn"]'));
-    if (!notes.length) return;
-    var main = document.querySelector('main');
-    // Pair each note with its marker and order by the marker's position in
-    // the text -- Quarto hoists a fold's notes out in reverse DOM order, so
-    // document order of the notes cannot be trusted for stacking.
-    var pairs = [];
-    notes.forEach(function (note) {
-      note.style.top = '';
-      var m = note.id.match(/^fn(\d+)$/);
-      var marker = m && document.getElementById('fnref' + m[1]);
-      if (!marker) return;
-      // Notes belonging to a closed solution fold are display:none (and so
-      // are their markers); they get aligned when the fold opens.
-      if (!note.offsetParent || !marker.offsetParent) return;
-      pairs.push({ note: note, marker: marker });
-    });
-    pairs.sort(function (a, b) {
-      return a.marker.getBoundingClientRect().top -
-             b.marker.getBoundingClientRect().top;
-    });
-    var lastBottom = -Infinity;
-    pairs.forEach(function (pair) {
-      var note = pair.note;
-      var rect = note.getBoundingClientRect();
-      // Only when the note actually sits in the margin column; on narrow
-      // screens Quarto folds it into the body flow, which needs no help.
-      if (main && rect.left < main.getBoundingClientRect().left +
-                  (document.querySelector('main p') || main).clientWidth * 0.8) {
-        return;
-      }
-      var naturalTop = rect.top + window.scrollY;
-      var markerTop = pair.marker.getBoundingClientRect().top + window.scrollY;
-      var target = Math.max(markerTop, lastBottom + 14);
-      note.style.position = 'relative';
-      note.style.top = (target - naturalTop) + 'px';
-      lastBottom = target + rect.height;
-    });
-  }
-
-  function scheduleAlign() {
-    alignMarginNotes();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(alignMarginNotes);
-    }
-    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
-      MathJax.startup.promise.then(function () {
-        setTimeout(alignMarginNotes, 50);
-      });
-    }
-    window.addEventListener('load', alignMarginNotes);
-    // _math-fit.html dispatches this after every fitting pass. Equation
-    // sizes just changed, so the markers may have moved out from under the
-    // notes; realign against the new geometry.
-    window.addEventListener('math-fit:done', alignMarginNotes);
-    var t;
-    window.addEventListener('resize', function () {
-      clearTimeout(t);
-      t = setTimeout(alignMarginNotes, 150);
-    });
-    // A solution fold reveals its margin notes when it opens; align them
-    // once the collapse animation has finished.
-    [].slice.call(document.querySelectorAll('.callout-header'))
-      .forEach(function (h) {
-        h.addEventListener('click', function () {
-          setTimeout(alignMarginNotes, 450);
-        });
-      });
-  }
-
   ready(function () {
-    scheduleAlign();
-
     // Quarto copies a callout's title into an HTML title attribute on the
     // callout div, so the browser shows a native "Solution" tooltip whenever
     // the mouse rests anywhere over an open fold. The visible header (and

@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-698d30ae8ec9bf73ceb3cf0b04d766a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e67dc420c8a575ff6a8184f4ee0838de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -412,7 +412,7 @@ window.Quarto = {
 </div>
 <p>which is clearly less than 1.96. Thus we would fail to reject <span class="math inline">\(H_0\colon p = 0.07\)</span> exactly as the Wald confidence interval instructed us above. This procedure is called the <em>Wald test</em> for a proportion. Its main benefit is that it agrees with the Wald interval, unlike the score test, restoring the link between tests and confidence intervals that we teach our students. Unfortunately <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">the Wald confidence interval is terrible and you should never use it</a>. Because the Wald test is equivalent to checking whether <span class="math inline">\(p_0\)</span> lies inside the Wald confidence interval, it inherits all of the latter’s defects.</p>
 <p>Indeed, compared to the score test, the Wald test is a disaster, as I’ll now show. Suppose we carry out a 5% test. If the null is true, we should reject it 5% of the time. Because the Wald and Score tests are both based on an approximation provided by the <a href="../../post/thirty-isn-t-the-magic-number/">central limit theorem</a>, we should allow a bit of leeway here: the actual rejection rates may be slightly different from 5%. Nevertheless, we’d expect them to at least be <em>fairly close</em> to the nominal value of 5%. The following plot shows the <em>actual</em> type I error rates of the score and Wald tests, over a range of values for the true population proportion <span class="math inline">\(p\)</span> with sample sizes of 25, 50, and 100. In each case the nominal size of each test, shown as a dashed red line, is 5%.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;For the R code used to generate these plots, see the Appendix at the end of this post.</p></div></div><div class="cell" data-layout-align="center">
+<div class="no-row-height column-margin column-container"><div id="fn1" data-note-refs="fnref1"><p><sup>1</sup>&nbsp;For the R code used to generate these plots, see the Appendix at the end of this post. <a href="#fnref1" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -540,7 +540,7 @@ sample estimates:
 &amp;= \frac{1}{\widetilde{n}} \left[\omega \widehat{p}(1 - \widehat{p}) + (1 - \omega) \frac{1}{2} \cdot \frac{1}{2}\right]
 \end{aligned}
 \]</span> defining <span class="math inline">\(\widetilde{n} = n + c^2\)</span>. To make sense of this result, recall that <span class="math inline">\(\widehat{\text{SE}}^2\)</span>, the quantity that is used to construct the Wald interval, is a ratio of two terms: <span class="math inline">\(\widehat{p}(1 - \widehat{p})\)</span> is the usual estimate of the <em>population variance</em> based on iid samples from a Bernoulli distribution and <span class="math inline">\(n\)</span> is the sample size. Similarly, <span class="math inline">\(\widetilde{\text{SE}}^2\)</span> is a ratio of two terms. The first is a <em>weighted average</em> of the population variance estimator and <span class="math inline">\(1/4\)</span>, the population variance under the assumption that <span class="math inline">\(p = 1/2\)</span>. Once again, the Wilson interval “pulls” away from extremes. In this case it pulls away from extreme estimates of the population variance towards the <em>largest possible</em> population variance: <span class="math inline">\(1/4\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> We divide this by the sample size <em>augmented</em> by <span class="math inline">\(c^2\)</span>, a strictly positive quantity that depends on the confidence level.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>.</p></div><div id="fn3"><p><sup>3</sup>&nbsp;If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post.</p></div><div id="fn4"><p><sup>4</sup>&nbsp;As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%”.</p></div></div><p>To make this more concrete, consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Using this approximation we find that <span class="math display">\[
+<div class="no-row-height column-margin column-container"><div id="fn2" data-note-refs="fnref2"><p><sup>2</sup>&nbsp;The value of <span class="math inline">\(p\)</span> that maximizes <span class="math inline">\(p(1-p)\)</span> is <span class="math inline">\(p=1/2\)</span> and <span class="math inline">\((1/2)^2 = 1/4\)</span>. <a href="#fnref2" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn3" data-note-refs="fnref3"><p><sup>3</sup>&nbsp;If you know anything about Bayesian statistics, you may be suspicious that there’s a connection to be made here. Indeed this whole exercise looks very much like a <a href="http://sims.princeton.edu/yftp/DummyObs/DumObsPrior.pdf">dummy observation prior</a> in which we artificially augment the sample with “fake data.” There is a Bayesian connection here, but the details will have to wait for a future post. <a href="#fnref3" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn4" data-note-refs="fnref4"><p><sup>4</sup>&nbsp;As far as I’m concerned, 1.96 is effectively 2. If you disagree, please replace all instances of “95%” with “95.45%”. <a href="#fnref4" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>To make this more concrete, consider the case of a 95% Wilson interval. In this case <span class="math inline">\(c^2 \approx 4\)</span> so that <span class="math inline">\(\omega \approx n / (n + 4)\)</span> and <span class="math inline">\((1 - \omega) \approx 4/(n+4)\)</span>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Using this approximation we find that <span class="math display">\[
 \widetilde{p} \approx \frac{n}{n + 4} \cdot \widehat{p} + \frac{4}{n + 4} \cdot \frac{1}{2} =  \frac{n \widehat{p} + 2}{n + 4}
 \]</span> which is <em>precisely</em> the midpoint of the <a href="../../post/don-t-use-the-textbook-ci-for-a-proportion/">Agresti-Coull confidence interval</a>. And while <span class="math display">\[
 \widetilde{\text{SE}}^2 \approx \frac{1}{n + 4} \left[\frac{n}{n + 4}\cdot \widehat{p}(1 - \widehat{p}) +\frac{4}{n + 4} \cdot \frac{1}{2} \cdot \frac{1}{2}\right]
@@ -574,7 +574,7 @@ n(1 - \omega) &amp;&lt; \sum_{i=1}^n X_i &lt; n \omega\\
 \left\lceil n\left(\frac{c^2}{n + c^2} \right)\right\rceil &amp;\leq \sum_{i=1}^n X_i \leq \left\lfloor n \left( \frac{n}{n + c^2}\right) \right\rfloor
 \end{aligned}
 \]</span> where <span class="math inline">\(\lceil \cdot \rceil\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceiling</a> function and <span class="math inline">\(\lfloor \cdot \rfloor\)</span> is the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> function.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Using this inequality, we can calculate the minimum and maximum number of successes in <span class="math inline">\(n\)</span> trials for which a 95% Wald interval will lie inside the range <span class="math inline">\([0,1]\)</span> as follows:</p>
-<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>.</p></div></div><div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn5" data-note-refs="fnref5"><p><sup>5</sup>&nbsp;The final inequality follows because <span class="math inline">\(\sum_{i}^n X_i\)</span> can only take on a value in <span class="math inline">\(\{0, 1, ..., n\}\)</span> while <span class="math inline">\(n\omega\)</span> and <span class="math inline">\(n(1 - \omega)\)</span> may not be integers, depending on the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(c^2\)</span>. <a href="#fnref5" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">:</span><span class="dv">20</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>omega <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="st">"n"</span> <span class="ot">=</span> n,  </span>
@@ -715,7 +715,7 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
     }
     // Rescaling equations changes their heights, which moves everything
     // below them -- including margin-note markers. Announce the pass so the
-    // aligner in _theme.html can re-run against the settled geometry; both
+    // aligner in _notes.html can re-run against the settled geometry; both
     // scripts debounce resize independently, so without this signal the
     // aligner can fire first and pin notes to positions that no longer exist.
     window.dispatchEvent(new Event('math-fit:done'));
@@ -746,6 +746,89 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
     // element and it bubbles to the document.
     document.addEventListener('shown.bs.collapse', schedule);
   });
+})();
+</script>
+<script>
+// Margin-note visibility and wide-screen alignment.
+//
+// tools-normalize-notes.py has already put the notes in reference order and
+// given each one data-note-refs, the IDs of the markers that cite it. This
+// script shows a note whenever one of those markers is visible, so a note cited
+// inside a closed solution fold stays hidden until the fold opens. It also
+// keeps the fold button's label and aria-label in step with its state.
+//
+// When --margin-notes-active (set in custom.scss, alongside the grid
+// breakpoint) is 1, notes sit in the margin and each is moved level with its
+// marker, pushed down 14px below the previous note if they would collide. At
+// narrower widths the notes are in the text flow and left alone.
+//
+// Alignment must run after anything that moves a marker: a resize, font
+// loading, a fold finishing its animation, and _math-fit.html rescaling
+// equations (it dispatches math-fit:done). It listens for each of these events,
+// plus a ResizeObserver on main, instead of guessing animation durations. A
+// misplaced note shows up only after a resize, never on a fresh load, which is
+// why the check scripts test resizes.
+(function () {
+  function ready() {
+    var notes = Array.from(document.querySelectorAll('[data-note-refs]'));
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pairs = notes.map(function (note) {
+      return {note: note, markers: note.dataset.noteRefs.split(' ').map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean)};
+    });
+    function visible(el) { return el.getClientRects().length > 0; }
+
+    function align() {
+      var active = [];
+      pairs.forEach(function (pair) {
+        var marker = pair.markers.find(visible);
+        pair.note.hidden = !marker;
+        pair.note.style.top = '';
+        if (marker) active.push({note: pair.note, marker: marker});
+      });
+      document.querySelectorAll('.callout.solution .callout-header').forEach(function (header) {
+        var opened = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-label', opened ? 'Hide solution' : 'Reveal solution');
+        header.querySelector('.callout-title-container').textContent = opened ? 'Hide' : 'Click to reveal';
+      });
+      // The breakpoint is declared in CSS alongside the grid fallback.
+      if (getComputedStyle(main).getPropertyValue('--margin-notes-active').trim() !== '1') return;
+      active.sort(function (a, b) {
+        return a.marker.compareDocumentPosition(b.marker) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+      var lastBottom = -Infinity;
+      active.forEach(function (pair) {
+        var rect = pair.note.getBoundingClientRect();
+        var target = Math.max(pair.marker.getBoundingClientRect().top, lastBottom + 14);
+        pair.note.style.top = (target - rect.top) + 'px';
+        lastBottom = target + rect.height;
+      });
+    }
+
+    var pending = false;
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; align(); });
+    }
+    align();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    window.addEventListener('math-fit:done', schedule);
+    // Use completion events, not a guessed duration of the animation.
+    document.addEventListener('shown.bs.collapse', schedule);
+    document.addEventListener('hidden.bs.collapse', schedule);
+    if (document.fonts) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(main);
+      notes.forEach(function (note) { observer.observe(note); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
 })();
 </script>
 <script>
@@ -819,87 +902,7 @@ n\widehat{p}^2 + \widehat{p}c^2 &lt; nc^2\widehat{\text{SE}}^2 = c^2 \widehat{p}
     }
   }
 
-  // ---- margin notes: sit level with their markers ----
-  // Quarto aligns a margin footnote with the top of the paragraph that cites
-  // it, so a note citing the last sentence of a long paragraph appears well
-  // before the passage it belongs to. This slides each note down to its own
-  // marker, keeping notes in order and never overlapping. Offsets are
-  // position: relative, so nothing else on the page moves.
-  function alignMarginNotes() {
-    var notes = [].slice.call(
-      document.querySelectorAll('.column-margin div[id^="fn"]'));
-    if (!notes.length) return;
-    var main = document.querySelector('main');
-    // Pair each note with its marker and order by the marker's position in
-    // the text -- Quarto hoists a fold's notes out in reverse DOM order, so
-    // document order of the notes cannot be trusted for stacking.
-    var pairs = [];
-    notes.forEach(function (note) {
-      note.style.top = '';
-      var m = note.id.match(/^fn(\d+)$/);
-      var marker = m && document.getElementById('fnref' + m[1]);
-      if (!marker) return;
-      // Notes belonging to a closed solution fold are display:none (and so
-      // are their markers); they get aligned when the fold opens.
-      if (!note.offsetParent || !marker.offsetParent) return;
-      pairs.push({ note: note, marker: marker });
-    });
-    pairs.sort(function (a, b) {
-      return a.marker.getBoundingClientRect().top -
-             b.marker.getBoundingClientRect().top;
-    });
-    var lastBottom = -Infinity;
-    pairs.forEach(function (pair) {
-      var note = pair.note;
-      var rect = note.getBoundingClientRect();
-      // Only when the note actually sits in the margin column; on narrow
-      // screens Quarto folds it into the body flow, which needs no help.
-      if (main && rect.left < main.getBoundingClientRect().left +
-                  (document.querySelector('main p') || main).clientWidth * 0.8) {
-        return;
-      }
-      var naturalTop = rect.top + window.scrollY;
-      var markerTop = pair.marker.getBoundingClientRect().top + window.scrollY;
-      var target = Math.max(markerTop, lastBottom + 14);
-      note.style.position = 'relative';
-      note.style.top = (target - naturalTop) + 'px';
-      lastBottom = target + rect.height;
-    });
-  }
-
-  function scheduleAlign() {
-    alignMarginNotes();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(alignMarginNotes);
-    }
-    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
-      MathJax.startup.promise.then(function () {
-        setTimeout(alignMarginNotes, 50);
-      });
-    }
-    window.addEventListener('load', alignMarginNotes);
-    // _math-fit.html dispatches this after every fitting pass. Equation
-    // sizes just changed, so the markers may have moved out from under the
-    // notes; realign against the new geometry.
-    window.addEventListener('math-fit:done', alignMarginNotes);
-    var t;
-    window.addEventListener('resize', function () {
-      clearTimeout(t);
-      t = setTimeout(alignMarginNotes, 150);
-    });
-    // A solution fold reveals its margin notes when it opens; align them
-    // once the collapse animation has finished.
-    [].slice.call(document.querySelectorAll('.callout-header'))
-      .forEach(function (h) {
-        h.addEventListener('click', function () {
-          setTimeout(alignMarginNotes, 450);
-        });
-      });
-  }
-
   ready(function () {
-    scheduleAlign();
-
     // Quarto copies a callout's title into an HTML title attribute on the
     // callout div, so the browser shows a native "Solution" tooltip whenever
     // the mouse rests anywhere over an open fold. The visible header (and

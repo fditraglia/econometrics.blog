@@ -48,7 +48,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-698d30ae8ec9bf73ceb3cf0b04d766a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e67dc420c8a575ff6a8184f4ee0838de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -339,7 +339,7 @@ window.Quarto = {
 &amp;= \text{Cov}(X,Y) - \beta \text{Var}(X) = 0.
 \end{aligned}
 \]</span></p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Surprised that <span class="math inline">\(\mathbb{E}[X(Y - \mathbb{E}[Y])] = \text{Cov}(X,Y)\)</span> and <span class="math inline">\(\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)\)</span>? These are great homework problems! Work through the algebra using the definitions of variance and covariance.</p></div></div></section>
+<div class="no-row-height column-margin column-container"><div id="fn1" data-note-refs="fnref1"><p><sup>1</sup>&nbsp;Surprised that <span class="math inline">\(\mathbb{E}[X(Y - \mathbb{E}[Y])] = \text{Cov}(X,Y)\)</span> and <span class="math inline">\(\mathbb{E}[X(X - \mathbb{E}[X])] = \text{Var}(X)\)</span>? These are great homework problems! Work through the algebra using the definitions of variance and covariance. <a href="#fnref1" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div></section>
 <section id="conditional-mean-function" class="level2 page-columns page-full" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="conditional-mean-function"><span class="header-section-number">2</span> Conditional Mean Function</h2>
 <p>In other situations <span class="math inline">\(Y = \alpha + \beta X + U\)</span> is intended to represent a <em>conditional mean function</em>. This is usually signaled by the assumption <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span>. This time around I haven’t written the word assumption in “scare quotes.” That’s because there is an assumption lurking here, unlike in the population linear regression model from above. Still, this is a hopelessly confusing way of indicating it. Here’s a better way:</p>
@@ -349,7 +349,7 @@ window.Quarto = {
 <p>Again, this makes it clear that <span class="math inline">\(U\)</span> has no life of its own. It is <em>constructed</em> from <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>. The conditional mean function <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is simply the minimizer of <span class="math inline">\(\mathbb{E}[\left\{ Y - f(X)\right\}^2]\)</span> over all (well-behaved) functions.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> By construction <span class="math inline">\(\mathbb{E}[U|X] = 0\)</span> since <span class="math display">\[
 \mathbb{E}[U|X] = \mathbb{E}[Y - \mathbb{E}(Y|X)|X] = \mathbb{E}[Y|X] - \mathbb{E}[Y|X] = 0
 \]</span> by the linearity of conditional expectation and the fact that <span class="math inline">\(\mathbb{E}(Y|X)\)</span> is a function of <span class="math inline">\(X\)</span>. But how can we be sure that the conditional mean function is linear? This is a <em>bona fide</em> assumption: it may be true or it may be false. Either way, it is much clearer to emphasize that we are making an assumption about the <em>form</em> of the conditional mean function, <em>not</em> an assumption about the error term <span class="math inline">\(U \equiv Y - \mathbb{E}(Y|X)\)</span>.</p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;See Section 2.1 of my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a> for details.</p></div></div></section>
+<div class="no-row-height column-margin column-container"><div id="fn2" data-note-refs="fnref2"><p><sup>2</sup>&nbsp;See Section 2.1 of my <a href="https://www.economictricks.com/limdep-notes.pdf">lecture notes</a> for details. <a href="#fnref2" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div></section>
 <section id="causal-model" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="causal-model"><span class="header-section-number">3</span> Causal Model</h2>
 <p>Both interpretations of <span class="math inline">\(Y = \alpha + \beta X + U\)</span> from above are purely predictive; they say nothing about whether <span class="math inline">\(X\)</span> <em>causes</em> <span class="math inline">\(Y\)</span>. To indicate that a linear model is meant to be causal, it is traditional to write something like “suppose that <span class="math inline">\(Y = \alpha + \beta X + U\)</span> where <span class="math inline">\(X\)</span> may be endogenous.” Often “may be endogenous” is replaced by “where <span class="math inline">\(X\)</span> may be correlated with <span class="math inline">\(U\)</span>.” What on earth is this supposed to mean? The language is vague, evasive, and imprecise. It also stretches the meaning of “<span class="math inline">\(=\)</span>” beyond all reason. Here’s my suggested improvement:</p>
@@ -413,7 +413,7 @@ window.Quarto = {
     }
     // Rescaling equations changes their heights, which moves everything
     // below them -- including margin-note markers. Announce the pass so the
-    // aligner in _theme.html can re-run against the settled geometry; both
+    // aligner in _notes.html can re-run against the settled geometry; both
     // scripts debounce resize independently, so without this signal the
     // aligner can fire first and pin notes to positions that no longer exist.
     window.dispatchEvent(new Event('math-fit:done'));
@@ -444,6 +444,89 @@ window.Quarto = {
     // element and it bubbles to the document.
     document.addEventListener('shown.bs.collapse', schedule);
   });
+})();
+</script>
+<script>
+// Margin-note visibility and wide-screen alignment.
+//
+// tools-normalize-notes.py has already put the notes in reference order and
+// given each one data-note-refs, the IDs of the markers that cite it. This
+// script shows a note whenever one of those markers is visible, so a note cited
+// inside a closed solution fold stays hidden until the fold opens. It also
+// keeps the fold button's label and aria-label in step with its state.
+//
+// When --margin-notes-active (set in custom.scss, alongside the grid
+// breakpoint) is 1, notes sit in the margin and each is moved level with its
+// marker, pushed down 14px below the previous note if they would collide. At
+// narrower widths the notes are in the text flow and left alone.
+//
+// Alignment must run after anything that moves a marker: a resize, font
+// loading, a fold finishing its animation, and _math-fit.html rescaling
+// equations (it dispatches math-fit:done). It listens for each of these events,
+// plus a ResizeObserver on main, instead of guessing animation durations. A
+// misplaced note shows up only after a resize, never on a fresh load, which is
+// why the check scripts test resizes.
+(function () {
+  function ready() {
+    var notes = Array.from(document.querySelectorAll('[data-note-refs]'));
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pairs = notes.map(function (note) {
+      return {note: note, markers: note.dataset.noteRefs.split(' ').map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean)};
+    });
+    function visible(el) { return el.getClientRects().length > 0; }
+
+    function align() {
+      var active = [];
+      pairs.forEach(function (pair) {
+        var marker = pair.markers.find(visible);
+        pair.note.hidden = !marker;
+        pair.note.style.top = '';
+        if (marker) active.push({note: pair.note, marker: marker});
+      });
+      document.querySelectorAll('.callout.solution .callout-header').forEach(function (header) {
+        var opened = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-label', opened ? 'Hide solution' : 'Reveal solution');
+        header.querySelector('.callout-title-container').textContent = opened ? 'Hide' : 'Click to reveal';
+      });
+      // The breakpoint is declared in CSS alongside the grid fallback.
+      if (getComputedStyle(main).getPropertyValue('--margin-notes-active').trim() !== '1') return;
+      active.sort(function (a, b) {
+        return a.marker.compareDocumentPosition(b.marker) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+      var lastBottom = -Infinity;
+      active.forEach(function (pair) {
+        var rect = pair.note.getBoundingClientRect();
+        var target = Math.max(pair.marker.getBoundingClientRect().top, lastBottom + 14);
+        pair.note.style.top = (target - rect.top) + 'px';
+        lastBottom = target + rect.height;
+      });
+    }
+
+    var pending = false;
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; align(); });
+    }
+    align();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    window.addEventListener('math-fit:done', schedule);
+    // Use completion events, not a guessed duration of the animation.
+    document.addEventListener('shown.bs.collapse', schedule);
+    document.addEventListener('hidden.bs.collapse', schedule);
+    if (document.fonts) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(main);
+      notes.forEach(function (note) { observer.observe(note); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
 })();
 </script>
 <script>
@@ -517,87 +600,7 @@ window.Quarto = {
     }
   }
 
-  // ---- margin notes: sit level with their markers ----
-  // Quarto aligns a margin footnote with the top of the paragraph that cites
-  // it, so a note citing the last sentence of a long paragraph appears well
-  // before the passage it belongs to. This slides each note down to its own
-  // marker, keeping notes in order and never overlapping. Offsets are
-  // position: relative, so nothing else on the page moves.
-  function alignMarginNotes() {
-    var notes = [].slice.call(
-      document.querySelectorAll('.column-margin div[id^="fn"]'));
-    if (!notes.length) return;
-    var main = document.querySelector('main');
-    // Pair each note with its marker and order by the marker's position in
-    // the text -- Quarto hoists a fold's notes out in reverse DOM order, so
-    // document order of the notes cannot be trusted for stacking.
-    var pairs = [];
-    notes.forEach(function (note) {
-      note.style.top = '';
-      var m = note.id.match(/^fn(\d+)$/);
-      var marker = m && document.getElementById('fnref' + m[1]);
-      if (!marker) return;
-      // Notes belonging to a closed solution fold are display:none (and so
-      // are their markers); they get aligned when the fold opens.
-      if (!note.offsetParent || !marker.offsetParent) return;
-      pairs.push({ note: note, marker: marker });
-    });
-    pairs.sort(function (a, b) {
-      return a.marker.getBoundingClientRect().top -
-             b.marker.getBoundingClientRect().top;
-    });
-    var lastBottom = -Infinity;
-    pairs.forEach(function (pair) {
-      var note = pair.note;
-      var rect = note.getBoundingClientRect();
-      // Only when the note actually sits in the margin column; on narrow
-      // screens Quarto folds it into the body flow, which needs no help.
-      if (main && rect.left < main.getBoundingClientRect().left +
-                  (document.querySelector('main p') || main).clientWidth * 0.8) {
-        return;
-      }
-      var naturalTop = rect.top + window.scrollY;
-      var markerTop = pair.marker.getBoundingClientRect().top + window.scrollY;
-      var target = Math.max(markerTop, lastBottom + 14);
-      note.style.position = 'relative';
-      note.style.top = (target - naturalTop) + 'px';
-      lastBottom = target + rect.height;
-    });
-  }
-
-  function scheduleAlign() {
-    alignMarginNotes();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(alignMarginNotes);
-    }
-    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
-      MathJax.startup.promise.then(function () {
-        setTimeout(alignMarginNotes, 50);
-      });
-    }
-    window.addEventListener('load', alignMarginNotes);
-    // _math-fit.html dispatches this after every fitting pass. Equation
-    // sizes just changed, so the markers may have moved out from under the
-    // notes; realign against the new geometry.
-    window.addEventListener('math-fit:done', alignMarginNotes);
-    var t;
-    window.addEventListener('resize', function () {
-      clearTimeout(t);
-      t = setTimeout(alignMarginNotes, 150);
-    });
-    // A solution fold reveals its margin notes when it opens; align them
-    // once the collapse animation has finished.
-    [].slice.call(document.querySelectorAll('.callout-header'))
-      .forEach(function (h) {
-        h.addEventListener('click', function () {
-          setTimeout(alignMarginNotes, 450);
-        });
-      });
-  }
-
   ready(function () {
-    scheduleAlign();
-
     // Quarto copies a callout's title into an HTML title attribute on the
     // callout div, so the browser shows a native "Solution" tooltip whenever
     // the mouse rests anywhere over an open fold. The visible header (and

@@ -83,7 +83,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e02e479d25f0a4a5979a5a33258b8987.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-698d30ae8ec9bf73ceb3cf0b04d766a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e67dc420c8a575ff6a8184f4ee0838de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -355,9 +355,9 @@ window.Quarto = {
   </ul>
 </nav>
 <p>The F-statistic for a test of multiple linear restrictions is a staple of introductory econometrics courses. In the simplest case, it can be written as <span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)}\]</span> where <span class="math inline">\(SSR_r\)</span> is the <em>restricted</em> sum of squared residuals, <span class="math inline">\(SSR_{u}\)</span> is the <em>unrestricted</em> sum of squared residuals, <span class="math inline">\(q\)</span> is the number of restrictions, and <span class="math inline">\((n - k - 1)\)</span> is the degrees of freedom of the unrestricted model.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn1"><p><sup>1</sup>&nbsp;Specifically, the “simplest case” refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity.</p></div></div><p>In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add to a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the <span class="math inline">\(F\)</span> statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even <em>obvious</em>.</p>
+<div class="no-row-height column-margin column-container"><div id="fn1" data-note-refs="fnref1"><p><sup>1</sup>&nbsp;Specifically, the “simplest case” refers to a setting in which both the restricted and unrestricted models include an intercept and we assume homoskedasticity. <a href="#fnref1" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>In my experience, students encountering this expression for the first time find it bewilderingly arbitrary; it becomes just one more item to add to a list of formulas memorized for the exam and promptly forgotten. My aim in this post is to demystify the <span class="math inline">\(F\)</span> statistic. By the end, I hope that you will find the form of this expression intuitive, perhaps even <em>obvious</em>.</p>
 <p>This is not a post about asymptotic theory, and it is not a post about heteroskedasticity. I will not prove that <span class="math inline">\(F\)</span> follows an <span class="math inline">\(F\)</span>-distribution, and I will blithely assume that we inhabit the idealized textbook realm in which all errors are homoskedastic. I will also dodge the question of whether you should even be carrying out an F-test in the first place.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This is a post about understanding what the <span class="math inline">\(F\)</span>-statistic measures and why it takes the form that it does.</p>
-<div class="no-row-height column-margin column-container"><div id="fn2"><p><sup>2</sup>&nbsp;See <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R-squared, and Other Distractions</a> for an insightful critique.</p></div></div><section id="the-simplest-possible-example" class="level2 page-columns page-full" data-number="1">
+<div class="no-row-height column-margin column-container"><div id="fn2" data-note-refs="fnref2"><p><sup>2</sup>&nbsp;See <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R-squared, and Other Distractions</a> for an insightful critique. <a href="#fnref2" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><section id="the-simplest-possible-example" class="level2 page-columns page-full" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="the-simplest-possible-example"><span class="header-section-number">1</span> The Simplest Possible Example</h2>
 <p>The best way to understand the <span class="math inline">\(F\)</span>-statistic is by looking at an example that’s so simple that there’s no reason to use an <span class="math inline">\(F\)</span>-test in the first place. Here’s a dataset of students’ scores on two introductory statistics midterms that I gave many years ago:</p>
 <div class="cell">
@@ -388,7 +388,7 @@ window.Quarto = {
 </div>
 </div>
 <p>To keep this example as simple as possible, I’ll drop the missing observations.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn3"><p><sup>3</sup>&nbsp;Health warning: it <em>dangerous</em> to glibly drop missing observations in applied work! The key question is why those nine students missed the second exam. If their reasons for doing so are “as good as randomly assigned,” e.g.&nbsp;a death in the family or an unexpected illness or injury, these observations as <em>missing at random</em> (MAR). In this case, dropping them is statistically innocuous. If instead these students’ reasons for missing the exam are related to their course performance, then dropping their observations could yield a misleading picture of the underlying relationship between midterm scores.</p></div></div><div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn3" data-note-refs="fnref3"><p><sup>3</sup>&nbsp;Health warning: it <em>dangerous</em> to glibly drop missing observations in applied work! The key question is why those nine students missed the second exam. If their reasons for doing so are “as good as randomly assigned,” e.g.&nbsp;a death in the family or an unexpected illness or injury, these observations as <em>missing at random</em> (MAR). In this case, dropping them is statistically innocuous. If instead these students’ reasons for missing the exam are related to their course performance, then dropping their observations could yield a misleading picture of the underlying relationship between midterm scores. <a href="#fnref3" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>midterms <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(midterms)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Let’s call student #4 Natalie: she scored 88% on the first midterm but missed the second. Suppose we wanted to predict how well Natalie <em>would have done</em> on the second midterm had she taken it. There are many ways that we could try to make this prediction. One possibility would be to ignore Natalie’s score on the first midterm, and predict that she would have scored 81.4 on the second: the average score among all students who took this exam. Another possibility would be to fit a linear regression to the scores of all students who took <em>both</em> exams and use this to project Natalie’s score on midterm two based on her score on midterm one. If scores on the two exams are correlated, option two seems like a better idea: Natalie outperformed the class average on midterm one by 8.4 or roughly 0.77 standard deviations. It seems reasonable to account for this when predicting her score on the second exam.</p>
@@ -397,7 +397,7 @@ window.Quarto = {
 \]</span> which is simply least squares without a predictor variable.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In contrast, the usual least-squares regression problem is <span class="math display">\[
 \min_{a,b} \sum_{i=1}^n (y_i - a - b x_i)^2
 \]</span> with solutions <span class="math inline">\(\hat{a} = \bar{y} - \hat{b} \bar{x}\)</span> and <span class="math inline">\(\hat{b} = s_{xy} / s_x^2\)</span>, where <span class="math inline">\(s_{xy}\)</span> is the sample covariance of scores on the two midterms and <span class="math inline">\(s_x^2\)</span> is the sample variance of scores on the first midterm. Notice how these two optimization problems are related: the first is a <em>restricted</em> (aka <em>constrained</em>) version of the second with the constraint <span class="math inline">\(b = 0\)</span>. In the discussion below, I will call the first of these the <em>restricted regression</em> and the second the <em>unrestricted regression</em>.</p>
-<div class="no-row-height column-margin column-container"><div id="fn4"><p><sup>4</sup>&nbsp;If you’re taking introductory statistics or econometrics it’s a good idea to try to prove this for yourself!</p></div></div><p>It’s easy to fit these regressions in R. We’ll start with the restricted:</p>
+<div class="no-row-height column-margin column-container"><div id="fn4" data-note-refs="fnref4"><p><sup>4</sup>&nbsp;If you’re taking introductory statistics or econometrics it’s a good idea to try to prove this for yourself! <a href="#fnref4" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>It’s easy to fit these regressions in R. We’ll start with the restricted:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>restricted <span class="ot">&lt;-</span> <span class="fu">lm</span>(Midterm2 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> midterms)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(restricted)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -459,7 +459,7 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 <section id="how-much-better-is-the-fit-of-the-unrestricted-regression" class="level2 page-columns page-full" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="how-much-better-is-the-fit-of-the-unrestricted-regression"><span class="header-section-number">2</span> How much better is the fit of the unrestricted regression?</h2>
 <p>While I didn’t present it in this way, the choice between restricted and unrestricted regressions above could be formulated as a hypothesis test. The restricted regression imposes a zero regression slope, but the unrestricted regression doesn’t. In this case, we can test the restriction that the slope is in fact zero using simple t-test. Based on the t-statistic of 5.33 from above we would easily <em>reject</em> the restriction at any conventional significance level.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn5"><p><sup>5</sup>&nbsp;If you’re familiar with the “trinity” of classical tests (Score/LM, Likelihood Ratio, and Wald), this reasoning amounts to a Wald test: fit the unrestricted model and use the distance between the parameter estimates and their values under the restriction to form a test statistic. If the unrestricted estimates are close enough to the restriction, don’t reject it.</p></div><div id="fn6"><p><sup>6</sup>&nbsp;Again, if you’re familiar with the aforementioned “trinity” of tests, the procedure I’m about to describe amounts to a Likelihood Ratio Test: fit both the restricted and unrestricted models, and compare their maximized sample likelihoods. If the likelihoods are similar, don’t reject the restriction.</p></div></div><p>But there’s another way to carry out the same test. Although it would be overkill in this example, the principles that underlie it can be used to carry out tests in more complicated situations where a simple t-test wouldn’t suffice. Rather than examining the slope estimate from the unrestricted regression, this alternative approach compares the <em>sum of squared residuals</em> (SSR) of the two regressions to see which does a better job of fitting the observed data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> It’s easy to compute the SSR of the two regressions from above using the <code>residuals()</code> function:</p>
+<div class="no-row-height column-margin column-container"><div id="fn5" data-note-refs="fnref5"><p><sup>5</sup>&nbsp;If you’re familiar with the “trinity” of classical tests (Score/LM, Likelihood Ratio, and Wald), this reasoning amounts to a Wald test: fit the unrestricted model and use the distance between the parameter estimates and their values under the restriction to form a test statistic. If the unrestricted estimates are close enough to the restriction, don’t reject it. <a href="#fnref5" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div><div id="fn6" data-note-refs="fnref6"><p><sup>6</sup>&nbsp;Again, if you’re familiar with the aforementioned “trinity” of tests, the procedure I’m about to describe amounts to a Likelihood Ratio Test: fit both the restricted and unrestricted models, and compare their maximized sample likelihoods. If the likelihoods are similar, don’t reject the restriction. <a href="#fnref6" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>But there’s another way to carry out the same test. Although it would be overkill in this example, the principles that underlie it can be used to carry out tests in more complicated situations where a simple t-test wouldn’t suffice. Rather than examining the slope estimate from the unrestricted regression, this alternative approach compares the <em>sum of squared residuals</em> (SSR) of the two regressions to see which does a better job of fitting the observed data.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> It’s easy to compute the SSR of the two regressions from above using the <code>residuals()</code> function:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>SSR_u <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(unrestricted)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>SSR_r <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(restricted)<span class="sc">^</span><span class="dv">2</span>)</span>
@@ -481,7 +481,7 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 </div>
 <p>Notice that the restricted regression line is flat because it does not use scores on the first midterm to predict those on the second. The lower SSR of the unrestricted model reflects the fact that the observations in the <code>midterms</code> dataset are on average <em>closer</em> to a line with slope 0.6 and intercept 32.6 than they are to a line with slope zero and intercept 81.4.</p>
 <p>To understand this picture, it helps to think about the following question: is it possible for the unrestricted regression to have a <em>higher</em> SSR than the restricted one? Recall from above that each of these regressions is the solution to an optimization problem. The difference between them is that the restricted regression imposes a <em>constraint</em> while the unrestricted regression doesn’t. If the best slope for predicting second midterm scores using first midterm scores is zero, the unrestricted regression is free to set <span class="math inline">\(b = 0\)</span>. In this case its estimates would coincide with those of the restricted regression. On the other hand, if the best slope <em>isn’t</em> zero that means some other choice of <span class="math inline">\(b\)</span> by definition results in a lower SSR: linear regression chooses the line whose slope and intercept minimize the squared vertical deviations between the data and the line. The restricted regression is <em>forced</em> to have <span class="math inline">\(b = 0\)</span>, so in this case it must do a worse job fitting the data.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> This reasoning shows that we will <em>always</em> find that the SSR of the restricted model is at least as large as that of the unrestricted model.</p>
-<div class="no-row-height column-margin column-container"><div id="fn7"><p><sup>7</sup>&nbsp;More generally, imposing a constraint can never result in a <em>better</em> solution to an optimization problem: at best it can leave the optimum unchanged.</p></div></div><p>We shouldn’t be surprised to see that the unrestricted regression “fits the data” better than the restricted one: it can’t do otherwise unless the sample correlation between midterm scores is exactly zero. But there is still the question of <em>how much better</em> it fits. Taking differences tells us how much larger the SSR of the restricted model is compared to that of the unrestricted model:</p>
+<div class="no-row-height column-margin column-container"><div id="fn7" data-note-refs="fnref7"><p><sup>7</sup>&nbsp;More generally, imposing a constraint can never result in a <em>better</em> solution to an optimization problem: at best it can leave the optimum unchanged. <a href="#fnref7" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>We shouldn’t be surprised to see that the unrestricted regression “fits the data” better than the restricted one: it can’t do otherwise unless the sample correlation between midterm scores is exactly zero. But there is still the question of <em>how much better</em> it fits. Taking differences tells us how much larger the SSR of the restricted model is compared to that of the unrestricted model:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>SSR_r <span class="sc">-</span> SSR_u</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -505,7 +505,7 @@ F-statistic:  28.4 on 1 and 69 DF,  p-value: 1.174e-06</code></pre>
 <h2 data-number="3" class="anchored" data-anchor-id="sampling-uncertainty"><span class="header-section-number">3</span> Sampling Uncertainty</h2>
 <p>We’ve <em>nearly</em> arrived at the F-statistic. To see what’s missing, we’ll use a bit of algebra to re-write it as <span class="math display">\[F \equiv \frac{(SSR_r - SSR_{u})/q}{SSR_{u} / (n - k - 1)} = \left(\frac{SSR_r - SSR_u}{SSR_u}\right) \left(\frac{n - k - 1}{q}\right).\]</span> We obtained the first factor on the RHS, <span class="math inline">\((SSR_r - SSR_u) / SSR_u\)</span>, simply by reasoning about units and the nature of constrained versus unconstrained optimization problems. Stop for a minute and appreciate how impressive this is: simple intuition has taken us halfway to this rather formidable-looking expression. To understand the second factor, we need to think about sampling uncertainty.</p>
 <p>In the midterms example we found that the restricted regression SSR was 41% larger than the unrestricted one. Is this a big difference or a small one? Units don’t enter into it, because we have already eliminated them. But the <code>midterms</code> dataset only contains information on 71 students. If we merely want to summarize the relationship between test scores for these students, there is no role for statistical inference: summary statistics suffice. Tests and confidence intervals enter the picture when we hope to <em>generalize</em> from an observed sample to the population from which it was drawn. Imagine a large population of introductory statistics students who took my two midterms. Now suppose that we observe a random sample of 71 students from this population. How much information do the observed exam scores for <em>these students</em> provide about the relationship between midterm scores that we <em>in the population</em>?<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
-<div class="no-row-height column-margin column-container"><div id="fn8"><p><sup>8</sup>&nbsp;It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief.</p></div></div><p>The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population. We can see this in the expression for the standard error of the sample mean: <span class="math inline">\(\text{SE}(\bar{X}) = \sigma_x/\sqrt{n}\)</span>. The larger the sample size, the smaller the standard error, all else equal. Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic. The same reasoning applies to the F-statistic above. The numerator <span class="math inline">\((n - k - 1)\)</span> in the second factor increases with the sample size <span class="math inline">\(n\)</span>. This <em>magnifies</em> the effect of the first factor. An <span class="math inline">\(SSR_r\)</span> that is 41% higher than the <span class="math inline">\(SSR_u\)</span> is “more impressive” evidence when the sample size is <span class="math inline">\(1000\)</span> than when it is <span class="math inline">\(10\)</span>. Small samples are intrinsically more variable than large ones, so we should expect them to turn up anomalous results more frequently. The F-statistic takes this into account.</p>
+<div class="no-row-height column-margin column-container"><div id="fn8" data-note-refs="fnref8"><p><sup>8</sup>&nbsp;It may be difficult to imagine a population from which the students who happen to have taken my course in a particular semester could be viewed as a random sample. For the purposes of this exercise I kindly ask you to suspend your disbelief. <a href="#fnref8" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><p>The larger the sample size, the more evidence an observed difference in the sample provides about a potential difference in the population. We can see this in the expression for the standard error of the sample mean: <span class="math inline">\(\text{SE}(\bar{X}) = \sigma_x/\sqrt{n}\)</span>. The larger the sample size, the smaller the standard error, all else equal. Accordingly, given two datasets with identical summary statistics, the larger sample will have the larger t-statistic. The same reasoning applies to the F-statistic above. The numerator <span class="math inline">\((n - k - 1)\)</span> in the second factor increases with the sample size <span class="math inline">\(n\)</span>. This <em>magnifies</em> the effect of the first factor. An <span class="math inline">\(SSR_r\)</span> that is 41% higher than the <span class="math inline">\(SSR_u\)</span> is “more impressive” evidence when the sample size is <span class="math inline">\(1000\)</span> than when it is <span class="math inline">\(10\)</span>. Small samples are intrinsically more variable than large ones, so we should expect them to turn up anomalous results more frequently. The F-statistic takes this into account.</p>
 <p>So why <span class="math inline">\((n - k - 1)\)</span> rather than <span class="math inline">\(n\)</span>? This is a so-called “degrees of freedom correction.” By estimating <span class="math inline">\(k\)</span> regression slope parameters and <span class="math inline">\(1\)</span> intercept parameter, we “use up” <span class="math inline">\((k + 1)\)</span> of the observations, leaving only <span class="math inline">\((n - k - 1)\)</span> pieces of truly independent information. This is not particularly intuitive. In a stunning departure from my usual advice to introductory statistics and econometrics students, I suggest that you simply memorize this part of the F-statistic. It may help to notice that the same degrees of freedom correction appears in the expression for the standard error of the regression, <span class="math inline">\(SER \equiv \sqrt{SSR/(n - k - 1)}\)</span>, a measure of the average distance that the observed data fall from the regression line.</p>
 <p>The only as-yet-unexplained quantity in the F-test statistic is <span class="math inline">\(q\)</span>. This denotes the <em>number of restrictions</em> imposed by the restricted model. Counting restrictions is the same thing as counting equals signs. In a regression of the form <span class="math inline">\(Y = \beta_0 + \beta_1 X + U\)</span> a restriction of the form <span class="math inline">\(\beta_1 = 1\)</span> gives <span class="math inline">\(q = 1\)</span> because there it takes a single equals sign to assert that <span class="math inline">\(\beta_1\)</span> equals one. More complicated regressions allow more complicated kinds of restrictions. For example, in the regression <span class="math display">\[
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
@@ -527,7 +527,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
 <section id="while-were-here-we-might-as-well-carry-out-the-test" class="level2 page-columns page-full" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="while-were-here-we-might-as-well-carry-out-the-test"><span class="header-section-number">4</span> While we’re here we might as well carry out the test!</h2>
 <p>Now that we understand why the F-test statistic takes the form that it does, let’s carry out the F-test in each of the two examples from above: <code>midterms</code> and <code>sim_dat</code>. Under the null hypothesis that the constraints imposed by the restricted regression are <em>correct</em>, the F-test statistic follows an <span class="math inline">\(F(q, n-k-1)\)</span> distribution.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> For the <code>midterms</code> dataset our test statistic is</p>
-<div class="no-row-height column-margin column-container"><div id="fn9"><p><sup>9</sup>&nbsp;Strictly speaking this requires the regression errors to be normally distributed and homoskedastic. If the errors are non-normal but homoskedastic, then the F-statistic is approximately distributed as an <span class="math inline">\(F(q, \infty)\)</span> random variable for large <span class="math inline">\(n\)</span>. Life is much more complicated under heteroskedasticity, but this is a topic for a future post!</p></div></div><div class="cell">
+<div class="no-row-height column-margin column-container"><div id="fn9" data-note-refs="fnref9"><p><sup>9</sup>&nbsp;Strictly speaking this requires the regression errors to be normally distributed and homoskedastic. If the errors are non-normal but homoskedastic, then the F-statistic is approximately distributed as an <span class="math inline">\(F(q, \infty)\)</span> random variable for large <span class="math inline">\(n\)</span>. Life is much more complicated under heteroskedasticity, but this is a topic for a future post! <a href="#fnref9" class="footnote-back" role="doc-backlink" aria-label="Back to reference">↩︎</a></p></div></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>F_midterms <span class="ot">&lt;-</span> ((SSR_r <span class="sc">-</span> SSR_u) <span class="sc">/</span> SSR_u) <span class="sc">*</span> (<span class="dv">71</span> <span class="sc">-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">1</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>F_midterms</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -655,7 +655,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
     }
     // Rescaling equations changes their heights, which moves everything
     // below them -- including margin-note markers. Announce the pass so the
-    // aligner in _theme.html can re-run against the settled geometry; both
+    // aligner in _notes.html can re-run against the settled geometry; both
     // scripts debounce resize independently, so without this signal the
     // aligner can fire first and pin notes to positions that no longer exist.
     window.dispatchEvent(new Event('math-fit:done'));
@@ -686,6 +686,89 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
     // element and it bubbles to the document.
     document.addEventListener('shown.bs.collapse', schedule);
   });
+})();
+</script>
+<script>
+// Margin-note visibility and wide-screen alignment.
+//
+// tools-normalize-notes.py has already put the notes in reference order and
+// given each one data-note-refs, the IDs of the markers that cite it. This
+// script shows a note whenever one of those markers is visible, so a note cited
+// inside a closed solution fold stays hidden until the fold opens. It also
+// keeps the fold button's label and aria-label in step with its state.
+//
+// When --margin-notes-active (set in custom.scss, alongside the grid
+// breakpoint) is 1, notes sit in the margin and each is moved level with its
+// marker, pushed down 14px below the previous note if they would collide. At
+// narrower widths the notes are in the text flow and left alone.
+//
+// Alignment must run after anything that moves a marker: a resize, font
+// loading, a fold finishing its animation, and _math-fit.html rescaling
+// equations (it dispatches math-fit:done). It listens for each of these events,
+// plus a ResizeObserver on main, instead of guessing animation durations. A
+// misplaced note shows up only after a resize, never on a fresh load, which is
+// why the check scripts test resizes.
+(function () {
+  function ready() {
+    var notes = Array.from(document.querySelectorAll('[data-note-refs]'));
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pairs = notes.map(function (note) {
+      return {note: note, markers: note.dataset.noteRefs.split(' ').map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean)};
+    });
+    function visible(el) { return el.getClientRects().length > 0; }
+
+    function align() {
+      var active = [];
+      pairs.forEach(function (pair) {
+        var marker = pair.markers.find(visible);
+        pair.note.hidden = !marker;
+        pair.note.style.top = '';
+        if (marker) active.push({note: pair.note, marker: marker});
+      });
+      document.querySelectorAll('.callout.solution .callout-header').forEach(function (header) {
+        var opened = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-label', opened ? 'Hide solution' : 'Reveal solution');
+        header.querySelector('.callout-title-container').textContent = opened ? 'Hide' : 'Click to reveal';
+      });
+      // The breakpoint is declared in CSS alongside the grid fallback.
+      if (getComputedStyle(main).getPropertyValue('--margin-notes-active').trim() !== '1') return;
+      active.sort(function (a, b) {
+        return a.marker.compareDocumentPosition(b.marker) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+      var lastBottom = -Infinity;
+      active.forEach(function (pair) {
+        var rect = pair.note.getBoundingClientRect();
+        var target = Math.max(pair.marker.getBoundingClientRect().top, lastBottom + 14);
+        pair.note.style.top = (target - rect.top) + 'px';
+        lastBottom = target + rect.height;
+      });
+    }
+
+    var pending = false;
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; align(); });
+    }
+    align();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    window.addEventListener('math-fit:done', schedule);
+    // Use completion events, not a guessed duration of the animation.
+    document.addEventListener('shown.bs.collapse', schedule);
+    document.addEventListener('hidden.bs.collapse', schedule);
+    if (document.fonts) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(main);
+      notes.forEach(function (note) { observer.observe(note); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
 })();
 </script>
 <script>
@@ -759,87 +842,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + U
     }
   }
 
-  // ---- margin notes: sit level with their markers ----
-  // Quarto aligns a margin footnote with the top of the paragraph that cites
-  // it, so a note citing the last sentence of a long paragraph appears well
-  // before the passage it belongs to. This slides each note down to its own
-  // marker, keeping notes in order and never overlapping. Offsets are
-  // position: relative, so nothing else on the page moves.
-  function alignMarginNotes() {
-    var notes = [].slice.call(
-      document.querySelectorAll('.column-margin div[id^="fn"]'));
-    if (!notes.length) return;
-    var main = document.querySelector('main');
-    // Pair each note with its marker and order by the marker's position in
-    // the text -- Quarto hoists a fold's notes out in reverse DOM order, so
-    // document order of the notes cannot be trusted for stacking.
-    var pairs = [];
-    notes.forEach(function (note) {
-      note.style.top = '';
-      var m = note.id.match(/^fn(\d+)$/);
-      var marker = m && document.getElementById('fnref' + m[1]);
-      if (!marker) return;
-      // Notes belonging to a closed solution fold are display:none (and so
-      // are their markers); they get aligned when the fold opens.
-      if (!note.offsetParent || !marker.offsetParent) return;
-      pairs.push({ note: note, marker: marker });
-    });
-    pairs.sort(function (a, b) {
-      return a.marker.getBoundingClientRect().top -
-             b.marker.getBoundingClientRect().top;
-    });
-    var lastBottom = -Infinity;
-    pairs.forEach(function (pair) {
-      var note = pair.note;
-      var rect = note.getBoundingClientRect();
-      // Only when the note actually sits in the margin column; on narrow
-      // screens Quarto folds it into the body flow, which needs no help.
-      if (main && rect.left < main.getBoundingClientRect().left +
-                  (document.querySelector('main p') || main).clientWidth * 0.8) {
-        return;
-      }
-      var naturalTop = rect.top + window.scrollY;
-      var markerTop = pair.marker.getBoundingClientRect().top + window.scrollY;
-      var target = Math.max(markerTop, lastBottom + 14);
-      note.style.position = 'relative';
-      note.style.top = (target - naturalTop) + 'px';
-      lastBottom = target + rect.height;
-    });
-  }
-
-  function scheduleAlign() {
-    alignMarginNotes();
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(alignMarginNotes);
-    }
-    if (window.MathJax && MathJax.startup && MathJax.startup.promise) {
-      MathJax.startup.promise.then(function () {
-        setTimeout(alignMarginNotes, 50);
-      });
-    }
-    window.addEventListener('load', alignMarginNotes);
-    // _math-fit.html dispatches this after every fitting pass. Equation
-    // sizes just changed, so the markers may have moved out from under the
-    // notes; realign against the new geometry.
-    window.addEventListener('math-fit:done', alignMarginNotes);
-    var t;
-    window.addEventListener('resize', function () {
-      clearTimeout(t);
-      t = setTimeout(alignMarginNotes, 150);
-    });
-    // A solution fold reveals its margin notes when it opens; align them
-    // once the collapse animation has finished.
-    [].slice.call(document.querySelectorAll('.callout-header'))
-      .forEach(function (h) {
-        h.addEventListener('click', function () {
-          setTimeout(alignMarginNotes, 450);
-        });
-      });
-  }
-
   ready(function () {
-    scheduleAlign();
-
     // Quarto copies a callout's title into an HTML title attribute on the
     // callout div, so the browser shows a native "Solution" tooltip whenever
     // the mouse rests anywhere over an open fold. The visible header (and
