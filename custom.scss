@@ -642,31 +642,47 @@ nav[role="doc-toc"].toc-left, #quarto-margin-sidebar nav[role="doc-toc"] {
   line-height: 1.5;
 }
 
-// A puzzler's solution fold runs to the end of its post, so every margin
-// note Quarto hoists to AFTER the fold belongs to the solution. Quarto
-// lifts margin notes out of the fold's collapse container to place them on
-// the page grid, so while the fold is shut they would sit readable beside
-// it and give the answer away. Hide them until it opens: Bootstrap keeps
-// .collapsed on the header while the fold is shut, and without JavaScript
-// the fold cannot open at all, so the notes stay hidden for exactly as
-// long as the solution does. tools-check-folds.py verifies this behavior
-// with the fold closed and open.
-.callout.solution:has(.callout-header.collapsed) ~ .column-margin {
-  display: none;
-}
-
-// Quarto's layoutMarginEls (quarto.js) re-runs on every body-height change
-// and pushes any margin element that sits above the previous one in DOM
-// order down with an inline margin-top. The theme's aligner in _theme.html
-// positions notes in MARKER order (Quarto hoists a fold's notes out in
-// reverse DOM order) and prevents overlap itself, so Quarto's pass would
-// "fix" a correctly placed note by shoving it below its later-in-DOM
-// sibling -- and it runs after the aligner, with nothing realigning behind
-// it. A stylesheet !important beats an inline style, so this pins the
-// notes' margin and leaves their placement entirely to the aligner. Only
-// footnotes are pinned; figure captions and asides keep Quarto's behavior.
-.column-margin > div[id^="fn"] {
+// Margin footnotes are placed by three parties, and these rules divide the
+// work among them.
+//
+// tools-normalize-notes.py fixes the notes' ORDER in the finished HTML. Quarto
+// hoists notes cited inside a solution fold out of the collapse container and
+// writes them in reverse (puzzler 1 came out 1, 2, 3, 6, 5, 4). Earlier the
+// aligner hid this with visual offsets in the wide margin, but below the
+// margin breakpoint notes fall into the text in HTML order, so phone readers
+// saw them reversed. The reversal happens in Quarto's own final HTML pass,
+// out of reach of any Lua filter, hence a post-render step. The normalizer also
+// stamps each note with data-note-refs, the IDs of the markers that cite it.
+//
+// _notes.html owns VISIBILITY and wide-screen POSITION. A note is shown
+// whenever one of its markers is visible, so a note cited inside a closed fold
+// cannot give the solution away. The normalizer sets `hidden` on those notes in
+// the HTML as well, so they stay hidden before any script runs. Visibility used
+// to be inferred from position: every margin note after a closed fold was
+// hidden, which forced a fold to run to the end of its post. Explicit
+// references remove that constraint.
+//
+// Quarto's layoutMarginEls (quarto.js) still handles captions and asides, but
+// must be kept off footnotes. It re-runs on every body-height change and pushes
+// a margin element down with an inline margin-top whenever it sits above its
+// predecessor in DOM order. It runs after the aligner, with nothing realigning
+// behind it. A stylesheet !important beats an inline style, so the pin below
+// leaves footnote placement to the aligner alone. Breaking this misplaces notes
+// only after a resize or zoom, never on a fresh load (the September 2026 bug);
+// tools-check-folds.py and tools-check-overlap.py test resizes for that reason.
+//
+// --margin-notes-active tells the aligner whether notes are in the margin at
+// all. It is flipped to 0 in the narrow-screen block at the end of this file,
+// alongside the grid fallback, so the script and the grid cannot disagree
+// about the breakpoint.
+main { --margin-notes-active: 1; }
+.column-margin > div[data-note-refs] {
+  position: relative;
   margin-top: 0 !important;
+  &[hidden] { display: none !important; }
+}
+.column-margin:has(> [data-note-refs]):not(:has(> :not([hidden]))) {
+  display: none;
 }
 
 // ---------------------------------------------------------- footnotes --
@@ -695,16 +711,15 @@ nav[role="doc-toc"].toc-left, #quarto-margin-sidebar nav[role="doc-toc"] {
   }
 }
 
-// A post that sets reference-location per block prints each note beneath the
-// passage that cites it instead. The puzzlers do this so that a note belonging
-// to a solution stays inside the fold that hides it; at the foot of the page
-// it would answer the question for a reader who had not opened the fold.
+// A post that sets reference-location to block or section prints each note
+// beneath the passage that cites it instead. No post does so today; the
+// puzzlers used to, to keep a solution's notes inside its fold, until the
+// margin notes learned which fold each note belongs to (see the margin-notes
+// section above). The styling stays for any future post that opts in.
 //
 // These blocks interrupt a post rather than close one, so they take a hairline
 // and a little room and nothing else. Pandoc opens them with an <hr>, which
-// would double the hairline. Both of its placements are covered here; the
-// puzzlers use the per-block one, which is the only placement that keeps every
-// marker on the same side of the fold as the note it points to.
+// would double the hairline; both placements are covered here.
 .footnotes-end-of-block,
 .footnotes-end-of-section {
   margin: 1.7em 0 2em;
@@ -1216,12 +1231,15 @@ body.home-view-date {
 //
 //   ::: {.callout-note .solution icon=false collapse="true" appearance="simple" title="Solution"}
 //
-// Footnotes in a puzzler are ordinary margin footnotes. Quarto hoists margin
-// notes out of the collapse container, so the notes cited inside the fold
-// would be readable beside it while it is shut; the rule at the end of the
-// margin-notes section above hides every margin note that follows a collapsed
-// fold, which is also why a fold must run to the end of its post.
-// tools-check-folds.py is what enforces all of this.
+// Footnotes in a puzzler are ordinary margin footnotes. Notes cited inside a
+// fold are hidden while it is shut, by reference rather than by position (see
+// the margin-notes section), so ordinary content and further folds may follow
+// a solution. tools-check-folds.py enforces this, including on a synthetic page
+// with two folds and a note after them.
+//
+// tools-normalize-notes.py also turns each fold's header into a native
+// <button>. Quarto renders it as a clickable div, which a keyboard cannot
+// reach; the button is in the tab order and opens with Space or Enter.
 //
 // callout-note supplies the collapsing behavior and arrives in Bootstrap's
 // blue inside a bordered box. The .solution class is ours, and everything
@@ -1251,6 +1269,12 @@ body.home-view-date {
 
 .callout.solution {
   .callout-header {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
     background: none;
     padding: 0.45rem 0;
     cursor: pointer;
@@ -1259,32 +1283,28 @@ body.home-view-date {
   // A "## Solution" heading sits above every fold, so the bar does not repeat
   // the name. It says what a click will do instead, which the chevron alone
   // signals too weakly: a reader who misses it reads a puzzler with no
-  // solution. Bootstrap keeps the collapsed class on the header while the fold
-  // is shut, which is what distinguishes the two states here.
-  //
-  // The title text stays in the markup, where a screen reader still announces
-  // it, and is sized away so that only the state label shows.
+  // solution. The label is real text, "Click to reveal" or "Hide", written by
+  // the normalizer and switched by _notes.html on Bootstrap's collapse events,
+  // which also keep the button's aria-label in step. It used to be CSS
+  // ::after content over a title sized to zero, which screen readers announce
+  // inconsistently.
   .callout-title-container {
     font-family: $font-family-monospace;
     font-weight: 500;
     letter-spacing: 0.09em;
     text-transform: uppercase;
     color: $vermilion;
-    font-size: 0;
-
-    &::after { font-size: 0.68rem; }
-  }
-
-  .callout-header.collapsed .callout-title-container::after {
-    content: "Click to reveal";
-  }
-
-  .callout-header:not(.collapsed) .callout-title-container::after {
-    content: "Hide";
+    font-size: 0.68rem;
+    text-align: left;
   }
 
   .callout-header:hover {
     .callout-title-container, .callout-toggle { color: $ink-strong; }
+  }
+
+  .callout-header:focus-visible {
+    outline: 2px solid $vermilion;
+    outline-offset: 3px;
   }
 
   .callout-toggle { color: $vermilion; }
@@ -1470,7 +1490,17 @@ body.home-view-date {
 // Quarto nests the same grid again on each cell inside such a post, so both the
 // outer main and every .page-columns within it have to be flattened; changing
 // only the outer one leaves the nested tracks to push the page out further.
-@media (max-width: 991.98px) {
+//
+// This block runs to 1023px rather than Quarto's 991px. With this theme's wide
+// gutters the desktop grid needs 1004px, so at 992px the page scrolled sideways
+// by 12px. The margin therefore appears only from 1024px, and below that the
+// notes fall into the text flow, where they get a return link and some space.
+// The aligner reads --margin-notes-active to learn which mode it is in.
+@media (max-width: 1023.98px) {
+  main { --margin-notes-active: 0; }
+  .column-margin .footnote-back { display: inline; }
+  .column-margin > [data-note-refs] { margin-bottom: 1rem; }
+
   main.content.page-full {
     grid-column: body-content-start / body-content-end !important;
   }

@@ -1,48 +1,18 @@
 # /// script
-# dependencies = ["playwright"]
+# dependencies = ["playwright==1.63.0"]
 # ///
-"""Check that no solution fold leaks a footnote, in either direction.
+"""Check solution visibility, keyboard controls and note reading order.
 
-Run against _site/ after `quarto render`:
-
-    uv run tools-check-folds.py
-
-A puzzler post hides its solution behind a collapsed callout. Its footnotes
-are ordinary margin footnotes, and Quarto hoists margin notes out of the
-fold's collapse container so the page grid can place them -- left alone, a
-note cited inside a closed fold would sit readable in the margin beside it,
-giving the answer away. A rule in custom.scss therefore hides every margin
-note that follows a collapsed fold (a fold always runs to the end of its
-post, so those notes all belong to the solution) and reveals them when the
-fold opens.
-
-The invariant this enforces is about what a reader can see, not where the
-markup sits: at any moment, a note must be readable exactly when its marker
-is readable. Both failure directions matter -- a readable note with a hidden
-marker leaks the solution, and a visible marker with a hidden note points at
-nothing. The check runs twice per page, once with the fold shut and once
-after opening it.
-
-A third pass guards note POSITION, not just visibility. Three scripts touch
-where a margin note sits: Quarto's layoutMarginEls (re-runs on any body-
-height change), the aligner in _theme.html (marker-ordered, the one that
-must win), and _math-fit.html (rescales equations, moving every marker
-below them). A 2026-09-01 bug scattered a fold's notes after any window
-resize -- fresh loads were always clean, so no static check could see it.
-With the fold open, this pass resizes the viewport 1440 -> 1000 -> 1440
-(crossing the width where _math-fit rescales and Quarto's pass fires) and
-then asserts the aligner's contract: notes in marker order, each level with
-its marker or 14px below the previous note, within 2px.
-
-Notes are matched as li[id^="fn"] and div[id^="fn"]: pandoc renders end-of-
-section notes as list items and margin notes as divs. An early version
-looked only at list items and reported a leaking page as clean.
-
-Exits non-zero on any violation, naming the note and which way it went.
+Run after `quarto render`: uv run tools-check-folds.py
+Fresh desktop/mobile/tablet loads, independent folds, Space/Enter activation,
+closing and reopening, and resizing in both directions are covered. Notes must
+follow reference order in the DOM and visually; margin notes must also align.
 """
 import functools
 import http.server
 import pathlib
+import re
+import runpy
 import sys
 import threading
 
@@ -92,14 +62,13 @@ PROBE = """() => {
   return out;
 }"""
 
-# Mirrors the aligner in _theme.html: pair each margin note with its marker,
-# skip notes folded into the body flow (narrow screens), sort by marker
-# position, and compute the target the aligner should have set -- level with
-# the marker, or 14px below the previous note, whichever is lower.
+# Geometry contract, independent of the aligner's CSS mode flag.
 ALIGN_PROBE = r"""() => {
   const main = document.querySelector('main');
   const textLeft = main.getBoundingClientRect().left;
-  const textWidth = (document.querySelector('main p') || main).clientWidth;
+  // The first *visible* paragraph: one inside a closed fold has zero width.
+  const para = [...main.querySelectorAll('p')].find(p => p.offsetParent);
+  const textWidth = (para || main).clientWidth;
   const pairs = [];
   document.querySelectorAll('.column-margin div[id^="fn"]').forEach(note => {
     const m = note.id.match(/^fn(\d+)$/);
@@ -142,51 +111,133 @@ def collect(notes, state, failures, path):
                 (path, n, f"is hidden while its marker is in plain view ({state})"))
 
 
-def main():
-    index = SITE / "index.html"
-    if not index.exists():
-        sys.exit("No _site/ found. Run `quarto render` first.")
+ORDER_PROBE = r"""() => {
+  const markers = [...document.querySelectorAll('a.footnote-ref')];
+  const visible = el => el && el.getClientRects().length > 0;
+  const notes = [...document.querySelectorAll('.column-margin div[id^="fn"]')]
+    .filter(visible);
+  const rank = note => markers.findIndex(m =>
+    m.href.split('#').pop() === note.id && visible(m));
+  const errors = [];
+  for (let i = 1; i < notes.length; i++) {
+    if (rank(notes[i]) < rank(notes[i-1])) errors.push('DOM order: ' + notes[i-1].id + ', ' + notes[i].id);
+    if (notes[i].getBoundingClientRect().top < notes[i-1].getBoundingClientRect().bottom - 2)
+      errors.push('visual order/overlap: ' + notes[i-1].id + ', ' + notes[i].id);
+  }
+  return errors;
+}"""
 
-    pages = sorted(SITE.glob("post/*/index.html"))
+
+def main():
+    if not (SITE / "index.html").exists():
+        sys.exit("No _site/ found. Run `quarto render` first.")
+    pages = [p for p in sorted(SITE.glob("post/*/index.html"))
+             if re.search(r'<div[^>]+class="[^"]*\bsolution\b', p.read_text())]
     server = serve_site()
     port = server.server_address[1]
-    folds, failures = 0, []
+    failures = []
+
+    def check(page, path, state):
+        collect(page.evaluate(PROBE), state, failures, path)
+        for error in page.evaluate(ORDER_PROBE):
+            failures.append((path, {"id": "order", "text": state}, error))
+        for row in page.evaluate(ALIGN_PROBE):
+            if abs(row["expected"] - row["actual"]) > ALIGN_TOLERANCE:
+                failures.append((path, row, f"{state}: at {row['actual']}px, expected {row['expected']}px"))
+        overflow = page.evaluate("() => {window.scrollTo(500, window.scrollY); const x = window.scrollX; window.scrollTo(0, window.scrollY); return x;}")
+        if overflow:
+            failures.append((path, {"id": "overflow", "text": state}, f"scrolls sideways {overflow}px"))
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 900})
         for path in pages:
-            page.goto(f"http://127.0.0.1:{port}/post/{path.parent.name}/",
-                      wait_until="networkidle")
-            page.wait_for_timeout(500)
-            notes = page.evaluate(PROBE)
-            if notes is None:
-                continue
-            folds += 1
-            collect(notes, "fold closed", failures, path)
-            # Open every fold on the page and re-check.
-            for header in page.query_selector_all(".callout.solution .callout-header"):
-                header.click()
-            page.wait_for_timeout(700)  # Bootstrap collapse animation
-            collect(page.evaluate(PROBE), "fold open", failures, path)
-            # Resize round-trip, then check the notes still sit where the
-            # aligner's contract says. 800ms per step lets the debounced
-            # resize handlers (aligner, _math-fit, Quarto) all finish.
-            for width in (1000, 1440):
+            url = f"http://127.0.0.1:{port}/post/{path.parent.name}/"
+            for width in (390, 830, 991, 992, 1023, 1024, 1440):
+                page.set_viewport_size({"width": width, "height": 900})
+                page.goto(url, wait_until="networkidle")
+                page.wait_for_timeout(500)
+                check(page, path, f"{width}px closed")
+                headers = page.locator('.callout.solution .callout-header')
+                for i in range(headers.count()):
+                    header = headers.nth(i)
+                    if header.evaluate("el => el.tagName !== 'BUTTON' || el.type !== 'button'"):
+                        failures.append((path, {"id": "toggle", "text": ""}, "not a native button"))
+                    header.focus()
+                    page.keyboard.press('Shift+Tab')
+                    page.keyboard.press('Tab')
+                    if not header.evaluate('el => el === document.activeElement'):
+                        failures.append((path, {"id": "toggle", "text": ""}, "not in keyboard tab order"))
+                    header.press('Space')
+                    page.wait_for_timeout(700)
+                    if header.get_attribute('aria-expanded') != 'true':
+                        failures.append((path, {"id": "toggle", "text": ""}, "Space did not open solution"))
+                    check(page, path, f"{width}px fold {i+1} opened with Space")
+                    header.press('Enter')
+                    page.wait_for_timeout(700)
+                    if header.get_attribute('aria-expanded') != 'false':
+                        failures.append((path, {"id": "toggle", "text": ""}, "Enter did not close solution"))
+                    check(page, path, f"{width}px fold {i+1} closed with Enter")
+                    header.click()
+                    page.wait_for_timeout(700)
+                check(page, path, f"{width}px all open")
+            for width in (992, 830, 390, 830, 992, 1440):
                 page.set_viewport_size({"width": width, "height": 900})
                 page.wait_for_timeout(800)
-            for row in page.evaluate(ALIGN_PROBE):
-                if abs(row["expected"] - row["actual"]) > ALIGN_TOLERANCE:
-                    failures.append((path, row,
-                        f"sits at {row['actual']}px, expected {row['expected']}px "
-                        "(after resize round-trip) -- the aligner lost to a later layout pass"))
+                check(page, path, f"resized to {width}px")
+            print(f"Checked {path.parent.name}", flush=True)
+
+        # Exercise the old ownership failure even though today's articles
+        # happen to end with their only solution. Serve a synthetic body in
+        # a real rendered page so it uses the actual CSS and Bootstrap JS.
+        fixture = runpy.run_path(str(SITE.parent / 'tests/test_normalize_notes.py'))
+        marker, note, margin, fold = (fixture[k] for k in ('marker', 'note', 'margin', 'fold'))
+        body = (fold('<p>First solution' + marker(1) + '</p>') + margin(note(1)) +
+                fold('<p>Second solution' + marker(2) + '</p>', 2) + margin(note(2)) +
+                '<p>Ordinary content after both solutions' + marker(3) + '</p>' + margin(note(3)))
+        source = pages[0].read_text()
+        source = re.sub(r'(<main\b[^>]*>).*?(</main>)',
+                        lambda m: m[1] + body + m[2], source, flags=re.S)
+        source = fixture['normalize'](source)
+        url = f"http://127.0.0.1:{port}/post/{pages[0].parent.name}/?notes-fixture"
+        page.route(url, lambda route: route.fulfill(body=source, content_type='text/html'))
+        for width in (390, 1440):
+            page.set_viewport_size({'width': width, 'height': 900})
+            page.goto(url, wait_until='networkidle')
+            check(page, pages[0], f'fixture {width}px both closed')
+            headers = page.locator('.callout.solution .callout-header')
+            for i in (0, 1, 0, 1):
+                headers.nth(i).press('Enter')
+                page.wait_for_timeout(700)
+                check(page, pages[0], f'fixture {width}px toggled fold {i+1}')
+
+        # Mutation check: prove the reading-order assertion catches the
+        # original reversal, rather than merely reporting the fixed site green.
+        for header in page.locator('.callout.solution .callout-header').all():
+            header.click()
+        page.set_viewport_size({'width': 390, 'height': 900})
+        page.wait_for_timeout(700)
+        page.evaluate("""() => {
+          const notes = [...document.querySelectorAll('[data-note-refs]')];
+          const holder = notes[0].parentElement;
+          notes.reverse().forEach(n => holder.appendChild(n));
+        }""")
+        if not page.evaluate(ORDER_PROBE):
+            failures.append((pages[0], {'id': 'mutation', 'text': ''},
+                             'order check failed to detect deliberately reversed notes'))
+        # Initial HTML must already hide solution notes, before JS runs.
+        context = browser.new_context(java_script_enabled=False,
+                                      viewport={"width": 390, "height": 900})
+        static_page = context.new_page()
+        for path in pages:
+            static_page.goto(f"http://127.0.0.1:{port}/post/{path.parent.name}/",
+                             wait_until="networkidle")
+            collect(static_page.evaluate(PROBE), "JavaScript disabled", failures, path)
         browser.close()
     server.shutdown()
-
     for path, note, problem in failures:
-        print(f"{path.parent.name}: {note['id']} {problem}")
-        print(f"    {note['text']}...")
-
-    print(f"{len(failures)} violation(s) across {folds} page(s) with a fold.")
+        print(f"{path.parent.name}: {note['id']} {problem} {note['text']}")
+    print(f"{len(failures)} violation(s) across {len(pages)} page(s) with a fold.")
     return 1 if failures else 0
 
 

@@ -3,8 +3,8 @@ author: Francis J. DiTraglia
 
 # The post page per the 2026 redesign: the table of contents sits in the body
 # as a one-line strip under the title, numbered h2 sections, and footnotes in
-# the right margin. Puzzler posts override reference-location in their own
-# frontmatter so that notes stay inside the solution fold.
+# the right margin. The post-render normalizer associates solution notes
+# with their references so they are hidden when the solution is closed.
 date-format: "D MMMM YYYY"
 
 # The eyebrow line above each title (subject · date · reading time · series

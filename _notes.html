@@ -1,0 +1,83 @@
+<script>
+// Margin-note visibility and wide-screen alignment.
+//
+// tools-normalize-notes.py has already put the notes in reference order and
+// given each one data-note-refs, the IDs of the markers that cite it. This
+// script shows a note whenever one of those markers is visible, so a note cited
+// inside a closed solution fold stays hidden until the fold opens. It also
+// keeps the fold button's label and aria-label in step with its state.
+//
+// When --margin-notes-active (set in custom.scss, alongside the grid
+// breakpoint) is 1, notes sit in the margin and each is moved level with its
+// marker, pushed down 14px below the previous note if they would collide. At
+// narrower widths the notes are in the text flow and left alone.
+//
+// Alignment must run after anything that moves a marker: a resize, font
+// loading, a fold finishing its animation, and _math-fit.html rescaling
+// equations (it dispatches math-fit:done). It listens for each of these events,
+// plus a ResizeObserver on main, instead of guessing animation durations. A
+// misplaced note shows up only after a resize, never on a fresh load, which is
+// why the check scripts test resizes.
+(function () {
+  function ready() {
+    var notes = Array.from(document.querySelectorAll('[data-note-refs]'));
+    var main = document.querySelector('main');
+    if (!main) return;
+    var pairs = notes.map(function (note) {
+      return {note: note, markers: note.dataset.noteRefs.split(' ').map(function (id) {
+        return document.getElementById(id);
+      }).filter(Boolean)};
+    });
+    function visible(el) { return el.getClientRects().length > 0; }
+
+    function align() {
+      var active = [];
+      pairs.forEach(function (pair) {
+        var marker = pair.markers.find(visible);
+        pair.note.hidden = !marker;
+        pair.note.style.top = '';
+        if (marker) active.push({note: pair.note, marker: marker});
+      });
+      document.querySelectorAll('.callout.solution .callout-header').forEach(function (header) {
+        var opened = header.getAttribute('aria-expanded') === 'true';
+        header.setAttribute('aria-label', opened ? 'Hide solution' : 'Reveal solution');
+        header.querySelector('.callout-title-container').textContent = opened ? 'Hide' : 'Click to reveal';
+      });
+      // The breakpoint is declared in CSS alongside the grid fallback.
+      if (getComputedStyle(main).getPropertyValue('--margin-notes-active').trim() !== '1') return;
+      active.sort(function (a, b) {
+        return a.marker.compareDocumentPosition(b.marker) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+      var lastBottom = -Infinity;
+      active.forEach(function (pair) {
+        var rect = pair.note.getBoundingClientRect();
+        var target = Math.max(pair.marker.getBoundingClientRect().top, lastBottom + 14);
+        pair.note.style.top = (target - rect.top) + 'px';
+        lastBottom = target + rect.height;
+      });
+    }
+
+    var pending = false;
+    function schedule() {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; align(); });
+    }
+    align();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    window.addEventListener('math-fit:done', schedule);
+    // Use completion events, not a guessed duration of the animation.
+    document.addEventListener('shown.bs.collapse', schedule);
+    document.addEventListener('hidden.bs.collapse', schedule);
+    if (document.fonts) document.fonts.ready.then(schedule);
+    if (window.ResizeObserver) {
+      var observer = new ResizeObserver(schedule);
+      observer.observe(main);
+      notes.forEach(function (note) { observer.observe(note); });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
+  else ready();
+})();
+</script>

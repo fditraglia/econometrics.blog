@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["playwright"]
+# dependencies = ["playwright==1.63.0"]
 # ///
 """Check that no rendered page scrolls sideways at any reading width.
 
@@ -20,7 +20,10 @@ Exits non-zero when any page scrolls, and names the widest element that is not
 inside a scrolling container, which is usually the cause.
 """
 import pathlib
+import functools
+import http.server
 import sys
+import threading
 
 from playwright.sync_api import sync_playwright
 
@@ -29,7 +32,7 @@ SITE = pathlib.Path(__file__).parent / "_site"
 # 390 is a common phone; 768 is where Quarto would reveal the table of contents;
 # 900 is where this site does reveal it, and where the page grid is still wider
 # than the screen for a post using `column: page`; 1200 is a laptop.
-WIDTHS = (360, 390, 768, 900, 1200)
+WIDTHS = (360, 390, 768, 900, 992, 1023, 1024, 1200)
 
 PROBE = """() => {
   window.scrollTo(500, 0);
@@ -94,18 +97,31 @@ def main():
             sys.exit(f"No rendered page matched: {' '.join(wanted)}")
         print(f"Checking {len(targets)} of the site's pages ({' '.join(wanted)}).")
     failures = []
+    # Load the real module scripts too: Chromium blocks quarto.js on file://.
+    class QuietHandler(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+    server = http.server.ThreadingHTTPServer(
+        ('127.0.0.1', 0), functools.partial(QuietHandler, directory=str(SITE)))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         for width in WIDTHS:
             page = browser.new_page(viewport={"width": width, "height": 900})
             for path in targets:
-                page.goto(path.as_uri(), wait_until="networkidle")
-                page.wait_for_timeout(1500)  # MathJax typesets after load
+                page.goto(f"http://127.0.0.1:{server.server_address[1]}/{path.relative_to(SITE).as_posix()}",
+                          wait_until="networkidle")
+                page.evaluate("""async () => {
+                  await document.fonts.ready;
+                  if (window.MathJax?.startup?.promise) await MathJax.startup.promise;
+                }""")
+                page.wait_for_timeout(300)  # math-fit's debounced layout pass
                 result = page.evaluate(PROBE)
                 if result["moved"]:
                     failures.append((width, path, result))
             page.close()
         browser.close()
+    server.shutdown()
 
     for width, path, result in failures:
         name = path.parent.name if path.parent.name != "_site" else "index"

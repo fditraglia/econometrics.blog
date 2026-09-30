@@ -13,10 +13,10 @@ project:
     - fonts/
     - apple-touch-icon.png
     - icon.svg
-  # Quarto leaves cross-post links in the feeds page-relative, which breaks
-  # them wherever a feed item is republished. Standard library only, so CI
-  # needs nothing installed.
+  # Normalize note order and solution controls in the finished HTML, then
+  # fix relative links in syndicated feeds. Both use only Python's stdlib.
   post-render:
+    - python3 tools-normalize-notes.py
     - python3 tools-absolutize-feed-links.py
 
 website:
@@ -70,6 +70,7 @@ format:
           <script data-goatcounter="https://econometrics.goatcounter.com/count"
                   async src="//gc.zgo.at/count.js"></script>
       - _math-fit.html
+      - _notes.html
       - _listing-tidy.html
       - _theme.html
 

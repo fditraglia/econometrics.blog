@@ -52,7 +52,7 @@ The home page renders a series as a group: the series name as an unlinked label,
 - `r-feed.qmd` — Unlisted page whose only job is to generate the R-only feed for R-bloggers (see below)
 - `post/` — All blog posts
 - `_quarto.yml` — Site configuration
-- `custom.scss` — Theme customization (currently empty, uses cosmo)
+- `custom.scss` — Theme customization on top of cosmo
 - `CNAME` — Custom domain (`www.econometrics.blog`)
 - `_freeze/` — Cached code execution results (must be committed)
 - `.github/workflows/publish.yml` — GitHub Actions deployment workflow
@@ -105,7 +105,7 @@ Workflow for any `.qmd` change:
 A puzzler post keeps its solution behind a fold so that a reader meets the question first. Two pieces are needed:
 
 1. A `## Solution` heading.
-2. The fold itself, a collapsed Quarto callout styled in the "solution folds" section of `custom.scss`, running **from the reveal to the end of the post** — nothing comes after it.
+2. The fold itself, a collapsed Quarto callout styled in the "solution folds" section of `custom.scss`, wrapping the solution. Ordinary content and additional folds may follow it.
 
 ```
 ## Solution
@@ -118,14 +118,14 @@ A puzzler post keeps its solution behind a fold so that a reader meets the quest
 :::
 ```
 
-The heading carries the name, and the bar below it reads "CLICK TO REVEAL" when shut and "HIDE" when open. Both labels come from `custom.scss`; the `title="Solution"` in the markup is sized away and remains only for screen readers.
+The heading carries the name. `tools-normalize-notes.py` converts the rendered header to a native button with real "Click to reveal" / "Hide" text; `_notes.html` updates the text and accessible label on collapse events.
 
-Footnotes in a puzzler are ordinary margin footnotes, like every other post — no `reference-location` override. What makes that safe: Quarto hoists margin notes out of the fold's collapse container, so notes cited inside the fold would sit readable in the margin beside it, and a rule in `custom.scss` (`.callout.solution:has(.callout-header.collapsed) ~ .column-margin`) hides every margin note that follows a collapsed fold until it opens. This is why the fold must run to the end of the post: a margin note after the fold is assumed to belong to it. `_theme.html` re-aligns the revealed notes to their markers when the fold opens.
+Footnotes remain ordinary margin footnotes. The post-render normalizer sorts adjacent hoisted note containers by reference order, adds return links, records the actual reference IDs in `data-note-refs`, and initially hides notes whose references are all inside closed folds. `_notes.html` keeps a note visible whenever one of its references is visible. Ownership is never inferred from being after a solution, so unrelated notes after a fold remain readable.
 
 Four things to know before adding one:
 
 - **Headings inside a fold stay out of the table of contents**, so a section title cannot give the answer away. This is Quarto's behavior, not something the CSS arranges.
-- **Run `uv run tools-check-folds.py` when the fold structure changes.** It opens each fold-bearing page twice — fold shut, fold open — and fails unless every note is readable exactly when its marker is readable. This is what catches a leaked solution or a dangling marker; nothing else does. It is only worth running when something it can actually see has changed: adding or removing a fold, moving where one starts or ends, adding or removing a footnote inside or after a fold, or editing the fold and margin-note rules in `custom.scss`. Editing prose or code *inside* an existing fold cannot move a fold boundary or a footnote marker, so do not re-run it for wording changes — it takes a while and the answer cannot differ.
+- **Run `uv run tools-check-folds.py` when fold structure or note behavior changes.** It checks reference/note visibility, DOM and visual order, desktop alignment, keyboard tab order and Space/Enter operation on fresh phone/tablet/desktop loads and resize round trips. `python3 -m unittest discover -s tests` covers the build transform, including multiple folds, ordinary notes after folds, and shared references.
 - **`tools-check-layout.py` cannot see inside a closed fold.** After adding one, open it and check for sideways scroll at 390px separately.
 - **Render the post directly** (`quarto render post/slug/index.qmd`) after editing it — see the freeze warning above.
 
@@ -165,7 +165,7 @@ quarto render post/my-post/index.qmd   # render one post
 
 ### Layout check
 
-`tools-check-layout.py` loads every rendered page at 360, 390, 768, 900 and 1200px and fails if any of them scrolls sideways, naming the widest element that is not inside a scrolling container. Run it after `quarto render` when changing anything in `custom.scss`:
+`tools-check-layout.py` loads every rendered page over HTTP at phone, tablet and desktop widths, including both sides of the 1024px margin breakpoint and fails if any of them scrolls sideways, naming the widest element that is not inside a scrolling container. Run it after `quarto render` when changing anything in `custom.scss`:
 
 ```
 uv run tools-check-layout.py
@@ -173,11 +173,11 @@ uv run tools-check-layout.py
 
 It needs browsers that uv does not install; once per machine run `uv run --with playwright playwright install chromium webkit`. Overflow is detected by scrolling the page and reading `window.scrollX` back, rather than by comparing `scrollWidth` to `clientWidth`, which reports content inside a scrolling box as an overflow when that is the intended behavior.
 
-All 43 pages pass at all five widths. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
+All rendered pages must pass at every checked width. Keep it that way: the rules that got them there are collected under "narrow screens" at the end of `custom.scss`, each with the case that motivated it.
 
 ### Overlap check
 
-`tools-check-overlap.py` asserts the property a reader actually notices: no two pieces of text drawn on top of each other, on any page, at any width. It loads every page twice, once at 1440px stepping down through fifteen widths and once at 360px stepping up, measuring after each step so both fresh-load and after-resize layouts are covered, with solution folds opened. It takes about three minutes and pages run in four parallel browsers. Run it after `quarto render` whenever `custom.scss`, `_theme.html` or `_math-fit.html` changes:
+`tools-check-overlap.py` asserts the property a reader actually notices: no two pieces of text drawn on top of each other, on any page, at any width. It loads every page twice, once at 1440px stepping down through seventeen widths and once at 360px stepping up, measuring after each step so both fresh-load and after-resize layouts are covered, with solution folds opened. It takes about three minutes and pages run in four parallel browsers. Run it after `quarto render` whenever `custom.scss`, `_theme.html`, `_notes.html` or `_math-fit.html` changes:
 
 ```
 uv run tools-check-overlap.py            # every page
@@ -187,7 +187,7 @@ uv run tools-check-overlap.py james      # only pages whose path matches
 It exists because the two older checks each guard one symptom and a 2026-09-05 bug passed both: between 768px and 992px Quarto keeps each hoisted margin-note container 1em tall, the theme's `page-full` override moves the notes into the body column there, and every post's notes sat under the following paragraph on a fresh load. The check was validated by removing that fix from the rendered stylesheet, which produced 157 overlapping pairs on 25 pages; with the fix in place there are none. A new check must be shown to fail the same way before it is trusted.
 
 ### Deployment
-Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, and pushes the output to the `gh-pages` branch. GitHub Pages serves from `gh-pages`.
+Deployment is automatic on push to `master`. The GitHub Actions workflow at `.github/workflows/publish.yml` installs Quarto, renders the site using the `_freeze/` cache, runs the unit tests and `tools-check-folds.py` against that render, and pushes the checked output to the `gh-pages` branch without rendering again. The layout and overlap checks are not run in CI, because they guard stylesheet changes, which are made locally, and would add about ten minutes to every deploy; run them locally after any change to `custom.scss`. GitHub Pages serves from `gh-pages`.
 
 **CI is pinned to Quarto 1.10.18**, matching the local install, so CI renders exactly what was rendered and checked locally — much of the theme keys on Quarto internals, and an unpinned CI would pick up new Quarto releases on its own schedule. To upgrade Quarto: bump the `version:` in `publish.yml` and the local install together, run `quarto render`, then all three check scripts (`tools-check-layout.py`, `tools-check-folds.py`, `tools-check-overlap.py`), and push only when all pass.
 
@@ -230,7 +230,8 @@ Font URLs in that file are site-root absolute (`/fonts/...`). Declaring them in 
 A few fragile spots, all of which degrade to "looks more like stock Quarto" rather than breaking:
 
 - Several selectors target Quarto-internal class names (`.quarto-title-meta-heading`, `.quarto-category`, `#title-block-header`). A Quarto upgrade could rename these.
-- Three scripts touch where a margin note sits, and the aligner in `_theme.html` must be the last effective writer. Quarto's `layoutMarginEls` (in `quarto.js`) re-runs on every body-height change and pushes overlapping margin elements apart in DOM order — wrong for a fold's notes, which Quarto hoists in reverse order — so a rule in `custom.scss` pins `margin-top: 0 !important` on margin footnotes to take them away from it (figure captions and asides keep Quarto's behavior). `_math-fit.html` rescales equations, which moves every marker below them, so it dispatches `math-fit:done` after each fitting pass and the aligner re-runs on that event. Breaking any piece of this — the CSS pin, the event, the aligner — misplaces notes only *after a window resize or zoom*, never on a fresh load, so eyeballing a freshly loaded page proves nothing; the resize pass in `tools-check-folds.py` and the stepped sweep in `tools-check-overlap.py` are what verify it.
+- `tools-normalize-notes.py` owns the rendered note order and solution-button markup; `_notes.html` owns note visibility and desktop alignment. CSS pins Quarto's inline note margins to zero, leaving Quarto in charge of captions and asides only. `_math-fit.html` dispatches `math-fit:done` when equations change size. The aligner uses collapse completion events and ResizeObserver, not fixed animation delays. The CSS `--margin-notes-active` flag shares the grid's 1024px breakpoint. Keep the mobile grid/height fixes and run all three browser checks after changes.
+
 - The post title block is a custom template partial, `_partials/title-block.html`, wired up in `post/_metadata.yml`. It renders the metadata line (subject · date · reading time · series position) from front matter; the reading time comes from `_reading-time.lua`, a Pandoc filter that counts words at render time (200 wpm, matching Quarto's listing field), so no R and no JavaScript are involved. A Quarto upgrade that restructures its title-block partial could need this file revisited.
 - The home page is `listing.ejs.md`: a hero for the latest post (text-only unless the post opts in with an `image:` frontmatter line, which the hero shows at 150px), a by-subject view (default) and a by-date view behind a client-side toggle, a puzzler block, and a hidden flat list of per-post stubs. The stubs are what List.js — and therefore the category filter — actually operates on; `_theme.html` mirrors the filter state onto the visible views via their `data-indexes` attributes, moves the margin block into the sidebar, wires the toggle (localStorage, subject view rendered first so the page is correct before JS runs), and collapses long sections behind an italic "five more". The `Puzzlers` nav item points at `/#category=puzzler`, which Quarto's listing JS reads on load; puzzler and meta filters force the date view, since those posts have no subject-view lines.
 - The `!important` flags on `.quarto-category` are required, not stylistic. Quarto ships a more specific rule that restores the default pill border without them.

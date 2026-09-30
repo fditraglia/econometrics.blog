@@ -19,13 +19,31 @@ jobs:
         with:
           # Pinned to the version installed locally, so CI renders match the
           # local renders that built _freeze/. Upgrade deliberately: bump this
-          # and the local install together, then render and run both checks
+          # and the local install together, then render and run the checks
           # (see CLAUDE.md, Deployment).
           version: 1.10.18
 
-      - name: Render and Publish
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Install the browser for the folds check
+        run: uv run --with playwright==1.63.0 playwright install --with-deps chromium
+
+      # The unit tests and the folds check guard what CI is best placed to
+      # catch: note order and solution visibility in the build actually being
+      # published, where a failure would leak a puzzler's answer. The layout
+      # and overlap checks guard stylesheet changes, which are made locally,
+      # take about ten minutes between them, and stay a local step: run them
+      # after any change to custom.scss (see CLAUDE.md).
+      - name: Render and check
+        run: |
+          uv run python -m unittest discover -s tests
+          quarto render
+          uv run tools-check-folds.py
+
+      - name: Publish checked output
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          render: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

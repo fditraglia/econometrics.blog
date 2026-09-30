@@ -1,5 +1,5 @@
 # /// script
-# dependencies = ["playwright"]
+# dependencies = ["playwright==1.63.0"]
 # ///
 """Check that no two pieces of text on any page overlap, at any width.
 
@@ -18,7 +18,7 @@ actually notices, which is text drawn on top of other text. A 2026-09-05 bug
 This check asserts that property directly. Every page is loaded twice: once
 at the widest width and stepped down through WIDTHS, once at the narrowest
 and stepped up. Each step is measured after the page's resize handlers
-(the aligner in _theme.html, _math-fit.html, Quarto's layoutMarginEls) have
+(the aligner in _notes.html, _math-fit.html, Quarto's layoutMarginEls) have
 settled, so both fresh-load and after-resize layouts are covered at every
 width. Solution folds are opened after the first measurement of each pass,
 so the fold-closed state is measured once and the open state at every width.
@@ -53,7 +53,7 @@ SITE = pathlib.Path(__file__).parent / "_site"
 # the layout check uses, and a few in between. Each breakpoint is tested on
 # both sides.
 WIDTHS = (360, 390, 480, 600, 700, 767, 768, 830, 899, 900, 991, 992,
-          1100, 1200, 1440)
+          1023, 1024, 1100, 1200, 1440)
 TOLERANCE = 3     # px of intersection in both directions before it counts
 SETTLE_MS = 450   # aligner and _math-fit debounce 150ms; Quarto throttles 50ms
 WORKERS = 4
